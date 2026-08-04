@@ -104,7 +104,6 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`  Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log('============================================');
   console.log('');
-  console.log('  Default Admin: admin / Admin@12345');
   console.log('  (jalankan: npm run db:init untuk setup database)');
   console.log('');
 });
