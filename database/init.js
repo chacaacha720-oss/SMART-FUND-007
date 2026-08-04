@@ -9,11 +9,33 @@ const mysql = require('mysql2/promise');
 const bcrypt = require('bcrypt');
 
 async function initDatabase() {
-  const host = process.env.DB_HOST || process.env.MYSQLHOST || process.env.MYSQL_HOST || process.env.DATABASE_HOST || 'localhost';
-  const port = parseInt(process.env.DB_PORT || process.env.MYSQLPORT || process.env.MYSQL_PORT || process.env.DATABASE_PORT || '3306', 10);
-  const user = process.env.DB_USER || process.env.MYSQLUSER || process.env.MYSQL_USER || process.env.DATABASE_USER || 'root';
-  const password = process.env.DB_PASSWORD || process.env.MYSQLPASSWORD || process.env.MYSQL_PASSWORD || process.env.DATABASE_PASSWORD || '';
-  const database = process.env.DB_NAME || process.env.MYSQLDATABASE || process.env.MYSQL_DB || process.env.DATABASE_NAME || 'smart_fund';
+  // Parse DATABASE_URL if present (Railway format: mysql://user:pass@host:port/db)
+  const dbUrl = process.env.DATABASE_URL || process.env.MYSQL_PRIVATE_URL || '';
+
+  let host = 'localhost';
+  let port = 3306;
+  let user = 'root';
+  let password = '';
+  let database = 'smart_fund';
+
+  if (dbUrl) {
+    try {
+      const url = new URL(dbUrl);
+      host = url.hostname;
+      port = parseInt(url.port || '3306', 10);
+      user = decodeURIComponent(url.username || 'root');
+      password = decodeURIComponent(url.password || '');
+      database = url.pathname.replace(/^\//, '') || 'smart_fund';
+    } catch (err) {
+      console.error('[DB] Failed to parse DATABASE_URL:', err.message);
+    }
+  } else {
+    host = process.env.DB_HOST || process.env.MYSQLHOST || process.env.MYSQL_HOST || process.env.DATABASE_HOST || 'localhost';
+    port = parseInt(process.env.DB_PORT || process.env.MYSQLPORT || process.env.MYSQL_PORT || process.env.DATABASE_PORT || '3306', 10);
+    user = process.env.DB_USER || process.env.MYSQLUSER || process.env.MYSQL_USER || process.env.DATABASE_USER || 'root';
+    password = process.env.DB_PASSWORD || process.env.MYSQLPASSWORD || process.env.MYSQL_PASSWORD || process.env.DATABASE_PASSWORD || '';
+    database = process.env.DB_NAME || process.env.MYSQLDATABASE || process.env.MYSQL_DB || process.env.DATABASE_NAME || 'smart_fund';
+  }
 
   console.log('============================================');
   console.log('  SMART FUND - Database Initialization');
