@@ -9,33 +9,53 @@ const mysql = require('mysql2/promise');
 const bcrypt = require('bcrypt');
 
 async function initDatabase() {
-  const host = process.env.DB_HOST || 'localhost';
-  const port = parseInt(process.env.DB_PORT || '3306', 10);
-  const user = process.env.DB_USER || 'root';
-  const password = process.env.DB_PASSWORD || '';
-  const database = process.env.DB_NAME || 'smart_fund';
+  const host = process.env.DB_HOST || process.env.MYSQLHOST || process.env.MYSQL_HOST || process.env.DATABASE_HOST || 'localhost';
+  const port = parseInt(process.env.DB_PORT || process.env.MYSQLPORT || process.env.MYSQL_PORT || process.env.DATABASE_PORT || '3306', 10);
+  const user = process.env.DB_USER || process.env.MYSQLUSER || process.env.MYSQL_USER || process.env.DATABASE_USER || 'root';
+  const password = process.env.DB_PASSWORD || process.env.MYSQLPASSWORD || process.env.MYSQL_PASSWORD || process.env.DATABASE_PASSWORD || '';
+  const database = process.env.DB_NAME || process.env.MYSQLDATABASE || process.env.MYSQL_DB || process.env.DATABASE_NAME || 'smart_fund';
 
   console.log('============================================');
   console.log('  SMART FUND - Database Initialization');
   console.log('============================================\n');
 
-  // 1. Connect without database to create it
+  // 1. Connect to MySQL server (with database if exists)
   let conn;
   try {
-    conn = await mysql.createConnection({ host, port, user, password, multipleStatements: true });
+    conn = await mysql.createConnection({ host, port, user, password, database, multipleStatements: true });
     console.log('[OK] Connected to MySQL server');
   } catch (err) {
-    console.error('[ERROR] Cannot connect to MySQL:', err.message);
-    console.error('       Pastikan MySQL berjalan dan kredensial di .env benar.');
-    process.exit(1);
+    // Try connecting without database (for local dev where DB doesn't exist yet)
+    try {
+      conn = await mysql.createConnection({ host, port, user, password, multipleStatements: true });
+      console.log('[OK] Connected to MySQL server (without database)');
+    } catch (err2) {
+      console.error('[ERROR] Cannot connect to MySQL:', err.message);
+      console.error('       Pastikan MySQL berjalan dan kredensial di .env benar.');
+      process.exit(1);
+    }
   }
 
-  // 2. Run schema.sql
+  // 2. Run schema.sql (strip CREATE DATABASE & USE for Railway compatibility)
   try {
     const schemaPath = path.join(__dirname, 'schema.sql');
-    const sql = fs.readFileSync(schemaPath, 'utf8');
+    let sql = fs.readFileSync(schemaPath, 'utf8');
+
+    // Remove CREATE DATABASE and USE statements (Railway provides the database)
+    sql = sql.replace(/CREATE DATABASE[^;]*;/gi, '');
+    sql = sql.replace(/USE\s+[^;]*;/gi, '');
+
+    // Ensure database exists (for local dev)
+    try {
+      await conn.query(`CREATE DATABASE IF NOT EXISTS \`${database}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`);
+      await conn.query(`USE \`${database}\``);
+    } catch (dbErr) {
+      // Railway user may not have CREATE DATABASE permission - that's OK
+      console.log('[INFO] Database already exists or no permission to create (Railway mode)');
+    }
+
     await conn.query(sql);
-    console.log('[OK] Schema executed (database & tables created)');
+    console.log('[OK] Schema executed (tables created)');
   } catch (err) {
     console.error('[ERROR] Failed to execute schema:', err.message);
     process.exit(1);
