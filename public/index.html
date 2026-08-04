@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
 <head>
-  <base href="/smart-id-global/" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SMART FUND - Pinjaman Online Terpercaya | Bunga Mulai 5%</title>
@@ -376,47 +375,17 @@
       <div class="text-center mb-16" data-aos="fade-up">
         <span class="text-blue-600 font-semibold">TESTIMONI</span>
         <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mt-2">Apa Kata Nasabah Kami</h2>
+        <p class="text-slate-600 mt-4 flex items-center justify-center gap-2">
+          <span class="inline-block w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+          <span class="text-sm font-medium text-green-600">Live testimonial • Update otomatis setiap 30 detik</span>
+        </p>
       </div>
-      <div class="grid md:grid-cols-3 gap-6">
-        <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 card-hover stagger-1" data-aos="fade-up" data-aos-delay="0">
-          <div class="flex text-amber-400 mb-4">
-            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-          </div>
-          <p class="text-slate-600 mb-6">"Prosesnya cepat dan mudah. Saya bisa mendapatkan modal usaha dalam waktu singkat. Terima kasih SMART FUND!"</p>
-          <div class="flex items-center gap-3">
-            <div class="w-12 h-12 rounded-full gradient-bg flex items-center justify-center text-white font-bold">B</div>
-            <div>
-              <p class="font-bold text-slate-900">Budi Santoso</p>
-              <p class="text-sm text-slate-500">Pengusaha, Jakarta</p>
-            </div>
-          </div>
-        </div>
-        <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 card-hover stagger-2" data-aos="fade-up" data-aos-delay="100">
-          <div class="flex text-amber-400 mb-4">
-            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-          </div>
-          <p class="text-slate-600 mb-6">"Bunganya ringan dan transparan. Tidak ada biaya tersembunyi. Sangat membantu untuk renovasi rumah saya."</p>
-          <div class="flex items-center gap-3">
-            <div class="w-12 h-12 rounded-full gradient-bg flex items-center justify-center text-white font-bold">S</div>
-            <div>
-              <p class="font-bold text-slate-900">Siti Rahayu</p>
-              <p class="text-sm text-slate-500">Ibu Rumah Tangga, Bandung</p>
-            </div>
-          </div>
-        </div>
-        <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 card-hover stagger-3" data-aos="fade-up" data-aos-delay="200">
-          <div class="flex text-amber-400 mb-4">
-            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-          </div>
-          <p class="text-slate-600 mb-6">"Platform pinjaman online terpercaya. Berizin OJK jadi lebih aman. Proses verifikasi cepat dan praktis."</p>
-          <div class="flex items-center gap-3">
-            <div class="w-12 h-12 rounded-full gradient-bg flex items-center justify-center text-white font-bold">A</div>
-            <div>
-              <p class="font-bold text-slate-900">Ahmad Fauzi</p>
-              <p class="text-sm text-slate-500">Karyawan, Surabaya</p>
-            </div>
-          </div>
-        </div>
+
+      <div id="testimoniCarousel" class="relative">
+        <div id="testimoniTrack" class="grid md:grid-cols-3 gap-6 transition-opacity duration-500"></div>
+
+        <!-- Indicator dots -->
+        <div id="testimoniDots" class="flex justify-center gap-2 mt-8"></div>
       </div>
     </div>
   </section>
@@ -470,7 +439,6 @@
           <ul class="space-y-2 text-sm">
             <li><a href="/register.html" class="hover:text-blue-400 transition">Daftar</a></li>
             <li><a href="/login.html" class="hover:text-blue-400 transition">Masuk</a></li>
-            <li><a href="/admin.html" class="hover:text-blue-400 transition">Admin</a></li>
           </ul>
         </div>
         <div>

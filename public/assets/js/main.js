@@ -198,6 +198,124 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ============================================
+  // TESTIMONI CAROUSEL (auto-rotate setiap 30 detik)
+  // ============================================
+  const testimoniTrack = document.getElementById('testimoniTrack');
+  const testimoniDots = document.getElementById('testimoniDots');
+
+  // 12 testimoni, dibagi per grup 3
+  const allTestimoni = [
+    { name: 'Budi Santoso', role: 'Pengusaha, Jakarta', photo: 'https://i.pravatar.cc/150?img=12', rating: 5, text: 'Prosesnya cepat dan mudah. Saya bisa mendapatkan modal usaha dalam waktu singkat. Terima kasih SMART FUND!' },
+    { name: 'Siti Rahayu', role: 'Ibu Rumah Tangga, Bandung', photo: 'https://i.pravatar.cc/150?img=47', rating: 5, text: 'Bunganya ringan dan transparan. Tidak ada biaya tersembunyi. Sangat membantu untuk renovasi rumah saya.' },
+    { name: 'Ahmad Fauzi', role: 'Karyawan, Surabaya', photo: 'https://i.pravatar.cc/150?img=33', rating: 5, text: 'Platform pinjaman online terpercaya. Berizin OJK jadi lebih aman. Proses verifikasi cepat dan praktis.' },
+    { name: 'Dewi Lestari', role: 'Mahasiswa, Yogyakarta', photo: 'https://i.pravatar.cc/150?img=49', rating: 5, text: 'Dana pendidikan saya cair tepat waktu. Prosesnya sangat membantu untuk kelancaran studi saya.' },
+    { name: 'Rizky Pratama', role: 'Freelancer, Bali', photo: 'https://i.pravatar.cc/150?img=15', rating: 5, text: 'Saya butuh modal mendadak untuk project klien. SMART FUND cair dalam 1 hari kerja. Mantap!' },
+    { name: 'Linda Kusuma', role: 'Dokter, Medan', photo: 'https://i.pravatar.cc/150?img=44', rating: 5, text: 'Pelayanan customer service-nya ramah dan responsif. Cicilan ringan sesuai kemampuan saya.' },
+    { name: 'Hendra Wijaya', role: 'Petani, Semarang', photo: 'https://i.pravatar.cc/150?img=8', rating: 5, text: 'Modal usaha pertanian saya jadi lancar. Bunganya sangat kompetitif dibanding tempat lain.' },
+    { name: 'Maya Anggraini', role: 'Ibu Rumah Tangga, Makassar', photo: 'https://i.pravatar.cc/150?img=20', rating: 5, text: 'Untuk kebutuhan biaya persalinan, SMART FUND benar-benar membantu. Prosesnya cepat dan aman.' },
+    { name: 'Andi Setiawan', role: 'PNS, Palembang', photo: 'https://i.pravatar.cc/150?img=53', rating: 5, text: 'Renovasi rumah saya berjalan lancar dengan bantuan pinjaman dari SMART FUND. Recommended!' },
+    { name: 'Fitri Handayani', role: 'Wiraswasta, Bogor', photo: 'https://i.pravatar.cc/150?img=25', rating: 5, text: 'Tidak ada biaya tersembunyi, semuanya transparan. Admin verifikasi sangat cepat dan profesional.' },
+    { name: 'Joko Susilo', role: 'Mekanik, Malang', photo: 'https://i.pravatar.cc/150?img=11', rating: 5, text: 'Buka usaha bengkel jadi lebih mudah. Pinjaman cair tanpa ribet dan syarat yang mudah.' },
+    { name: 'Ratna Sari', role: 'Guru, Denpasar', photo: 'https://i.pravatar.cc/150?img=38', rating: 5, text: 'Saya sangat terbantu untuk biaya pendidikan anak. SMART FUND bisa diandalkan dan terpercaya.' },
+  ];
+
+  // Acak urutan testimoni (shuffle)
+  function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  // Kelompokkan testimoni per 3
+  function chunkArray(arr, size) {
+    const chunks = [];
+    for (let i = 0; i < arr.length; i += size) {
+      chunks.push(arr.slice(i, i + size));
+    }
+    return chunks;
+  }
+
+  if (testimoniTrack) {
+    const shuffled = shuffleArray([...allTestimoni]);
+    const groups = chunkArray(shuffled, 3);
+    let currentGroup = 0;
+
+    function renderTestimoniGroup(group) {
+      const cards = group.map((t, idx) => {
+        const stars = Array(t.rating).fill('<i class="fas fa-star"></i>').join('');
+        return `
+          <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 card-hover testimonial-card" data-aos="fade-up" data-aos-delay="${idx * 100}">
+            <div class="flex text-amber-400 mb-4">${stars}</div>
+            <p class="text-slate-600 mb-6 italic">"${t.text}"</p>
+            <div class="flex items-center gap-3">
+              <img src="${t.photo}" alt="${t.name}" class="w-14 h-14 rounded-full object-cover border-2 border-blue-100 shadow-sm" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(t.name)}&background=2563eb&color=fff&size=128';" />
+              <div>
+                <p class="font-bold text-slate-900">${t.name}</p>
+                <p class="text-sm text-slate-500">${t.role}</p>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+      testimoniTrack.innerHTML = cards;
+      // Re-init AOS untuk animasi fade
+      if (typeof AOS !== 'undefined') {
+        setTimeout(() => AOS.refresh(), 50);
+      }
+    }
+
+    function renderDots() {
+      if (!testimoniDots) return;
+      testimoniDots.innerHTML = groups.map((_, i) => `
+        <button class="testimoni-dot w-3 h-3 rounded-full transition ${i === currentGroup ? 'bg-blue-600 w-8' : 'bg-slate-300 hover:bg-slate-400'}" data-index="${i}" aria-label="Slide ${i + 1}"></button>
+      `).join('');
+      testimoniDots.querySelectorAll('.testimoni-dot').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          currentGroup = parseInt(btn.dataset.index, 10);
+          updateTestimoni();
+        });
+      });
+    }
+
+    function updateTestimoni() {
+      // Fade out
+      testimoniTrack.style.opacity = '0';
+      setTimeout(() => {
+        renderTestimoniGroup(groups[currentGroup]);
+        renderDots();
+        // Fade in
+        testimoniTrack.style.opacity = '1';
+      }, 250);
+    }
+
+    // Initial render
+    renderTestimoniGroup(groups[currentGroup]);
+    renderDots();
+    testimoniTrack.style.opacity = '1';
+
+    // Auto-rotate every 30 seconds
+    let autoRotateInterval = setInterval(() => {
+      currentGroup = (currentGroup + 1) % groups.length;
+      updateTestimoni();
+    }, 30000);
+
+    // Pause when hover, resume when leave
+    const testimoniSection = document.getElementById('testimoni');
+    if (testimoniSection) {
+      testimoniSection.addEventListener('mouseenter', () => clearInterval(autoRotateInterval));
+      testimoniSection.addEventListener('mouseleave', () => {
+        clearInterval(autoRotateInterval);
+        autoRotateInterval = setInterval(() => {
+          currentGroup = (currentGroup + 1) % groups.length;
+          updateTestimoni();
+        }, 30000);
+      });
+    }
+  }
+
+  // ============================================
   // FAQ
   // ============================================
   const faqs = [

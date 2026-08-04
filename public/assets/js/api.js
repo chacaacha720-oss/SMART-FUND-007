@@ -2,7 +2,7 @@
    SMART FUND - API Helper & Utilities
    ============================================ */
 
-const BASE_PATH = '/smart-id-global';
+const BASE_PATH = '';
 const API_BASE = `${BASE_PATH}/api`;
 
 // ============================================
