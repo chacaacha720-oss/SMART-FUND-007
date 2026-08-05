@@ -54,11 +54,6 @@
               <p class="text-slate-500 text-sm mt-1" data-i18n="login.subtitle">Login ke akun SMART FUND Anda</p>
             </div>
             <div class="flex items-center gap-2">
-              <select data-lang-select class="appearance-none px-3 py-2 rounded-lg bg-slate-100 text-sm font-semibold text-slate-700 focus:outline-none cursor-pointer hover:bg-slate-200 transition" aria-label="Language">
-                <option value="id">🇮🇩</option>
-                <option value="ms">🇲🇾</option>
-                <option value="en">🇬🇧</option>
-              </select>
               <button id="darkToggle" class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center">
                 <i class="fas fa-moon text-slate-600"></i>
               </button>
@@ -123,20 +118,8 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-  <script src="/assets/js/i18n.js"></script>
-  <script src="/assets/js/locale.js"></script>
   <script src="/assets/js/currency.js"></script>
   <script src="/assets/js/api.js"></script>
-  <script>
-    // Language selector handler
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('[data-lang-select]').forEach((select) => {
-        select.addEventListener('change', (e) => {
-          I18N.setLang(e.target.value);
-        });
-      });
-    });
-  </script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       hidePageLoader();

@@ -63,14 +63,6 @@
 
         <!-- Actions -->
         <div class="flex items-center gap-3">
-          <!-- Language Selector -->
-          <div class="relative">
-            <select data-lang-select class="appearance-none px-3 py-2 rounded-lg bg-slate-100 text-sm font-semibold text-slate-700 focus:outline-none cursor-pointer hover:bg-slate-200 transition" aria-label="Language">
-              <option value="id">🇮🇩 Indonesia</option>
-              <option value="ms">🇲🇾 Malaysia</option>
-              <option value="en">🇬🇧 English</option>
-            </select>
-          </div>
           <button id="darkToggle" class="w-10 h-10 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition hover:rotate-12">
             <i class="fas fa-moon text-slate-600"></i>
           </button>
@@ -470,24 +462,12 @@
     </div>
   </footer>
 
-  <!-- Scripts -->
+   <!-- Scripts -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-  <script src="/assets/js/i18n.js"></script>
-  <script src="/assets/js/locale.js"></script>
   <script src="/assets/js/currency.js"></script>
   <script src="/assets/js/api.js"></script>
   <script src="/assets/js/main.js"></script>
-  <script>
-    // Language selector handler
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('[data-lang-select]').forEach((select) => {
-        select.addEventListener('change', (e) => {
-          I18N.setLang(e.target.value);
-        });
-      });
-    });
-  </script>
   <script>
     // Navbar scroll effect
     const navbar = document.getElementById('navbar');
