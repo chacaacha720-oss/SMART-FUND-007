@@ -4,7 +4,7 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "npm run db:init || true && npm start",
+    "startCommand": "npm run db:init 2>&1 || (echo 'db:init failed, continuing...' && true) ; sleep 5 ; npm start",
     "healthcheckPath": "/",
     "healthcheckTimeout": 100,
     "restartPolicyType": "ON_FAILURE",
