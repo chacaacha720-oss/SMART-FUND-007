@@ -2,7 +2,10 @@
  * SMART FUND - Telegram Bot Notification Service
  * Mengirim notifikasi pengajuan pinjaman ke admin via Telegram Bot API
  */
-require('dotenv').config();
+// Load .env only in local/development; Railway provides env vars at runtime
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 const axios = require('axios');
 const db = require('./db');
 const { t, formatCurrency, formatDateTime } = require('./i18n');

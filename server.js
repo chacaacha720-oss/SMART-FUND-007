@@ -6,7 +6,10 @@
  * Railway compatible - uses Environment Variables only.
  * No hardcoded localhost. Uses process.env.PORT || 3000.
  */
-require('dotenv').config();
+// Load .env only in local/development; Railway provides env vars at runtime
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 
 const fs = require('fs');
 const path = require('path');

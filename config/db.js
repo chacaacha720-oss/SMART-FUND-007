@@ -11,11 +11,15 @@
  * No hardcoded localhost fallbacks - if env vars are missing, 
  * validation errors are thrown instead of silently connecting to the wrong host.
  */
-require('dotenv').config();
+// Load .env only in local/development; Railway provides env vars at runtime
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 const mysql = require('mysql2/promise');
 
-// Parse DATABASE_URL if present (Railway format: mysql://user:pass@host:port/db)
-const dbUrl = process.env.DATABASE_URL || process.env.MYSQL_PRIVATE_URL || '';
+  // 1. Parse DATABASE_URL (Railway MySQL plugin format)
+  //    MYSQL_PRIVATE_URL is an alias used by the Railway plugin
+  const dbUrl = process.env.DATABASE_URL || process.env.MYSQL_PRIVATE_URL || '';
 
 function getDbConfig() {
   if (dbUrl) {

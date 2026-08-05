@@ -3,7 +3,10 @@
  * Menjalankan schema.sql dan membuat admin default
  * Railway compatible - uses Environment Variables only.
  */
-require('dotenv').config();
+// Load .env only in local/development; Railway provides env vars at runtime
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 const fs = require('fs');
 const path = require('path');
 const mysql = require('mysql2/promise');
