@@ -18,8 +18,8 @@ if (process.env.NODE_ENV !== 'production' && !process.env.RAILWAY_ENVIRONMENT) {
 const mysql = require('mysql2/promise');
 
   // 1. Parse DATABASE_URL (Railway MySQL plugin format)
-  //    MYSQL_PRIVATE_URL is an alias used by the Railway plugin
-  const dbUrl = process.env.DATABASE_URL || process.env.MYSQL_PRIVATE_URL || '';
+  //    MYSQL_PRIVATE_URL / MYSQL_URL are aliases used by the Railway plugin
+  const dbUrl = process.env.DATABASE_URL || process.env.MYSQL_PRIVATE_URL || process.env.MYSQL_URL || '';
 
 function getDbConfig() {
   if (dbUrl) {

@@ -14,7 +14,7 @@ const bcrypt = require('bcrypt');
 
 function getDbConfig() {
   // Parse DATABASE_URL if present (Railway format: mysql://user:pass@host:port/db)
-  const dbUrl = process.env.DATABASE_URL || process.env.MYSQL_PRIVATE_URL || '';
+  const dbUrl = process.env.DATABASE_URL || process.env.MYSQL_PRIVATE_URL || process.env.MYSQL_URL || '';
 
   if (dbUrl) {
     try {
