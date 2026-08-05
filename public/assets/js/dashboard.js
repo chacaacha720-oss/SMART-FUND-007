@@ -122,13 +122,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     setBtnLoading(btn, false);
 
     if (res.success) {
-      await alertSuccess('Pengajuan Berhasil!', `Pengajuan #${res.data.applicationId} terkirim. Status: Menunggu Persetujuan. Notifikasi telah dikirim ke admin via Telegram.`);
       document.getElementById('applyStep2').classList.add('hidden');
       document.getElementById('applyStep1').classList.remove('hidden');
       document.getElementById('applyAmount').value = '';
       document.getElementById('applyPurpose').value = '';
+
+      await openLoanAdminConfirmation(res.data.applicationId, amount, tenor, purpose);
       await loadDashboard();
-      // Navigate to dashboard
       document.querySelector('.sidebar-link[data-page="dashboard"]').click();
     } else {
       showToast(res.message || 'Gagal mengajukan', 'error');
@@ -322,6 +322,53 @@ async function submitWithdrawal(e) {
     }
   });
   showToast(res.message || 'Permintaan penarikan telah dikirim', 'success');
+}
+
+async function openLoanAdminConfirmation(applicationId, amount, tenor, purpose) {
+  const chatTitle = `Pengajuan #${applicationId} berhasil dikirim`;
+  const chatMessage = `Halo Admin, saya ingin melanjutkan pengajuan pinjaman saya.\n\nID Pengajuan: #${applicationId}\nJumlah: ${formatRupiah(amount)}\nTenor: ${tenor} bulan\nTujuan: ${purpose}\n\nMohon konfirmasi segera.`;
+  const whatsappMessage = `Halo Admin, saya ingin melanjutkan pengajuan pinjaman saya.\n\nID Pengajuan: #${applicationId}\nJumlah: ${formatRupiah(amount)}\nTenor: ${tenor} bulan\nTujuan: ${purpose}\n\nMohon konfirmasi segera.`;
+
+  await Swal.fire({
+    icon: 'success',
+    title: 'Pengajuan Berhasil',
+    html: `
+      <div class="text-left space-y-4">
+        <p class="text-slate-600">Pengajuan Anda telah terkirim dan sedang menunggu persetujuan admin.</p>
+        <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-slate-700">
+          <p class="font-semibold text-slate-800 mb-2"><i class="fas fa-circle-info mr-1 text-blue-600"></i> Lanjutkan ke admin chat</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <button id="loanTelegramChatBtn" class="w-full rounded-xl bg-sky-500 text-white px-4 py-3 font-semibold hover:bg-sky-600 transition">
+              <i class="fab fa-telegram-plane mr-2"></i> Telegram Admin
+            </button>
+            <button id="loanWhatsappChatBtn" class="w-full rounded-xl bg-emerald-500 text-white px-4 py-3 font-semibold hover:bg-emerald-600 transition">
+              <i class="fab fa-whatsapp mr-2"></i> WhatsApp Admin
+            </button>
+          </div>
+        </div>
+      </div>
+    `,
+    showCancelButton: true,
+    showConfirmButton: false,
+    cancelButtonText: 'Tutup',
+    allowOutsideClick: false,
+    didOpen: () => {
+      const telegramBtn = document.getElementById('loanTelegramChatBtn');
+      const whatsappBtn = document.getElementById('loanWhatsappChatBtn');
+
+      telegramBtn.addEventListener('click', () => {
+        const telegramUrl = `https://t.me/smartfundonline_bot?text=${encodeURIComponent(chatMessage)}`;
+        window.open(telegramUrl, '_blank', 'noopener,noreferrer');
+      });
+
+      whatsappBtn.addEventListener('click', () => {
+        const whatsappUrl = `https://wa.me/6281234567890?text=${encodeURIComponent(whatsappMessage)}`;
+        window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+      });
+    },
+  });
+
+  showToast(`${chatTitle}. Admin akan segera menerima notifikasi.`, 'success');
 }
 
 async function markNotifRead(id) {

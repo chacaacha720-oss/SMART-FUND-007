@@ -26,17 +26,27 @@ async function register(req, res) {
     const phone = sanitize(req.body.phone || '').trim();
     const password = req.body.password;
 
-    // Cek email sudah terdaftar
-    const [exists] = await db.query('SELECT id FROM users WHERE email = ?', [email]);
-    if (exists.length) {
+    const [emailRows] = await db.query('SELECT id FROM users WHERE email = ?', [email]);
+    if (emailRows.length) {
       return res.status(400).json({ success: false, message: 'Email sudah terdaftar' });
+    }
+
+    const [phoneRows] = await db.query('SELECT id FROM users WHERE phone = ?', [phone]);
+    if (phoneRows.length) {
+      return res.status(400).json({ success: false, message: 'Nomor HP sudah terdaftar' });
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
 
-    // Ambil default loan limit dari settings
-    const [settings] = await db.query("SELECT setting_value FROM settings WHERE setting_key = 'default_loan_limit'");
-    const defaultLimit = settings.length ? parseFloat(settings[0].setting_value) : 5000000;
+    let defaultLimit = 5000000;
+    try {
+      const [settings] = await db.query("SELECT setting_value FROM settings WHERE setting_key = 'default_loan_limit'");
+      if (settings.length && settings[0].setting_value !== null && settings[0].setting_value !== '') {
+        defaultLimit = parseFloat(settings[0].setting_value) || 5000000;
+      }
+    } catch (settingErr) {
+      console.warn('Register settings fallback used:', settingErr.message);
+    }
 
     const [result] = await db.query(
       `INSERT INTO users (full_name, email, phone, password_hash, loan_limit, status) VALUES (?, ?, ?, ?, ?, 'active')`,
@@ -45,15 +55,21 @@ async function register(req, res) {
 
     const userId = result.insertId;
 
-    // Buat notifikasi welcome
-    await db.query(
-      `INSERT INTO notifications (user_id, title, message, type) VALUES (?, ?, ?, 'success')`,
-      [userId, 'Selamat Datang di SMART FUND!', `Halo ${fullName}, akun Anda berhasil dibuat. Nikmati berbagai kemudahan pinjaman online bersama kami.`]
-    );
+    try {
+      await db.query(
+        `INSERT INTO notifications (user_id, title, message, type) VALUES (?, ?, ?, 'success')`,
+        [userId, 'Selamat Datang di SMART FUND!', `Halo ${fullName}, akun Anda berhasil dibuat. Nikmati berbagai kemudahan pinjaman online bersama kami.`]
+      );
+    } catch (notifyErr) {
+      console.warn('Register welcome notification skipped:', notifyErr.message);
+    }
 
-    // Auto login
     const token = signToken({ id: userId, role: 'user', email });
     const [userRows] = await db.query('SELECT id, full_name, email, phone, balance, loan_limit, status FROM users WHERE id = ?', [userId]);
+
+    if (!userRows.length) {
+      return res.status(500).json({ success: false, message: 'Registrasi gagal, data user tidak ditemukan setelah insert' });
+    }
 
     return res.json({
       success: true,
@@ -63,7 +79,7 @@ async function register(req, res) {
     });
   } catch (err) {
     console.error('Register error:', err);
-    return res.status(500).json({ success: false, message: 'Terjadi kesalahan server' });
+    return res.status(500).json({ success: false, message: 'Terjadi kesalahan server. Cek koneksi database atau jalankan npm run db:init.' });
   }
 }
 
