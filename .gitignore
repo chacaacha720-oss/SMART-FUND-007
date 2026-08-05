@@ -34,4 +34,4 @@ desktop.ini
 
 # Build
 dist/
-build/
+build/.playwright-mcp/

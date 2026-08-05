@@ -145,9 +145,15 @@
         </section>
 
         <!-- ============================================ APPLY PAGE ============================================ -->
-        <section id="page-apply" class="page-content hidden">
+         <section id="page-apply" class="page-content hidden">
           <h2 class="text-2xl font-extrabold text-slate-900 mb-6">Ajukan Pinjaman</h2>
           <div class="bg-white rounded-2xl p-6 md:p-8 border border-slate-100 shadow-sm">
+            <!-- Multi-step progress bar -->
+            <div class="step-progress-bar mb-6" role="status" aria-label="Progress langkah pengajuan pinjaman">
+              <div id="applyInd1" class="step-indicator active">1</div>
+              <div class="step-line inactive" id="applyLine1"></div>
+              <div id="applyInd2" class="step-indicator inactive">2</div>
+            </div>
             <!-- Step 1 -->
             <div id="applyStep1" class="space-y-5">
               <h3 class="font-bold text-slate-900 text-lg"><i class="fas fa-user text-blue-600 mr-2"></i> Step 1: Data Diri</h3>

@@ -67,8 +67,13 @@ async function showAdminApp(admin) {
   // Mobile sidebar
   const sidebar = document.getElementById('adminSidebar');
   const overlay = document.getElementById('sidebarOverlay');
-  document.getElementById('adminMenuToggle').addEventListener('click', () => { sidebar.classList.add('open'); overlay.classList.add('show'); });
-  overlay.addEventListener('click', () => { sidebar.classList.remove('open'); overlay.classList.remove('show'); });
+  const menuToggle = document.getElementById('adminMenuToggle');
+  const openSidebar = () => { sidebar.classList.add('open'); overlay.classList.add('show'); };
+  const closeSidebar = () => { sidebar.classList.remove('open'); overlay.classList.remove('show'); };
+  menuToggle.removeEventListener('click', openSidebar);
+  menuToggle.addEventListener('click', openSidebar);
+  overlay.removeEventListener('click', closeSidebar);
+  overlay.addEventListener('click', closeSidebar);
 
   // Navigation
   const pageTitles = {
@@ -80,18 +85,20 @@ async function showAdminApp(admin) {
     settings: I18N.t('admin.settings'),
   };
   document.querySelectorAll('.admin-link').forEach((link) => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const page = link.dataset.page;
-      document.querySelectorAll('.admin-content').forEach((p) => p.classList.add('hidden'));
-      document.getElementById(`apage-${page}`).classList.remove('hidden');
-      document.querySelectorAll('.admin-link').forEach((l) => l.classList.remove('active'));
-      link.classList.add('active');
-      document.getElementById('adminPageTitle').textContent = pageTitles[page];
-      sidebar.classList.remove('open'); overlay.classList.remove('show');
-      loadAdminPage(page);
-    });
+    link.removeEventListener('click', handleAdminNavClick);
+    link.addEventListener('click', handleAdminNavClick);
   });
+  function handleAdminNavClick(e) {
+    e.preventDefault();
+    const page = this.dataset.page;
+    document.querySelectorAll('.admin-content').forEach((p) => p.classList.add('hidden'));
+    document.getElementById(`apage-${page}`).classList.remove('hidden');
+    document.querySelectorAll('.admin-link').forEach((l) => l.classList.remove('active'));
+    this.classList.add('active');
+    document.getElementById('adminPageTitle').textContent = pageTitles[page];
+    closeSidebar();
+    loadAdminPage(page);
+  }
 
   // Logout
   document.getElementById('adminLogoutBtn').addEventListener('click', async () => {
@@ -195,7 +202,7 @@ function renderUsersTable(users, search = '') {
   const filtered = search ? users.filter((u) => u.full_name.toLowerCase().includes(search.toLowerCase()) || u.email.toLowerCase().includes(search.toLowerCase())) : users;
   if (!filtered.length) { tbody.innerHTML = `<tr><td colspan="7" class="text-center py-8 text-slate-400">${I18N.t('admin.noUsers')}</td></tr>`; return; }
   tbody.innerHTML = filtered.map((u) => `
-    <tr class="border-b border-slate-100 hover:bg-slate-50">
+    <tr class="table-row hover:bg-slate-50 dark:hover:bg-slate-800/30">
       <td class="px-4 py-3 font-semibold text-slate-700">#${u.id}</td>
       <td class="px-4 py-3 text-slate-700">${u.full_name}</td>
       <td class="px-4 py-3 text-slate-500 text-sm">${u.email}</td>
@@ -277,7 +284,7 @@ async function loadApplications() {
   const tbody = document.getElementById('appsTable');
   if (!res.data.length) { tbody.innerHTML = `<tr><td colspan="7" class="text-center py-8 text-slate-400">${I18N.t('admin.noApplications')}</td></tr>`; return; }
   tbody.innerHTML = res.data.map((a) => `
-    <tr class="border-b border-slate-100 hover:bg-slate-50">
+    <tr class="table-row hover:bg-slate-50 dark:hover:bg-slate-800/30">
       <td class="px-4 py-3 font-semibold text-slate-700">#${a.id}</td>
       <td class="px-4 py-3 text-slate-700">${a.full_name}<div class="text-xs text-slate-400">${a.phone}</div></td>
       <td class="px-4 py-3 text-slate-700">${formatRupiah(a.amount)}</td>
@@ -366,7 +373,7 @@ async function loadTransactions() {
   const tbody = document.getElementById('txTable');
   if (!res.data.length) { tbody.innerHTML = `<tr><td colspan="7" class="text-center py-8 text-slate-400">${I18N.t('admin.noTransactions')}</td></tr>`; return; }
   tbody.innerHTML = res.data.map((t) => `
-    <tr class="border-b border-slate-100 hover:bg-slate-50">
+    <tr class="table-row hover:bg-slate-50 dark:hover:bg-slate-800/30">
       <td class="px-4 py-3 font-semibold text-slate-700">#${t.id}</td>
       <td class="px-4 py-3 text-slate-700">${t.full_name}</td>
       <td class="px-4 py-3 text-slate-700 capitalize">${t.type.replace('_', ' ')}</td>

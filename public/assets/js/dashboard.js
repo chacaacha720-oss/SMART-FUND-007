@@ -27,11 +27,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Mobile sidebar
   const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('sidebarOverlay');
-  document.getElementById('menuToggle').addEventListener('click', () => {
-    sidebar.classList.add('open');
-    overlay.classList.add('show');
-  });
-  overlay.addEventListener('click', () => { sidebar.classList.remove('open'); overlay.classList.remove('show'); });
+  const menuToggle = document.getElementById('menuToggle');
+  const openSidebar = () => { sidebar.classList.add('open'); overlay.classList.add('show'); };
+  const closeSidebar = () => { sidebar.classList.remove('open'); overlay.classList.remove('show'); };
+  menuToggle.removeEventListener('click', openSidebar);
+  menuToggle.addEventListener('click', openSidebar);
+  overlay.removeEventListener('click', closeSidebar);
+  overlay.addEventListener('click', closeSidebar);
 
   // Sidebar navigation
   const pageTitles = {
@@ -41,19 +43,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     balance: I18N.t('dash.balance'),
     limit: I18N.t('dash.limit'),
   };
+  function handleSidebarClick(e) {
+    e.preventDefault();
+    const page = this.dataset.page;
+    document.querySelectorAll('.page-content').forEach((p) => p.classList.add('hidden'));
+    const pageEl = document.getElementById(`page-${page}`);
+    if (pageEl) pageEl.classList.remove('hidden');
+    document.querySelectorAll('.sidebar-link').forEach((l) => l.classList.remove('active'));
+    this.classList.add('active');
+    document.getElementById('pageTitle').textContent = pageTitles[page] || I18N.t('dash.dashboard');
+    closeSidebar();
+    loadPageData(page);
+  }
   document.querySelectorAll('.sidebar-link[data-page]').forEach((link) => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const page = link.dataset.page;
-      document.querySelectorAll('.page-content').forEach((p) => p.classList.add('hidden'));
-      document.getElementById(`page-${page}`).classList.remove('hidden');
-      document.querySelectorAll('.sidebar-link').forEach((l) => l.classList.remove('active'));
-      link.classList.add('active');
-      document.getElementById('pageTitle').textContent = pageTitles[page] || I18N.t('dash.dashboard');
-      sidebar.classList.remove('open');
-      overlay.classList.remove('show');
-      loadPageData(page);
-    });
+    link.removeEventListener('click', handleSidebarClick);
+    link.addEventListener('click', handleSidebarClick);
   });
 
   // Logout
@@ -84,13 +88,28 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('applyPhone').value = currentUser.phone;
   document.getElementById('applyLimitInfo').textContent = formatRupiah(currentUser.loan_limit);
 
+  const applyInd1 = document.getElementById('applyInd1');
+  const applyInd2 = document.getElementById('applyInd2');
+  const applyLine1 = document.getElementById('applyLine1');
+  function applyStep1Active() {
+    applyInd1.classList.remove('complete'); applyInd1.classList.add('active');
+    applyInd2.classList.remove('active', 'complete'); applyInd2.classList.add('inactive');
+    if (applyLine1) { applyLine1.classList.remove('active'); applyLine1.classList.add('inactive'); }
+  }
+  function applyStep2Active() {
+    applyInd1.classList.remove('active'); applyInd1.classList.add('complete');
+    applyInd2.classList.remove('inactive', 'complete'); applyInd2.classList.add('active');
+    if (applyLine1) { applyLine1.classList.remove('inactive'); applyLine1.classList.add('active'); }
+  }
   document.getElementById('applyNextBtn').addEventListener('click', () => {
     document.getElementById('applyStep1').classList.add('hidden');
     document.getElementById('applyStep2').classList.remove('hidden');
+    applyStep2Active();
   });
   document.getElementById('applyBackBtn').addEventListener('click', () => {
     document.getElementById('applyStep2').classList.add('hidden');
     document.getElementById('applyStep1').classList.remove('hidden');
+    applyStep1Active();
   });
 
   // Estimasi real-time
@@ -136,7 +155,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       await openLoanAdminConfirmation(res.data.applicationId, amount, tenor, purpose);
       await loadDashboard();
-      document.querySelector('.sidebar-link[data-page="dashboard"]').click();
+      const dashLink = document.querySelector('.sidebar-link[data-page="dashboard"]');
+      if (dashLink) dashLink.click();
       // Beritahu admin (tab lain) bahwa ada pengajuan baru
       document.dispatchEvent(new CustomEvent('applySuccess'));
     } else {
@@ -208,7 +228,7 @@ async function loadPageData(page) {
     const tbody = document.getElementById('historyTable');
     if (res.success && res.data.length) {
       tbody.innerHTML = res.data.map((l) => `
-        <tr class="border-b border-slate-100 hover:bg-slate-50">
+        <tr class="table-row hover:bg-slate-50 dark:hover:bg-slate-800/30">
           <td class="px-4 py-3 font-semibold text-slate-700">#${l.id}</td>
           <td class="px-4 py-3 text-slate-700">${formatRupiah(l.amount)}</td>
           <td class="px-4 py-3 text-slate-700">${l.tenor} bln</td>
