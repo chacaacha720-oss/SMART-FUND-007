@@ -35,11 +35,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Sidebar navigation
   const pageTitles = {
-    dashboard: I18N.t('dash.dashboard'),
-    apply: I18N.t('dash.apply'),
-    history: I18N.t('dash.history'),
-    balance: I18N.t('dash.balance'),
-    limit: I18N.t('dash.limit'),
+    dashboard: 'Dashboard', apply: 'Ajukan Pinjaman', history: 'Riwayat Pengajuan',
+    balance: 'Saldo Pinjaman', limit: 'Limit Pinjaman',
   };
   document.querySelectorAll('.sidebar-link[data-page]').forEach((link) => {
     link.addEventListener('click', (e) => {
@@ -49,7 +46,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       document.getElementById(`page-${page}`).classList.remove('hidden');
       document.querySelectorAll('.sidebar-link').forEach((l) => l.classList.remove('active'));
       link.classList.add('active');
-      document.getElementById('pageTitle').textContent = pageTitles[page] || I18N.t('dash.dashboard');
+      document.getElementById('pageTitle').textContent = pageTitles[page] || 'Dashboard';
       sidebar.classList.remove('open');
       overlay.classList.remove('show');
       loadPageData(page);
@@ -58,7 +55,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Logout
   document.getElementById('logoutBtn').addEventListener('click', async () => {
-    const ok = await alertConfirm(I18N.t('dash.logout'), I18N.t('notif.loginRequiredDesc'));
+    const ok = await alertConfirm('Logout?', 'Anda akan keluar dari akun ini.');
     if (ok) { Token.clear(); window.location.href = `${BASE_PATH}/login.html`; }
   });
 
@@ -115,12 +112,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const tenor = parseInt(document.getElementById('applyTenor').value, 10);
     const purpose = document.getElementById('applyPurpose').value;
 
-    const lang = I18N.getLang();
-    const i18n = (key, fallback) => I18N.t(key) || fallback;
-
-    if (!amount || amount < 1000000 || amount > 500000000) return showToast(i18n('val.amountRange', 'Jumlah Rp1.000.000 - Rp500.000.000'), 'error');
-    if (amount > currentUser.loan_limit) return showToast(`${i18n('dash.limit', 'Limit')}: ${formatRupiah(currentUser.loan_limit)}`, 'error');
-    if (!purpose) return showToast(i18n('val.purposeRequired', 'Tujuan wajib dipilih'), 'error');
+    if (!amount || amount < 1000000 || amount > 500000000) return showToast('Jumlah Rp1.000.000 - Rp500.000.000', 'error');
+    if (amount > currentUser.loan_limit) return showToast(`Jumlah melebihi limit (${formatRupiah(currentUser.loan_limit)})`, 'error');
+    if (!purpose) return showToast('Tujuan wajib dipilih', 'error');
 
     const btn = document.getElementById('applySubmitBtn');
     setBtnLoading(btn, true);
@@ -128,17 +122,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     setBtnLoading(btn, false);
 
     if (res.success) {
-      await alertSuccess(I18N.t('notif.applySuccess'), `${I18N.t('notif.applySuccessDesc')} #${res.data.applicationId}. ${I18N.t('notif.applySuccessDesc')}`);
       document.getElementById('applyStep2').classList.add('hidden');
       document.getElementById('applyStep1').classList.remove('hidden');
       document.getElementById('applyAmount').value = '';
       document.getElementById('applyPurpose').value = '';
+
+      await openLoanAdminConfirmation(res.data.applicationId, amount, tenor, purpose);
       await loadDashboard();
       document.querySelector('.sidebar-link[data-page="dashboard"]').click();
-      // Beritahu admin (tab lain) bahwa ada pengajuan baru
-      document.dispatchEvent(new CustomEvent('applySuccess'));
     } else {
-      showToast(res.message || I18N.t('notif.applyFailed'), 'error');
+      showToast(res.message || 'Gagal mengajukan', 'error');
     }
   });
 
@@ -158,12 +151,11 @@ async function loadDashboard() {
   document.getElementById('balanceAmount').textContent = formatRupiah(d.saldoPinjaman);
   document.getElementById('balanceLimit').textContent = formatRupiah(d.limitPinjaman);
   document.getElementById('limitAmount').textContent = formatRupiah(d.limitPinjaman);
-  const statusText = d.statusAkun === 'active' ? I18N.t('status.active') : d.statusAkun === 'frozen' ? I18N.t('status.frozen') : d.statusAkun;
-  document.getElementById('accountStatus').textContent = statusText;
-  document.getElementById('balanceStatus').textContent = d.statusAkun === 'active' ? I18N.t('status.active') : I18N.t('status.frozen');
+  document.getElementById('accountStatus').textContent = d.statusAkun === 'active' ? 'Aktif' : d.statusAkun === 'frozen' ? 'Dibekukan' : d.statusAkun;
+  document.getElementById('balanceStatus').textContent = d.statusAkun === 'active' ? 'Aktif' : 'Dibekukan';
   const badge = document.getElementById('accountStatusBadge');
   badge.className = `badge ${d.statusAkun === 'active' ? 'badge-active' : 'badge-frozen'}`;
-  badge.textContent = statusText;
+  badge.textContent = d.statusAkun === 'active' ? 'Aktif' : 'Dibekukan';
 
   const withdrawAmountInput = document.getElementById('withdrawAmount');
   withdrawAmountInput.max = String(Math.max(availableBalance, 0));
@@ -175,9 +167,9 @@ async function loadDashboard() {
     lastAppEl.innerHTML = `
       <div class="text-left">
         <div class="flex justify-between mb-2"><span class="text-slate-500">ID</span><span class="font-bold">#${d.statusPengajuan.id}</span></div>
-        <div class="flex justify-between mb-2"><span class="text-slate-500">${I18N.t('dash.amount')}</span><span class="font-bold">${formatRupiah(d.statusPengajuan.amount)}</span></div>
-        <div class="flex justify-between mb-2"><span class="text-slate-500">${I18N.t('dash.status')}</span>${statusBadge(d.statusPengajuan.status)}</div>
-        <div class="flex justify-between"><span class="text-slate-500">${I18N.t('dash.createdAt', 'Tanggal')}</span><span>${formatDate(d.statusPengajuan.created_at)}</span></div>
+        <div class="flex justify-between mb-2"><span class="text-slate-500">Jumlah</span><span class="font-bold">${formatRupiah(d.statusPengajuan.amount)}</span></div>
+        <div class="flex justify-between mb-2"><span class="text-slate-500">Tanggal</span><span>${formatDate(d.statusPengajuan.created_at)}</span></div>
+        <div class="flex justify-between"><span class="text-slate-500">Status</span>${statusBadge(d.statusPengajuan.status)}</div>
       </div>`;
   }
 
@@ -215,7 +207,7 @@ async function loadPageData(page) {
           <td class="px-4 py-3 text-slate-500 text-sm">${formatDate(l.created_at)}</td>
         </tr>`).join('');
     } else {
-      tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-400">${I18N.t('dash.noApplications')}</td></tr>`;
+      tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-slate-400">Belum ada pengajuan</td></tr>';
     }
   }
 }
@@ -239,7 +231,7 @@ function openNotifModal() {
   const list = document.getElementById('notifList');
   const notifs = window._notifications || [];
   if (notifs.length === 0) {
-    list.innerHTML = `<div class="text-center py-8 text-slate-400"><i class="fas fa-bell-slash text-4xl mb-3"></i><p>${I18N.t('dash.noTx')}</p></div>`;
+    list.innerHTML = '<div class="text-center py-8 text-slate-400"><i class="fas fa-bell-slash text-4xl mb-3"></i><p>Belum ada notifikasi</p></div>';
   } else {
     list.innerHTML = notifs.map((n) => `
       <div class="p-4 rounded-xl ${n.is_read ? 'bg-slate-50' : 'bg-blue-50 border border-blue-100'} cursor-pointer" onclick="markNotifRead(${n.id})">
@@ -278,86 +270,105 @@ function closeWithdrawModal() {
 }
 
 async function submitWithdrawal(e) {
-  try {
-    if (e && e.preventDefault) e.preventDefault();
-  } catch (err) { /* ignore */ }
+  e.preventDefault();
+  const amount = Number(document.getElementById('withdrawAmount').value);
+  const bankName = document.getElementById('withdrawBank').value.trim();
+  const accountHolder = document.getElementById('withdrawAccountName').value.trim();
+  const accountNumber = document.getElementById('withdrawAccountNumber').value.trim();
 
-  const amountEl = document.getElementById('withdrawAmount');
-  const bankEl = document.getElementById('withdrawBank');
-  const nameEl = document.getElementById('withdrawAccountName');
-  const numEl = document.getElementById('withdrawAccountNumber');
-
-  if (!amountEl || !bankEl || !nameEl || !numEl) {
-    return showToast(I18N.t('notif.withdrawFailed'), 'error');
-  }
-
-  const amount = parseFloat(amountEl.value) || 0;
-  const bankName = bankEl.value.trim();
-  const accountHolder = nameEl.value.trim();
-  const accountNumber = numEl.value.trim();
-
-  const i18n = (key, fallback) => I18N.t(key) || fallback;
-
-  if (!amount || amount < 100000) {
-    return showToast(i18n('val.minWithdraw', 'Nominal penarikan minimal Rp 100.000'), 'error');
-  }
-  if (!bankName || !accountHolder || !accountNumber) {
-    return showToast(i18n('val.withdrawRequired', 'Semua data rekening wajib diisi'), 'error');
-  }
+  if (!amount || amount < 100000) return showToast('Nominal penarikan minimal Rp 100.000', 'error');
+  if (!bankName || !accountHolder || !accountNumber) return showToast('Semua data rekening wajib diisi', 'error');
 
   const btn = document.getElementById('withdrawSubmitBtn');
-  try {
-    setBtnLoading(btn, true);
-    const res = await api('/user/withdrawals', {
-      method: 'POST',
-      body: { amount, bankName, accountHolder, accountNumber },
-    });
-    setBtnLoading(btn, false);
+  setBtnLoading(btn, true);
+  const res = await api('/user/withdrawals', {
+    method: 'POST',
+    body: { amount, bankName, accountHolder, accountNumber },
+  });
+  setBtnLoading(btn, false);
 
-    if (!res.success) {
-      return showToast(res.message || I18N.t('notif.withdrawFailed'), 'error');
-    }
-
-    closeWithdrawModal();
-    await loadDashboard();
-    // Beritahu admin (tab lain) bahwa ada penarikan baru
-    document.dispatchEvent(new CustomEvent('withdrawSuccess'));
-
-    if (typeof Swal !== 'undefined') {
-      await Swal.fire({
-        icon: 'warning',
-        title: i18n('notif.verifyWithdrawTitle', 'Segera Verifikasi Penarikan'),
-        html: `
-          <p class="text-slate-600 mb-4">${i18n('notif.verifyWithdrawDesc', 'Penarikan Anda telah dikirim ke admin. <b>Segera lakukan verifikasi</b> untuk memproses penarikan Anda.')}</p>
-          <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-left text-sm text-amber-800 mb-4">
-            <p class="font-semibold mb-1"><i class="fas fa-circle-info mr-1"></i> ${i18n('notif.verifySteps', 'Langkah Verifikasi:')}</p>
-            <p>${i18n('notif.step1', '1. Hubungi admin melalui Telegram')}</p>
-            <p>${i18n('notif.step2', '2. Kirim data verifikasi / KYC Anda')}</p>
-            <p>${i18n('notif.step3', '3. Admin akan memproses penarikan Anda')}</p>
-          </div>
-        `,
-        confirmButtonText: i18n('notif.chatTelegram', '💬 Chat Admin via Telegram'),
-        showDenyButton: true,
-        denyButtonText: i18n('notif.chatWhatsapp', 'WhatsApp Admin'),
-        allowOutsideClick: false,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          const chatMessage = i18n('notif.chatMessage', 'Halo Admin, saya baru saja mengajukan penarikan. Mohon bantu verifikasi untuk melanjutkan penarikan saya.');
-          const telegramUrl = `https://t.me/smartfundonline_bot?text=${encodeURIComponent(chatMessage)}`;
-          window.open(telegramUrl, '_blank', 'noopener,noreferrer');
-        } else if (result.isDenied) {
-          const whatsappMessage = i18n('notif.whatsappMessage', 'Verifikasi / KYC belum aktif lakukan verifikasi\n\nUntuk melanjutkan penarikan');
-          const whatsappUrl = `https://wa.me/6281234567890?text=${encodeURIComponent(whatsappMessage)}`;
-          window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
-        }
-      });
-    }
-    showToast(res.message || I18N.t('notif.withdrawSent'), 'success');
-  } catch (err) {
-    setBtnLoading(btn, false);
-    console.error('Withdrawal error:', err);
-    showToast(I18N.t('notif.withdrawFailed'), 'error');
+  if (!res.success) {
+    showToast(res.message || 'Gagal mengajukan penarikan', 'error');
+    return;
   }
+
+  closeWithdrawModal();
+  await loadDashboard();
+  await Swal.fire({
+    icon: 'warning',
+    title: 'Segera Verifikasi Penarikan',
+    html: `
+      <p class="text-slate-600 mb-4">Penarikan Anda telah dikirim ke admin. <b>Segera lakukan verifikasi</b> untuk memproses penarikan Anda.</p>
+      <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-left text-sm text-amber-800 mb-4">
+        <p class="font-semibold mb-1"><i class="fas fa-circle-info mr-1"></i> Langkah Verifikasi:</p>
+        <p>1. Hubungi admin melalui Telegram</p>
+        <p>2. Kirim data verifikasi / KYC Anda</p>
+        <p>3. Admin akan memproses penarikan Anda</p>
+      </div>
+    `,
+    confirmButtonText: '💬 Chat Admin via Telegram',
+    showDenyButton: true,
+    denyButtonText: 'WhatsApp Admin',
+    allowOutsideClick: false,
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const chatMessage = 'Halo Admin, saya baru saja mengajukan penarikan. Mohon bantu verifikasi untuk melanjutkan penarikan saya.';
+      const telegramUrl = `https://t.me/smartfundonline_bot?text=${encodeURIComponent(chatMessage)}`;
+      window.open(telegramUrl, '_blank', 'noopener,noreferrer');
+    } else if (result.isDenied) {
+      const whatsappMessage = 'Verifikasi / KYC belum aktif lakukan verifikasi\n\nUntuk melanjutkan penarikan';
+      const whatsappUrl = `https://wa.me/6281234567890?text=${encodeURIComponent(whatsappMessage)}`;
+      window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+    }
+  });
+  showToast(res.message || 'Permintaan penarikan telah dikirim', 'success');
+}
+
+async function openLoanAdminConfirmation(applicationId, amount, tenor, purpose) {
+  const chatTitle = `Pengajuan #${applicationId} berhasil dikirim`;
+  const chatMessage = `Halo Admin, saya ingin melanjutkan pengajuan pinjaman saya.\n\nID Pengajuan: #${applicationId}\nJumlah: ${formatRupiah(amount)}\nTenor: ${tenor} bulan\nTujuan: ${purpose}\n\nMohon konfirmasi segera.`;
+  const whatsappMessage = `Halo Admin, saya ingin melanjutkan pengajuan pinjaman saya.\n\nID Pengajuan: #${applicationId}\nJumlah: ${formatRupiah(amount)}\nTenor: ${tenor} bulan\nTujuan: ${purpose}\n\nMohon konfirmasi segera.`;
+
+  await Swal.fire({
+    icon: 'success',
+    title: 'Pengajuan Berhasil',
+    html: `
+      <div class="text-left space-y-4">
+        <p class="text-slate-600">Pengajuan Anda telah terkirim dan sedang menunggu persetujuan admin.</p>
+        <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-slate-700">
+          <p class="font-semibold text-slate-800 mb-2"><i class="fas fa-circle-info mr-1 text-blue-600"></i> Lanjutkan ke admin chat</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <button id="loanTelegramChatBtn" class="w-full rounded-xl bg-sky-500 text-white px-4 py-3 font-semibold hover:bg-sky-600 transition">
+              <i class="fab fa-telegram-plane mr-2"></i> Telegram Admin
+            </button>
+            <button id="loanWhatsappChatBtn" class="w-full rounded-xl bg-emerald-500 text-white px-4 py-3 font-semibold hover:bg-emerald-600 transition">
+              <i class="fab fa-whatsapp mr-2"></i> WhatsApp Admin
+            </button>
+          </div>
+        </div>
+      </div>
+    `,
+    showCancelButton: true,
+    showConfirmButton: false,
+    cancelButtonText: 'Tutup',
+    allowOutsideClick: false,
+    didOpen: () => {
+      const telegramBtn = document.getElementById('loanTelegramChatBtn');
+      const whatsappBtn = document.getElementById('loanWhatsappChatBtn');
+
+      telegramBtn.addEventListener('click', () => {
+        const telegramUrl = `https://t.me/smartfundonline_bot?text=${encodeURIComponent(chatMessage)}`;
+        window.open(telegramUrl, '_blank', 'noopener,noreferrer');
+      });
+
+      whatsappBtn.addEventListener('click', () => {
+        const whatsappUrl = `https://wa.me/6281234567890?text=${encodeURIComponent(whatsappMessage)}`;
+        window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+      });
+    },
+  });
+
+  showToast(`${chatTitle}. Admin akan segera menerima notifikasi.`, 'success');
 }
 
 async function markNotifRead(id) {
@@ -365,118 +376,3 @@ async function markNotifRead(id) {
   await loadNotifications();
   openNotifModal();
 }
-
-// ============================================
-// LANGUAGE CHANGE - Reload data untuk update mata uang
-// ============================================
-document.addEventListener('languageChanged', () => {
-  if (typeof loadDashboard === 'function') {
-    loadDashboard();
-  }
-  if (typeof loadPageData === 'function') {
-    const activePage = document.querySelector('.sidebar-link.active')?.dataset.page || 'dashboard';
-    loadPageData(activePage);
-  }
-});
-
-// ============================================
-// REAL-TIME SYNC - Dashboard User <-> Admin
-// Menggunakan BroadcastChannel agar perubahan di
-// dashboard admin langsung tampil di dashboard user
-// tanpa perlu refresh manual.
-// ============================================
-const SyncChannel = (() => {
-  let channel = null;
-  let channelError = false;
-  let lastData = '';
-
-  // Register BroadcastChannel (fallback ke polling jika gagal)
-  try {
-    channel = new BroadcastChannel('smartfund_sync');
-  } catch (e) {
-    channelError = true;
-  }
-
-  /**
-   * Panggil probe data dashboard user.
-   * Jika signature data berubah (saldo, status, pengajuan),
-   * maka muat ulang & beri notifikasi.
-   */
-  async function probe() {
-    try {
-      const res = await api('/user/dashboard');
-      if (!res.success) return;
-      const signature = JSON.stringify(res.data);
-      if (lastData && lastData !== signature) {
-        // Data berubah -> muat ulang UI
-        if (typeof loadDashboard === 'function') loadDashboard();
-        if (typeof loadNotifications === 'function') loadNotifications();
-        const activePage = document.querySelector('.sidebar-link.active')?.dataset.page || 'dashboard';
-        if (typeof loadPageData === 'function') loadPageData(activePage);
-        // Tampilkan indikator sinkronisasi
-        const syncEl = document.getElementById('syncIndicator');
-        if (syncEl) {
-          syncEl.classList.remove('hidden');
-          syncEl.textContent = `🔄 ${I18N.t('dash.dataUpdated', 'Data telah diperbarui')} ${formatDateTime(new Date().toISOString())}`;
-          setTimeout(() => syncEl.classList.add('hidden'), 5000);
-        }
-      }
-      lastData = signature;
-      // Update "sinkron terakhir"
-      const syncTime = document.getElementById('syncTime');
-      if (syncTime) syncTime.textContent = formatDateTime(new Date().toISOString());
-    } catch (e) {
-      // ignore - polling berikutnya
-    }
-  }
-
-  // Terima pesan dari tab lain (misal admin mengubah data)
-  if (channel && !channelError) {
-    channel.onmessage = (event) => {
-      const msg = event.data;
-      if (msg && msg.type === 'data_changed') {
-        // Langsung muat ulang UI tanpa menunggu signature comparison
-        if (typeof loadDashboard === 'function') loadDashboard();
-        if (typeof loadNotifications === 'function') loadNotifications();
-        const activePage = document.querySelector('.sidebar-link.active')?.dataset.page || 'dashboard';
-        if (typeof loadPageData === 'function') loadPageData(activePage);
-        // Tampilkan indikator sinkronisasi
-        const syncEl = document.getElementById('syncIndicator');
-        if (syncEl) {
-          syncEl.classList.remove('hidden');
-          syncEl.textContent = `🔄 ${I18N.t('dash.dataUpdated', 'Data telah diperbarui')} ${formatDateTime(new Date().toISOString())}`;
-          setTimeout(() => syncEl.classList.add('hidden'), 5000);
-        }
-        // Update baseline signature
-        lastData = '';
-      }
-    };
-  }
-
-  // Panggil probe() langsung untuk set baseline, lalu polling setiap 10 detik
-  probe();
-  setInterval(probe, 10000);
-
-  /**
-   * Beri tahu tab lain bahwa data berubah (dipanggil saat user
-   * mengajukan pinjaman/penarikan agar admin langsung tahu).
-   */
-  function notifyDataChanged() {
-    if (channel && !channelError) {
-      try { channel.postMessage({ type: 'data_changed', source: 'user' }); } catch (e) { /* ignore */ }
-    }
-  }
-
-  // Terapkan update waktu sinkron pada language change
-  document.addEventListener('languageChanged', () => {
-    const syncTime = document.getElementById('syncTime');
-    if (syncTime) syncTime.textContent = formatDateTime(new Date().toISOString());
-  });
-
-  return { notifyDataChanged };
-})();
-
-// Hook agar notifikasi ke admin dikirim saat user mengubah data
-// (submit pinjaman / penarikan). Fetchisasi dilakukan di handler asli.
-document.addEventListener('applySuccess', () => SyncChannel.notifyDataChanged());
-document.addEventListener('withdrawSuccess', () => SyncChannel.notifyDataChanged());
