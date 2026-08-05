@@ -1,6 +1,7 @@
 /**
  * SMART FUND - Database Initialization Script
  * Menjalankan schema.sql dan membuat admin default
+ * Railway compatible - uses Environment Variables only.
  */
 require('dotenv').config();
 const fs = require('fs');
@@ -8,38 +9,53 @@ const path = require('path');
 const mysql = require('mysql2/promise');
 const bcrypt = require('bcrypt');
 
-async function initDatabase() {
+function getDbConfig() {
   // Parse DATABASE_URL if present (Railway format: mysql://user:pass@host:port/db)
   const dbUrl = process.env.DATABASE_URL || process.env.MYSQL_PRIVATE_URL || '';
-
-  let host = 'localhost';
-  let port = 3306;
-  let user = 'root';
-  let password = '';
-  let database = 'smart_fund';
 
   if (dbUrl) {
     try {
       const url = new URL(dbUrl);
-      host = url.hostname;
-      port = parseInt(url.port || '3306', 10);
-      user = decodeURIComponent(url.username || 'root');
-      password = decodeURIComponent(url.password || '');
-      database = url.pathname.replace(/^\//, '') || 'smart_fund';
+      return {
+        host: url.hostname,
+        port: parseInt(url.port || '3306', 10),
+        user: decodeURIComponent(url.username || ''),
+        password: decodeURIComponent(url.password || ''),
+        database: url.pathname.replace(/^\//, '') || '',
+      };
     } catch (err) {
       console.error('[DB] Failed to parse DATABASE_URL:', err.message);
     }
-  } else {
-    host = process.env.DB_HOST || process.env.MYSQLHOST || process.env.MYSQL_HOST || process.env.DATABASE_HOST || 'localhost';
-    port = parseInt(process.env.DB_PORT || process.env.MYSQLPORT || process.env.MYSQL_PORT || process.env.DATABASE_PORT || '3306', 10);
-    user = process.env.DB_USER || process.env.MYSQLUSER || process.env.MYSQL_USER || process.env.DATABASE_USER || 'root';
-    password = process.env.DB_PASSWORD || process.env.MYSQLPASSWORD || process.env.MYSQL_PASSWORD || process.env.DATABASE_PASSWORD || '';
-    database = process.env.DB_NAME || process.env.MYSQLDATABASE || process.env.MYSQL_DB || process.env.DATABASE_NAME || 'smart_fund';
   }
+
+  return {
+    host: process.env.DB_HOST || process.env.MYSQLHOST || process.env.MYSQL_HOST || process.env.DATABASE_HOST || '',
+    port: parseInt(process.env.DB_PORT || process.env.MYSQLPORT || process.env.MYSQL_PORT || process.env.DATABASE_PORT || '3306', 10),
+    user: process.env.DB_USER || process.env.MYSQLUSER || process.env.MYSQL_USER || process.env.DATABASE_USER || '',
+    password: process.env.DB_PASSWORD || process.env.MYSQLPASSWORD || process.env.MYSQL_PASSWORD || process.env.DATABASE_PASSWORD || '',
+    database: process.env.DB_NAME || process.env.MYSQLDATABASE || process.env.MYSQL_DB || process.env.DATABASE_NAME || '',
+  };
+}
+
+async function initDatabase() {
+  const { host, port, user, password, database } = getDbConfig();
 
   console.log('============================================');
   console.log('  SMART FUND - Database Initialization');
   console.log('============================================\n');
+
+  // Validate required config - fail fast with clear error
+  const missingVars = [];
+  if (!host) missingVars.push('DB_HOST');
+  if (!user) missingVars.push('DB_USER');
+  if (!database) missingVars.push('DB_NAME');
+
+  if (missingVars.length > 0) {
+    console.error(`[ERROR] Missing Environment Variables: ${missingVars.join(', ')}`);
+    console.error('       Pastikan .env atau variabel Railway sudah di-set dengan benar.');
+    console.error(`       DB_PORT: ${port}, DB_PASSWORD: ${password ? '***' : '(kosong)'}`);
+    process.exit(1);
+  }
 
   // 1. Connect to MySQL server (with database if exists)
   let conn;
@@ -53,6 +69,11 @@ async function initDatabase() {
       console.log('[OK] Connected to MySQL server (without database)');
     } catch (err2) {
       console.error('[ERROR] Cannot connect to MySQL:', err.message);
+      if (err2.code === 'ECONNREFUSED') {
+        console.error('       Kemungkinan penyebab: MySQL tidak berjalan atau host/port salah.');
+      } else if (err2.code === 'ER_ACCESS_DENIED_ERROR') {
+        console.error('       Kemungkinan penyebab: Username atau password salah (Access denied).');
+      }
       console.error('       Pastikan MySQL berjalan dan kredensial di .env benar.');
       process.exit(1);
     }

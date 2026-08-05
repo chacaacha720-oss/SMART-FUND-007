@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Dashboard - SMART FUND</title>
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>tailwind.config = { darkMode: 'class' };</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -86,6 +86,11 @@
               <h1 id="adminPageTitle" class="text-lg font-bold text-slate-900">Dashboard</h1>
             </div>
             <div class="flex items-center gap-3">
+              <select data-lang-select class="px-2 py-2 rounded-lg bg-slate-100 text-sm font-semibold text-slate-700 focus:outline-none cursor-pointer">
+                <option value="id">🇮🇩 ID</option>
+                <option value="ms">🇲🇾 MS</option>
+                <option value="en">🇬🇧 EN</option>
+              </select>
               <button id="darkToggle" class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center"><i class="fas fa-moon text-slate-600"></i></button>
               <div class="flex items-center gap-2">
                 <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white font-bold">A</div>
@@ -310,7 +315,18 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+  <script src="/assets/js/i18n.js"></script>
   <script src="/assets/js/api.js"></script>
   <script src="/assets/js/admin.js"></script>
+  <script>
+    // Language selector handler
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('[data-lang-select]').forEach((select) => {
+        select.addEventListener('change', (e) => {
+          I18N.setLang(e.target.value);
+        });
+      });
+    });
+  </script>
 </body>
 </html>

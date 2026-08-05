@@ -2,22 +2,58 @@
  * SMART FUND - Main Server
  * Platform Pinjaman Online Terpercaya
  * Node.js + Express + MySQL + Telegram Bot
+ * 
+ * Railway compatible - uses Environment Variables only.
+ * No hardcoded localhost. Uses process.env.PORT || 3000.
  */
 require('dotenv').config();
 
+const fs = require('fs');
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
-const path = require('path');
 const rateLimit = require('express-rate-limit');
 const session = require('express-session');
 
 const routes = require('./routes');
 const { notFound, multerErrorHandler, globalErrorHandler } = require('./middleware/errorHandler');
+const { i18nMiddleware } = require('./middleware/i18n');
 const { getTelegramSettings, handleTelegramWebhookUpdate } = require('./config/telegram');
+const db = require('./config/db');
 
 const app = express();
-const PORT = Number(process.env.PORT) || 3000;
+const PORT = process.env.PORT || 3000;
+
+// ============================================
+// STARTUP LOGGING
+// ============================================
+console.log('============================================');
+console.log('  SMART FUND - Platform Pinjaman Online');
+console.log('============================================');
+console.log('✔ Environment Loaded');
+console.log(`  NODE_ENV: ${process.env.NODE_ENV || 'development'}`);
+console.log(`  PORT: ${PORT}`);
+
+// Detect Railway environment
+if (process.env.RAILWAY_SERVICE_NAME || process.env.RAILWAY_PUBLIC_DOMAIN || process.env.RAILWAY_DATABASE_ID) {
+  console.log('✔ Railway Environment Loaded');
+} else if (process.env.DATABASE_URL || process.env.MYSQL_PRIVATE_URL) {
+  console.log('✔ Railway/Cloud Database URL Detected');
+} else {
+  console.log('✔ Local Environment');
+}
+
+// ============================================
+// AUTO-CREATE UPLOADS FOLDER
+// ============================================
+const uploadDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+  console.log('✔ Uploads folder created:', uploadDir);
+} else {
+  console.log('✔ Uploads folder exists:', uploadDir);
+}
 
 // ============================================
 // SECURITY MIDDLEWARE
@@ -37,7 +73,12 @@ const apiLimiter = rateLimit({
   max: 300,
   standardHeaders: true,
   legacyHeaders: false,
-  message: { success: false, message: 'Terlalu banyak request. Coba lagi nanti.' },
+  // Message is localized by the i18n middleware
+  message: (req) => {
+    const { t } = require('./config/i18n');
+    const lang = req.lang || 'id';
+    return { success: false, message: t(lang, 'error.tooManyRequests') };
+  },
 });
 
 // ============================================
@@ -45,13 +86,19 @@ const apiLimiter = rateLimit({
 // ============================================
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Session - secure cookies only in production with a proper PROXY_TRUST setting
+const isProduction = process.env.NODE_ENV === 'production';
+app.set('trust proxy', isProduction ? 1 : false);
+
 app.use(session({
   secret: process.env.SESSION_SECRET || 'smartfund_session_secret_2026',
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: process.env.NODE_ENV === 'production',
+    secure: isProduction && process.env.COOKIE_SECURE === 'true',
     httpOnly: true,
+    sameSite: 'lax',
     maxAge: 24 * 60 * 60 * 1000,
   },
 }));
@@ -65,7 +112,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // ============================================
 // ROUTES
 // ============================================
-app.use('/api', apiLimiter, routes);
+app.use('/api', i18nMiddleware, apiLimiter, routes);
 
 app.post('/api/telegram/webhook', async (req, res) => {
   const update = req.body || {};
@@ -95,17 +142,47 @@ app.use(globalErrorHandler);
 // ============================================
 // START SERVER
 // ============================================
-app.listen(PORT, '0.0.0.0', () => {
+const server = app.listen(PORT, '0.0.0.0', () => {
+  console.log('✔ Server Running');
   console.log('============================================');
-  console.log('  SMART FUND - Platform Pinjaman Online');
+  console.log(`  Server: http://0.0.0.0:${PORT}`);
+  console.log(`  API:    http://0.0.0.0:${PORT}/api`);
+  console.log(`  Env:    ${process.env.NODE_ENV || 'development'}`);
   console.log('============================================');
-  console.log(`  Server running on http://0.0.0.0:${PORT}`);
-  console.log(`  API base: http://0.0.0.0:${PORT}/api`);
-  console.log(`  Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log('============================================');
-  console.log('');
   console.log('  (jalankan: npm run db:init untuk setup database)');
   console.log('');
+});
+
+// ============================================
+// GLOBAL UNHANDLED ERROR HANDLING
+// ============================================
+process.on('uncaughtException', (err) => {
+  console.error('[FATAL] Uncaught Exception:', err.message);
+  console.error(err.stack);
+  // Don't crash - log and continue
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('[FATAL] Unhandled Rejection at:', promise);
+  console.error('[FATAL] Reason:', reason);
+  // Don't crash - log and continue
+});
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('✔ SIGTERM received - shutting down gracefully...');
+  server.close(() => {
+    console.log('✔ Server closed');
+    process.exit(0);
+  });
+});
+
+process.on('SIGINT', () => {
+  console.log('✔ SIGINT received - shutting down gracefully...');
+  server.close(() => {
+    console.log('✔ Server closed');
+    process.exit(0);
+  });
 });
 
 module.exports = app;

@@ -329,3 +329,17 @@ async function markNotifRead(id) {
   await loadNotifications();
   openNotifModal();
 }
+
+// ============================================
+// LANGUAGE CHANGE - Reload data untuk update mata uang
+// ============================================
+document.addEventListener('languageChanged', () => {
+  // Reload dashboard data to update currency display
+  if (typeof loadDashboard === 'function') {
+    loadDashboard();
+  }
+  if (typeof loadPageData === 'function') {
+    const activePage = document.querySelector('.sidebar-link.active')?.dataset.page || 'dashboard';
+    loadPageData(activePage);
+  }
+});

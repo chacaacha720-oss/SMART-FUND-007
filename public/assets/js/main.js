@@ -57,18 +57,61 @@ document.addEventListener('DOMContentLoaded', () => {
     return { monthly, total, interest };
   }
 
+  // Range min/max per mata uang - slider tetap dalam IDR untuk konsistensi
+  const LOAN_LIMITS_IDR = {
+    min: 1000000,    // Rp 1.000.000 (≈ RM 290, ≈ $ 62)
+    max: 500000000,   // Rp 500.000.000 (≈ RM 145.000, ≈ $ 31.000)
+    step: 1000000,   // Rp 1.000.000
+    defaultVal: 10000000, // Rp 10.000.000
+  };
+
+  function updateCalculatorRange() {
+    if (!loanAmount) return;
+    // Slider selalu menggunakan IDR untuk konsistensi logika
+    loanAmount.min = LOAN_LIMITS_IDR.min;
+    loanAmount.max = LOAN_LIMITS_IDR.max;
+    loanAmount.step = LOAN_LIMITS_IDR.step;
+    // Set ke nilai default dalam IDR
+    const currentVal = parseInt(loanAmount.value, 10);
+    if (!currentVal || currentVal < LOAN_LIMITS_IDR.min || currentVal > LOAN_LIMITS_IDR.max) {
+      loanAmount.value = LOAN_LIMITS_IDR.defaultVal;
+    }
+    // Update min/max labels dengan format currency
+    const minLabel = document.getElementById('calcMinLabel');
+    const maxLabel = document.getElementById('calcMaxLabel');
+    if (minLabel) minLabel.textContent = formatRupiah(LOAN_LIMITS_IDR.min);
+    if (maxLabel) maxLabel.textContent = formatRupiah(LOAN_LIMITS_IDR.max);
+  }
+
   function updateCalculator() {
     if (!loanAmount) return;
+    // Slider value selalu dalam IDR
     const amount = parseInt(loanAmount.value, 10);
     const tenor = parseInt(loanTenor.value, 10);
+
+    if (isNaN(amount) || amount < LOAN_LIMITS_IDR.min) {
+      loanAmount.value = LOAN_LIMITS_IDR.min;
+      return updateCalculator();
+    }
+    if (amount > LOAN_LIMITS_IDR.max) {
+      loanAmount.value = LOAN_LIMITS_IDR.max;
+      return updateCalculator();
+    }
+
+    // Tampilkan nilai amount dalam mata uang aktif
     amountDisplay.textContent = formatRupiah(amount);
+
+    // Kalkulasi bunga selalu dalam IDR (5% per tahun)
     const calc = calculateLoan(amount, tenor, 5);
+
+    // Tampilkan hasil dalam mata uang aktif
     monthlyPaymentEl.textContent = formatRupiah(calc.monthly);
     totalInterestEl.textContent = formatRupiah(calc.interest);
     totalPaymentEl.textContent = formatRupiah(calc.total);
   }
 
   if (loanAmount) {
+    updateCalculatorRange();
     loanAmount.addEventListener('input', updateCalculator);
     loanTenor.addEventListener('change', updateCalculator);
     updateCalculator();
@@ -205,18 +248,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 12 testimoni, dibagi per grup 3
   const allTestimoni = [
-    { name: 'Budi Santoso', role: 'Pengusaha, Jakarta', photo: 'https://i.pravatar.cc/150?img=12', rating: 5, text: 'Prosesnya cepat dan mudah. Saya bisa mendapatkan modal usaha dalam waktu singkat. Terima kasih SMART FUND!' },
-    { name: 'Siti Rahayu', role: 'Ibu Rumah Tangga, Bandung', photo: 'https://i.pravatar.cc/150?img=47', rating: 5, text: 'Bunganya ringan dan transparan. Tidak ada biaya tersembunyi. Sangat membantu untuk renovasi rumah saya.' },
-    { name: 'Ahmad Fauzi', role: 'Karyawan, Surabaya', photo: 'https://i.pravatar.cc/150?img=33', rating: 5, text: 'Platform pinjaman online terpercaya. Berizin OJK jadi lebih aman. Proses verifikasi cepat dan praktis.' },
-    { name: 'Dewi Lestari', role: 'Mahasiswa, Yogyakarta', photo: 'https://i.pravatar.cc/150?img=49', rating: 5, text: 'Dana pendidikan saya cair tepat waktu. Prosesnya sangat membantu untuk kelancaran studi saya.' },
-    { name: 'Rizky Pratama', role: 'Freelancer, Bali', photo: 'https://i.pravatar.cc/150?img=15', rating: 5, text: 'Saya butuh modal mendadak untuk project klien. SMART FUND cair dalam 1 hari kerja. Mantap!' },
-    { name: 'Linda Kusuma', role: 'Dokter, Medan', photo: 'https://i.pravatar.cc/150?img=44', rating: 5, text: 'Pelayanan customer service-nya ramah dan responsif. Cicilan ringan sesuai kemampuan saya.' },
-    { name: 'Hendra Wijaya', role: 'Petani, Semarang', photo: 'https://i.pravatar.cc/150?img=8', rating: 5, text: 'Modal usaha pertanian saya jadi lancar. Bunganya sangat kompetitif dibanding tempat lain.' },
-    { name: 'Maya Anggraini', role: 'Ibu Rumah Tangga, Makassar', photo: 'https://i.pravatar.cc/150?img=20', rating: 5, text: 'Untuk kebutuhan biaya persalinan, SMART FUND benar-benar membantu. Prosesnya cepat dan aman.' },
-    { name: 'Andi Setiawan', role: 'PNS, Palembang', photo: 'https://i.pravatar.cc/150?img=53', rating: 5, text: 'Renovasi rumah saya berjalan lancar dengan bantuan pinjaman dari SMART FUND. Recommended!' },
-    { name: 'Fitri Handayani', role: 'Wiraswasta, Bogor', photo: 'https://i.pravatar.cc/150?img=25', rating: 5, text: 'Tidak ada biaya tersembunyi, semuanya transparan. Admin verifikasi sangat cepat dan profesional.' },
-    { name: 'Joko Susilo', role: 'Mekanik, Malang', photo: 'https://i.pravatar.cc/150?img=11', rating: 5, text: 'Buka usaha bengkel jadi lebih mudah. Pinjaman cair tanpa ribet dan syarat yang mudah.' },
-    { name: 'Ratna Sari', role: 'Guru, Denpasar', photo: 'https://i.pravatar.cc/150?img=38', rating: 5, text: 'Saya sangat terbantu untuk biaya pendidikan anak. SMART FUND bisa diandalkan dan terpercaya.' },
+    { name: 'Budi Santoso', role: 'Pengusaha, Jakarta', rating: 5, text: 'Prosesnya cepat dan mudah. Saya bisa mendapatkan modal usaha dalam waktu singkat. Terima kasih SMART FUND!' },
+    { name: 'Siti Rahayu', role: 'Ibu Rumah Tangga, Bandung', rating: 5, text: 'Bunganya ringan dan transparan. Tidak ada biaya tersembunyi. Sangat membantu untuk renovasi rumah saya.' },
+    { name: 'Ahmad Fauzi', role: 'Karyawan, Surabaya', rating: 5, text: 'Platform pinjaman online terpercaya. Berizin OJK jadi lebih aman. Proses verifikasi cepat dan praktis.' },
+    { name: 'Dewi Lestari', role: 'Mahasiswa, Yogyakarta', rating: 5, text: 'Dana pendidikan saya cair tepat waktu. Prosesnya sangat membantu untuk kelancaran studi saya.' },
+    { name: 'Rizky Pratama', role: 'Freelancer, Bali', rating: 5, text: 'Saya butuh modal mendadak untuk project klien. SMART FUND cair dalam 1 hari kerja. Mantap!' },
+    { name: 'Linda Kusuma', role: 'Dokter, Medan', rating: 5, text: 'Pelayanan customer service-nya ramah dan responsif. Cicilan ringan sesuai kemampuan saya.' },
+    { name: 'Hendra Wijaya', role: 'Petani, Semarang', rating: 5, text: 'Modal usaha pertanian saya jadi lancar. Bunganya sangat kompetitif dibanding tempat lain.' },
+    { name: 'Maya Anggraini', role: 'Ibu Rumah Tangga, Makassar', rating: 5, text: 'Untuk kebutuhan biaya persalinan, SMART FUND benar-benar membantu. Prosesnya cepat dan aman.' },
+    { name: 'Andi Setiawan', role: 'PNS, Palembang', rating: 5, text: 'Renovasi rumah saya berjalan lancar dengan bantuan pinjaman dari SMART FUND. Recommended!' },
+    { name: 'Fitri Handayani', role: 'Wiraswasta, Bogor', rating: 5, text: 'Tidak ada biaya tersembunyi, semuanya transparan. Admin verifikasi sangat cepat dan profesional.' },
+    { name: 'Joko Susilo', role: 'Mekanik, Malang', rating: 5, text: 'Buka usaha bengkel jadi lebih mudah. Pinjaman cair tanpa ribet dan syarat yang mudah.' },
+    { name: 'Ratna Sari', role: 'Guru, Denpasar', rating: 5, text: 'Saya sangat terbantu untuk biaya pendidikan anak. SMART FUND bisa diandalkan dan terpercaya.' },
   ];
 
   // Acak urutan testimoni (shuffle)
@@ -250,7 +293,9 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="flex text-amber-400 mb-4">${stars}</div>
             <p class="text-slate-600 mb-6 italic">"${t.text}"</p>
             <div class="flex items-center gap-3">
-              <img src="${t.photo}" alt="${t.name}" class="w-14 h-14 rounded-full object-cover border-2 border-blue-100 shadow-sm" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(t.name)}&background=2563eb&color=fff&size=128';" />
+              <div class="w-14 h-14 rounded-full gradient-bg flex items-center justify-center text-white font-bold text-lg shadow-sm">
+                ${t.name.charAt(0)}
+              </div>
               <div>
                 <p class="font-bold text-slate-900">${t.name}</p>
                 <p class="text-sm text-slate-500">${t.role}</p>
@@ -314,6 +359,18 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   }
+
+  // ============================================
+  // LANGUAGE CHANGE - Update currency display
+  // ============================================
+  document.addEventListener('languageChanged', () => {
+    if (typeof updateCalculatorRange === 'function') {
+      updateCalculatorRange();
+    }
+    if (typeof updateCalculator === 'function') {
+      updateCalculator();
+    }
+  });
 
   // ============================================
   // FAQ

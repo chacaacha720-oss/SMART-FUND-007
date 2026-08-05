@@ -86,8 +86,70 @@ async function api(endpoint, options = {}) {
 // ============================================
 // FORMATTERS
 // ============================================
+// ============================================
+// CURRENCY FORMATTING (mendukung Rp, RM, USD)
+// ============================================
+// ============================================
+// CURRENCY RATES (Real-time dari API)
+// ============================================
+let CURRENCY_RATES = {
+  IDR: 1,        // Rupiah (dasar)
+  MYR: 0.00029,  // Ringgit Malaysia (fallback)
+  USD: 0.000062, // US Dollar (fallback)
+};
+
+// Fetch real-time exchange rates
+async function fetchExchangeRates() {
+  try {
+    const res = await fetch('https://open.er-api.com/v6/latest/IDR');
+    const data = await res.json();
+    if (data && data.rates) {
+      CURRENCY_RATES.MYR = data.rates.MYR || CURRENCY_RATES.MYR;
+      CURRENCY_RATES.USD = data.rates.USD || CURRENCY_RATES.USD;
+      console.log('Exchange rates updated:', CURRENCY_RATES);
+    }
+  } catch (err) {
+    console.warn('Failed to fetch exchange rates, using fallback:', err);
+  }
+}
+
+// Fetch rates on load
+fetchExchangeRates();
+// Refresh rates every 5 minutes
+setInterval(fetchExchangeRates, 5 * 60 * 1000);
+
+function getCurrencySymbol() {
+  const lang = (typeof I18N !== 'undefined' && I18N.getLang) ? I18N.getLang() : 'id';
+  if (lang === 'ms') return 'RM';
+  if (lang === 'en') return '$';
+  return 'Rp';
+}
+
+function getCurrencyLocale() {
+  const lang = (typeof I18N !== 'undefined' && I18N.getLang) ? I18N.getLang() : 'id';
+  if (lang === 'ms') return 'ms-MY';
+  if (lang === 'en') return 'en-US';
+  return 'id-ID';
+}
+
+function getCurrencyRate() {
+  const lang = (typeof I18N !== 'undefined' && I18N.getLang) ? I18N.getLang() : 'id';
+  if (lang === 'ms') return CURRENCY_RATES.MYR;
+  if (lang === 'en') return CURRENCY_RATES.USD;
+  return CURRENCY_RATES.IDR;
+}
+
+function formatCurrency(amount) {
+  const symbol = getCurrencySymbol();
+  const locale = getCurrencyLocale();
+  const rate = getCurrencyRate();
+  const converted = Number(amount || 0) * rate;
+  return symbol + ' ' + converted.toLocaleString(locale, { maximumFractionDigits: 0 });
+}
+
+// Backward compatibility - formatRupiah sekarang mengikuti bahasa aktif
 function formatRupiah(amount) {
-  return 'Rp ' + Number(amount || 0).toLocaleString('id-ID');
+  return formatCurrency(amount);
 }
 
 function formatDate(dateStr) {

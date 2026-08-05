@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard - SMART FUND</title>
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>tailwind.config = { darkMode: 'class' };</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -29,14 +29,14 @@
         </a>
       </div>
       <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
-        <a class="sidebar-link active" data-page="dashboard"><i class="fas fa-gauge-high w-5"></i> Dashboard</a>
-        <a class="sidebar-link" data-page="apply"><i class="fas fa-file-circle-plus w-5"></i> Ajukan Pinjaman</a>
-        <a class="sidebar-link" data-page="history"><i class="fas fa-clock-rotate-left w-5"></i> Riwayat Pengajuan</a>
-        <a class="sidebar-link" data-page="balance"><i class="fas fa-wallet w-5"></i> Saldo Pinjaman</a>
-        <a class="sidebar-link" data-page="limit"><i class="fas fa-gauge w-5"></i> Limit Pinjaman</a>
+        <a class="sidebar-link active" data-page="dashboard"><i class="fas fa-gauge-high w-5"></i> <span data-i18n="dash.dashboard">Dashboard</span></a>
+        <a class="sidebar-link" data-page="apply"><i class="fas fa-file-circle-plus w-5"></i> <span data-i18n="dash.apply">Ajukan Pinjaman</span></a>
+        <a class="sidebar-link" data-page="history"><i class="fas fa-clock-rotate-left w-5"></i> <span data-i18n="dash.history">Riwayat Pengajuan</span></a>
+        <a class="sidebar-link" data-page="balance"><i class="fas fa-wallet w-5"></i> <span data-i18n="dash.balance">Saldo Pinjaman</span></a>
+        <a class="sidebar-link" data-page="limit"><i class="fas fa-gauge w-5"></i> <span data-i18n="dash.limit">Limit Pinjaman</span></a>
       </nav>
       <div class="p-4 border-t border-slate-100">
-        <a id="logoutBtn" class="sidebar-link text-red-500 hover:bg-red-50"><i class="fas fa-right-from-bracket w-5"></i> Logout</a>
+        <a id="logoutBtn" class="sidebar-link text-red-500 hover:bg-red-50"><i class="fas fa-right-from-bracket w-5"></i> <span data-i18n="dash.logout">Logout</span></a>
       </div>
     </aside>
 
@@ -49,9 +49,14 @@
             <button id="menuToggle" class="md:hidden w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center">
               <i class="fas fa-bars text-slate-600"></i>
             </button>
-            <h1 id="pageTitle" class="text-lg font-bold text-slate-900">Dashboard</h1>
+            <h1 id="pageTitle" class="text-lg font-bold text-slate-900" data-i18n="dash.dashboard">Dashboard</h1>
           </div>
           <div class="flex items-center gap-3">
+            <select data-lang-select class="px-2 py-2 rounded-lg bg-slate-100 text-sm font-semibold text-slate-700 focus:outline-none cursor-pointer">
+              <option value="id">🇮🇩 ID</option>
+              <option value="ms">🇲🇾 MS</option>
+              <option value="en">🇬🇧 EN</option>
+            </select>
             <button id="darkToggle" class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center">
               <i class="fas fa-moon text-slate-600"></i>
             </button>
@@ -75,8 +80,8 @@
         <!-- ============================================ DASHBOARD PAGE ============================================ -->
         <section id="page-dashboard" class="page-content">
           <div class="mb-6">
-            <h2 class="text-2xl font-extrabold text-slate-900">Selamat Datang, <span id="welcomeName" class="gradient-text">User</span> 👋</h2>
-            <p class="text-slate-500 mt-1">Ringkasan akun dan aktivitas pinjaman Anda</p>
+            <h2 class="text-2xl font-extrabold text-slate-900"><span data-i18n="dash.welcome">Selamat Datang,</span> <span id="welcomeName" class="gradient-text">User</span> 👋</h2>
+            <p class="text-slate-500 mt-1" data-i18n="dash.summary">Ringkasan akun dan aktivitas pinjaman Anda</p>
           </div>
 
           <!-- Status Akun -->
@@ -86,7 +91,7 @@
                 <i class="fas fa-shield-halved text-blue-600 text-xl"></i>
               </div>
               <div>
-                <p class="text-sm text-slate-500">Status Akun</p>
+                <p class="text-sm text-slate-500" data-i18n="dash.accountStatus">Status Akun</p>
                 <p id="accountStatus" class="font-bold text-slate-900">Aktif</p>
               </div>
             </div>
@@ -100,7 +105,7 @@
                 <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center feature-icon"><i class="fas fa-wallet text-green-600 text-xl"></i></div>
                 <i class="fas fa-arrow-trend-up text-green-500"></i>
               </div>
-              <p class="text-sm text-slate-500">Saldo Pinjaman</p>
+              <p class="text-sm text-slate-500" data-i18n="dash.balanceLabel">Saldo Pinjaman</p>
               <p id="statBalance" class="text-2xl font-extrabold text-slate-900 mt-1">Rp 0</p>
             </div>
             <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm stat-card stagger-2">
@@ -108,7 +113,7 @@
                 <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center feature-icon"><i class="fas fa-gauge text-blue-600 text-xl"></i></div>
                 <i class="fas fa-arrow-trend-up text-blue-500"></i>
               </div>
-              <p class="text-sm text-slate-500">Limit Pinjaman</p>
+              <p class="text-sm text-slate-500" data-i18n="dash.limitLabel">Limit Pinjaman</p>
               <p id="statLimit" class="text-2xl font-extrabold text-slate-900 mt-1">Rp 0</p>
             </div>
             <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm stat-card stagger-3">
@@ -116,25 +121,25 @@
                 <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center feature-icon"><i class="fas fa-file-invoice-dollar text-amber-600 text-xl"></i></div>
                 <i class="fas fa-arrow-trend-down text-amber-500"></i>
               </div>
-              <p class="text-sm text-slate-500">Withdrawal</p>
+              <p class="text-sm text-slate-500" data-i18n="dash.withdrawal">Withdrawal</p>
               <p id="statTagihan" class="text-2xl font-extrabold text-slate-900 mt-1">Rp 0</p>
-              <button id="openWithdrawBtn" class="mt-4 w-full px-4 py-2 rounded-xl bg-amber-500 text-white font-semibold hover:bg-amber-600 transition btn-shine">Tarik Saldo</button>
+              <button id="openWithdrawBtn" class="mt-4 w-full px-4 py-2 rounded-xl bg-amber-500 text-white font-semibold hover:bg-amber-600 transition btn-shine" data-i18n="dash.withdrawBtn">Tarik Saldo</button>
             </div>
           </div>
 
           <!-- Status Pengajuan & Riwayat -->
           <div class="grid lg:grid-cols-2 gap-6">
             <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm stat-card stagger-4">
-              <h3 class="font-bold text-slate-900 mb-4"><i class="fas fa-info-circle text-blue-600 mr-2"></i> Status Pengajuan Terakhir</h3>
+              <h3 class="font-bold text-slate-900 mb-4"><i class="fas fa-info-circle text-blue-600 mr-2"></i> <span data-i18n="dash.lastApp">Status Pengajuan Terakhir</span></h3>
               <div id="lastApplication" class="text-center py-8 text-slate-400">
                 <i class="fas fa-inbox text-4xl mb-3"></i>
-                <p>Belum ada pengajuan</p>
+                <p data-i18n="dash.noApp">Belum ada pengajuan</p>
               </div>
             </div>
             <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm stat-card stagger-5">
-              <h3 class="font-bold text-slate-900 mb-4"><i class="fas fa-receipt text-blue-600 mr-2"></i> Riwayat Transaksi</h3>
+              <h3 class="font-bold text-slate-900 mb-4"><i class="fas fa-receipt text-blue-600 mr-2"></i> <span data-i18n="dash.recentTx">Riwayat Transaksi</span></h3>
               <div id="recentTransactions" class="space-y-3">
-                <div class="text-center py-8 text-slate-400"><i class="fas fa-inbox text-4xl mb-3"></i><p>Belum ada transaksi</p></div>
+                <div class="text-center py-8 text-slate-400"><i class="fas fa-inbox text-4xl mb-3"></i><p data-i18n="dash.noTx">Belum ada transaksi</p></div>
               </div>
             </div>
           </div>
@@ -308,7 +313,18 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+  <script src="/assets/js/i18n.js"></script>
   <script src="/assets/js/api.js"></script>
   <script src="/assets/js/dashboard.js"></script>
+  <script>
+    // Language selector handler
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('[data-lang-select]').forEach((select) => {
+        select.addEventListener('change', (e) => {
+          I18N.setLang(e.target.value);
+        });
+      });
+    });
+  </script>
 </body>
 </html>

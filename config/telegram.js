@@ -5,6 +5,7 @@
 require('dotenv').config();
 const axios = require('axios');
 const db = require('./db');
+const { t, formatCurrency, formatDateTime } = require('./i18n');
 
 const DEFAULT_TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
 const DEFAULT_TELEGRAM_ADMIN_CHAT_ID = process.env.TELEGRAM_ADMIN_CHAT_ID || '';
@@ -104,50 +105,56 @@ async function logTelegram(chatId, message, status, error, payload) {
 }
 
 /**
- * Format notifikasi pengajuan pinjaman baru
+ * Format notifikasi pengajuan pinjaman baru (locale-aware)
  */
 async function buildLoanApplicationMessage(data) {
   const {
     fullName, phone, email, amount, tenor, purpose,
-    monthlyPayment, totalInterest, totalPayment, applicationId, userId,
+    monthlyPayment, totalInterest, totalPayment, applicationId, userId, lang,
   } = data;
 
-  const fmt = (n) => 'Rp ' + Number(n).toLocaleString('id-ID');
-  const date = new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
+  const language = lang || 'id';
+  const fmt = (n) => formatCurrency(language, n);
+  const date = formatDateTime(language, new Date().toISOString());
   const config = await getTelegramSettings();
-  const dashboardUrl = `${process.env.SITE_URL || 'http://localhost:3000'}/admin.html#applications`;
+  // SITE_URL from env - set in Railway to https://your-domain.up.railway.app for production links.
+  // If empty, uses relative path (works in both localhost & Railway)
+  const siteUrl = process.env.SITE_URL || '';
+  const dashboardUrl = siteUrl
+    ? `${siteUrl}/admin.html#applications`
+    : '/admin.html#applications';
   const chatUrl = `https://t.me/${config.botUsername}?text=${encodeURIComponent(
-    `Halo ${fullName}, terima kasih telah mengajukan pinjaman di SMART FUND. Ada yang bisa kami bantu?`
+    t(language, 'telegram.welcomeChat', fullName)
   )}`;
 
   const inlineKeyboard = [
-    [{ text: '📊 Lihat Dashboard Admin', url: dashboardUrl }],
-    [{ text: '💬 Chat User', url: chatUrl }],
+    [{ text: t(language, 'telegram.viewDashboard'), url: dashboardUrl }],
+    [{ text: t(language, 'telegram.chatUser'), url: chatUrl }],
   ];
 
   const message = `
-🔔 <b>PENGAJUAN PINJAMAN BARU</b>
+🔔 <b>${t(language, 'telegram.newLoanTitle')}</b>
 
-👤 <b>Data Peminjam:</b>
-• Nama: ${fullName}
-• No. HP: ${phone}
-• Email: ${email}
+👤 <b>${t(language, 'telegram.borrowerData')}:</b>
+• ${t(language, 'telegram.name')}: ${fullName}
+• ${t(language, 'telegram.phone')}: ${phone}
+• ${t(language, 'telegram.email')}: ${email}
 • ID User: #${userId}
 
-💰 <b>Detail Pinjaman:</b>
-• Jumlah: ${fmt(amount)}
-• Tenor: ${tenor} bulan
-• Tujuan: ${purpose}
+💰 <b>${t(language, 'telegram.loanDetail')}:</b>
+• ${t(language, 'telegram.amount')}: ${fmt(amount)}
+• ${t(language, 'telegram.tenor')}: ${tenor} ${t(language, 'telegram.month')}
+• ${t(language, 'telegram.purpose')}: ${purpose}
 
-📊 <b>Perhitungan:</b>
-• Cicilan/Bulan: ${fmt(monthlyPayment)}
-• Total Bunga: ${fmt(totalInterest)}
-• Total Bayar: ${fmt(totalPayment)}
+📊 <b>${t(language, 'telegram.calculation')}:</b>
+• ${t(language, 'telegram.monthly')}: ${fmt(monthlyPayment)}
+• ${t(language, 'telegram.totalInterest')}: ${fmt(totalInterest)}
+• ${t(language, 'telegram.totalPayment')}: ${fmt(totalPayment)}
 
 🆔 Application ID: <b>#${applicationId}</b>
-⏰ Waktu: ${date}
+⏰ ${t(language, 'telegram.time')}: ${date}
 
-<i>Segera verifikasi dan proses pengajuan ini melalui dashboard admin.</i>
+<i>${t(language, 'telegram.verifyPrompt')}</i>
   `.trim();
 
   return { message, inlineKeyboard };
