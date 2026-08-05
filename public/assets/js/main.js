@@ -12,16 +12,29 @@ document.addEventListener('DOMContentLoaded', () => {
   // ============================================
   const navbar = document.getElementById('navbar');
   window.addEventListener('scroll', () => {
-    if (window.scrollY > 20) navbar.classList.add('shadow-md');
-    else navbar.classList.remove('shadow-md');
+    if (window.scrollY > 20) navbar.classList.add('navbar-shadow');
+    else navbar.classList.remove('navbar-shadow');
   });
 
-  // Mobile menu
+  // Mobile menu overlay (fullscreen)
   const mobileMenuBtn = document.getElementById('mobileMenuBtn');
   const mobileMenu = document.getElementById('mobileMenu');
-  if (mobileMenuBtn) {
-    mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-    mobileMenu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+  if (mobileMenuBtn && mobileMenu) {
+    const openMenu = () => {
+      mobileMenu.classList.add('active');
+      mobileMenuBtn.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    };
+    const closeMenu = () => {
+      mobileMenu.classList.remove('active');
+      mobileMenuBtn.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    };
+    mobileMenuBtn.addEventListener('click', openMenu);
+    mobileMenu.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeMenu));
+    const closeBtn = document.getElementById('mobileMenuClose');
+    if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
   }
 
   // Dark mode toggle

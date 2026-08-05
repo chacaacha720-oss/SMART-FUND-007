@@ -17,10 +17,15 @@ const Currency = {
   },
 
   /**
-   * Get the active locale config
+   * Get the active locale config (fallback to Indonesia)
    */
   config() {
-    return (typeof LocaleConfig !== 'undefined' && LocaleConfig.current) ? LocaleConfig.current() : { locale: 'id-ID', currency: 'IDR', symbol: 'Rp' };
+    const lang = this.getLang();
+    // LocaleConfig is optional; default to id-ID if not loaded
+    if (typeof LocaleConfig !== 'undefined' && LocaleConfig.get) {
+      return LocaleConfig.get(lang);
+    }
+    return { locale: 'id-ID', currency: 'IDR', symbol: 'Rp' };
   },
 
   /**
@@ -134,7 +139,7 @@ function formatRupiah(amount) {
 }
 
 /**
- * formatCurrency - legacy alias that follows active language
+ * formatCurrency - locale-aware that follows active language
  */
 function formatCurrency(amount) {
   return Currency.format(amount);

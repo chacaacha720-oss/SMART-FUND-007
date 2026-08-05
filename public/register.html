@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" />
   <link rel="stylesheet" href="/assets/css/style.css" />
+  <script src="/assets/js/i18n.js"></script>
 </head>
 <body class="font-jakarta antialiased min-h-screen flex">
   <div id="pageLoader" class="page-loader"><div class="loader-logo mx-auto"></div></div>
@@ -20,18 +21,18 @@
     <!-- Left Brand Panel -->
     <div class="hidden lg:flex lg:w-1/2 gradient-bg relative overflow-hidden">
       <div class="absolute inset-0 hero-pattern"></div>
-      <div class="relative z-10 flex flex-col justify-between p-12 text-white">
-        <a href="/" class="flex items-center gap-2.5 group">
-          <img src="/assets/img/logo.png" alt="SMART FUND Logo" class="w-10 h-10 object-contain transition-transform duration-300 group-hover:scale-110 animate-float" />
-          <span class="text-xl font-extrabold">SMART FUND</span>
+      <div class="relative z-10 flex flex-col justify-between p-8 lg:p-12 text-white">
+        <a href="/" class="flex items-center gap-2.5 group" aria-label="Beranda SMART FUND">
+          <img src="/assets/img/logo.png" alt="SMART FUND Logo" loading="eager" width="40" height="40" class="object-contain transition-transform duration-300 group-hover:scale-110 animate-float" />
+          <span class="text-xl lg:text-2xl font-extrabold">SMART FUND</span>
         </a>
         <div>
-          <h1 class="text-4xl font-extrabold leading-tight mb-4" data-i18n="register.welcome">Bergabung dengan SMART FUND 🚀</h1>
-          <p class="text-lg opacity-90 mb-8" data-i18n="register.welcomeDesc">Daftar sekarang dan nikmati kemudahan pinjaman online dengan bunga kompetitif mulai 5% per tahun.</p>
+          <h1 class="text-3xl lg:text-4xl font-extrabold leading-tight mb-4">Bergabung dengan SMART FUND 🚀</h1>
+          <p class="text-lg opacity-90 mb-8">Daftar sekarang dan nikmati kemudahan pinjaman online dengan bunga kompetitif mulai 5% per tahun.</p>
           <div class="space-y-4">
-            <div class="flex items-center gap-3"><i class="fas fa-circle-check text-xl"></i><span data-i18n="register.f1">Proses registrasi cepat</span></div>
-            <div class="flex items-center gap-3"><i class="fas fa-circle-check text-xl"></i><span data-i18n="register.f2">Otomatis login setelah daftar</span></div>
-            <div class="flex items-center gap-3"><i class="fas fa-circle-check text-xl"></i><span data-i18n="register.f3">Akses dashboard lengkap</span></div>
+            <div class="flex items-center gap-3"><i class="fas fa-circle-check text-xl"></i><span>Proses registrasi cepat</span></div>
+            <div class="flex items-center gap-3"><i class="fas fa-circle-check text-xl"></i><span>Otomatis login setelah daftar</span></div>
+            <div class="flex items-center gap-3"><i class="fas fa-circle-check text-xl"></i><span>Akses dashboard lengkap</span></div>
           </div>
         </div>
         <p class="text-sm opacity-70">&copy; 2026 SMART FUND. All rights reserved.</p>
@@ -39,24 +40,22 @@
     </div>
 
     <!-- Right Form Panel -->
-    <div class="flex-1 lg:w-1/2 flex items-center justify-center p-6 md:p-12 bg-slate-50">
+    <div class="flex-1 lg:w-1/2 flex items-center justify-center p-5 sm:p-8 md:p-12 bg-slate-50">
       <div class="w-full max-w-md">
         <a href="/" class="lg:hidden flex items-center gap-2.5 justify-center mb-8 group">
-          <img src="/assets/img/logo.png" alt="SMART FUND Logo" class="w-10 h-10 object-contain transition-transform duration-300 group-hover:scale-110 animate-float" />
+          <img src="/assets/img/logo.png" alt="SMART FUND Logo" loading="lazy" width="40" height="40" class="object-contain transition-transform duration-300 group-hover:scale-110 animate-float" />
           <span class="text-xl font-extrabold gradient-text">SMART FUND</span>
         </a>
 
-        <div class="bg-white rounded-3xl shadow-xl p-8 border border-slate-100 hover-lift animate-zoom-in">
+        <div class="bg-white rounded-3xl shadow-xl p-6 sm:p-8 border border-slate-100 hover-lift animate-zoom-in">
           <div class="flex justify-between items-center mb-6">
             <div>
-              <h2 class="text-2xl font-extrabold text-slate-900" data-i18n="register.title">Daftar Akun</h2>
-              <p class="text-slate-500 text-sm mt-1" data-i18n="register.subtitle">Buat akun SMART FUND baru</p>
+              <h2 class="text-2xl font-extrabold text-slate-900">Daftar Akun</h2>
+              <p class="text-slate-500 text-sm mt-1">Buat akun SMART FUND baru</p>
             </div>
-            <div class="flex items-center gap-2">
-              <button id="darkToggle" class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center">
-                <i class="fas fa-moon text-slate-600"></i>
-              </button>
-            </div>
+            <button id="darkToggle" class="icon-btn" aria-label="Toggle dark mode">
+              <i class="fas fa-moon text-slate-600"></i>
+            </button>
           </div>
 
           <!-- Step Indicators -->
@@ -71,44 +70,44 @@
           <!-- Step 1: Data Pribadi -->
           <div id="regStep1" class="space-y-4">
             <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-2" data-i18n="register.fullName">Nama Lengkap</label>
+              <label class="form-label" for="fullName">Nama Lengkap</label>
               <div class="relative">
                 <i class="fas fa-id-card absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                <input type="text" id="fullName" placeholder="Nama lengkap Anda" class="w-full pl-11 pr-4 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 outline-none" />
+                <input type="text" id="fullName" placeholder="Nama lengkap Anda" class="form-input pl-11" />
               </div>
             </div>
             <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-2" data-i18n="register.email">Email</label>
+              <label class="form-label" for="email">Email</label>
               <div class="relative">
                 <i class="fas fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                <input type="email" id="email" placeholder="email@example.com" class="w-full pl-11 pr-4 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 outline-none" />
+                <input type="email" id="email" placeholder="email@example.com" class="form-input pl-11" />
               </div>
             </div>
             <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-2" data-i18n="register.phone">Nomor HP</label>
+              <label class="form-label" for="phone">Nomor HP</label>
               <div class="relative">
                 <i class="fas fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                <input type="tel" id="phone" placeholder="0812xxxxxxxx" class="w-full pl-11 pr-4 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 outline-none" />
+                <input type="tel" id="phone" placeholder="0812xxxxxxxx" class="form-input pl-11" />
               </div>
             </div>
             <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-2" data-i18n="register.password">Password</label>
+              <label class="form-label" for="password">Password</label>
               <div class="relative">
                 <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                <input type="password" id="password" placeholder="Min 6 karakter (huruf & angka)" class="w-full pl-11 pr-12 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 outline-none" />
-                <button type="button" id="togglePwd1" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600"><i class="fas fa-eye"></i></button>
+                <input type="password" id="password" placeholder="Min 6 karakter (huruf & angka)" class="form-input pl-11 pr-12" />
+                <button type="button" id="togglePwd1" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600" aria-label="Toggle password visibility"><i class="fas fa-eye"></i></button>
               </div>
             </div>
             <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-2" data-i18n="register.confirmPassword">Konfirmasi Password</label>
+              <label class="form-label" for="confirmPassword">Konfirmasi Password</label>
               <div class="relative">
                 <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                <input type="password" id="confirmPassword" placeholder="Ulangi password" class="w-full pl-11 pr-12 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 outline-none" />
-                <button type="button" id="togglePwd2" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600"><i class="fas fa-eye"></i></button>
+                <input type="password" id="confirmPassword" placeholder="Ulangi password" class="form-input pl-11 pr-12" />
+                <button type="button" id="togglePwd2" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600" aria-label="Toggle password visibility"><i class="fas fa-eye"></i></button>
               </div>
             </div>
-            <button id="toStep2Btn" class="w-full py-4 gradient-bg text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition btn-shine">
-              <span data-i18n="register.next">Lanjut</span> <i class="fas fa-arrow-right ml-2"></i>
+            <button id="toStep2Btn" class="btn btn-primary w-full">
+              <span>Lanjut</span> <i class="fas fa-arrow-right ml-2"></i>
             </button>
           </div>
 
@@ -132,26 +131,24 @@
             </div>
             <label class="flex items-start gap-3 cursor-pointer p-3 rounded-xl hover:bg-blue-50 transition">
               <input type="checkbox" id="agreeTerms" class="w-5 h-5 mt-0.5 rounded border-slate-300 text-blue-600 focus:ring-blue-500" />
-              <span class="text-sm text-slate-700"><span data-i18n="register.agree">Saya menyetujui</span> <a href="#" data-i18n="register.terms" class="text-blue-600 font-semibold">Syarat & Ketentuan</a> <span data-i18n="register.and">serta</span> <a href="#" data-i18n="register.privacy" class="text-blue-600 font-semibold">Kebijakan Privasi</a> SMART FUND</span>
+              <span class="text-sm text-slate-700">Saya menyetujui <a href="#" class="text-blue-600 font-semibold">Syarat & Ketentuan</a> serta <a href="#" class="text-blue-600 font-semibold">Kebijikan Privasi</a> SMART FUND</span>
             </label>
             <div class="flex gap-3">
-              <button id="backTo1Btn" class="px-6 py-4 bg-slate-100 text-slate-600 font-bold rounded-xl hover:bg-slate-200 transition">
-                <i class="fas fa-arrow-left"></i>
-              </button>
-              <button id="submitRegBtn" class="flex-1 py-4 gradient-bg text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition relative btn-shine">
-                <span class="btn-text"><i class="fas fa-user-plus mr-2"></i> <span data-i18n="register.btn">Daftar Sekarang</span></span>
+              <button id="backTo1Btn" class="btn btn-secondary"><i class="fas fa-arrow-left"></i></button>
+              <button id="submitRegBtn" class="flex-1 btn btn-primary">
+                <span class="btn-text"><i class="fas fa-user-plus mr-2"></i> Daftar Sekarang</span>
               </button>
             </div>
           </div>
 
           <p class="text-center text-slate-600 text-sm mt-6">
-            <span data-i18n="register.haveAccount">Sudah punya akun?</span>
-            <a href="/login.html" data-i18n="register.login" class="text-blue-600 font-bold hover:underline">Masuk</a>
+            <span>Sudah punya akun?</span>
+            <a href="/login.html" class="text-blue-600 font-bold hover:underline">Masuk</a>
           </p>
         </div>
 
         <p class="text-center text-sm text-slate-400 mt-6">
-          <a href="/" data-i18n="register.back" class="hover:text-blue-600"><i class="fas fa-arrow-left mr-1"></i> Kembali ke Beranda</a>
+          <a href="/" class="hover:text-blue-600"><i class="fas fa-arrow-left mr-1"></i> Kembali ke Beranda</a>
         </p>
       </div>
     </div>
@@ -212,12 +209,12 @@
         const password = document.getElementById('password').value;
         const confirm = document.getElementById('confirmPassword').value;
 
-        if (!fullName || fullName.length < 3) return showToast(I18N.t('val.nameMin'), 'error');
-        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showToast(I18N.t('val.emailInvalid'), 'error');
-        if (!phone || !/^((\+62|62|0)8[1-9]\d{6,11})$/.test(phone.replace(/[\s-]/g, ''))) return showToast(I18N.t('val.phoneInvalid'), 'error');
-        if (!password || password.length < 6) return showToast(I18N.t('val.passwordMin'), 'error');
-        if (!/[a-zA-Z]/.test(password) || !/[0-9]/.test(password)) return showToast(I18N.t('val.passwordMix'), 'error');
-        if (password !== confirm) return showToast(I18N.t('val.passwordMatch'), 'error');
+        if (!fullName || fullName.length < 3) return showToast('Nama lengkap minimal 3 karakter', 'error');
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showToast('Email tidak valid', 'error');
+        if (!phone || !/^((\+62|62|0)8[1-9]\d{6,11})$/.test(phone.replace(/[\s-]/g, ''))) return showToast('Nomor HP tidak valid', 'error');
+        if (!password || password.length < 6) return showToast('Password minimal 6 karakter', 'error');
+        if (!/[a-zA-Z]/.test(password) || !/[0-9]/.test(password)) return showToast('Password harus mengandung huruf dan angka', 'error');
+        if (password !== confirm) return showToast('Password tidak cocok', 'error');
 
         goStep(2);
       });
@@ -227,7 +224,7 @@
       // Step 2 -> submit
       const submitBtn = document.getElementById('submitRegBtn');
       submitBtn.addEventListener('click', async () => {
-        if (!document.getElementById('agreeTerms').checked) return showToast(I18N.t('val.agreeTerms'), 'error');
+        if (!document.getElementById('agreeTerms').checked) return showToast('Anda harus menyetujui syarat & ketentuan', 'error');
 
         const body = {
           fullName: document.getElementById('fullName').value.trim(),
@@ -243,10 +240,10 @@
 
         if (res.success) {
           Token.set(res.token, false);
-          await alertSuccess(I18N.t('notif.registerSuccess'), I18N.t('notif.registerSuccessDesc'));
-          window.location.href = `${BASE_PATH}/dashboard.html`;
+          showToast('Registrasi berhasil! Mengarahkan ke dashboard...', 'success');
+          setTimeout(() => (window.location.href = `${BASE_PATH}/dashboard.html`), 800);
         } else {
-          showToast(res.message || I18N.t('notif.registerFailed'), 'error');
+          showToast(res.message || 'Registrasi gagal', 'error');
         }
       });
     });
