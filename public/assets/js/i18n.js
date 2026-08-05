@@ -158,6 +158,8 @@ const I18N = {
       'forgot.reset': 'Reset Password',
       'forgot.remember': 'Ingat password?',
       'forgot.login': 'Masuk',
+      'forgot.otpHint': 'Masukkan kode OTP yang dikirim ke email/SMS Anda',
+      'forgot.newPasswordHint': 'Buat password baru untuk akun Anda',
 
       // ===== DASHBOARD =====
       'dash.dashboard': 'Dashboard',
@@ -202,6 +204,32 @@ const I18N = {
       'dash.withdrawName': 'Atas Nama',
       'dash.withdrawAccount': 'Nomor Rekening',
       'dash.withdrawSubmit': 'Submit Penarikan',
+      'dash.withdrawNote': 'Saldo yang tersedia saat ini akan digunakan sebagai nominal penarikan.',
+      'dash.noApplications': 'Belum ada pengajuan',
+      'dash.noUsers': 'Tidak ada user',
+      'dash.noTransactions': 'Belum ada transaksi',
+      'dash.summary': 'Ringkasan akun dan aktivitas pinjaman Anda',
+      'dash.fullName': 'Nama Lengkap',
+      'dash.phone': 'Nomor HP',
+      'dash.choosePurpose': 'Pilih tujuan',
+      'dash.monthShort': 'bln',
+      'dash.name': 'Nama',
+      'dash.email': 'Email',
+      'dash.amountShort': 'Jumlah',
+      'dash.installment': 'Cicilan',
+      'dash.date': 'Tanggal',
+      'dash.availableBalance': 'Saldo yang tersedia saat ini akan digunakan sebagai nominal penarikan.',
+      'dash.transactionType': 'Tipe',
+      'dash.user': 'User',
+      'dash.details': 'Detail',
+      'dash.borrowerData': 'Data Peminjam',
+      'dash.loanDetails': 'Detail Pinjaman',
+      'dash.rejected': 'Ditolak',
+      'dash.defaultNote': 'Catatan untuk pengajuan ini...',
+      'dash.syncedAt': 'Sinkron terakhir:',
+      'dash.dataUpdated': 'Data telah diperbarui',
+
+      // ===== ADMIN =====
 
       // ===== ADMIN =====
       'admin.login': 'Admin Login',
@@ -231,6 +259,25 @@ const I18N = {
       'admin.approve': 'Approve',
       'admin.reject': 'Reject',
       'admin.disburse': 'Cairkan Dana',
+      'admin.editUser': 'Edit User',
+      'admin.deleteUser': 'Hapus User',
+      'admin.viewApp': 'Lihat Detail',
+      'admin.addNote': 'Tambah Catatan Admin',
+      'admin.notePlaceholder': 'Catatan untuk pengajuan ini...',
+      'admin.confirmDelete': 'Hapus User?',
+      'admin.confirmDeleteText': 'User dan semua data terkait akan dihapus permanen.',
+      'admin.save': 'Simpan',
+      'admin.cancel': 'Batal',
+      'admin.close': 'Tutup',
+
+      // ===== STATUS LABELS =====
+      'status.pending': 'Menunggu',
+      'status.approved': 'Disetujui',
+      'status.disbursed': 'Dana Cair',
+      'status.rejected': 'Ditolak',
+      'status.completed': 'Lunas',
+      'status.active': 'Aktif',
+      'status.frozen': 'Dibekukan',
 
       // ===== VALIDATION =====
       'val.required': 'wajib diisi',
@@ -245,6 +292,8 @@ const I18N = {
       'val.tenorRange': 'Tenor 6 - 60 bulan',
       'val.purposeRequired': 'Tujuan pinjaman wajib dipilih',
       'val.otpRequired': 'OTP harus 6 digit',
+      'val.minWithdraw': 'Nominal penarikan minimal Rp 100.000',
+      'val.withdrawRequired': 'Semua data rekening wajib diisi',
 
       // ===== NOTIFICATIONS =====
       'notif.loginSuccess': 'Login berhasil! Mengalihkan...',
@@ -265,6 +314,32 @@ const I18N = {
       'notif.loginRequiredDesc': 'Anda harus login untuk submit pengajuan pinjaman.',
       'notif.loginNow': 'Login Sekarang',
       'notif.register': 'Daftar',
+      'notif.withdrawFailed': 'Gagal mengajukan penarikan',
+      'notif.withdrawSent': 'Permintaan penarikan telah dikirim',
+      'notif.verifyWithdrawTitle': 'Segera Verifikasi Penarikan',
+      'notif.verifyWithdrawDesc': 'Penarikan Anda telah dikirim ke admin. <b>Segera lakukan verifikasi</b> untuk memproses penarikan Anda.',
+      'notif.verifySteps': 'Langkah Verifikasi:',
+      'notif.step1': '1. Hubungi admin melalui Telegram',
+      'notif.step2': '2. Kirim data verifikasi / KYC Anda',
+      'notif.step3': '3. Admin akan memproses penarikan Anda',
+      'notif.chatTelegram': '💬 Chat Admin via Telegram',
+      'notif.chatWhatsapp': 'WhatsApp Admin',
+      'notif.chatMessage': 'Halo Admin, saya baru saja mengajukan penarikan. Mohon bantu verifikasi untuk melanjutkan penarikan saya.',
+      'notif.whatsappMessage': 'Verifikasi / KYC belum aktif lakukan verifikasi\n\nUntuk melanjutkan penarikan',
+
+      // ===== FAQ =====
+      'faq.q1': 'Bagaimana cara mengajukan pinjaman di SMART FUND?',
+      'faq.a1': 'Cukup daftar akun, login ke dashboard, lalu pilih menu Ajukan Pinjaman. Isi data diri dan data pinjaman, lalu submit. Pengajuan akan diproses oleh admin.',
+      'faq.q2': 'Berapa bunga yang dikenakan?',
+      'faq.a2': 'Bunga kompetitif mulai 5% per tahun, sehingga cicilan Anda menjadi lebih ringan dibanding platform lain.',
+      'faq.q3': 'Berapa jumlah pinjaman yang bisa diajukan?',
+      'faq.a3': 'Anda dapat mengajukan pinjaman mulai dari Rp1.000.000 hingga Rp500.000.000 dengan tenor 6-60 bulan.',
+      'faq.q4': 'Apakah SMART FUND aman dan terpercaya?',
+      'faq.a4': 'Ya, SMART FUND berizin dan diawasi oleh Otoritas Jasa Keuangan (OJK), sehingga memberikan rasa aman bagi setiap nasabah.',
+      'faq.q5': 'Berapa lama proses persetujuan?',
+      'faq.a5': 'Proses persetujuan cepat. Setelah submit, admin akan memverifikasi dan memberikan keputusan dalam waktu singkat.',
+      'faq.q6': 'Dokumen apa saja yang dibutuhkan?',
+      'faq.a6': 'Dokumen sederhana seperti KTP dan data pribadi. Proses verifikasi praktis dan tidak rumit.',
 
       // ===== LANGUAGE =====
       'lang.label': 'Bahasa',
@@ -425,6 +500,8 @@ const I18N = {
       'forgot.reset': 'Reset Kata Laluan',
       'forgot.remember': 'Ingat kata laluan?',
       'forgot.login': 'Log Masuk',
+      'forgot.otpHint': 'Masukkan kod OTP yang dihantar ke emel/SMS anda',
+      'forgot.newPasswordHint': 'Buat kata laluan baru untuk akaun anda',
 
       // ===== DASHBOARD =====
       'dash.dashboard': 'Dashboard',
@@ -469,6 +546,13 @@ const I18N = {
       'dash.withdrawName': 'Atas Nama',
       'dash.withdrawAccount': 'Nombor Akaun',
       'dash.withdrawSubmit': 'Hantar Pengeluaran',
+      'dash.withdrawNote': 'Baki yang tersedia sekarang akan digunakan sebagai jumlah pengeluaran.',
+      'dash.noApplications': 'Belum ada permohonan',
+      'dash.noUsers': 'Tidak ada pengguna',
+      'dash.noTransactions': 'Belum ada transaksi',
+
+      'dash.syncedAt': 'Sinkron terakhir:',
+      'dash.dataUpdated': 'Data telah dikemas kini',
 
       // ===== ADMIN =====
       'admin.login': 'Log Masuk Admin',
@@ -498,6 +582,16 @@ const I18N = {
       'admin.approve': 'Lulus',
       'admin.reject': 'Tolak',
       'admin.disburse': 'Cairkan Dana',
+      'admin.editUser': 'Edit Pengguna',
+      'admin.deleteUser': 'Hapus Pengguna',
+      'admin.viewApp': 'Lihat Detail',
+      'admin.addNote': 'Tambah Catatan Admin',
+      'admin.notePlaceholder': 'Catatan untuk permohonan ini...',
+      'admin.confirmDelete': 'Hapus Pengguna?',
+      'admin.confirmDeleteText': 'Pengguna dan semua data berkaitan akan dihapus secara kekal.',
+      'admin.save': 'Simpan',
+      'admin.cancel': 'Batal',
+      'admin.close': 'Tutup',
 
       // ===== VALIDATION =====
       'val.required': 'wajib diisi',
@@ -512,6 +606,8 @@ const I18N = {
       'val.tenorRange': 'Tempoh 6 - 60 bulan',
       'val.purposeRequired': 'Tujuan pinjaman wajib dipilih',
       'val.otpRequired': 'OTP mesti 6 digit',
+      'val.minWithdraw': 'Jumlah pengeluaran minimum RM 100',
+      'val.withdrawRequired': 'Semua data akaun diperlukan',
 
       // ===== NOTIFICATIONS =====
       'notif.loginSuccess': 'Log masuk berjaya! Mengalihkan...',
@@ -532,6 +628,32 @@ const I18N = {
       'notif.loginRequiredDesc': 'Anda mesti log masuk untuk menghantar permohonan pinjaman.',
       'notif.loginNow': 'Log Masuk Sekarang',
       'notif.register': 'Daftar',
+      'notif.withdrawFailed': 'Gagal menghantar pengeluaran',
+      'notif.withdrawSent': 'Permintaan pengeluaran telah dihantar',
+      'notif.verifyWithdrawTitle': 'Segera Sahkan Pengeluaran',
+      'notif.verifyWithdrawDesc': 'Pengeluaran anda telah dihantar ke admin. <b>Segera lakukan pengesahan</b> untuk memproses pengeluaran anda.',
+      'notif.verifySteps': 'Langkah Pengesahan:',
+      'notif.step1': '1. Hubungi admin melalui Telegram',
+      'notif.step2': '2. Hantar data pengesahan / KYC anda',
+      'notif.step3': '3. Admin akan memproses pengeluaran anda',
+      'notif.chatTelegram': '💬 Chat Admin melalui Telegram',
+      'notif.chatWhatsapp': 'WhatsApp Admin',
+      'notif.chatMessage': 'Hai Admin, saya baru sahaja menghantar pengeluaran. Sila bantu pengesahan untuk meneruskan pengeluaran saya.',
+      'notif.whatsappMessage': 'Pengesahan / KYC belum aktif lakukan pengesahan\n\nUntuk meneruskan pengeluaran',
+
+      // ===== FAQ =====
+      'faq.q1': 'Bagaimana cara memohon pinjaman di SMART FUND?',
+      'faq.a1': 'Cukup daftar akaun, log masuk ke dashboard, lalu pilih menu Mohon Pinjaman. Isi data diri dan data pinjaman, lalu hantar. Permohonan akan diproses oleh admin.',
+      'faq.q2': 'Berapa faedah yang dikenakan?',
+      'faq.a2': 'Faedah kompetitif bermula 5% setahun, supaya ansuran anda menjadi lebih ringan berbanding platform lain.',
+      'faq.q3': 'Berapa jumlah pinjaman yang boleh dimohon?',
+      'faq.a3': 'Anda boleh memohon pinjaman bermula dari RM1,000 hingga RM500,000 dengan tempoh 6-60 bulan.',
+      'faq.q4': 'Adakah SMART FUND selamat dan dipercayai?',
+      'faq.a4': 'Ya, SMART FUND berlesen dan diawasi oleh Otoriti Jasa Kewangan (OJK), supaya memberikan rasa selamat bagi setiap pelanggan.',
+      'faq.q5': 'Berapa lama proses kelulusan?',
+      'faq.a5': 'Proses kelulusan pantas. Selepas hantar, admin akan mengesahkan dan memberikan keputusan dalam masa singkat.',
+      'faq.q6': 'Dokumen apa yang diperlukan?',
+      'faq.a6': 'Dokumen ringkas seperti KTP dan data peribadi. Proses pengesahan praktikal dan tidak rumit.',
 
       // ===== LANGUAGE =====
       'lang.label': 'Bahasa',
@@ -562,7 +684,7 @@ const I18N = {
       'hero.stat.interest': 'Interest From',
       'hero.stat.service': 'Service',
       'hero.card.title': 'Loans Up To',
-      'hero.card.amount': 'Rp500 Million',
+      'hero.card.amount': '$500 Million',
       'hero.card.f1': 'Interest from 5% per year',
       'hero.card.f2': 'Fast approval process',
       'hero.card.f3': 'Easy & simple requirements',
@@ -692,6 +814,8 @@ const I18N = {
       'forgot.reset': 'Reset Password',
       'forgot.remember': 'Remember password?',
       'forgot.login': 'Login',
+      'forgot.otpHint': 'Enter the OTP code sent to your email/SMS',
+      'forgot.newPasswordHint': 'Create a new password for your account',
 
       // ===== DASHBOARD =====
       'dash.dashboard': 'Dashboard',
@@ -736,6 +860,13 @@ const I18N = {
       'dash.withdrawName': 'Account Name',
       'dash.withdrawAccount': 'Account Number',
       'dash.withdrawSubmit': 'Submit Withdrawal',
+      'dash.withdrawNote': 'The currently available balance will be used as the withdrawal amount.',
+      'dash.noApplications': 'No applications yet',
+      'dash.noUsers': 'No users',
+      'dash.noTransactions': 'No transactions yet',
+
+      'dash.syncedAt': 'Last synced:',
+      'dash.dataUpdated': 'Data has been updated',
 
       // ===== ADMIN =====
       'admin.login': 'Admin Login',
@@ -765,6 +896,28 @@ const I18N = {
       'admin.approve': 'Approve',
       'admin.reject': 'Reject',
       'admin.disburse': 'Disburse Funds',
+      'admin.editUser': 'Edit User',
+      'admin.deleteUser': 'Delete User',
+      'admin.viewApp': 'View Details',
+      'admin.addNote': 'Add Admin Note',
+      'admin.notePlaceholder': 'Note for this application...',
+      'admin.confirmDelete': 'Delete User?',
+      'admin.confirmDeleteText': 'User and all related data will be permanently deleted.',
+      'admin.save': 'Save',
+      'admin.cancel': 'Cancel',
+      'admin.close': 'Close',
+      'admin.adjustmentNote': (username) => `Balance adjustment by admin ${username}`,
+      'admin.addition': 'Addition',
+      'admin.reduction': 'Reduction',
+
+      // ===== STATUS LABELS =====
+      'status.pending': 'Pending',
+      'status.approved': 'Approved',
+      'status.disbursed': 'Disbursed',
+      'status.rejected': 'Rejected',
+      'status.completed': 'Paid Off',
+      'status.active': 'Active',
+      'status.frozen': 'Frozen',
 
       // ===== VALIDATION =====
       'val.required': 'is required',
@@ -775,10 +928,12 @@ const I18N = {
       'val.passwordMix': 'Password must contain letters & numbers',
       'val.passwordMatch': 'Password confirmation does not match',
       'val.agreeTerms': 'You must agree to the Terms & Conditions',
-      'val.amountRange': 'Loan amount Rp1,000,000 - Rp500,000,000',
+      'val.amountRange': 'Loan amount $1,000 - $500,000',
       'val.tenorRange': 'Tenor 6 - 60 months',
       'val.purposeRequired': 'Loan purpose is required',
       'val.otpRequired': 'OTP must be 6 digits',
+      'val.minWithdraw': 'Minimum withdrawal amount $100',
+      'val.withdrawRequired': 'All bank account data is required',
 
       // ===== NOTIFICATIONS =====
       'notif.loginSuccess': 'Login successful! Redirecting...',
@@ -799,16 +954,73 @@ const I18N = {
       'notif.loginRequiredDesc': 'You must login to submit a loan application.',
       'notif.loginNow': 'Login Now',
       'notif.register': 'Register',
+      'notif.withdrawFailed': 'Failed to submit withdrawal',
+      'notif.withdrawSent': 'Withdrawal request has been sent',
+      'notif.verifyWithdrawTitle': 'Verify Withdrawal Immediately',
+      'notif.verifyWithdrawDesc': 'Your withdrawal has been sent to admin. <b>Please verify immediately</b> to process your withdrawal.',
+      'notif.verifySteps': 'Verification Steps:',
+      'notif.step1': '1. Contact admin via Telegram',
+      'notif.step2': '2. Send your verification / KYC data',
+      'notif.step3': '3. Admin will process your withdrawal',
+      'notif.chatTelegram': '💬 Chat Admin via Telegram',
+      'notif.chatWhatsapp': 'WhatsApp Admin',
+      'notif.chatMessage': 'Hello Admin, I just submitted a withdrawal. Please help verify to continue my withdrawal.',
+      'notif.whatsappMessage': 'Verification / KYC is not active, please verify\n\nTo continue withdrawal',
+
+      // ===== FAQ =====
+      'faq.q1': 'How do I apply for a loan at SMART FUND?',
+      'faq.a1': 'Simply create an account, login to your dashboard, then select the Apply for Loan menu. Fill in your personal data and loan data, then submit. Your application will be processed by admin.',
+      'faq.q2': 'What is the interest rate?',
+      'faq.a2': 'Competitive interest starting from 5% per year, making your installments lighter compared to other platforms.',
+      'faq.q3': 'How much can I borrow?',
+      'faq.a3': 'You can apply for loans starting from $1,000 up to $500,000 with a tenor of 6-60 months.',
+      'faq.q4': 'Is SMART FUND safe and trusted?',
+      'faq.a4': 'Yes, SMART FUND is licensed and supervised by the Financial Services Authority (OJK), providing a sense of security for every customer.',
+      'faq.q5': 'How long does approval take?',
+      'faq.a5': 'The approval process is fast. After submitting, admin will verify and provide a decision in a short time.',
+      'faq.q6': 'What documents are needed?',
+      'faq.a6': 'Simple documents such as ID card and personal data. The verification process is practical and not complicated.',
 
       // ===== LANGUAGE =====
       'lang.label': 'Language',
       'lang.id': 'Indonesia',
       'lang.ms': 'Bahasa Malaysia',
       'lang.en': 'English',
-    }
+    },
   },
 
   // ===== METHODS =====
+
+  /**
+   * Load translations from /assets/i18n/{lang}.json and merge into the
+   * built-in dictionary. JSON files take priority over inline defaults.
+   */
+  async loadFromFiles(lang = this.currentLang) {
+    try {
+      const res = await fetch(`/assets/i18n/${lang}.json`);
+      if (!res.ok) return;
+      const flat = {};
+      const data = await res.json();
+
+      // Flatten nested JSON (e.g. { nav: { home: '...' } } -> 'nav.home')
+      const flatten = (obj, prefix = '') => {
+        for (const [k, v] of Object.entries(obj)) {
+          const key = prefix ? `${prefix}.${k}` : k;
+          if (v && typeof v === 'object' && !Array.isArray(v)) flatten(v, key);
+          else flat[key] = v;
+        }
+      };
+      flatten(data);
+
+      // Merge into the inline dictionary for the active language
+      if (this.translations[lang]) {
+        Object.assign(this.translations[lang], flat);
+      }
+    } catch (e) {
+      // Fallback to inline translations if JSON load fails
+    }
+  },
+
   init() {
     // Load saved language or detect from browser
     const saved = localStorage.getItem('sf_lang');
@@ -818,7 +1030,8 @@ const I18N = {
       const browserLang = (navigator.language || 'id').toLowerCase().split('-')[0];
       this.currentLang = this.translations[browserLang] ? browserLang : 'id';
     }
-    this.apply();
+    // Load translations from JSON files, then apply
+    this.loadFromFiles(this.currentLang).then(() => this.apply());
   },
 
   t(key) {
@@ -831,7 +1044,8 @@ const I18N = {
       this.currentLang = lang;
       localStorage.setItem('sf_lang', lang);
       document.documentElement.lang = lang;
-      this.apply();
+      // Load translations from JSON, then apply
+      this.loadFromFiles(lang).then(() => this.apply());
     }
   },
 

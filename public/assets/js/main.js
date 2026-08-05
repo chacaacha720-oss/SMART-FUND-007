@@ -125,13 +125,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!token) {
         Swal.fire({
           icon: 'info',
-          title: 'Login Diperlukan',
-          text: 'Anda harus login terlebih dahulu untuk mengajukan pinjaman.',
+          title: I18N.t('notif.loginRequired'),
+          text: I18N.t('notif.loginRequiredDesc'),
           showCancelButton: true,
           confirmButtonColor: '#2563eb',
           cancelButtonColor: '#64748b',
-          confirmButtonText: 'Login Sekarang',
-          cancelButtonText: 'Daftar',
+          confirmButtonText: I18N.t('notif.loginNow'),
+          cancelButtonText: I18N.t('notif.register'),
         }).then((result) => {
           if (result.isConfirmed) window.location.href = `${BASE_PATH}/login.html`;
           else if (result.dismiss === Swal.DismissReason.cancel) window.location.href = `${BASE_PATH}/register.html`;
@@ -186,10 +186,10 @@ document.addEventListener('DOMContentLoaded', () => {
     nextStepBtn.addEventListener('click', () => {
       const fullName = document.getElementById('formFullName').value.trim();
       const phone = document.getElementById('formPhone').value.trim();
-      if (!fullName) return showToast('Nama lengkap wajib diisi', 'error');
-      if (fullName.length < 3) return showToast('Nama minimal 3 karakter', 'error');
-      if (!phone) return showToast('Nomor HP wajib diisi', 'error');
-      if (!/^(\+62|62|0)8[1-9]\d{6,11}$/.test(phone.replace(/[\s-]/g, ''))) return showToast('Nomor HP tidak valid', 'error');
+      if (!fullName) return showToast(`${I18N.t('apply.fullName')} ${I18N.t('val.required')}`, 'error');
+      if (fullName.length < 3) return showToast(I18N.t('val.nameMin'), 'error');
+      if (!phone) return showToast(`${I18N.t('apply.phone')} ${I18N.t('val.required')}`, 'error');
+      if (!/^(\+62|62|0)8[1-9]\d{6,11}$/.test(phone.replace(/[\s-]/g, ''))) return showToast(I18N.t('val.phoneInvalid'), 'error');
       goToStep(2);
     });
   }
@@ -202,13 +202,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!token) {
         Swal.fire({
           icon: 'info',
-          title: 'Login Diperlukan',
-          text: 'Anda harus login untuk submit pengajuan pinjaman.',
+          title: I18N.t('notif.loginRequired'),
+          text: I18N.t('notif.loginRequiredDesc'),
           showCancelButton: true,
           confirmButtonColor: '#2563eb',
           cancelButtonColor: '#64748b',
-          confirmButtonText: 'Login Sekarang',
-          cancelButtonText: 'Daftar',
+          confirmButtonText: I18N.t('notif.loginNow'),
+          cancelButtonText: I18N.t('notif.register'),
         }).then((r) => {
           if (r.isConfirmed) window.location.href = `${BASE_PATH}/login.html`;
           else if (r.dismiss === Swal.DismissReason.cancel) window.location.href = `${BASE_PATH}/register.html`;
@@ -220,9 +220,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const tenor = parseInt(document.getElementById('formTenor').value, 10);
       const purpose = document.getElementById('formPurpose').value;
 
-      if (!amount || amount < 1000000 || amount > 500000000) return showToast('Jumlah pinjaman Rp1.000.000 - Rp500.000.000', 'error');
-      if (!tenor || tenor < 6 || tenor > 60) return showToast('Tenor 6 - 60 bulan', 'error');
-      if (!purpose) return showToast('Tujuan pinjaman wajib dipilih', 'error');
+      if (!amount || amount < 1000000 || amount > 500000000) return showToast(I18N.t('val.amountRange'), 'error');
+      if (!tenor || tenor < 6 || tenor > 60) return showToast(I18N.t('val.tenorRange'), 'error');
+      if (!purpose) return showToast(I18N.t('val.purposeRequired'), 'error');
 
       setBtnLoading(submitLoanBtn, true);
       const res = await api('/loans/apply', {
@@ -232,10 +232,10 @@ document.addEventListener('DOMContentLoaded', () => {
       setBtnLoading(submitLoanBtn, false);
 
       if (res.success) {
-        await alertSuccess('Pengajuan Berhasil!', `Pengajuan pinjaman #${res.data.applicationId} telah dikirim. Status: Menunggu Persetujuan. Admin akan segera memverifikasi.`);
+        await alertSuccess(I18N.t('notif.applySuccess'), `${I18N.t('notif.applySuccessDesc')} #${res.data.applicationId}`);
         window.location.href = `${BASE_PATH}/dashboard.html`;
       } else {
-        showToast(res.message || 'Gagal mengajukan pinjaman', 'error');
+        showToast(res.message || I18N.t('notif.applyFailed'), 'error');
       }
     });
   }
@@ -373,24 +373,24 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ============================================
-  // FAQ
+  // FAQ - localized
   // ============================================
-  const faqs = [
-    { q: 'Bagaimana cara mengajukan pinjaman di SMART FUND?', a: 'Cukup daftar akun, login ke dashboard, lalu pilih menu Ajukan Pinjaman. Isi data diri dan data pinjaman, lalu submit. Pengajuan akan diproses oleh admin.' },
-    { q: 'Berapa bunga yang dikenakan?', a: 'Bunga kompetitif mulai 5% per tahun, sehingga cicilan Anda menjadi lebih ringan dibanding platform lain.' },
-    { q: 'Berapa jumlah pinjaman yang bisa diajukan?', a: 'Anda dapat mengajukan pinjaman mulai dari Rp1.000.000 hingga Rp500.000.000 dengan tenor 6-60 bulan.' },
-    { q: 'Apakah SMART FUND aman dan terpercaya?', a: 'Ya, SMART FUND berizin dan diawasi oleh Otoritas Jasa Keuangan (OJK), sehingga memberikan rasa aman bagi setiap nasabah.' },
-    { q: 'Berapa lama proses persetujuan?', a: 'Proses persetujuan cepat. Setelah submit, admin akan memverifikasi dan memberikan keputusan dalam waktu singkat.' },
-    { q: 'Dokumen apa saja yang dibutuhkan?', a: 'Dokumen sederhana seperti KTP dan data pribadi. Proses verifikasi praktis dan tidak rumit.' },
-  ];
-
   const faqContainer = document.getElementById('faqContainer');
-  if (faqContainer) {
+
+  function renderFaq() {
+    if (!faqContainer) return;
+    const faqs = [
+      { q: I18N.t('faq.q1'), a: I18N.t('faq.a1') },
+      { q: I18N.t('faq.q2'), a: I18N.t('faq.a2') },
+      { q: I18N.t('faq.q3'), a: I18N.t('faq.a3') },
+      { q: I18N.t('faq.q4'), a: I18N.t('faq.a4') },
+      { q: I18N.t('faq.q5'), a: I18N.t('faq.a5') },
+      { q: I18N.t('faq.q6'), a: I18N.t('faq.a6') },
+    ];
+    faqContainer.innerHTML = '';
     faqs.forEach((faq, i) => {
       const item = document.createElement('div');
       item.className = 'bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden';
-      item.setAttribute('data-aos', 'fade-up');
-      item.setAttribute('data-aos-delay', i * 50);
       item.innerHTML = `
         <button class="faq-btn w-full flex items-center justify-between p-5 text-left font-semibold text-slate-800 hover:bg-blue-50 transition">
           <span>${faq.q}</span>
@@ -408,4 +408,9 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
+
+  renderFaq();
+
+  // Re-render FAQ on language change
+  document.addEventListener('languageChanged', renderFaq);
 });

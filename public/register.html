@@ -164,6 +164,8 @@
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
   <script src="/assets/js/i18n.js"></script>
+  <script src="/assets/js/locale.js"></script>
+  <script src="/assets/js/currency.js"></script>
   <script src="/assets/js/api.js"></script>
   <script>
     // Language selector handler
@@ -227,12 +229,12 @@
         const password = document.getElementById('password').value;
         const confirm = document.getElementById('confirmPassword').value;
 
-        if (!fullName || fullName.length < 3) return showToast('Nama lengkap minimal 3 karakter', 'error');
-        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showToast('Email tidak valid', 'error');
-        if (!phone || !/^((\+62|62|0)8[1-9]\d{6,11})$/.test(phone.replace(/[\s-]/g, ''))) return showToast('Nomor HP tidak valid', 'error');
-        if (!password || password.length < 6) return showToast('Password minimal 6 karakter', 'error');
-        if (!/[a-zA-Z]/.test(password) || !/[0-9]/.test(password)) return showToast('Password harus mengandung huruf & angka', 'error');
-        if (password !== confirm) return showToast('Konfirmasi password tidak cocok', 'error');
+        if (!fullName || fullName.length < 3) return showToast(I18N.t('val.nameMin'), 'error');
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showToast(I18N.t('val.emailInvalid'), 'error');
+        if (!phone || !/^((\+62|62|0)8[1-9]\d{6,11})$/.test(phone.replace(/[\s-]/g, ''))) return showToast(I18N.t('val.phoneInvalid'), 'error');
+        if (!password || password.length < 6) return showToast(I18N.t('val.passwordMin'), 'error');
+        if (!/[a-zA-Z]/.test(password) || !/[0-9]/.test(password)) return showToast(I18N.t('val.passwordMix'), 'error');
+        if (password !== confirm) return showToast(I18N.t('val.passwordMatch'), 'error');
 
         goStep(2);
       });
@@ -242,7 +244,7 @@
       // Step 2 -> submit
       const submitBtn = document.getElementById('submitRegBtn');
       submitBtn.addEventListener('click', async () => {
-        if (!document.getElementById('agreeTerms').checked) return showToast('Anda harus menyetujui Syarat & Ketentuan', 'error');
+        if (!document.getElementById('agreeTerms').checked) return showToast(I18N.t('val.agreeTerms'), 'error');
 
         const body = {
           fullName: document.getElementById('fullName').value.trim(),
@@ -258,10 +260,10 @@
 
         if (res.success) {
           Token.set(res.token, false);
-          await alertSuccess('Registrasi Berhasil!', 'Akun Anda telah dibuat. Anda otomatis login dan akan diarahkan ke dashboard.');
+          await alertSuccess(I18N.t('notif.registerSuccess'), I18N.t('notif.registerSuccessDesc'));
           window.location.href = `${BASE_PATH}/dashboard.html`;
         } else {
-          showToast(res.message || 'Registrasi gagal', 'error');
+          showToast(res.message || I18N.t('notif.registerFailed'), 'error');
         }
       });
     });

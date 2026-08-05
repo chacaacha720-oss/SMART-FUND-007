@@ -4,6 +4,7 @@
  */
 const jwt = require('jsonwebtoken');
 const db = require('../config/db');
+const { t } = require('../config/i18n');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'smartfund_super_secret_key_change_this_2026';
 
@@ -11,30 +12,31 @@ const JWT_SECRET = process.env.JWT_SECRET || 'smartfund_super_secret_key_change_
  * Verifikasi JWT token user (Bearer token)
  */
 async function authUser(req, res, next) {
+  const lang = req.lang || 'id';
   try {
     const header = req.headers.authorization;
     if (!header || !header.startsWith('Bearer ')) {
-      return res.status(401).json({ success: false, message: 'Token tidak ditemukan. Silakan login.' });
+      return res.status(401).json({ success: false, message: t(lang, 'auth.tokenNotFound') });
     }
     const token = header.split(' ')[1];
     const decoded = jwt.verify(token, JWT_SECRET);
 
     if (decoded.role !== 'user') {
-      return res.status(403).json({ success: false, message: 'Akses ditolak. Bukan akun user.' });
+      return res.status(403).json({ success: false, message: t(lang, 'auth.notUser') });
     }
 
     const [rows] = await db.query('SELECT id, full_name, email, phone, status FROM users WHERE id = ?', [decoded.id]);
     if (rows.length === 0) {
-      return res.status(401).json({ success: false, message: 'User tidak ditemukan.' });
+      return res.status(401).json({ success: false, message: t(lang, 'auth.userNotFound') });
     }
     const user = rows[0];
     if (user.status === 'frozen') {
-      return res.status(403).json({ success: false, message: 'Akun Anda dibekukan. Hubungi admin.' });
+      return res.status(403).json({ success: false, message: t(lang, 'auth.accountFrozen') });
     }
     req.user = user;
     next();
   } catch (err) {
-    return res.status(401).json({ success: false, message: 'Token tidak valid atau kadaluarsa.' });
+    return res.status(401).json({ success: false, message: t(lang, 'auth.tokenInvalid') });
   }
 }
 
@@ -42,29 +44,30 @@ async function authUser(req, res, next) {
  * Verifikasi JWT token admin
  */
 async function authAdmin(req, res, next) {
+  const lang = req.lang || 'id';
   try {
     const header = req.headers.authorization;
     if (!header || !header.startsWith('Bearer ')) {
-      return res.status(401).json({ success: false, message: 'Token admin tidak ditemukan.' });
+      return res.status(401).json({ success: false, message: t(lang, 'auth.adminTokenNotFound') });
     }
     const token = header.split(' ')[1];
     const decoded = jwt.verify(token, JWT_SECRET);
 
     if (decoded.role !== 'admin' && decoded.role !== 'super_admin') {
-      return res.status(403).json({ success: false, message: 'Akses ditolak. Bukan admin.' });
+      return res.status(403).json({ success: false, message: t(lang, 'auth.notAdmin') });
     }
 
     const [rows] = await db.query('SELECT id, username, email, full_name, role, status FROM admins WHERE id = ?', [decoded.id]);
     if (rows.length === 0) {
-      return res.status(401).json({ success: false, message: 'Admin tidak ditemukan.' });
+      return res.status(401).json({ success: false, message: t(lang, 'auth.adminNotFound') });
     }
     if (rows[0].status !== 'active') {
-      return res.status(403).json({ success: false, message: 'Akun admin nonaktif.' });
+      return res.status(403).json({ success: false, message: t(lang, 'auth.adminInactive') });
     }
     req.admin = rows[0];
     next();
   } catch (err) {
-    return res.status(401).json({ success: false, message: 'Token admin tidak valid atau kadaluarsa.' });
+    return res.status(401).json({ success: false, message: t(lang, 'auth.adminTokenInvalid') });
   }
 }
 

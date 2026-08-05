@@ -15,9 +15,9 @@ router.use('/loans', loanRoutes);
 router.use('/user', userRoutes);
 router.use('/admin', adminRoutes);
 
-// Health check
+// Health check - localized message
 router.get('/health', (req, res) => {
-  res.json({ success: true, message: 'SMART FUND API running', time: new Date().toISOString() });
+  res.json({ success: true, message: req.t ? req.t('health.running') : 'SMART FUND API running', time: new Date().toISOString() });
 });
 
 module.exports = router;

@@ -8,6 +8,7 @@ const crypto = require('crypto');
 const db = require('../config/db');
 const { JWT_SECRET } = require('../middleware/auth');
 const { sanitize, isValidEmail } = require('../middleware/validate');
+const { t } = require('../config/i18n');
 
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
 
@@ -20,6 +21,7 @@ function signToken(payload) {
  * Registrasi user baru -> auto login
  */
 async function register(req, res) {
+  const lang = req.lang || 'id';
   try {
     const fullName = sanitize(req.body.fullName);
     const email = (req.body.email || '').toLowerCase().trim();
@@ -29,7 +31,7 @@ async function register(req, res) {
     // Cek email sudah terdaftar
     const [exists] = await db.query('SELECT id FROM users WHERE email = ?', [email]);
     if (exists.length) {
-      return res.status(400).json({ success: false, message: 'Email sudah terdaftar' });
+      return res.status(400).json({ success: false, message: t(lang, 'auth.emailExists') });
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
@@ -48,7 +50,7 @@ async function register(req, res) {
     // Buat notifikasi welcome
     await db.query(
       `INSERT INTO notifications (user_id, title, message, type) VALUES (?, ?, ?, 'success')`,
-      [userId, 'Selamat Datang di SMART FUND!', `Halo ${fullName}, akun Anda berhasil dibuat. Nikmati berbagai kemudahan pinjaman online bersama kami.`]
+      [userId, t(lang, 'auth.welcomeNotif'), t(lang, 'auth.welcomeMsg', fullName)]
     );
 
     // Auto login
@@ -57,13 +59,13 @@ async function register(req, res) {
 
     return res.json({
       success: true,
-      message: 'Registrasi berhasil. Anda otomatis login.',
+      message: t(lang, 'auth.registerSuccess'),
       token,
       data: userRows[0],
     });
   } catch (err) {
     console.error('Register error:', err);
-    return res.status(500).json({ success: false, message: 'Terjadi kesalahan server' });
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
   }
 }
 
@@ -72,6 +74,7 @@ async function register(req, res) {
  * Login dengan email atau nomor HP
  */
 async function login(req, res) {
+  const lang = req.lang || 'id';
   try {
     const identifier = (req.body.identifier || '').trim();
     const password = req.body.password;
@@ -84,17 +87,17 @@ async function login(req, res) {
     );
 
     if (rows.length === 0) {
-      return res.status(401).json({ success: false, message: 'Email/Nomor HP atau password salah' });
+      return res.status(401).json({ success: false, message: t(lang, 'auth.loginFailed') });
     }
 
     const user = rows[0];
     if (user.status === 'frozen') {
-      return res.status(403).json({ success: false, message: 'Akun Anda dibekukan. Hubungi admin.' });
+      return res.status(403).json({ success: false, message: t(lang, 'auth.accountFrozenLogin') });
     }
 
     const valid = await bcrypt.compare(password, user.password_hash);
     if (!valid) {
-      return res.status(401).json({ success: false, message: 'Email/Nomor HP atau password salah' });
+      return res.status(401).json({ success: false, message: t(lang, 'auth.loginFailed') });
     }
 
     await db.query('UPDATE users SET last_login = NOW() WHERE id = ?', [user.id]);
@@ -104,7 +107,7 @@ async function login(req, res) {
 
     return res.json({
       success: true,
-      message: 'Login berhasil',
+      message: t(lang, 'auth.loginSuccess'),
       token,
       data: {
         id: user.id,
@@ -118,7 +121,7 @@ async function login(req, res) {
     });
   } catch (err) {
     console.error('Login error:', err);
-    return res.status(500).json({ success: false, message: 'Terjadi kesalahan server' });
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
   }
 }
 
@@ -127,12 +130,13 @@ async function login(req, res) {
  * Kirim OTP (dummy) ke email/HP
  */
 async function forgotPassword(req, res) {
+  const lang = req.lang || 'id';
   try {
     const email = (req.body.email || '').toLowerCase().trim();
     const phone = (req.body.phone || '').trim();
 
     if (!email && !phone) {
-      return res.status(400).json({ success: false, message: 'Email atau nomor HP wajib diisi' });
+      return res.status(400).json({ success: false, message: t(lang, 'auth.identifierRequired') });
     }
 
     // Cari user
@@ -142,7 +146,7 @@ async function forgotPassword(req, res) {
 
     const [rows] = await db.query(query, params);
     if (rows.length === 0) {
-      return res.status(404).json({ success: false, message: 'Akun tidak ditemukan' });
+      return res.status(404).json({ success: false, message: t(lang, 'auth.accountNotFound') });
     }
 
     const user = rows[0];
@@ -160,13 +164,13 @@ async function forgotPassword(req, res) {
 
     return res.json({
       success: true,
-      message: 'OTP telah dikirim ke email & SMS Anda',
+      message: t(lang, 'auth.otpSent'),
       // Untuk demo, kembalikan OTP & token
       debug: { otp, token, email: user.email },
     });
   } catch (err) {
     console.error('Forgot password error:', err);
-    return res.status(500).json({ success: false, message: 'Terjadi kesalahan server' });
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
   }
 }
 
@@ -175,22 +179,23 @@ async function forgotPassword(req, res) {
  * Verifikasi OTP
  */
 async function verifyOtp(req, res) {
+  const lang = req.lang || 'id';
   try {
     const { email, otp } = req.body;
-    if (!email || !otp) return res.status(400).json({ success: false, message: 'Email dan OTP wajib diisi' });
+    if (!email || !otp) return res.status(400).json({ success: false, message: t(lang, 'auth.emailOtpRequired') });
 
     const [rows] = await db.query(
       'SELECT * FROM password_resets WHERE email = ? AND otp = ? AND is_used = 0 AND expires_at > NOW() ORDER BY id DESC LIMIT 1',
       [email, otp]
     );
     if (rows.length === 0) {
-      return res.status(400).json({ success: false, message: 'OTP tidak valid atau kadaluarsa' });
+      return res.status(400).json({ success: false, message: t(lang, 'auth.otpInvalid') });
     }
 
-    return res.json({ success: true, message: 'OTP valid', token: rows[0].token });
+    return res.json({ success: true, message: t(lang, 'auth.otpValid'), token: rows[0].token });
   } catch (err) {
     console.error('Verify OTP error:', err);
-    return res.status(500).json({ success: false, message: 'Terjadi kesalahan server' });
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
   }
 }
 
@@ -199,17 +204,18 @@ async function verifyOtp(req, res) {
  * Buat password baru setelah verifikasi OTP
  */
 async function resetPassword(req, res) {
+  const lang = req.lang || 'id';
   try {
     const { token, newPassword } = req.body;
-    if (!token || !newPassword) return res.status(400).json({ success: false, message: 'Token dan password baru wajib diisi' });
-    if (newPassword.length < 6) return res.status(400).json({ success: false, message: 'Password minimal 6 karakter' });
+    if (!token || !newPassword) return res.status(400).json({ success: false, message: t(lang, 'auth.tokenPasswordRequired') });
+    if (newPassword.length < 6) return res.status(400).json({ success: false, message: t(lang, 'auth.passwordMin') });
 
     const [rows] = await db.query(
       'SELECT * FROM password_resets WHERE token = ? AND is_used = 0 AND expires_at > NOW() ORDER BY id DESC LIMIT 1',
       [token]
     );
     if (rows.length === 0) {
-      return res.status(400).json({ success: false, message: 'Token tidak valid atau kadaluarsa' });
+      return res.status(400).json({ success: false, message: t(lang, 'auth.resetTokenInvalid') });
     }
 
     const reset = rows[0];
@@ -218,10 +224,10 @@ async function resetPassword(req, res) {
     await db.query('UPDATE users SET password_hash = ? WHERE email = ?', [hash, reset.email]);
     await db.query('UPDATE password_resets SET is_used = 1 WHERE id = ?', [reset.id]);
 
-    return res.json({ success: true, message: 'Password berhasil diubah. Silakan login.' });
+    return res.json({ success: true, message: t(lang, 'auth.passwordChanged') });
   } catch (err) {
     console.error('Reset password error:', err);
-    return res.status(500).json({ success: false, message: 'Terjadi kesalahan server' });
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
   }
 }
 
@@ -230,16 +236,17 @@ async function resetPassword(req, res) {
  * Data user yang sedang login
  */
 async function me(req, res) {
+  const lang = req.lang || 'id';
   try {
     const [rows] = await db.query(
       'SELECT id, full_name, email, phone, nik, address, job, income_range, balance, loan_limit, status, ktp_filename, created_at FROM users WHERE id = ?',
       [req.user.id]
     );
-    if (rows.length === 0) return res.status(404).json({ success: false, message: 'User tidak ditemukan' });
+    if (rows.length === 0) return res.status(404).json({ success: false, message: t(lang, 'auth.userNotFound404') });
     return res.json({ success: true, data: rows[0] });
   } catch (err) {
     console.error('Me error:', err);
-    return res.status(500).json({ success: false, message: 'Terjadi kesalahan server' });
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
   }
 }
 

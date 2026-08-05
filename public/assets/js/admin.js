@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     e.preventDefault();
     const username = document.getElementById('adminUsername').value.trim();
     const password = adminPwdInput.value;
-    if (!username || !password) return showToast('Username dan password wajib diisi', 'error');
+    if (!username || !password) return showToast(I18N.t('admin.userPassRequired', 'Username dan password wajib diisi'), 'error');
 
     const btn = document.getElementById('adminLoginBtn');
     setBtnLoading(btn, true);
@@ -46,10 +46,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (res.success) {
       AdminToken.set(res.token, true);
-      showToast('Login admin berhasil!', 'success');
+      showToast(I18N.t('admin.loginSuccess', 'Login admin berhasil!'), 'success');
       setTimeout(() => showAdminApp(res.data), 500);
     } else {
-      showToast(res.message || 'Login gagal', 'error');
+      showToast(res.message || I18N.t('admin.loginFailed', 'Login gagal'), 'error');
     }
   });
 });
@@ -71,7 +71,14 @@ async function showAdminApp(admin) {
   overlay.addEventListener('click', () => { sidebar.classList.remove('open'); overlay.classList.remove('show'); });
 
   // Navigation
-  const pageTitles = { dashboard: 'Dashboard', users: 'Data User', applications: 'Pengajuan', transactions: 'Transaksi', telegram: 'Pengaturan Telegram', settings: 'Setting Website' };
+  const pageTitles = {
+    dashboard: I18N.t('admin.dashboard'),
+    users: I18N.t('admin.users'),
+    applications: I18N.t('admin.applications'),
+    transactions: I18N.t('admin.transactions'),
+    telegram: I18N.t('admin.telegram'),
+    settings: I18N.t('admin.settings'),
+  };
   document.querySelectorAll('.admin-link').forEach((link) => {
     link.addEventListener('click', (e) => {
       e.preventDefault();
@@ -88,7 +95,7 @@ async function showAdminApp(admin) {
 
   // Logout
   document.getElementById('adminLogoutBtn').addEventListener('click', async () => {
-    const ok = await alertConfirm('Logout Admin?', 'Anda akan keluar dari dashboard admin.');
+    const ok = await alertConfirm(I18N.t('dash.logout'), I18N.t('notif.loginRequiredDesc'));
     if (ok) { Token.clear(); window.location.href = `${BASE_PATH}/admin.html`; }
   });
 
@@ -139,8 +146,8 @@ async function loadAdminDashboard() {
     data: {
       labels,
       datasets: [
-        { label: 'Total Pengajuan', data: totals, backgroundColor: '#2563eb', borderRadius: 8 },
-        { label: 'Dana Cair', data: danaCair, backgroundColor: '#16a34a', borderRadius: 8 },
+        { label: I18N.t('admin.totalApp'), data: totals, backgroundColor: '#2563eb', borderRadius: 8 },
+        { label: I18N.t('admin.disbursed'), data: danaCair, backgroundColor: '#16a34a', borderRadius: 8 },
       ],
     },
     options: { responsive: true, plugins: { legend: { position: 'top' } }, scales: { y: { beginAtZero: true } } },
@@ -155,7 +162,7 @@ async function loadAdminDashboard() {
         <div class="flex justify-between text-xs text-slate-500"><span>${formatRupiah(a.amount)}</span><span>${formatDate(a.created_at)}</span></div>
       </div>`).join('');
   } else {
-    recentEl.innerHTML = '<p class="text-center text-slate-400 py-4">Belum ada pengajuan</p>';
+    recentEl.innerHTML = `<p class="text-center text-slate-400 py-4">${I18N.t('admin.noApplications')}</p>`;
   }
 }
 
@@ -186,7 +193,7 @@ async function loadUsers() {
 function renderUsersTable(users, search = '') {
   const tbody = document.getElementById('usersTable');
   const filtered = search ? users.filter((u) => u.full_name.toLowerCase().includes(search.toLowerCase()) || u.email.toLowerCase().includes(search.toLowerCase())) : users;
-  if (!filtered.length) { tbody.innerHTML = '<tr><td colspan="7" class="text-center py-8 text-slate-400">Tidak ada user</td></tr>'; return; }
+  if (!filtered.length) { tbody.innerHTML = `<tr><td colspan="7" class="text-center py-8 text-slate-400">${I18N.t('admin.noUsers')}</td></tr>`; return; }
   tbody.innerHTML = filtered.map((u) => `
     <tr class="border-b border-slate-100 hover:bg-slate-50">
       <td class="px-4 py-3 font-semibold text-slate-700">#${u.id}</td>
@@ -196,8 +203,8 @@ function renderUsersTable(users, search = '') {
       <td class="px-4 py-3 text-slate-700">${formatRupiah(u.loan_limit)}</td>
       <td class="px-4 py-3">${statusBadge(u.status)}</td>
       <td class="px-4 py-3">
-        <button onclick="editUser(${u.id})" class="text-blue-600 hover:bg-blue-50 p-2 rounded-lg" title="Edit"><i class="fas fa-edit"></i></button>
-        <button onclick="deleteUser(${u.id})" class="text-red-500 hover:bg-red-50 p-2 rounded-lg" title="Hapus"><i class="fas fa-trash"></i></button>
+        <button onclick="editUser(${u.id})" class="text-blue-600 hover:bg-blue-50 p-2 rounded-lg" title="${I18N.t('admin.editUser')}"><i class="fas fa-edit"></i></button>
+        <button onclick="deleteUser(${u.id})" class="text-red-500 hover:bg-red-50 p-2 rounded-lg" title="${I18N.t('admin.deleteUser')}"><i class="fas fa-trash"></i></button>
       </td>
     </tr>`).join('');
 }
@@ -223,27 +230,42 @@ function closeUserModal() {
 
 async function saveUser() {
   if (!currentUserId) return;
+
+  // Parse numeric fields safely - empty/NaN values are omitted so the backend
+  // does not receive NaN and cause a SQL error.
+  const balanceVal = document.getElementById('editUserBalance').value;
+  const loanLimitVal = document.getElementById('editUserLimit').value;
+  const balance = balanceVal !== '' && !isNaN(parseFloat(balanceVal)) ? parseFloat(balanceVal) : undefined;
+  const loanLimit = loanLimitVal !== '' && !isNaN(parseFloat(loanLimitVal)) ? parseFloat(loanLimitVal) : undefined;
+
   const body = {
     fullName: document.getElementById('editUserName').value,
     phone: document.getElementById('editUserPhone').value,
     status: document.getElementById('editUserStatus').value,
-    balance: parseFloat(document.getElementById('editUserBalance').value),
-    loanLimit: parseFloat(document.getElementById('editUserLimit').value),
   };
+  if (balance !== undefined) body.balance = balance;
+  if (loanLimit !== undefined) body.loanLimit = loanLimit;
+
   const btn = document.getElementById('saveUserBtn');
   setBtnLoading(btn, true);
   const res = await api(`/admin/users/${currentUserId}`, { method: 'PUT', body });
   setBtnLoading(btn, false);
-  if (res.success) { showToast('User berhasil diperbarui', 'success'); closeUserModal(); await loadUsers(); }
-  else showToast(res.message || 'Gagal memperbarui', 'error');
+  if (res.success) {
+    showToast(I18N.t('admin.userUpdated', 'User berhasil diperbarui'), 'success');
+    closeUserModal();
+    await loadUsers();
+    // Beri tahu tab user bahwa data berubah
+    AdminSync.notifyDataChanged();
+  }
+  else showToast(res.message || I18N.t('admin.noDataChanged'), 'error');
 }
 
 async function deleteUser(id) {
-  const ok = await alertConfirm('Hapus User?', 'User dan semua data terkait akan dihapus permanen.', 'Hapus', 'Batal');
+  const ok = await alertConfirm(I18N.t('admin.confirmDelete'), I18N.t('admin.confirmDeleteText'), I18N.t('admin.deleteUser'), I18N.t('admin.cancel'));
   if (!ok) return;
   const res = await api(`/admin/users/${id}`, { method: 'DELETE' });
-  if (res.success) { showToast('User dihapus', 'success'); await loadUsers(); }
-  else showToast(res.message || 'Gagal menghapus', 'error');
+  if (res.success) { showToast(I18N.t('admin.userDeleted', 'User dihapus'), 'success'); await loadUsers(); }
+  else showToast(res.message || I18N.t('admin.noDataChanged'), 'error');
 }
 
 // ============================================
@@ -253,7 +275,7 @@ async function loadApplications() {
   const res = await api('/admin/applications');
   if (!res.success) return;
   const tbody = document.getElementById('appsTable');
-  if (!res.data.length) { tbody.innerHTML = '<tr><td colspan="7" class="text-center py-8 text-slate-400">Belum ada pengajuan</td></tr>'; return; }
+  if (!res.data.length) { tbody.innerHTML = `<tr><td colspan="7" class="text-center py-8 text-slate-400">${I18N.t('admin.noApplications')}</td></tr>`; return; }
   tbody.innerHTML = res.data.map((a) => `
     <tr class="border-b border-slate-100 hover:bg-slate-50">
       <td class="px-4 py-3 font-semibold text-slate-700">#${a.id}</td>
@@ -263,7 +285,7 @@ async function loadApplications() {
       <td class="px-4 py-3 text-slate-500 text-sm">${a.purpose}</td>
       <td class="px-4 py-3">${statusBadge(a.status)}</td>
       <td class="px-4 py-3">
-        <button onclick="viewApp(${a.id})" class="text-blue-600 hover:bg-blue-50 p-2 rounded-lg" title="Detail"><i class="fas fa-eye"></i></button>
+        <button onclick="viewApp(${a.id})" class="text-blue-600 hover:bg-blue-50 p-2 rounded-lg" title="${I18N.t('admin.viewApp')}"><i class="fas fa-eye"></i></button>
       </td>
     </tr>`).join('');
 }
@@ -303,8 +325,8 @@ async function viewApp(id) {
     </div>
     ${a.admin_note ? `<div class="bg-amber-50 rounded-xl p-4 text-sm"><b>Catatan Admin:</b> ${a.admin_note}</div>` : ''}
     <div>
-      <label class="block text-sm font-semibold text-slate-700 mb-2">Tambah Catatan Admin</label>
-      <textarea id="appNote" rows="2" class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 outline-none" placeholder="Catatan untuk pengajuan ini...">${a.admin_note || ''}</textarea>
+      <label class="block text-sm font-semibold text-slate-700 mb-2">${I18N.t('admin.addNote')}</label>
+      <textarea id="appNote" rows="2" class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 outline-none" placeholder="${I18N.t('admin.notePlaceholder')}">${a.admin_note || ''}</textarea>
     </div>`;
   const modal = document.getElementById('appModal');
   modal.classList.remove('hidden'); modal.classList.add('flex');
@@ -319,17 +341,19 @@ function closeAppModal() {
 async function updateAppStatus(status) {
   if (!currentAppId) return;
   const note = document.getElementById('appNote')?.value || '';
-  const labels = { approved: 'menyetujui', rejected: 'menolak', disbursed: 'mencairkan dana' };
-  const ok = await alertConfirm(`Yakin ingin ${labels[status]} pengajuan #${currentAppId}?`, status === 'disbursed' ? 'Saldo user akan bertambah otomatis.' : '');
+  const labels = { approved: I18N.t('admin.approve'), rejected: I18N.t('admin.reject'), disbursed: I18N.t('admin.disburse') };
+  const ok = await alertConfirm(`${I18N.t('admin.confirmDelete', 'Yakin ingin mengubah status')} #${currentAppId}?`, status === 'disbursed' ? I18N.t('admin.disburse') + ': Saldo user akan bertambah otomatis.' : '');
   if (!ok) return;
   const res = await api(`/admin/applications/${currentAppId}/status`, { method: 'PUT', body: { status, adminNote: note } });
   if (res.success) {
-    showToast(`Pengajuan ${status === 'approved' ? 'disetujui' : status === 'rejected' ? 'ditolak' : 'dana dicairkan'}`, 'success');
+    showToast(`${I18N.t('admin.applications')} ${status === 'approved' ? I18N.t('status.approved') : status === 'rejected' ? I18N.t('status.rejected') : I18N.t('admin.disbursed').toLowerCase()}`, 'success');
     closeAppModal();
     await loadApplications();
     await loadAdminDashboard();
+    // Beri tahu tab user bahwa status pengajuan berubah
+    AdminSync.notifyDataChanged();
   } else {
-    showToast(res.message || 'Gagal mengubah status', 'error');
+    showToast(res.message || I18N.t('admin.noDataChanged'), 'error');
   }
 }
 
@@ -340,7 +364,7 @@ async function loadTransactions() {
   const res = await api('/admin/transactions');
   if (!res.success) return;
   const tbody = document.getElementById('txTable');
-  if (!res.data.length) { tbody.innerHTML = '<tr><td colspan="7" class="text-center py-8 text-slate-400">Belum ada transaksi</td></tr>'; return; }
+  if (!res.data.length) { tbody.innerHTML = `<tr><td colspan="7" class="text-center py-8 text-slate-400">${I18N.t('admin.noTransactions')}</td></tr>`; return; }
   tbody.innerHTML = res.data.map((t) => `
     <tr class="border-b border-slate-100 hover:bg-slate-50">
       <td class="px-4 py-3 font-semibold text-slate-700">#${t.id}</td>
@@ -351,19 +375,24 @@ async function loadTransactions() {
       <td class="px-4 py-3 text-slate-500 text-sm">${formatDate(t.created_at)}</td>
       <td class="px-4 py-3">
         ${t.status === 'pending' ? `
-          <button onclick="updateTxStatus(${t.id}, 'approved')" class="text-green-600 hover:bg-green-50 p-2 rounded-lg" title="Approve"><i class="fas fa-check"></i></button>
-          <button onclick="updateTxStatus(${t.id}, 'rejected')" class="text-red-500 hover:bg-red-50 p-2 rounded-lg" title="Reject"><i class="fas fa-times"></i></button>
+          <button onclick="updateTxStatus(${t.id}, 'approved')" class="text-green-600 hover:bg-green-50 p-2 rounded-lg" title="${I18N.t('admin.approve')}"><i class="fas fa-check"></i></button>
+          <button onclick="updateTxStatus(${t.id}, 'rejected')" class="text-red-500 hover:bg-red-50 p-2 rounded-lg" title="${I18N.t('admin.reject')}"><i class="fas fa-times"></i></button>
         ` : '<span class="text-slate-300 text-xs">-</span>'}
       </td>
     </tr>`).join('');
 }
 
 async function updateTxStatus(id, status) {
-  const ok = await alertConfirm(`${status === 'approved' ? 'Setujui' : 'Tolak'} transaksi #${id}?`, '');
+  const ok = await alertConfirm(`${I18N.t(status === 'approved' ? 'admin.approve' : 'admin.reject')} transaksi #${id}?`, '');
   if (!ok) return;
   const res = await api(`/admin/transactions/${id}/status`, { method: 'PUT', body: { status } });
-  if (res.success) { showToast(`Transaksi ${status}`, 'success'); await loadTransactions(); }
-  else showToast(res.message || 'Gagal', 'error');
+  if (res.success) {
+    showToast(`Transaksi ${status}`, 'success');
+    await loadTransactions();
+    // Beri tahu tab user bahwa status transaksi berubah
+    AdminSync.notifyDataChanged();
+  }
+  else showToast(res.message || I18N.t('admin.noDataChanged'), 'error');
 }
 
 // ============================================
@@ -386,7 +415,7 @@ async function saveTelegramSettings() {
   };
 
   if (!settings.telegram_bot_token || !settings.telegram_admin_chat_id) {
-    showToast('Bot Token dan Chat ID wajib diisi', 'error');
+    showToast(I18N.t('admin.telegram') + ': Bot Token dan Chat ID wajib diisi', 'error');
     return;
   }
 
@@ -396,10 +425,10 @@ async function saveTelegramSettings() {
   setBtnLoading(btn, false);
 
   if (res.success) {
-    showToast('Pengaturan Telegram berhasil disimpan', 'success');
+    showToast(I18N.t('admin.telegramTestSuccess', 'Pengaturan Telegram berhasil disimpan'), 'success');
     await loadTelegramLogs();
   } else {
-    showToast(res.message || 'Gagal menyimpan pengaturan Telegram', 'error');
+    showToast(res.message || I18N.t('admin.noDataChanged'), 'error');
   }
 }
 
@@ -407,7 +436,7 @@ async function loadTelegramLogs() {
   const res = await api('/admin/telegram/logs');
   if (!res.success) return;
   const el = document.getElementById('tgLogs');
-  if (!res.data.length) { el.innerHTML = '<p class="text-center text-slate-400 py-4">Belum ada log</p>'; return; }
+  if (!res.data.length) { el.innerHTML = `<p class="text-center text-slate-400 py-4">${I18N.t('admin.noTransactions')}</p>`; return; }
   el.innerHTML = res.data.slice(0, 20).map((l) => `
     <div class="p-3 ${l.status === 'sent' ? 'bg-green-50' : 'bg-red-50'} rounded-xl text-sm">
       <div class="flex justify-between mb-1">
@@ -420,8 +449,8 @@ async function loadTelegramLogs() {
 
 async function testTelegram() {
   const res = await api('/admin/telegram/test', { method: 'POST' });
-  if (res.success) { showToast('Test telegram berhasil dikirim!', 'success'); await loadTelegramLogs(); }
-  else showToast(res.message || 'Gagal mengirim test. Periksa konfigurasi bot.', 'error');
+  if (res.success) { showToast(I18N.t('admin.telegramTestSuccess', 'Test telegram berhasil dikirim!'), 'success'); await loadTelegramLogs(); }
+  else showToast(res.message || I18N.t('admin.telegramTestFailed'), 'error');
 }
 
 // ============================================
@@ -461,6 +490,50 @@ async function saveSettings(e) {
   setBtnLoading(btn, true);
   const res = await api('/admin/settings', { method: 'PUT', body: { settings } });
   setBtnLoading(btn, false);
-  if (res.success) showToast('Pengaturan berhasil disimpan', 'success');
-  else showToast(res.message || 'Gagal menyimpan', 'error');
+  if (res.success) showToast(I18N.t('admin.settingsSaved', 'Pengaturan berhasil disimpan'), 'success');
+  else showToast(res.message || I18N.t('admin.noDataChanged'), 'error');
 }
+
+// ============================================
+// REAL-TIME SYNC - Admin <-> User Dashboard
+// Menggunakan BroadcastChannel agar perubahan yang
+// dilakukan admin langsung tampil di dashboard user
+// tanpa perlu refresh manual.
+// ============================================
+const AdminSync = (() => {
+  let channel = null;
+  let channelError = false;
+
+  // Register BroadcastChannel (fallback ke polling jika gagal)
+  try {
+    channel = new BroadcastChannel('smartfund_sync');
+  } catch (e) {
+    channelError = true;
+  }
+
+  /**
+   * Beri tahu tab lain (dashboard user) bahwa data berubah.
+   * Dipanggil setelah admin mengubah saldo, status, pengajuan, transaksi.
+   */
+  function notifyDataChanged() {
+    if (channel && !channelError) {
+      try { channel.postMessage({ type: 'data_changed', source: 'admin' }); } catch (e) { /* ignore */ }
+    }
+  }
+
+  // Terima pesan dari tab user (misal user mengajukan pinjaman/penarikan)
+  if (channel && !channelError) {
+    channel.onmessage = (event) => {
+      const msg = event.data;
+      if (msg && msg.type === 'data_changed' && msg.source === 'user') {
+        // Muat ulang data admin agar selalu sinkron
+        if (typeof loadAdminDashboard === 'function') loadAdminDashboard();
+        if (typeof loadUsers === 'function') loadUsers();
+        if (typeof loadApplications === 'function') loadApplications();
+        if (typeof loadTransactions === 'function') loadTransactions();
+      }
+    };
+  }
+
+  return { notifyDataChanged };
+})();

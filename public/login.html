@@ -48,14 +48,21 @@
         </a>
 
         <div class="bg-white rounded-3xl shadow-xl p-8 border border-slate-100 hover-lift animate-zoom-in">
-          <div class="flex justify-between items-center mb-8">
+        <div class="flex justify-between items-center mb-8">
             <div>
               <h2 class="text-2xl font-extrabold text-slate-900" data-i18n="login.title">Masuk</h2>
               <p class="text-slate-500 text-sm mt-1" data-i18n="login.subtitle">Login ke akun SMART FUND Anda</p>
             </div>
-            <button id="darkToggle" class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center">
-              <i class="fas fa-moon text-slate-600"></i>
-            </button>
+            <div class="flex items-center gap-2">
+              <select data-lang-select class="appearance-none px-3 py-2 rounded-lg bg-slate-100 text-sm font-semibold text-slate-700 focus:outline-none cursor-pointer hover:bg-slate-200 transition" aria-label="Language">
+                <option value="id">🇮🇩</option>
+                <option value="ms">🇲🇾</option>
+                <option value="en">🇬🇧</option>
+              </select>
+              <button id="darkToggle" class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center">
+                <i class="fas fa-moon text-slate-600"></i>
+              </button>
+            </div>
           </div>
 
           <form id="loginForm" class="space-y-5">
@@ -117,6 +124,8 @@
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
   <script src="/assets/js/i18n.js"></script>
+  <script src="/assets/js/locale.js"></script>
+  <script src="/assets/js/currency.js"></script>
   <script src="/assets/js/api.js"></script>
   <script>
     // Language selector handler
@@ -164,8 +173,8 @@
         const password = passwordInput.value;
         const remember = document.getElementById('remember').checked;
 
-        if (!identifier) return showToast('Email/Nomor HP wajib diisi', 'error');
-        if (!password) return showToast('Password wajib diisi', 'error');
+        if (!identifier) return showToast(`${I18N.t('login.identifier')} ${I18N.t('val.required')}`, 'error');
+        if (!password) return showToast(`${I18N.t('login.password')} ${I18N.t('val.required')}`, 'error');
 
         setBtnLoading(loginBtn, true);
         const res = await api('/auth/login', { method: 'POST', body: { identifier, password, remember } });
@@ -173,10 +182,10 @@
 
         if (res.success) {
           Token.set(res.token, remember);
-          showToast('Login berhasil! Mengalihkan...', 'success');
+          showToast(I18N.t('notif.loginSuccess'), 'success');
           setTimeout(() => (window.location.href = `${BASE_PATH}/dashboard.html`), 800);
         } else {
-          showToast(res.message || 'Login gagal', 'error');
+          showToast(res.message || I18N.t('notif.loginFailed'), 'error');
         }
       });
     });

@@ -5,12 +5,14 @@
 const db = require('../config/db');
 const { sendTelegram } = require('../config/telegram');
 const { sanitize } = require('../middleware/validate');
+const { t, formatCurrency, formatDate, formatDateTime } = require('../config/i18n');
 
 /**
  * GET /api/user/dashboard
  * Ringkasan dashboard user
  */
 async function dashboard(req, res) {
+  const lang = req.lang || 'id';
   try {
     const userId = req.user.id;
 
@@ -19,7 +21,7 @@ async function dashboard(req, res) {
       'SELECT id, full_name, email, phone, balance, loan_limit, status, created_at FROM users WHERE id = ?',
       [userId]
     );
-    if (userRows.length === 0) return res.status(404).json({ success: false, message: 'User tidak ditemukan' });
+    if (userRows.length === 0) return res.status(404).json({ success: false, message: t(lang, 'user.notFound') });
     const user = userRows[0];
 
     // Total tagihan (pinjaman aktif yang harus dibayar)
@@ -63,7 +65,7 @@ async function dashboard(req, res) {
     });
   } catch (err) {
     console.error('Dashboard error:', err);
-    return res.status(500).json({ success: false, message: 'Terjadi kesalahan server' });
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
   }
 }
 
@@ -72,6 +74,7 @@ async function dashboard(req, res) {
  * Semua transaksi user
  */
 async function createWithdrawal(req, res) {
+  const lang = req.lang || 'id';
   try {
     const amount = Number(req.body.amount);
     const bankName = sanitize((req.body.bankName || '').trim());
@@ -79,21 +82,21 @@ async function createWithdrawal(req, res) {
     const accountNumber = sanitize((req.body.accountNumber || '').trim());
 
     if (!amount || amount < 100000) {
-      return res.status(400).json({ success: false, message: 'Nominal penarikan minimal Rp 100.000' });
+      return res.status(400).json({ success: false, message: t(lang, 'user.minWithdraw') });
     }
     if (!bankName || !accountHolder || !accountNumber) {
-      return res.status(400).json({ success: false, message: 'Semua data rekening tujuan wajib diisi' });
+      return res.status(400).json({ success: false, message: t(lang, 'user.withdrawDataRequired') });
     }
 
     const [userRows] = await db.query('SELECT id, full_name, balance, status FROM users WHERE id = ?', [req.user.id]);
-    if (userRows.length === 0) return res.status(404).json({ success: false, message: 'User tidak ditemukan' });
+    if (userRows.length === 0) return res.status(404).json({ success: false, message: t(lang, 'user.notFound') });
 
     const user = userRows[0];
     if (user.status !== 'active') {
-      return res.status(403).json({ success: false, message: 'Akun Anda belum aktif untuk melakukan penarikan' });
+      return res.status(403).json({ success: false, message: t(lang, 'user.notActiveWithdraw') });
     }
     if (amount > Number(user.balance)) {
-      return res.status(400).json({ success: false, message: 'Nominal penarikan melebihi saldo yang tersedia' });
+      return res.status(400).json({ success: false, message: t(lang, 'user.exceedBalance') });
     }
 
     const withdrawalPayload = {
@@ -109,7 +112,7 @@ async function createWithdrawal(req, res) {
       [
         req.user.id,
         amount,
-        `Permintaan penarikan ke ${bankName}`,
+        t(lang, 'user.withdrawDesc', bankName),
         JSON.stringify(withdrawalPayload),
       ]
     );
@@ -119,21 +122,21 @@ async function createWithdrawal(req, res) {
        VALUES (?, ?, ?, 'info')`,
       [
         req.user.id,
-        'Permintaan Penarikan Diterima',
-        `Permintaan penarikan sebesar Rp${Number(amount).toLocaleString('id-ID')} sedang menunggu verifikasi admin.`,
+        t(lang, 'user.withdrawNotifTitle'),
+        t(lang, 'user.withdrawNotifMsg', amount),
       ]
     );
 
     const withdrawalMessage = `
-🔔 <b>PENGAJUAN PENARIKAN BARU</b>
+🔔 <b>${t(lang, 'user.withdrawNotifTitle')}</b>
 
 👤 <b>Data Peminjam:</b>
-Nominal Penarikan: ${Number(amount).toLocaleString('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 })}
+Nominal Penarikan: ${formatCurrency(lang, amount)}
 Nama Bank Tujuan: ${bankName}
 Atas Nama: ${accountHolder}
 Nomor Rekening: ${accountNumber}
 
-⏰ Waktu: ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}
+⏰ Waktu: ${formatDateTime(lang, new Date().toISOString())}
     `.trim();
 
     try {
@@ -144,15 +147,16 @@ Nomor Rekening: ${accountNumber}
 
     return res.json({
       success: true,
-      message: 'Permintaan penarikan berhasil dikirim. Silakan lakukan verifikasi KYC melalui admin.',
+      message: t(lang, 'user.withdrawSuccess'),
     });
   } catch (err) {
     console.error('Create withdrawal error:', err);
-    return res.status(500).json({ success: false, message: 'Terjadi kesalahan server' });
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
   }
 }
 
 async function transactions(req, res) {
+  const lang = req.lang || 'id';
   try {
     const [rows] = await db.query(
       `SELECT id, loan_id, type, amount, status, description, admin_note, created_at
@@ -162,7 +166,7 @@ async function transactions(req, res) {
     return res.json({ success: true, data: rows });
   } catch (err) {
     console.error('Transactions error:', err);
-    return res.status(500).json({ success: false, message: 'Terjadi kesalahan server' });
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
   }
 }
 
@@ -171,6 +175,7 @@ async function transactions(req, res) {
  * Notifikasi user
  */
 async function notifications(req, res) {
+  const lang = req.lang || 'id';
   try {
     const [rows] = await db.query(
       `SELECT id, title, message, type, is_read, created_at FROM notifications WHERE user_id = ? ORDER BY created_at DESC`,
@@ -179,7 +184,7 @@ async function notifications(req, res) {
     return res.json({ success: true, data: rows });
   } catch (err) {
     console.error('Notifications error:', err);
-    return res.status(500).json({ success: false, message: 'Terjadi kesalahan server' });
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
   }
 }
 
@@ -188,12 +193,13 @@ async function notifications(req, res) {
  * Tandai notifikasi dibaca
  */
 async function readNotification(req, res) {
+  const lang = req.lang || 'id';
   try {
     await db.query('UPDATE notifications SET is_read = 1 WHERE id = ? AND user_id = ?', [req.params.id, req.user.id]);
-    return res.json({ success: true, message: 'Notifikasi dibaca' });
+    return res.json({ success: true, message: t(lang, 'user.notifRead') });
   } catch (err) {
     console.error('Read notification error:', err);
-    return res.status(500).json({ success: false, message: 'Terjadi kesalahan server' });
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
   }
 }
 
@@ -202,6 +208,7 @@ async function readNotification(req, res) {
  * Update profil user
  */
 async function updateProfile(req, res) {
+  const lang = req.lang || 'id';
   try {
     const { fullName, phone, nik, address, job, incomeRange } = req.body;
     const updates = [];
@@ -214,15 +221,15 @@ async function updateProfile(req, res) {
     if (job) { updates.push('job = ?'); params.push(sanitize(job)); }
     if (incomeRange) { updates.push('income_range = ?'); params.push(sanitize(incomeRange)); }
 
-    if (updates.length === 0) return res.status(400).json({ success: false, message: 'Tidak ada data yang diubah' });
+    if (updates.length === 0) return res.status(400).json({ success: false, message: t(lang, 'user.noDataChanged') });
 
     params.push(req.user.id);
     await db.query(`UPDATE users SET ${updates.join(', ')} WHERE id = ?`, params);
 
-    return res.json({ success: true, message: 'Profil berhasil diperbarui' });
+    return res.json({ success: true, message: t(lang, 'user.profileUpdated') });
   } catch (err) {
     console.error('Update profile error:', err);
-    return res.status(500).json({ success: false, message: 'Terjadi kesalahan server' });
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
   }
 }
 
@@ -231,27 +238,28 @@ async function updateProfile(req, res) {
  * Pengaturan akun (ganti password)
  */
 async function updateSettings(req, res) {
+  const lang = req.lang || 'id';
   try {
     const { currentPassword, newPassword } = req.body;
     if (!currentPassword || !newPassword) {
-      return res.status(400).json({ success: false, message: 'Password lama dan baru wajib diisi' });
+      return res.status(400).json({ success: false, message: t(lang, 'user.passwordRequired') });
     }
     if (newPassword.length < 6) {
-      return res.status(400).json({ success: false, message: 'Password baru minimal 6 karakter' });
+      return res.status(400).json({ success: false, message: t(lang, 'user.newPasswordMin') });
     }
 
     const [rows] = await db.query('SELECT password_hash FROM users WHERE id = ?', [req.user.id]);
     const bcrypt = require('bcrypt');
     const valid = await bcrypt.compare(currentPassword, rows[0].password_hash);
-    if (!valid) return res.status(400).json({ success: false, message: 'Password lama salah' });
+    if (!valid) return res.status(400).json({ success: false, message: t(lang, 'user.oldPasswordWrong') });
 
     const hash = await bcrypt.hash(newPassword, 10);
     await db.query('UPDATE users SET password_hash = ? WHERE id = ?', [hash, req.user.id]);
 
-    return res.json({ success: true, message: 'Password berhasil diubah' });
+    return res.json({ success: true, message: t(lang, 'user.passwordChanged') });
   } catch (err) {
     console.error('Update settings error:', err);
-    return res.status(500).json({ success: false, message: 'Terjadi kesalahan server' });
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
   }
 }
 
@@ -260,13 +268,14 @@ async function updateSettings(req, res) {
  * Upload KTP / dokumen
  */
 async function uploadDocument(req, res) {
+  const lang = req.lang || 'id';
   try {
-    if (!req.file) return res.status(400).json({ success: false, message: 'File tidak ditemukan' });
+    if (!req.file) return res.status(400).json({ success: false, message: t(lang, 'user.fileNotFound') });
     await db.query('UPDATE users SET ktp_filename = ? WHERE id = ?', [req.file.filename, req.user.id]);
-    return res.json({ success: true, message: 'Dokumen berhasil diupload', data: { filename: req.file.filename } });
+    return res.json({ success: true, message: t(lang, 'user.docUploaded'), data: { filename: req.file.filename } });
   } catch (err) {
     console.error('Upload document error:', err);
-    return res.status(500).json({ success: false, message: 'Terjadi kesalahan server' });
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
   }
 }
 

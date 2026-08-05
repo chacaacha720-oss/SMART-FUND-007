@@ -48,6 +48,10 @@ async function api(endpoint, options = {}) {
   const url = `${API_BASE}${endpoint}`;
   const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
 
+  // Attach the active language so the backend localizes all responses
+  const activeLang = (typeof I18N !== 'undefined' && I18N.getLang) ? I18N.getLang() : 'id';
+  headers['X-Lang'] = activeLang;
+
   // Attach the right token based on the endpoint scope
   const isAdminEndpoint = endpoint.startsWith('/admin');
   const token = isAdminEndpoint ? AdminToken.get() : Token.get();
@@ -85,94 +89,20 @@ async function api(endpoint, options = {}) {
 
 // ============================================
 // FORMATTERS
+// NOTE: formatCurrency, formatRupiah, formatDate, formatDateTime,
+// getCurrencySymbol, getCurrencyLocale are now defined in currency.js
 // ============================================
-// ============================================
-// CURRENCY FORMATTING (mendukung Rp, RM, USD)
-// ============================================
-// ============================================
-// CURRENCY RATES (Real-time dari API)
-// ============================================
-let CURRENCY_RATES = {
-  IDR: 1,        // Rupiah (dasar)
-  MYR: 0.00029,  // Ringgit Malaysia (fallback)
-  USD: 0.000062, // US Dollar (fallback)
-};
-
-// Fetch real-time exchange rates
-async function fetchExchangeRates() {
-  try {
-    const res = await fetch('https://open.er-api.com/v6/latest/IDR');
-    const data = await res.json();
-    if (data && data.rates) {
-      CURRENCY_RATES.MYR = data.rates.MYR || CURRENCY_RATES.MYR;
-      CURRENCY_RATES.USD = data.rates.USD || CURRENCY_RATES.USD;
-      console.log('Exchange rates updated:', CURRENCY_RATES);
-    }
-  } catch (err) {
-    console.warn('Failed to fetch exchange rates, using fallback:', err);
-  }
-}
-
-// Fetch rates on load
-fetchExchangeRates();
-// Refresh rates every 5 minutes
-setInterval(fetchExchangeRates, 5 * 60 * 1000);
-
-function getCurrencySymbol() {
-  const lang = (typeof I18N !== 'undefined' && I18N.getLang) ? I18N.getLang() : 'id';
-  if (lang === 'ms') return 'RM';
-  if (lang === 'en') return '$';
-  return 'Rp';
-}
-
-function getCurrencyLocale() {
-  const lang = (typeof I18N !== 'undefined' && I18N.getLang) ? I18N.getLang() : 'id';
-  if (lang === 'ms') return 'ms-MY';
-  if (lang === 'en') return 'en-US';
-  return 'id-ID';
-}
-
-function getCurrencyRate() {
-  const lang = (typeof I18N !== 'undefined' && I18N.getLang) ? I18N.getLang() : 'id';
-  if (lang === 'ms') return CURRENCY_RATES.MYR;
-  if (lang === 'en') return CURRENCY_RATES.USD;
-  return CURRENCY_RATES.IDR;
-}
-
-function formatCurrency(amount) {
-  const symbol = getCurrencySymbol();
-  const locale = getCurrencyLocale();
-  const rate = getCurrencyRate();
-  const converted = Number(amount || 0) * rate;
-  return symbol + ' ' + converted.toLocaleString(locale, { maximumFractionDigits: 0 });
-}
-
-// Backward compatibility - formatRupiah sekarang mengikuti bahasa aktif
-function formatRupiah(amount) {
-  return formatCurrency(amount);
-}
-
-function formatDate(dateStr) {
-  if (!dateStr) return '-';
-  const d = new Date(dateStr);
-  return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
-}
-
-function formatDateTime(dateStr) {
-  if (!dateStr) return '-';
-  const d = new Date(dateStr);
-  return d.toLocaleString('id-ID', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-}
 
 function statusBadge(status) {
+  const lang = (typeof I18N !== 'undefined' && I18N.getLang) ? I18N.getLang() : 'id';
   const map = {
-    pending: { class: 'badge-pending', text: 'Menunggu' },
-    approved: { class: 'badge-approved', text: 'Disetujui' },
-    disbursed: { class: 'badge-disbursed', text: 'Dana Cair' },
-    rejected: { class: 'badge-rejected', text: 'Ditolak' },
-    completed: { class: 'badge-completed', text: 'Lunas' },
-    active: { class: 'badge-active', text: 'Aktif' },
-    frozen: { class: 'badge-frozen', text: 'Dibekukan' },
+    pending: { class: 'badge-pending', text: I18N.t('status.pending') },
+    approved: { class: 'badge-approved', text: I18N.t('status.approved') },
+    disbursed: { class: 'badge-disbursed', text: I18N.t('status.disbursed') },
+    rejected: { class: 'badge-rejected', text: I18N.t('status.rejected') },
+    completed: { class: 'badge-completed', text: I18N.t('status.completed') },
+    active: { class: 'badge-active', text: I18N.t('status.active') },
+    frozen: { class: 'badge-frozen', text: I18N.t('status.frozen') },
   };
   const s = map[status] || { class: 'badge-pending', text: status };
   return `<span class="badge ${s.class}">${s.text}</span>`;

@@ -5,6 +5,7 @@
 const db = require('../config/db');
 const { sendTelegram, buildLoanApplicationMessage } = require('../config/telegram');
 const { sanitize } = require('../middleware/validate');
+const { t, formatCurrency } = require('../config/i18n');
 
 /**
  * Hitung cicilan dengan bunga flat tahunan
@@ -28,6 +29,7 @@ function calculateLoan(principal, tenorMonths, annualRatePercent = 5) {
  * Simulasi pinjaman (public)
  */
 async function simulate(req, res) {
+  const lang = req.lang || 'id';
   try {
     const amount = parseFloat(req.body.amount);
     const tenor = parseInt(req.body.tenor, 10);
@@ -42,17 +44,17 @@ async function simulate(req, res) {
     }
 
     if (!amount || amount < 1000000 || amount > 500000000) {
-      return res.status(400).json({ success: false, message: 'Jumlah pinjaman harus Rp1.000.000 - Rp500.000.000' });
+      return res.status(400).json({ success: false, message: t(lang, 'loan.amountRange') });
     }
     if (!tenor || tenor < 6 || tenor > 60) {
-      return res.status(400).json({ success: false, message: 'Tenor harus 6 - 60 bulan' });
+      return res.status(400).json({ success: false, message: t(lang, 'loan.tenorRange') });
     }
 
     const calc = calculateLoan(amount, tenor, rate);
     return res.json({ success: true, data: { amount, tenor, rate, ...calc } });
   } catch (err) {
     console.error('Simulate error:', err);
-    return res.status(500).json({ success: false, message: 'Terjadi kesalahan server' });
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
   }
 }
 
@@ -63,6 +65,7 @@ async function simulate(req, res) {
  * Step 2: Data Pinjaman (amount, tenor, purpose)
  */
 async function applyLoan(req, res) {
+  const lang = req.lang || 'id';
   try {
     const userId = req.user.id;
     const amount = parseFloat(req.body.amount);
@@ -70,25 +73,25 @@ async function applyLoan(req, res) {
     const purpose = sanitize(req.body.purpose);
 
     if (!amount || amount < 1000000 || amount > 500000000) {
-      return res.status(400).json({ success: false, message: 'Jumlah pinjaman harus Rp1.000.000 - Rp500.000.000' });
+      return res.status(400).json({ success: false, message: t(lang, 'loan.amountRange') });
     }
     if (!tenor || tenor < 6 || tenor > 60) {
-      return res.status(400).json({ success: false, message: 'Tenor harus 6 - 60 bulan' });
+      return res.status(400).json({ success: false, message: t(lang, 'loan.tenorRange') });
     }
     if (!purpose) {
-      return res.status(400).json({ success: false, message: 'Tujuan pinjaman wajib diisi' });
+      return res.status(400).json({ success: false, message: t(lang, 'loan.purposeRequired') });
     }
 
     // Cek limit user
     const [userRows] = await db.query('SELECT * FROM users WHERE id = ?', [userId]);
-    if (userRows.length === 0) return res.status(404).json({ success: false, message: 'User tidak ditemukan' });
+    if (userRows.length === 0) return res.status(404).json({ success: false, message: t(lang, 'loan.userNotFound') });
     const user = userRows[0];
 
     if (user.status === 'frozen') {
-      return res.status(403).json({ success: false, message: 'Akun dibekukan. Tidak dapat mengajukan pinjaman.' });
+      return res.status(403).json({ success: false, message: t(lang, 'loan.accountFrozen') });
     }
     if (amount > user.loan_limit) {
-      return res.status(400).json({ success: false, message: `Jumlah melebihi limit pinjaman Anda (Rp${Number(user.loan_limit).toLocaleString('id-ID')})` });
+      return res.status(400).json({ success: false, message: t(lang, 'loan.exceedLimit', user.loan_limit) });
     }
 
     // Cek apakah ada pinjaman aktif yang belum lunas
@@ -97,7 +100,7 @@ async function applyLoan(req, res) {
       [userId]
     );
     if (activeLoans[0].cnt > 0) {
-      return res.status(400).json({ success: false, message: 'Anda masih memiliki pinjaman aktif. Selesaikan terlebih dahulu.' });
+      return res.status(400).json({ success: false, message: t(lang, 'loan.hasActiveLoan') });
     }
 
     const [settings] = await db.query("SELECT setting_value FROM settings WHERE setting_key = 'interest_rate'");
@@ -115,10 +118,10 @@ async function applyLoan(req, res) {
     // Buat notifikasi untuk user
     await db.query(
       `INSERT INTO notifications (user_id, title, message, type) VALUES (?, ?, ?, 'info')`,
-      [userId, 'Pengajuan Pinjaman Diterima', `Pengajuan pinjaman #${loanId} sebesar Rp${amount.toLocaleString('id-ID')} telah diterima dan sedang menunggu persetujuan admin.`]
+      [userId, t(lang, 'loan.notifTitle'), t(lang, 'loan.notifMsg', loanId, amount)]
     );
 
-    // Kirim notifikasi Telegram ke admin
+    // Kirim notifikasi Telegram ke admin (locale-aware)
     const tgData = await buildLoanApplicationMessage({
       fullName: user.full_name,
       phone: user.phone,
@@ -131,12 +134,13 @@ async function applyLoan(req, res) {
       totalPayment: calc.totalPayment,
       applicationId: loanId,
       userId,
+      lang,
     });
     await sendTelegram(tgData.message, { inlineKeyboard: tgData.inlineKeyboard });
 
     return res.json({
       success: true,
-      message: 'Pengajuan berhasil dikirim. Status: Menunggu Persetujuan.',
+      message: t(lang, 'loan.applySuccess'),
       data: {
         applicationId: loanId,
         amount,
@@ -150,7 +154,7 @@ async function applyLoan(req, res) {
     });
   } catch (err) {
     console.error('Apply loan error:', err);
-    return res.status(500).json({ success: false, message: 'Terjadi kesalahan server' });
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
   }
 }
 
@@ -159,6 +163,7 @@ async function applyLoan(req, res) {
  * Riwayat pengajuan user yang login
  */
 async function myLoans(req, res) {
+  const lang = req.lang || 'id';
   try {
     const [rows] = await db.query(
       `SELECT id, amount, purpose, tenor, monthly_payment, total_interest, total_payment, status, admin_note, created_at, approved_at, disbursed_at
@@ -168,7 +173,7 @@ async function myLoans(req, res) {
     return res.json({ success: true, data: rows });
   } catch (err) {
     console.error('My loans error:', err);
-    return res.status(500).json({ success: false, message: 'Terjadi kesalahan server' });
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
   }
 }
 
@@ -177,16 +182,17 @@ async function myLoans(req, res) {
  * Detail pinjaman user
  */
 async function loanDetail(req, res) {
+  const lang = req.lang || 'id';
   try {
     const [rows] = await db.query(
       `SELECT * FROM loan_applications WHERE id = ? AND user_id = ?`,
       [req.params.id, req.user.id]
     );
-    if (rows.length === 0) return res.status(404).json({ success: false, message: 'Pinjaman tidak ditemukan' });
+    if (rows.length === 0) return res.status(404).json({ success: false, message: t(lang, 'loan.notFound') });
     return res.json({ success: true, data: rows[0] });
   } catch (err) {
     console.error('Loan detail error:', err);
-    return res.status(500).json({ success: false, message: 'Terjadi kesalahan server' });
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
   }
 }
 
