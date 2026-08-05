@@ -3,7 +3,7 @@
  * Mengirim notifikasi pengajuan pinjaman ke admin via Telegram Bot API
  */
 // Load .env only in local/development; Railway provides env vars at runtime
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production' && !process.env.RAILWAY_ENVIRONMENT) {
   require('dotenv').config();
 }
 const axios = require('axios');

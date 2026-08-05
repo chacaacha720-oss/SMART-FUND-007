@@ -12,7 +12,7 @@
  * validation errors are thrown instead of silently connecting to the wrong host.
  */
 // Load .env only in local/development; Railway provides env vars at runtime
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production' && !process.env.RAILWAY_ENVIRONMENT) {
   require('dotenv').config();
 }
 const mysql = require('mysql2/promise');

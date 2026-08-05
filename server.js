@@ -7,7 +7,7 @@
  * No hardcoded localhost. Uses process.env.PORT || 3000.
  */
 // Load .env only in local/development; Railway provides env vars at runtime
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production' && !process.env.RAILWAY_ENVIRONMENT) {
   require('dotenv').config();
 }
 
