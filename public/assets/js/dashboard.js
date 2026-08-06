@@ -482,37 +482,16 @@ const SyncChannel = (() => {
           syncEl.classList.remove('hidden');
           syncEl.textContent = `🔄 ${I18N.t('dash.dataUpdated', 'Data telah diperbarui')} ${formatDateTime(new Date().toISOString())}`;
           setTimeout(() => syncEl.classList.add('hidden'), 5000);
-  }
-  if (page === 'withdrawal-history') {
-    await loadWithdrawalHistory();
-  }
-}
+        }
+      }
 
-async function loadWithdrawalHistory() {
-  const res = await api('/withdrawals/user');
-  const tbody = document.getElementById('withdrawHistoryTable');
-  if (!tbody) return;
-  if (res.success && res.data.length) {
-    tbody.innerHTML = res.data.map((w) => `
-      <tr class="table-row hover:bg-slate-50 dark:hover:bg-slate-800/30">
-        <td class="px-4 py-3 font-semibold text-slate-700">${w.withdrawal_id}</td>
-        <td class="px-4 py-3 text-slate-700">${formatRupiah(w.jumlah)}</td>
-        <td class="px-4 py-3 text-slate-500 text-sm">${w.bank} • ${w.nama_rekening}</td>
-        <td class="px-4 py-3 text-slate-500 text-sm">${formatDate(w.created_at)}</td>
-        <td class="px-4 py-3">${statusBadge(w.status)}</td>
-      </tr>`).join('');
-  } else {
-    tbody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-slate-400">Belum ada riwayat penarikan</td></tr>`;
-  }
-}
       lastData = signature;
-      // Update "sinkron terakhir"
       const syncTime = document.getElementById('syncTime');
       if (syncTime) syncTime.textContent = formatDateTime(new Date().toISOString());
     } catch (e) {
       // ignore - polling berikutnya
     }
-  }
+  } // end probe()
 
   // Terima pesan dari tab lain (misal admin mengubah data)
   if (channel && !channelError) {

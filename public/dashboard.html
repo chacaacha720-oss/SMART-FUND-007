@@ -35,7 +35,6 @@
         <a class="sidebar-link" data-page="history"><i class="fas fa-clock-rotate-left w-5"></i> <span>Riwayat Pengajuan</span></a>
         <a class="sidebar-link" data-page="balance"><i class="fas fa-wallet w-5"></i> <span>Saldo Pinjaman</span></a>
         <a class="sidebar-link" data-page="limit"><i class="fas fa-chart-line w-5"></i> <span>Limit Pinjaman</span></a>
-        <a href="/withdraw.html" class="sidebar-link"><i class="fas fa-money-bill-wave w-5"></i> <span>Penarikan Dana</span></a>
       </nav>
       <div class="p-4 border-t border-slate-100">
         <a id="logoutBtn" class="sidebar-link text-red-500 hover:bg-red-50"><i class="fas fa-right-from-bracket w-5"></i> <span>Logout</span></a>
@@ -233,36 +232,8 @@
           </div>
         </section>
 
-        <!-- ============================================ WITHDRAWAL HISTORY PAGE ============================================ -->
-        <section id="page-withdrawal-history" class="page-content hidden">
-          <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-extrabold text-slate-900">Riwayat Penarikan Dana</h2>
-            <a href="/withdraw.html" class="btn btn-primary">
-              <i class="fas fa-money-bill-wave mr-2"></i> Ajukan Penarikan Baru
-            </a>
-          </div>
-          <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-            <div class="table-responsive">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>ID Penarikan</th>
-                    <th>Nominal</th>
-                    <th>Bank</th>
-                    <th>Tanggal</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody id="withdrawHistoryTable">
-                  <tr><td colspan="5" class="text-center py-8 text-slate-400">Memuat...</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        <!-- ============================================ BALANCE PAGE ============================================ -->
-        <section id="page-balance" class="page-content hidden">
+      <!-- ============================================ BALANCE PAGE ============================================ -->
+      <section id="page-balance" class="page-content hidden">
           <h2 class="text-2xl font-extrabold text-slate-900 mb-6">Saldo Pinjaman</h2>
           <div class="content-grid-2">
             <div class="bg-gradient-to-br from-blue-600 to-cyan-500 rounded-2xl p-8 text-white hover-lift">
