@@ -604,7 +604,7 @@ async function bulkUpdateUserLimit(req, res) {
     if (isNaN(newLimit) || newLimit <= 0) {
       return res.status(400).json({ success: false, message: t(lang, 'admin.invalidLimit') });
     }
-    const [result] = await db.query(`UPDATE users SET loan_limit = ? WHERE role = 'user'`, [newLimit]);
+    const [result] = await db.query('UPDATE users SET loan_limit = ?', [newLimit]);
     return res.json({
       success: true,
       message: t(lang, 'admin.limitUpdated', result.affectedRows),
