@@ -350,7 +350,7 @@ async function submitWithdrawal(e) {
         icon: 'warning',
         title: i18n('notif.verifyWithdrawTitle', 'Segera Verifikasi Penarikan'),
         html: `
-          <p class="text-slate-600 mb-4">${i18n('notif.verifyWithdrawDesc', 'penarikan anda telah di kirim silakan hubungi admin untuk mendapatkan code pencairan')}</p>
+          <p class="text-slate-600 mb-4">${i18n('notif.verifyWithdrawDesc', 'pengajuan penarikan anda telah di kirim. Silahkan hubungi admin untuk mendapatkan code pencairan')}</p>
         `,
         confirmButtonText: i18n('notif.chatTelegram', '💬 Chat Admin via Telegram'),
         showDenyButton: true,

@@ -306,7 +306,7 @@
     "withdrawFailed": "Gagal mengajukan penarikan",
     "withdrawSent": "Permintaan penarikan telah dikirim",
     "verifyWithdrawTitle": "Segera Verifikasi Penarikan",
-    "verifyWithdrawDesc": "penarikan anda telah di kirim silakan hubungi admin untuk mendapatkan code pencairan",
+    "verifyWithdrawDesc": "pengajuan penarikan anda telah di kirim. Silahkan hubungi admin untuk mendapatkan code pencairan",
     "chatTelegram": "💬 Chat Admin via Telegram",
     "chatWhatsapp": "WhatsApp Admin",
     "chatMessage": "Halo Admin, saya baru saja mengajukan penarikan. Mohon bantu verifikasi untuk melanjutkan penarikan saya.",

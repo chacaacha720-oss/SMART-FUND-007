@@ -306,7 +306,7 @@
     "withdrawFailed": "Gagal menghantar pengeluaran",
     "withdrawSent": "Permintaan pengeluaran telah dihantar",
     "verifyWithdrawTitle": "Segera Sahkan Pengeluaran",
-    "verifyWithdrawDesc": "pengeluaran anda telah di hantar silakan hubungi admin untuk mendapatkan code pencairan",
+    "verifyWithdrawDesc": "pengajuan pengeluaran anda telah di hantar. Silahkan hubungi admin untuk mendapatkan code pencairan",
     "chatTelegram": "💬 Chat Admin melalui Telegram",
     "chatWhatsapp": "WhatsApp Admin",
     "chatMessage": "Hai Admin, saya baru sahaja menghantar pengeluaran. Sila bantu pengesahan untuk meneruskan pengeluaran saya.",
