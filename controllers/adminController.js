@@ -397,7 +397,8 @@ async function updateApplicationStatus(req, res) {
         throw err;
       } finally {
         conn.release();
-      } else if (status === 'disbursed') {
+      }
+    } else if (status === 'disbursed') {
       const conn = await db.getConnection();
       try {
         await conn.beginTransaction();
