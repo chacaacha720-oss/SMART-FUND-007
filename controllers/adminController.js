@@ -361,44 +361,82 @@ async function updateApplicationStatus(req, res) {
     const app = appRows[0];
 
     if (status === 'approved') {
-      await db.query(
-        `UPDATE loan_applications SET status = 'approved', approved_at = NOW(), admin_note = ? WHERE id = ?`,
-        [adminNote || null, req.params.id]
-      );
-      await db.query(
-        `INSERT INTO notifications (user_id, title, message, type) VALUES (?, ?, ?, 'success')`,
-        [app.user_id, t(lang, 'admin.approvedNotifTitle'), t(lang, 'admin.approvedNotifMsg', app.id)]
-      );
+      const conn = await db.getConnection();
+      try {
+        await conn.beginTransaction();
+        await conn.query(
+          `UPDATE loan_applications SET status = 'approved', approved_at = NOW(), admin_note = ? WHERE id = ?`,
+          [adminNote || null, req.params.id]
+        );
+        await conn.query(
+          `INSERT INTO notifications (user_id, title, message, type) VALUES (?, ?, ?, 'success')`,
+          [app.user_id, t(lang, 'admin.approvedNotifTitle'), t(lang, 'admin.approvedNotifMsg', app.id)]
+        );
+        await conn.commit();
+      } catch (err) {
+        await conn.rollback();
+        throw err;
+      } finally {
+        conn.release();
+      }
     } else if (status === 'rejected') {
-      await db.query(
-        `UPDATE loan_applications SET status = 'rejected', rejected_at = NOW(), admin_note = ? WHERE id = ?`,
-        [adminNote || t(lang, 'admin.defaultRejectReason'), req.params.id]
-      );
-      await db.query(
-        `INSERT INTO notifications (user_id, title, message, type) VALUES (?, ?, ?, 'error')`,
-        [app.user_id, t(lang, 'admin.rejectedNotifTitle'), t(lang, 'admin.rejectedNotifMsg', app.id, adminNote || t(lang, 'admin.defaultRejectReason'))]
-      );
-    } else if (status === 'disbursed') {
-      // Cairkan dana -> saldo user bertambah
-      await db.query(
-        `UPDATE loan_applications SET status = 'disbursed', disbursed_at = NOW(), admin_note = ? WHERE id = ?`,
-        [adminNote || null, req.params.id]
-      );
-      await db.query('UPDATE users SET balance = balance + ? WHERE id = ?', [app.amount, app.user_id]);
-      await db.query(
-        `INSERT INTO transactions (user_id, loan_id, type, amount, status, description) VALUES (?, ?, 'disbursement', ?, 'completed', ?)`,
-        [app.user_id, app.id, app.amount, t(lang, 'admin.disbursementDesc')]
-      );
-      await db.query(
-        `INSERT INTO notifications (user_id, title, message, type) VALUES (?, ?, ?, 'success')`,
-        [app.user_id, t(lang, 'admin.disbursedNotifTitle'), t(lang, 'admin.disbursedNotifMsg', app.id, app.amount)]
-      );
+      const conn = await db.getConnection();
+      try {
+        await conn.beginTransaction();
+        await conn.query(
+          `UPDATE loan_applications SET status = 'rejected', rejected_at = NOW(), admin_note = ? WHERE id = ?`,
+          [adminNote || t(lang, 'admin.defaultRejectReason'), req.params.id]
+        );
+        await conn.query(
+          `INSERT INTO notifications (user_id, title, message, type) VALUES (?, ?, ?, 'error')`,
+          [app.user_id, t(lang, 'admin.rejectedNotifTitle'), t(lang, 'admin.rejectedNotifMsg', app.id, adminNote || t(lang, 'admin.defaultRejectReason'))]
+        );
+        await conn.commit();
+      } catch (err) {
+        await conn.rollback();
+        throw err;
+      } finally {
+        conn.release();
+      } else if (status === 'disbursed') {
+      const conn = await db.getConnection();
+      try {
+        await conn.beginTransaction();
+        await conn.query(
+          `UPDATE loan_applications SET status = 'disbursed', disbursed_at = NOW(), admin_note = ? WHERE id = ?`,
+          [adminNote || null, req.params.id]
+        );
+        await conn.query('UPDATE users SET balance = balance + ? WHERE id = ?', [app.amount, app.user_id]);
+        await conn.query(
+          `INSERT INTO transactions (user_id, loan_id, type, amount, status, description) VALUES (?, ?, 'disbursement', ?, 'completed', ?)`,
+          [app.user_id, app.id, app.amount, t(lang, 'admin.disbursementDesc')]
+        );
+        await conn.query(
+          `INSERT INTO notifications (user_id, title, message, type) VALUES (?, ?, ?, 'success')`,
+          [app.user_id, t(lang, 'admin.disbursedNotifTitle'), t(lang, 'admin.disbursedNotifMsg', app.id, app.amount)]
+        );
+        await conn.commit();
+      } catch (err) {
+        await conn.rollback();
+        throw err;
+      } finally {
+        conn.release();
+      }
     } else if (status === 'completed') {
-      await db.query(`UPDATE loan_applications SET status = 'completed' WHERE id = ?`, [req.params.id]);
-      await db.query(
-        `INSERT INTO notifications (user_id, title, message, type) VALUES (?, ?, ?, 'success')`,
-        [app.user_id, t(lang, 'admin.completedNotifTitle'), t(lang, 'admin.completedNotifMsg', app.id)]
-      );
+      const conn = await db.getConnection();
+      try {
+        await conn.beginTransaction();
+        await conn.query(`UPDATE loan_applications SET status = 'completed' WHERE id = ?`, [req.params.id]);
+        await conn.query(
+          `INSERT INTO notifications (user_id, title, message, type) VALUES (?, ?, ?, 'success')`,
+          [app.user_id, t(lang, 'admin.completedNotifTitle'), t(lang, 'admin.completedNotifMsg', app.id)]
+        );
+        await conn.commit();
+      } catch (err) {
+        await conn.rollback();
+        throw err;
+      } finally {
+        conn.release();
+      }
     } else {
       await db.query(`UPDATE loan_applications SET status = 'pending' WHERE id = ?`, [req.params.id]);
     }
@@ -452,8 +490,18 @@ async function updateTransactionStatus(req, res) {
 
     // Jika withdrawal approved -> kurangi saldo user
     if (tx.type === 'withdrawal' && status === 'approved') {
-      await db.query('UPDATE users SET balance = balance - ? WHERE id = ?', [tx.amount, tx.user_id]);
-      await db.query('UPDATE transactions SET status = ? WHERE id = ?', ['completed', req.params.id]);
+      const conn = await db.getConnection();
+      try {
+        await conn.beginTransaction();
+        await conn.query('UPDATE users SET balance = balance - ? WHERE id = ?', [tx.amount, tx.user_id]);
+        await conn.query('UPDATE transactions SET status = ? WHERE id = ?', ['completed', req.params.id]);
+        await conn.commit();
+      } catch (err) {
+        await conn.rollback();
+        throw err;
+      } finally {
+        conn.release();
+      }
     }
 
     await db.query(

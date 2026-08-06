@@ -6,7 +6,12 @@ const jwt = require('jsonwebtoken');
 const db = require('../config/db');
 const { t } = require('../config/i18n');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'smartfund_super_secret_key_change_this_2026';
+const JWT_SECRET = process.env.JWT_SECRET || 'dev_jwt_secret_not_secure';
+
+if (process.env.NODE_ENV === 'production' && JWT_SECRET === 'dev_jwt_secret_not_secure') {
+  console.error('[FATAL] JWT_SECRET environment variable not set in production');
+  process.exit(1);
+}
 
 /**
  * Verifikasi JWT token user (Bearer token)

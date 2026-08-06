@@ -116,7 +116,7 @@ async function initDatabase() {
 
     const [rows] = await conn.query('SELECT id FROM admins WHERE username = ?', [adminUsername]);
     if (rows.length === 0) {
-      const hash = await bcrypt.hash(adminPassword, 10);
+      const hash = await bcrypt.hash(adminPassword, 12);
       await conn.query(
         `INSERT INTO admins (username, email, password_hash, full_name, role, status)
          VALUES (?, ?, ?, ?, 'super_admin', 'active')`,

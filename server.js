@@ -16,6 +16,7 @@ const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const compression = require('compression');
 const rateLimit = require('express-rate-limit');
 const session = require('express-session');
 
@@ -27,6 +28,7 @@ const db = require('./config/db');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const isProduction = process.env.NODE_ENV === 'production';
 
 // ============================================
 // STARTUP LOGGING
@@ -62,11 +64,31 @@ if (!fs.existsSync(uploadDir)) {
 // SECURITY MIDDLEWARE
 // ============================================
 app.use(helmet({
-  contentSecurityPolicy: false, // disabled for CDN resources
   crossOriginEmbedderPolicy: false,
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "cdn.tailwindcss.com", "cdnjs.cloudflare.com", "unpkg.com", "cdn.jsdelivr.net"],
+      styleSrc: ["'self'", "'unsafe-inline'", "fonts.googleapis.com", "cdnjs.cloudflare.com", "unpkg.com", "cdn.jsdelivr.net"],
+      fontSrc: ["'self'", "fonts.gstatic.com", "cdnjs.cloudflare.com"],
+      imgSrc: ["'self'", "data:", "*"],
+      connectSrc: ["'self'"],
+      objectSrc: ["'none'"],
+      frameSrc: ["'self'"],
+      upgradeInsecureRequests: [],
+    },
+  },
 }));
+const corsOrigins = process.env.CORS_ORIGIN === '*'
+  ? true
+  : (process.env.CORS_ORIGIN || '').split(',').map((origin) => origin.trim()).filter(Boolean);
+
 app.use(cors({
-  origin: process.env.CORS_ORIGIN === '*' ? true : process.env.CORS_ORIGIN,
+  origin: (origin, callback) => {
+    if (corsOrigins === true) return callback(null, true);
+    if (!origin || corsOrigins.includes(origin)) return callback(null, origin);
+    callback(new Error('Not allowed by CORS'));
+  },
   credentials: true,
 }));
 
@@ -84,49 +106,77 @@ const apiLimiter = rateLimit({
   },
 });
 
+app.use(compression({ threshold: 1024 }));
+
 // ============================================
 // PARSER & SESSION
 // ============================================
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Session - secure cookies only in production with a proper PROXY_TRUST setting
-const isProduction = process.env.NODE_ENV === 'production';
-app.set('trust proxy', isProduction ? 1 : false);
+app.use((err, req, res, next) => {
+  if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+    const lang = req.lang || 'id';
+    return res.status(400).json({ success: false, message: require('./config/i18n').t(lang, 'error.invalidJson') || 'Invalid JSON payload' });
+  }
+  next(err);
+});
 
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'smartfund_session_secret_2026',
+// Environment validation (fail fast in production)
+if (isProduction) {
+  if (process.env.JWT_SECRET === 'smartfund_super_secret_key_change_this_2026' || !process.env.JWT_SECRET) {
+    console.error('[FATAL] JWT_SECRET is not set or using default insecure value in production');
+    process.exit(1);
+  }
+  if (process.env.SESSION_SECRET === 'smartfund_session_secret_2026' || !process.env.SESSION_SECRET) {
+    console.error('[FATAL] SESSION_SECRET is not set or using default insecure value in production');
+    process.exit(1);
+  }
+  console.log('✔ Production environment validation passed');
+}
+
+// Session configuration with secure settings
+const sessionConfig = {
+  secret: process.env.SESSION_SECRET || 'dev_session_secret',
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: isProduction && process.env.COOKIE_SECURE === 'true',
+    secure: isProduction,
     httpOnly: true,
-    sameSite: 'lax',
+    sameSite: isProduction ? 'none' : 'lax',
     maxAge: 24 * 60 * 60 * 1000,
   },
-}));
+};
+
+app.set('trust proxy', isProduction ? 1 : false);
+app.use(session(sessionConfig));
 
 // ============================================
 // STATIC FILES
 // ============================================
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use(express.static(path.join(__dirname, 'public'), {
+  maxAge: '1y',
+  etag: true,
+  lastModified: true,
+}));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
+  maxAge: '1y',
+  etag: true,
+}));
 
 // ============================================
 // ROUTES
 // ============================================
 app.use('/api', i18nMiddleware, apiLimiter, routes);
 
-app.post('/api/telegram/webhook', async (req, res) => {
+app.post('/api/telegram/webhook', async (req, res, next) => {
   const update = req.body || {};
-
   try {
     const config = await getTelegramSettings();
     const result = await handleTelegramWebhookUpdate(update, config.botToken);
     res.json({ ok: true, success: result.success, message: result.message });
   } catch (err) {
-    console.error('[Telegram Webhook] Error:', err.message);
-    res.status(500).json({ ok: false, success: false, message: 'Telegram webhook error' });
+    next(err);
   }
 });
 
@@ -172,20 +222,25 @@ process.on('unhandledRejection', (reason, promise) => {
 });
 
 // Graceful shutdown
-process.on('SIGTERM', () => {
-  console.log('✔ SIGTERM received - shutting down gracefully...');
+const gracefulShutdown = async (signal) => {
+  console.log(`✔ ${signal} received - shutting down gracefully...`);
+  try {
+    await db.end();
+    console.log('✔ Database pool closed');
+  } catch (err) {
+    console.error('[DB] Error closing pool:', err.message);
+  }
   server.close(() => {
     console.log('✔ Server closed');
     process.exit(0);
   });
-});
+  setTimeout(() => {
+    console.error('[FATAL] Could not close connections gracefully, forcefully shutting down');
+    process.exit(1);
+  }, 10000);
+};
 
-process.on('SIGINT', () => {
-  console.log('✔ SIGINT received - shutting down gracefully...');
-  server.close(() => {
-    console.log('✔ Server closed');
-    process.exit(0);
-  });
-});
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
 module.exports = app;

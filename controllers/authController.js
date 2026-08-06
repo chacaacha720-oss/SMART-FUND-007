@@ -34,7 +34,7 @@ async function register(req, res) {
       return res.status(400).json({ success: false, message: t(lang, 'auth.emailExists') });
     }
 
-    const passwordHash = await bcrypt.hash(password, 10);
+    const passwordHash = await bcrypt.hash(password, 12);
 
     // Ambil default loan limit dari settings
     const [settings] = await db.query("SELECT setting_value FROM settings WHERE setting_key = 'default_loan_limit'");
@@ -165,8 +165,6 @@ async function forgotPassword(req, res) {
     return res.json({
       success: true,
       message: t(lang, 'auth.otpSent'),
-      // Untuk demo, kembalikan OTP & token
-      debug: { otp, token, email: user.email },
     });
   } catch (err) {
     console.error('Forgot password error:', err);
@@ -219,7 +217,7 @@ async function resetPassword(req, res) {
     }
 
     const reset = rows[0];
-    const hash = await bcrypt.hash(newPassword, 10);
+    const hash = await bcrypt.hash(newPassword, 12);
 
     await db.query('UPDATE users SET password_hash = ? WHERE email = ?', [hash, reset.email]);
     await db.query('UPDATE password_resets SET is_used = 1 WHERE id = ?', [reset.id]);

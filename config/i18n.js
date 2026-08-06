@@ -167,6 +167,7 @@ const MESSAGES = {
     'error.fileImage': 'Hanya file gambar (JPG/PNG) yang diperbolehkan',
     'error.server': 'Terjadi kesalahan server',
     'error.tooManyRequests': 'Terlalu banyak request. Coba lagi nanti.',
+    'error.invalidJson': 'Format JSON tidak valid',
 
     // ===== Health =====
     'health.running': 'SMART FUND API berjalan',
