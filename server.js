@@ -5,6 +5,7 @@
  * 
  * Railway compatible - uses Environment Variables only.
  * No hardcoded localhost. Uses process.env.PORT || 3000.
+ * Version 1.0.2 - Mobile blur fix deployment
  */
 // Load .env only in local/development; Railway provides env vars at runtime
 if (process.env.NODE_ENV !== 'production' && !process.env.RAILWAY_ENVIRONMENT) {
