@@ -95,11 +95,9 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
   font-feature-settings: "liga", "kern";
   scroll-behavior: smooth;
   font-size: 16px;
-  text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
 }
 
