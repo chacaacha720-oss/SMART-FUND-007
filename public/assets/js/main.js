@@ -34,6 +34,10 @@ document.addEventListener('DOMContentLoaded', () => {
     mobileMenu.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeMenu));
     const closeBtn = document.getElementById('mobileMenuClose');
     if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+    // Close when clicking overlay background
+    mobileMenu.addEventListener('click', (e) => {
+      if (e.target === mobileMenu) closeMenu();
+    });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
   }
 
