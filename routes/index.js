@@ -9,12 +9,14 @@ const authRoutes = require('./authRoutes');
 const loanRoutes = require('./loanRoutes');
 const userRoutes = require('./userRoutes');
 const adminRoutes = require('./adminRoutes');
+const withdrawalRoutes = require('./withdrawalRoutes');
 const db = require('../config/db');
 
 router.use('/auth', authRoutes);
 router.use('/loans', loanRoutes);
 router.use('/user', userRoutes);
 router.use('/admin', adminRoutes);
+router.use('/withdrawals', withdrawalRoutes);
 
 // Health check - localized message with database status
 router.get('/health', async (req, res) => {

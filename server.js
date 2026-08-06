@@ -245,4 +245,42 @@ const gracefulShutdown = async (signal) => {
 process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
 process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
+(async () => {
+  // Auto-migrate: ensure withdrawal table & settings exist on startup
+  try {
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS withdrawals (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        withdrawal_id VARCHAR(20) NOT NULL UNIQUE,
+        member_id INT NOT NULL,
+        nama VARCHAR(100) NOT NULL,
+        email VARCHAR(100) NOT NULL,
+        no_hp VARCHAR(20) NOT NULL,
+        bank VARCHAR(50) NOT NULL,
+        no_rekening VARCHAR(50) NOT NULL,
+        nama_rekening VARCHAR(100) NOT NULL,
+        jumlah DECIMAL(15,2) NOT NULL,
+        status ENUM('menunggu_verifikasi','diproses','berhasil','ditolak') DEFAULT 'menunggu_verifikasi',
+        catatan TEXT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        processed_at DATETIME NULL,
+        FOREIGN KEY (member_id) REFERENCES users(id) ON DELETE CASCADE,
+        INDEX idx_status (status),
+        INDEX idx_member (member_id),
+        INDEX idx_created (created_at)
+      ) ENGINE=InnoDB`);
+    console.log('✔ Withdrawal table ready');
+
+    // Ensure min_withdrawal setting exists
+    const [rows] = await db.query("SELECT setting_value FROM settings WHERE setting_key = 'min_withdrawal'");
+    if (rows.length === 0) {
+      await db.query("INSERT INTO settings (setting_key, setting_value, description) VALUES ('min_withdrawal', '100000', 'Minimum penarikan dana (Rp)')");
+      console.log('✔ min_withdrawal setting added');
+    }
+  } catch (err) {
+    console.error('✘ Auto-migration failed:', err.message);
+  }
+})();
+
 module.exports = app;

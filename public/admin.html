@@ -70,6 +70,7 @@
           <a class="admin-link" data-page="users"><i class="fas fa-users w-5"></i> Data User</a>
           <a class="admin-link" data-page="applications"><i class="fas fa-file-circle-check w-5"></i> Pengajuan</a>
           <a class="admin-link" data-page="transactions"><i class="fas fa-receipt w-5"></i> Transaksi</a>
+          <a class="admin-link" data-page="withdrawals"><i class="fas fa-money-bill-wave w-5"></i> Penarikan Dana</a>
           <a class="admin-link" data-page="telegram"><i class="fab fa-telegram w-5"></i> Pengaturan Telegram</a>
           <a class="admin-link" data-page="settings"><i class="fas fa-gear w-5"></i> Setting Website</a>
         </nav>
@@ -212,6 +213,44 @@
                     </tr>
                   </thead>
                   <tbody id="txTable"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- WITHDRAWALS -->
+          <section id="apage-withdrawals" class="admin-content hidden">
+            <div class="flex justify-between items-center mb-6">
+              <h2 class="text-2xl font-extrabold text-slate-900">Manajemen Penarikan Dana</h2>
+              <div class="flex gap-3">
+                <input type="text" id="withdrawSearch" placeholder="Cari ID, nama, email..." class="px-4 py-2 rounded-xl border border-slate-200 focus:outline-none" />
+                <select id="withdrawFilter" class="px-4 py-2 rounded-xl border border-slate-200 bg-white">
+                  <option value="">Semua Status</option>
+                  <option value="menunggu_verifikasi">Menunggu Verifikasi</option>
+                  <option value="diproses">Diproses</option>
+                  <option value="berhasil">Berhasil</option>
+                  <option value="ditolak">Ditolak</option>
+                </select>
+              </div>
+            </div>
+            <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>ID Penarikan</th>
+                      <th>Nama</th>
+                      <th>Email</th>
+                      <th>Bank</th>
+                      <th>Jumlah</th>
+                      <th>Status</th>
+                      <th>Tanggal</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody id="withdrawTable">
+                    <tr><td colspan="8" class="text-center py-8 text-slate-400">Memuat...</td></tr>
+                  </tbody>
                 </table>
               </div>
             </div>

@@ -113,6 +113,31 @@ CREATE TABLE IF NOT EXISTS notifications (
 ) ENGINE=InnoDB;
 
 -- --------------------------------------------
+-- Table: withdrawals
+-- --------------------------------------------
+CREATE TABLE IF NOT EXISTS withdrawals (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  withdrawal_id VARCHAR(20) NOT NULL UNIQUE,
+  member_id INT NOT NULL,
+  nama VARCHAR(100) NOT NULL,
+  email VARCHAR(100) NOT NULL,
+  no_hp VARCHAR(20) NOT NULL,
+  bank VARCHAR(50) NOT NULL,
+  no_rekening VARCHAR(50) NOT NULL,
+  nama_rekening VARCHAR(100) NOT NULL,
+  jumlah DECIMAL(15,2) NOT NULL,
+  status ENUM('menunggu_verifikasi','diproses','berhasil','ditolak') DEFAULT 'menunggu_verifikasi',
+  catatan TEXT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  processed_at DATETIME NULL,
+  FOREIGN KEY (member_id) REFERENCES users(id) ON DELETE CASCADE,
+  INDEX idx_status (status),
+  INDEX idx_member (member_id),
+  INDEX idx_created (created_at)
+) ENGINE=InnoDB;
+
+-- --------------------------------------------
 -- Table: settings
 -- --------------------------------------------
 CREATE TABLE IF NOT EXISTS settings (
@@ -163,7 +188,8 @@ INSERT INTO settings (setting_key, setting_value, description) VALUES
   ('min_tenor', '6', 'Tenor minimum (bulan)'),
   ('max_tenor', '60', 'Tenor maksimum (bulan)'),
   ('interest_rate', '5', 'Bunga per tahun (%)'),
-  ('default_loan_limit', '5000000', 'Limit pinjaman default user baru'),
+  ('default_loan_limit', '200000000', 'Limit pinjaman default user baru'),
+  ('min_withdrawal', '100000', 'Minimum penarikan dana (Rp)'),
   ('telegram_enabled', 'true', 'Aktifkan notifikasi Telegram'),
   ('maintenance_mode', 'false', 'Mode pemeliharaan'),
   ('contact_email', 'cs@smartfund.id', 'Email kontak'),

@@ -180,6 +180,7 @@ async function loadAdminPage(page) {
   if (page === 'users') await loadUsers();
   if (page === 'applications') await loadApplications();
   if (page === 'transactions') await loadTransactions();
+  if (page === 'withdrawals') await loadWithdrawals();
   if (page === 'telegram') {
     await loadTelegramConfig();
     await loadTelegramLogs();
@@ -397,6 +398,117 @@ async function updateTxStatus(id, status) {
     showToast(`Transaksi ${status}`, 'success');
     await loadTransactions();
     // Beri tahu tab user bahwa status transaksi berubah
+    AdminSync.notifyDataChanged();
+  }
+  else showToast(res.message || I18N.t('admin.noDataChanged'), 'error');
+}
+
+// ============================================
+// WITHDRAWALS
+// ============================================
+async function loadWithdrawals(search = '', filter = '') {
+  const params = new URLSearchParams();
+  if (search) params.append('search', search);
+  if (filter) params.append('status', filter);
+  const res = await api(`/admin/withdrawals?${params.toString()}`);
+  const tbody = document.getElementById('withdrawTable');
+  if (!tbody) return;
+  if (!res.success || !res.data.length) {
+    tbody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-slate-400">${I18N.t('admin.noTransactions')}</td></tr>`;
+    return;
+  }
+  const statusMap = {
+    menunggu_verifikasi: { text: 'Menunggu Verifikasi', cls: 'badge-pending' },
+    diproses: { text: 'Diproses', cls: 'badge-active' },
+    berhasil: { text: 'Berhasil', cls: 'badge-approved' },
+    ditolak: { text: 'Ditolak', cls: 'badge-rejected' },
+  };
+  tbody.innerHTML = res.data.map((w) => `
+    <tr class="table-row hover:bg-slate-50 dark:hover:bg-slate-800/30">
+      <td class="px-4 py-3 font-semibold text-slate-700">${w.withdrawal_id}</td>
+      <td class="px-4 py-3 text-slate-700">${w.nama}</td>
+      <td class="px-4 py-3 text-slate-500 text-sm">${w.email}</td>
+      <td class="px-4 py-3 text-slate-700">${w.bank}</td>
+      <td class="px-4 py-3 text-slate-700">${formatRupiah(w.jumlah)}</td>
+      <td class="px-4 py-3"><span class="badge ${statusMap[w.status]?.cls || 'badge-pending'}">${statusMap[w.status]?.text || w.status}</span></td>
+      <td class="px-4 py-3 text-slate-500 text-sm">${formatDate(w.created_at)}</td>
+      <td class="px-4 py-3 space-x-1">
+        <button onclick="viewWithdrawal('${w.withdrawal_id}')" class="text-blue-600 hover:bg-blue-50 p-1 rounded" title="Lihat"><i class="fas fa-eye"></i></button>
+        ${w.status === 'menunggu_verifikasi' ? `
+          <button onclick="updateWithdrawStatus('${w.withdrawal_id}', 'diproses')" class="text-amber-600 hover:bg-amber-50 p-1 rounded" title="Proses"><i class="fas fa-cog"></i></button>
+          <button onclick="updateWithdrawStatus('${w.withdrawal_id}', 'berhasil')" class="text-green-600 hover:bg-green-50 p-1 rounded" title="Approve"><i class="fas fa-check"></i></button>
+          <button onclick="updateWithdrawStatus('${w.withdrawal_id}', 'ditolak')" class="text-red-600 hover:bg-red-50 p-1 rounded" title="Tolak"><i class="fas fa-times"></i></button>
+        ` : ''}
+      </td>
+    </tr>`).join('');
+}
+
+// Search & filter handlers
+const wdSearch = document.getElementById('withdrawSearch');
+if (wdSearch) {
+  let wdTimeout;
+  wdSearch.addEventListener('input', () => {
+    clearTimeout(wdTimeout);
+    wdTimeout = setTimeout(() => loadWithdrawals(wdSearch.value, document.getElementById('withdrawFilter')?.value || ''), 300);
+  });
+}
+const wdFilter = document.getElementById('withdrawFilter');
+if (wdFilter) {
+  wdFilter.addEventListener('change', () => {
+    loadWithdrawals(wdSearch?.value || '', wdFilter.value);
+  });
+}
+
+async function viewWithdrawal(id) {
+  const res = await api(`/admin/withdrawals/${id}`);
+  if (!res.success) { showToast(res.message || 'Gagal memuat detail', 'error'); return; }
+  const w = res.data;
+  const statusLabels = {
+    menunggu_verifikasi: 'Menunggu Verifikasi',
+    diproses: 'Diproses',
+    berhasil: 'Berhasil',
+    ditolak: 'Ditolak',
+  };
+  Swal.fire({
+    title: `Detail Penarikan ${w.withdrawal_id}`,
+    html: `
+      <div class="text-left space-y-2 text-sm">
+        <p><b>Nama:</b> ${w.nama}</p>
+        <p><b>Email:</b> ${w.email}</p>
+        <p><b>No HP:</b> ${w.no_hp}</p>
+        <p><b>Bank:</b> ${w.bank}</p>
+        <p><b>No Rekening:</b> ${w.no_rekening}</p>
+        <p><b>Nama Rekening:</b> ${w.nama_rekening}</p>
+        <p><b>Jumlah:</b> ${formatRupiah(w.jumlah)}</p>
+        <p><b>Status:</b> ${statusLabels[w.status] || w.status}</p>
+        <p><b>Dibuat:</b> ${formatDateTime(w.created_at)}</p>
+        ${w.catatan ? `<p><b>Catatan:</b> ${w.catatan}</p>` : ''}
+      </div>`,
+    confirmButtonText: 'OK',
+  });
+}
+
+async function updateWithdrawStatus(id, status) {
+  const statusLabel = { diproses: 'diproses', berhasil: 'Disetujui', ditolak: 'Ditolak' };
+  const ok = await alertConfirm(`Yakin ingin ${statusLabel[status]} penarikan ${id}?`, '');
+  if (!ok) return;
+
+  let note = '';
+  if (status === 'ditolak') {
+    const noteRes = await Swal.fire({
+      input: 'textarea',
+      inputLabel: 'Alasan penolakan (opsional)',
+      showCancelButton: true,
+      cancelButtonText: 'Batal',
+    });
+    if (!noteRes.isConfirmed) return;
+    note = noteRes.value || '';
+  }
+
+  const res = await api(`/admin/withdrawals/${id}/status`, { method: 'PUT', body: { status, catatan: note } });
+  if (res.success) {
+    showToast(`Status penarikan ${id} diperbarui`, 'success');
+    await loadWithdrawals();
     AdminSync.notifyDataChanged();
   }
   else showToast(res.message || I18N.t('admin.noDataChanged'), 'error');
