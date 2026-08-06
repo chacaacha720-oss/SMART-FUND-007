@@ -378,23 +378,25 @@ async function submitWithdrawal(e) {
 
 async function openLoanAdminConfirmation(applicationId, amount, tenor, purpose) {
   const chatTitle = `Pengajuan #${applicationId} berhasil dikirim`;
-  const chatMessage = `Halo Admin, saya ingin melanjutkan pengajuan pinjaman saya.\n\nID Pengajuan: #${applicationId}\nJumlah: ${formatRupiah(amount)}\nTenor: ${tenor} bulan\nTujuan: ${purpose}\n\nMohon konfirmasi segera.`;
-  const whatsappMessage = `Halo Admin, saya ingin melanjutkan pengajuan pinjaman saya.\n\nID Pengajuan: #${applicationId}\nJumlah: ${formatRupiah(amount)}\nTenor: ${tenor} bulan\nTujuan: ${purpose}\n\nMohon konfirmasi segera.`;
+  const chatMessage = `Halo Admin, saya baru saja mengajukan pinjaman. Mohon bantu verifikasi agar pengajuan pinjaman saya dapat segera diproses.`;
 
   await Swal.fire({
     icon: 'success',
     title: 'Pengajuan Berhasil',
     html: `
       <div class="text-left space-y-4">
-        <p class="text-slate-600">Pengajuan Anda telah terkirim dan sedang menunggu persetujuan admin.</p>
+        <p class="text-slate-600">Pengajuan pinjaman Anda telah berhasil dikirim.</p>
+        <p class="text-slate-600">Status saat ini:</p>
+        <p class="text-slate-600 font-medium">Menunggu Persetujuan Admin.</p>
+        <p class="text-slate-600">Untuk mempercepat proses verifikasi,<br>silakan hubungi Admin melalui salah satu<br>media berikut agar pengajuan pinjaman Anda<br>segera diproses.</p>
         <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-slate-700">
-          <p class="font-semibold text-slate-800 mb-2"><i class="fas fa-circle-info mr-1 text-blue-600"></i> Lanjutkan ke admin chat</p>
+          <p class="font-semibold text-slate-800 mb-2"><i class="fas fa-circle-info mr-1 text-blue-600"></i> Hubungi Admin</p>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <button id="loanTelegramChatBtn" class="w-full rounded-xl bg-sky-500 text-white px-4 py-3 font-semibold hover:bg-sky-600 transition">
-              <i class="fab fa-telegram-plane mr-2"></i> Telegram Admin
+              <i class="fab fa-telegram-plane mr-2"></i> 💬 Chat Admin via Telegram
             </button>
             <button id="loanWhatsappChatBtn" class="w-full rounded-xl bg-emerald-500 text-white px-4 py-3 font-semibold hover:bg-emerald-600 transition">
-              <i class="fab fa-whatsapp mr-2"></i> WhatsApp Admin
+              <i class="fab fa-whatsapp mr-2"></i> 📱 Chat Admin via WhatsApp
             </button>
           </div>
         </div>
@@ -409,12 +411,12 @@ async function openLoanAdminConfirmation(applicationId, amount, tenor, purpose) 
       const whatsappBtn = document.getElementById('loanWhatsappChatBtn');
 
       telegramBtn.addEventListener('click', () => {
-        const telegramUrl = `https://t.me/smartfundonline_bot?text=${encodeURIComponent(chatMessage)}`;
+        const telegramUrl = `https://t.me/cs_smartfund?text=${encodeURIComponent(chatMessage)}`;
         window.open(telegramUrl, '_blank', 'noopener,noreferrer');
       });
 
       whatsappBtn.addEventListener('click', () => {
-        const whatsappUrl = `https://wa.me/6281234567890?text=${encodeURIComponent(whatsappMessage)}`;
+        const whatsappUrl = `https://wa.me/6289679875858?text=${encodeURIComponent(chatMessage)}`;
         window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
       });
     },
