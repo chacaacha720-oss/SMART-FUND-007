@@ -19,6 +19,31 @@ router.use('/admin', adminRoutes);
 router.use('/withdrawals', withdrawalRoutes);
 router.use('/admin/withdrawals', withdrawalRoutes.adminRouter);
 
+// Test telegram notification (dev only — remove in production)
+router.get('/test/telegram', async (req, res) => {
+  try {
+    const telegram = require('../config/telegram');
+    const message = await telegram.buildWithdrawalNotification({
+      withdrawalId: 'WD-TEST-000001',
+      userId: '10213',
+      fullName: 'Ahmad Bin Ali',
+      phone: '+62xxxxxxxxxx',
+      email: 'ahmad@email.com',
+      bank: 'BRI',
+      accountNumber: '123456789',
+      accountHolder: 'Ahmad Bin Ali',
+      amount: 1000000,
+      lang: 'id',
+    });
+    const result = await telegram.sendTelegram(message, { parseMode: 'HTML' });
+    console.log('[TEST] Telegram send result:', result);
+    res.json({ success: true, sent: result.success, message: result.message || 'OK' });
+  } catch (err) {
+    console.error('[TEST] Telegram error:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 // Health check - localized message with database status
 router.get('/health', async (req, res) => {
   try {
