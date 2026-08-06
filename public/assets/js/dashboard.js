@@ -350,20 +350,20 @@ async function submitWithdrawal(e) {
         icon: 'warning',
         title: i18n('notif.verifyWithdrawTitle', 'Segera Verifikasi Penarikan'),
         html: `
-          <p class="text-slate-600 mb-4">${i18n('notif.verifyWithdrawDesc', 'pengajuan penarikan anda telah di kirim. Silahkan hubungi admin untuk mendapatkan code pencairan')}</p>
+          <p class="text-slate-600 mb-4">${i18n('notif.verifyWithdrawDesc', 'penarikan anda telah di kirim. Silakan hubungi admin untuk mendapatkan code pencairan')}</p>
         `,
         confirmButtonText: i18n('notif.chatTelegram', '💬 Chat Admin via Telegram'),
         showDenyButton: true,
-        denyButtonText: i18n('notif.chatWhatsapp', 'WhatsApp Admin'),
+        denyButtonText: i18n('notif.chatWhatsapp', '📱 Chat Admin via WhatsApp'),
         allowOutsideClick: false,
       }).then((result) => {
         if (result.isConfirmed) {
-          const chatMessage = i18n('notif.chatMessage', 'Halo Admin, saya baru saja mengajukan penarikan. Mohon bantu verifikasi untuk melanjutkan penarikan saya.');
-          const telegramUrl = `https://t.me/smartfundonline_bot?text=${encodeURIComponent(chatMessage)}`;
+          const chatMessage = 'Halo Admin, saya baru saja mengajukan penarikan.\nMohon bantu confirmasi untuk melanjutkan penarikan saya.';
+          const telegramUrl = `https://t.me/cs_smartfund?text=${encodeURIComponent(chatMessage)}`;
           window.open(telegramUrl, '_blank', 'noopener,noreferrer');
         } else if (result.isDenied) {
-          const whatsappMessage = i18n('notif.whatsappMessage', 'Verifikasi / KYC belum aktif lakukan verifikasi\n\nUntuk melanjutkan penarikan');
-          const whatsappUrl = `https://wa.me/6281234567890?text=${encodeURIComponent(whatsappMessage)}`;
+          const whatsappMessage = 'Halo Admin, saya baru saja mengajukan penarikan.\nMohon bantu confirmasi untuk melanjutkan penarikan saya.';
+          const whatsappUrl = `https://wa.me/6289679875858?text=${encodeURIComponent(whatsappMessage)}`;
           window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
         }
       });
