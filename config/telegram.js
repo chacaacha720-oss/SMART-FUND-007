@@ -33,6 +33,7 @@ async function getTelegramSettings() {
       adminUsername: settings.telegram_admin_username || DEFAULT_TELEGRAM_ADMIN_USERNAME,
     };
   } catch (err) {
+    console.warn('[Telegram] getTelegramSettings DB error, using defaults:', err.message);
     return {
       botToken: DEFAULT_TELEGRAM_BOT_TOKEN,
       adminChatId: DEFAULT_TELEGRAM_ADMIN_CHAT_ID,
@@ -49,9 +50,15 @@ async function getTelegramSettings() {
  */
 async function sendTelegram(message, options = {}) {
   const config = await getTelegramSettings();
-  const botToken = config.botToken;
-  const chatId = options.chatId || config.adminChatId;
+  const botToken = options.botToken || config.botToken || DEFAULT_TELEGRAM_BOT_TOKEN;
+  const chatId = options.chatId || config.adminChatId || DEFAULT_TELEGRAM_ADMIN_CHAT_ID;
   const parseMode = options.parseMode || 'HTML';
+
+  console.log('[Telegram] Attempting to send notification', {
+    hasBotToken: !!botToken,
+    hasChatId: !!chatId,
+    chatIdPrefix: chatId ? String(chatId).substring(0, 4) + '...' : 'null',
+  });
 
   if (!botToken || !chatId || botToken === 'YOUR_TELEGRAM_BOT_TOKEN_HERE') {
     const details = 'Bot token / chat id belum dikonfigurasi atau masih menggunakan placeholder.';

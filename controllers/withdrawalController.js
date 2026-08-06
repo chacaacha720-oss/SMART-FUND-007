@@ -108,7 +108,7 @@ async function createWithdrawal(req, res) {
      
     if (adminChatId) {
       try {
-        await telegram.sendTelegram(message, { parseMode: 'HTML', chatId: adminChatId });
+        await telegram.sendTelegram(message, { parseMode: 'HTML', chatId: adminChatId, botToken: settingMap.telegram_bot_token });
         telegramSent = true;
         await db.query('INSERT INTO telegram_logs (chat_id, message, status) VALUES (?, ?, ?)', [adminChatId, message, 'sent']);
       } catch (err) {
