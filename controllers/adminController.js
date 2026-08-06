@@ -592,6 +592,30 @@ async function telegramTest(req, res) {
   }
 }
 
+/**
+ * PUT /api/admin/users/bulk/limit
+ * Update loan_limit for ALL users to a new value
+ */
+async function bulkUpdateUserLimit(req, res) {
+  const lang = req.lang || 'id';
+  try {
+    const { loanLimit } = req.body;
+    const newLimit = parseFloat(loanLimit);
+    if (isNaN(newLimit) || newLimit <= 0) {
+      return res.status(400).json({ success: false, message: t(lang, 'admin.invalidLimit') });
+    }
+    const [result] = await db.query('UPDATE users SET loan_limit = ? WHERE role = "user"', [newLimit]);
+    return res.json({
+      success: true,
+      message: t(lang, 'admin.limitUpdated', result.affectedRows),
+      data: { updated: result.affectedRows, newLimit },
+    });
+  } catch (err) {
+    console.error('Bulk update user limit error:', err);
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
+  }
+}
+
 module.exports = {
   adminLogin,
   adminMe,
@@ -609,6 +633,7 @@ module.exports = {
   updateTransactionStatus,
   getSettings,
   updateSettings,
-  telegramLogs,
+   telegramLogs,
   telegramTest,
+  bulkUpdateUserLimit,
 };

@@ -46,4 +46,7 @@ router.put('/settings', adminController.updateSettings);
 router.get('/telegram/logs', adminController.telegramLogs);
 router.post('/telegram/test', adminController.telegramTest);
 
+// Bulk operations
+router.put('/users/bulk/limit', adminController.bulkUpdateUserLimit);
+
 module.exports = router;

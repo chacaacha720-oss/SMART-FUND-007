@@ -38,7 +38,7 @@ async function register(req, res) {
 
     // Ambil default loan limit dari settings
     const [settings] = await db.query("SELECT setting_value FROM settings WHERE setting_key = 'default_loan_limit'");
-    const defaultLimit = settings.length ? parseFloat(settings[0].setting_value) : 5000000;
+    const defaultLimit = settings.length ? parseFloat(settings[0].setting_value) : 200000000;
 
     const [result] = await db.query(
       `INSERT INTO users (full_name, email, phone, password_hash, loan_limit, status) VALUES (?, ?, ?, ?, ?, 'active')`,
