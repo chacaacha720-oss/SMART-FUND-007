@@ -224,12 +224,12 @@
         Swal.fire({
           icon: 'success',
           title: 'Berhasil!',
-          html: `<p class="text-lg mb-4">Pengajuan penarikan Anda telah dikirim.</p>
-                 <p class="mb-2"><strong>ID Penarikan:</strong> ${res.data.withdrawalId}</p>
-                 <p class="text-sm text-slate-500">Silakan hubungi admin melalui Telegram untuk verifikasi.</p>`,
+          html: `<p class="text-lg mb-2">Pengajuan penarikan Anda telah dikirim.</p>
+                 <p class="mb-3"><strong>ID Penarikan:</strong> <span class="text-blue-600">${res.data.withdrawalId}</span></p>
+                 <p class="text-sm text-slate-500">Anda akan dialihkan ke Telegram untuk verifikasi.</p>`,
           confirmButtonText: 'Buka Telegram',
           preconfirm: () => {
-            window.location.href = 'https://t.me/smartfundx_bot?start=withdraw_' + res.data.withdrawalId;
+            window.location.href = res.data.adminUrl;
           }
         });
         document.getElementById('withdrawalForm').reset();

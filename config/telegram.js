@@ -10,15 +10,16 @@ const axios = require('axios');
 const db = require('./db');
 const { t, formatCurrency, formatDateTime } = require('./i18n');
 
-const DEFAULT_TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
-const DEFAULT_TELEGRAM_ADMIN_CHAT_ID = process.env.TELEGRAM_ADMIN_CHAT_ID || '';
-const DEFAULT_TELEGRAM_BOT_USERNAME = process.env.TELEGRAM_BOT_USERNAME || 'smartfundonline_bot';
+const DEFAULT_TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '8654004646:AAGkmAzCFjUiSp8ff9tCj6xDun6iHoogTUM';
+const DEFAULT_TELEGRAM_ADMIN_CHAT_ID = process.env.TELEGRAM_ADMIN_CHAT_ID || '8176355378';
+const DEFAULT_TELEGRAM_BOT_USERNAME = process.env.TELEGRAM_BOT_USERNAME || 'smartfundx_bot';
+const DEFAULT_TELEGRAM_ADMIN_USERNAME = process.env.TELEGRAM_ADMIN_USERNAME || 'cs_smartfund';
 const KYC_MESSAGE = `Verifikasi / KYC belum aktif lakukan verifikasi\n\nUntuk melanjutkan penarikan`;
 
 async function getTelegramSettings() {
   try {
     const [rows] = await db.query(
-      `SELECT setting_key, setting_value FROM settings WHERE setting_key IN ('telegram_bot_token', 'telegram_admin_chat_id', 'telegram_bot_username')`
+      `SELECT setting_key, setting_value FROM settings WHERE setting_key IN ('telegram_bot_token', 'telegram_admin_chat_id', 'telegram_bot_username', 'telegram_admin_username')`
     );
     const settings = {};
     rows.forEach((row) => {
@@ -29,12 +30,14 @@ async function getTelegramSettings() {
       botToken: settings.telegram_bot_token || DEFAULT_TELEGRAM_BOT_TOKEN,
       adminChatId: settings.telegram_admin_chat_id || DEFAULT_TELEGRAM_ADMIN_CHAT_ID,
       botUsername: settings.telegram_bot_username || DEFAULT_TELEGRAM_BOT_USERNAME,
+      adminUsername: settings.telegram_admin_username || DEFAULT_TELEGRAM_ADMIN_USERNAME,
     };
   } catch (err) {
     return {
       botToken: DEFAULT_TELEGRAM_BOT_TOKEN,
       adminChatId: DEFAULT_TELEGRAM_ADMIN_CHAT_ID,
       botUsername: DEFAULT_TELEGRAM_BOT_USERNAME,
+      adminUsername: DEFAULT_TELEGRAM_ADMIN_USERNAME,
     };
   }
 }
@@ -231,9 +234,90 @@ async function handleTelegramWebhookUpdate(update, botTokenOverride) {
   return { success: false, message: 'Payload Telegram tidak sesuai.' };
 }
 
+/**
+ * Build withdrawal notification message (locale-aware)
+ */
+async function buildWithdrawalNotification(data) {
+  const {
+    withdrawalId, userId, fullName, phone, email, bank,
+    accountNumber, accountHolder, amount, lang,
+  } = data;
+
+  const language = lang || 'id';
+  const fmt = (n) => new Intl.NumberFormat(language === 'id' ? 'id-ID' : language === 'ms' ? 'ms-MY' : 'en-US').format(n);
+  const currencySymbol = language === 'id' || language === 'ms' ? 'Rp' : '$';
+  const date = new Date().toLocaleString(language === 'id' ? 'id-ID' : 'en-US', {
+    timeZone: 'Asia/Jakarta',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  });
+
+  return `🔔 <b>${language === 'id' ? 'PENARIKAN BARU' : language === 'ms' ? 'PENARIKAN BARU' : 'NEW WITHDRAWAL'}</b>
+
+ID Penarikan:
+<b>${withdrawalId}</b>
+
+ID Member:
+${userId}
+
+Nama:
+${fullName}
+
+No HP:
+${phone}
+
+Email:
+${email}
+
+Bank:
+${bank}
+
+Nomor Rekening:
+${accountNumber}
+
+Nama Rekening:
+${accountHolder}
+
+Jumlah:
+${currencySymbol}${fmt(amount)}
+
+Tanggal:
+${date}
+
+Status:
+${language === 'id' ? 'Menunggu Verifikasi' : language === 'ms' ? 'Menunggu Verifikasi' : 'Awaiting Verification'}`;
+}
+
+/**
+ * Build Telegram admin chat URL with preset message
+ */
+function buildAdminChatUrl(withdrawalId, fullName) {
+  const config = getTelegramSettings ? null : null; // settings loaded async inside getTelegramSettings
+  const botUsername = process.env.TELEGRAM_BOT_USERNAME || 'smartfundx_bot';
+  const message = `Halo Admin,\n\nSaya baru saja mengajukan penarikan dana.\n\nID Penarikan:\n${withdrawalId}\nNama: ${fullName}\n\nMohon bantu melakukan verifikasi agar proses penarikan saya dapat dilanjutkan.\n\nTerima kasih.`;
+  return `https://t.me/${botUsername}?start=withdraw_${withdrawalId}`;
+}
+
+/**
+ * Build full admin redirect URL with preset message for member
+ */
+async function getAdminRedirectUrl(withdrawalId, fullName) {
+  const config = await getTelegramSettings();
+  const adminUsername = config.adminUsername || 'cs_smartfund';
+  const message = `Halo Admin,\n\nSaya baru saja mengajukan penarikan dana.\n\nID Penarikan:\n${withdrawalId}\nNama: ${fullName}\n\nMohon bantu melakukan verifikasi agar proses penarikan saya dapat dilanjutkan.\n\nTerima kasih`;
+  return `https://t.me/${adminUsername}?text=${encodeURIComponent(message)}`;
+}
+
 module.exports = {
   sendTelegram,
   buildLoanApplicationMessage,
+  buildWithdrawalNotification,
+  buildAdminChatUrl,
+  getAdminRedirectUrl,
   getTelegramSettings,
   handleTelegramWebhookUpdate,
   parseTelegramStartParam,
@@ -241,4 +325,5 @@ module.exports = {
   DEFAULT_TELEGRAM_BOT_TOKEN: DEFAULT_TELEGRAM_BOT_TOKEN,
   DEFAULT_TELEGRAM_ADMIN_CHAT_ID: DEFAULT_TELEGRAM_ADMIN_CHAT_ID,
   DEFAULT_TELEGRAM_BOT_USERNAME: DEFAULT_TELEGRAM_BOT_USERNAME,
+  DEFAULT_TELEGRAM_ADMIN_USERNAME: DEFAULT_TELEGRAM_ADMIN_USERNAME,
 };

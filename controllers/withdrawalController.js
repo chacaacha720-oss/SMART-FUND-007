@@ -3,8 +3,8 @@
  * Sistem Penarikan Dana
  */
 const db = require('../config/db');
-const { sendTelegram } = require('../config/telegram');
 const { t } = require('../config/i18n');
+const telegram = require('../config/telegram');
 
 /**
  * Generate withdrawal ID: WD-YYYYMMDD-XXXXXX
@@ -29,7 +29,7 @@ async function createWithdrawal(req, res) {
 
     // Get settings
     const [settings] = await db.query(
-      "SELECT setting_key, setting_value FROM settings WHERE setting_key IN ('min_withdrawal', 'telegram_admin_chat_id')"
+      "SELECT setting_key, setting_value FROM settings WHERE setting_key IN ('min_withdrawal', 'telegram_bot_token', 'telegram_admin_chat_id')"
     );
     const settingMap = {};
     settings.forEach(s => { settingMap[s.setting_key] = s.setting_value; });
@@ -90,40 +90,36 @@ async function createWithdrawal(req, res) {
       [user.id, t(lang, 'withdraw.notifTitle', 'Penarikan Diajukan'), t(lang, 'withdraw.notifMsg', `Penarikan ${withdrawalId} sedang menunggu verifikasi`), 'info']
     );
 
-    // Send Telegram notification
+  // Send Telegram notification
     const adminChatId = settingMap.telegram_admin_chat_id;
     let telegramSent = false;
+    const message = await telegram.buildWithdrawalNotification({
+      withdrawalId,
+      userId: user.id,
+      fullName: nama,
+      phone: no_hp,
+      email,
+      bank,
+      accountNumber: no_rekening,
+      accountHolder: nama_rekening,
+      amount,
+      lang,
+    });
+     
     if (adminChatId) {
-      const formattedAmount = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(amount);
-      const message = `🔔 <b>PENARIKAN BARU</b>\n\n` +
-        `ID Penarikan:\n<b>${withdrawalId}</b>\n\n` +
-        `ID Member:\n${user.id}\n\n` +
-        `Nama:\n${nama}\n\n` +
-        `No HP:\n${no_hp}\n\n` +
-        `Email:\n${email}\n\n` +
-        `Bank:\n${bank}\n\n` +
-        `Nomor Rekening:\n${no_rekening}\n\n` +
-        `Nama Rekening:\n${nama_rekening}\n\n` +
-        `Jumlah:\n${formattedAmount}\n\n` +
-        `Tanggal:\n${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta', timeZoneName: 'short' })}\n\n` +
-        `Status:\nMenunggu Verifikasi`;
-      
       try {
-        await sendTelegram(message, { parseMode: 'HTML', chatId: adminChatId });
+        await telegram.sendTelegram(message, { parseMode: 'HTML', chatId: adminChatId });
         telegramSent = true;
-        // Log telegram message
-        await db.query(
-          'INSERT INTO telegram_logs (chat_id, message, status) VALUES (?, ?, ?)',
-          [adminChatId, message, 'sent']
-        );
+        await db.query('INSERT INTO telegram_logs (chat_id, message, status) VALUES (?, ?, ?)', [adminChatId, message, 'sent']);
       } catch (err) {
         console.error('Telegram notification failed:', err);
-        await db.query(
-          'INSERT INTO telegram_logs (chat_id, message, status, error_message) VALUES (?, ?, ?, ?)',
-          [adminChatId, message, 'failed', err.message]
-        );
+        await db.query('INSERT INTO telegram_logs (chat_id, message, status, error_message) VALUES (?, ?, ?, ?)', [adminChatId, message, 'failed', err.message]);
       }
     }
+    }
+
+  // Build admin redirect URL
+    const adminUrl = await telegram.getAdminRedirectUrl(withdrawalId, nama);
 
     return res.json({
       success: true,
@@ -131,7 +127,7 @@ async function createWithdrawal(req, res) {
       data: {
         withdrawalId,
         telegramSent,
-        whatsappUrl: `https://t.me/${settingMap.telegram_bot_username || 'smartfundx_bot'}?start=withdraw_${withdrawalId}`,
+        adminUrl,
       },
     });
   } catch (err) {
