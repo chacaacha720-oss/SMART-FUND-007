@@ -156,7 +156,7 @@ app.use(session(sessionConfig));
 // STATIC FILES
 // ============================================
 app.use(express.static(path.join(__dirname, 'public'), {
-  maxAge: '1y',
+  maxAge: '1d',
   etag: true,
   lastModified: true,
 }));
