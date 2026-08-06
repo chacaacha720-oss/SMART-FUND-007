@@ -298,13 +298,7 @@ async function submitWithdrawal(e) {
     icon: 'warning',
     title: 'Segera Verifikasi Penarikan',
     html: `
-      <p class="text-slate-600 mb-4">Penarikan Anda telah dikirim ke admin. <b>Segera lakukan verifikasi</b> untuk memproses penarikan Anda.</p>
-      <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-left text-sm text-amber-800 mb-4">
-        <p class="font-semibold mb-1"><i class="fas fa-circle-info mr-1"></i> Langkah Verifikasi:</p>
-        <p>1. Hubungi admin melalui Telegram</p>
-        <p>2. Kirim data verifikasi / KYC Anda</p>
-        <p>3. Admin akan memproses penarikan Anda</p>
-      </div>
+      <p class="text-slate-600 mb-4">penarikan anda telah di kirim silakan hubungi admin untuk mendapatkan code pencairan</p>
     `,
     confirmButtonText: '💬 Chat Admin via Telegram',
     showDenyButton: true,
