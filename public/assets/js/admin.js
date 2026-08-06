@@ -103,7 +103,7 @@ async function showAdminApp(admin) {
   // Logout
   document.getElementById('adminLogoutBtn').addEventListener('click', async () => {
     const ok = await alertConfirm(I18N.t('dash.logout'), I18N.t('notif.loginRequiredDesc'));
-    if (ok) { Token.clear(); window.location.href = `${BASE_PATH}/admin.html`; }
+    if (ok) { AdminToken.clear(); window.location.href = `${BASE_PATH}/admin.html`; }
   });
 
   // Load dashboard

@@ -21,10 +21,6 @@ const Token = {
     sessionStorage.removeItem('sf_token');
     localStorage.removeItem('sf_user');
     sessionStorage.removeItem('sf_user');
-    localStorage.removeItem('sf_admin_token');
-    sessionStorage.removeItem('sf_admin_token');
-    localStorage.removeItem('sf_admin');
-    sessionStorage.removeItem('sf_admin');
   },
 };
 
@@ -38,6 +34,12 @@ const AdminToken = {
     } else {
       sessionStorage.setItem('sf_admin_token', token);
     }
+  },
+  clear() {
+    localStorage.removeItem('sf_admin_token');
+    sessionStorage.removeItem('sf_admin_token');
+    localStorage.removeItem('sf_admin');
+    sessionStorage.removeItem('sf_admin');
   },
 };
 
@@ -73,9 +75,12 @@ async function api(endpoint, options = {}) {
     if (!res.ok) {
       // Auto logout on 401
       if (res.status === 401 && !endpoint.includes('/login') && !endpoint.includes('/register')) {
-        Token.clear();
-        if (window.location.pathname.includes('dashboard') || window.location.pathname.includes('admin')) {
+        if (isAdminEndpoint) AdminToken.clear();
+        else Token.clear();
+        if (window.location.pathname.includes('dashboard')) {
           window.location.href = `${BASE_PATH}/login.html`;
+        } else if (window.location.pathname.includes('admin')) {
+          window.location.href = `${BASE_PATH}/admin.html`;
         }
       }
       return { success: false, message: data.message || 'Terjadi kesalahan', errors: data.errors, data: data.data };
@@ -221,7 +226,7 @@ async function requireAdmin() {
   }
   const res = await api('/admin/me');
   if (!res.success) {
-    Token.clear();
+    AdminToken.clear();
     window.location.href = `${BASE_PATH}/admin.html`;
     return null;
   }
