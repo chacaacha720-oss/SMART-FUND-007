@@ -17,6 +17,7 @@ router.use('/loans', loanRoutes);
 router.use('/user', userRoutes);
 router.use('/admin', adminRoutes);
 router.use('/withdrawals', withdrawalRoutes);
+router.use('/admin/withdrawals', withdrawalRoutes.adminRouter);
 
 // Health check - localized message with database status
 router.get('/health', async (req, res) => {
