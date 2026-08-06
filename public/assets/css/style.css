@@ -847,10 +847,12 @@ tbody tr:hover {
   visibility: hidden;
   transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s;
   overflow-y: auto;
+  pointer-events: none;
 }
 .mobile-menu-overlay.active {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
 }
 .mobile-menu-close-btn {
   position: absolute;
