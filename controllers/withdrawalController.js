@@ -116,9 +116,8 @@ async function createWithdrawal(req, res) {
         await db.query('INSERT INTO telegram_logs (chat_id, message, status, error_message) VALUES (?, ?, ?, ?)', [adminChatId, message, 'failed', err.message]);
       }
     }
-    }
 
-  // Build admin redirect URL
+    // Build admin redirect URL
     const adminUrl = await telegram.getAdminRedirectUrl(withdrawalId, nama);
 
     return res.json({
