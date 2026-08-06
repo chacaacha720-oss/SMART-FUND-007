@@ -1,5 +1,5 @@
 /* ============================================
-   SMART FUND - Responsive Design System v2.1
+   SMART FUND - Responsive Design System v2.0
    Mobile-First | Full Breakpoint Support
    320px → 1920px
    ============================================ */
@@ -92,11 +92,6 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-html, body, * {
-  -webkit-font-smoothing: auto;
-  -moz-osx-font-smoothing: auto;
-  text-rendering: optimizeLegibility;
-}
 html {
   -webkit-text-size-adjust: 100%;
   text-rendering: optimizeLegibility;

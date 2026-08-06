@@ -1,0 +1,49 @@
+- generic [ref=f15e2]:
+  - text:   
+  - generic [ref=f15e4]:
+    - link "SMART FUND Logo SMART FUND" [ref=f15e5] [cursor=pointer]:
+      - /url: /
+      - img "SMART FUND Logo" [ref=f15e6]
+      - generic [ref=f15e7]: SMART FUND
+    - generic [ref=f15e8]:
+      - generic [ref=f15e9]:
+        - generic [ref=f15e10]:
+          - heading "Masuk" [level=2] [ref=f15e11]
+          - paragraph [ref=f15e12]: Login ke akun SMART FUND Anda
+        - button "Toggle dark mode" [ref=f15e13] [cursor=pointer]:
+          - generic [ref=f15e14]: 
+      - generic [ref=f15e15]:
+        - generic [ref=f15e16]:
+          - generic [ref=f15e17]: Email / Nomor HP
+          - generic [ref=f15e18]:
+            - generic [ref=f15e19]: 
+            - textbox "Email / Nomor HP" [ref=f15e20]:
+              - /placeholder: email@example.com atau 08xxx
+        - generic [ref=f15e21]:
+          - generic [ref=f15e22]: Password
+          - generic [ref=f15e23]:
+            - generic [ref=f15e24]: 
+            - textbox "Password" [ref=f15e25]:
+              - /placeholder: Masukkan password
+            - button "Toggle password visibility" [ref=f15e26] [cursor=pointer]:
+              - generic [ref=f15e27]: 
+        - generic [ref=f15e28]:
+          - generic [ref=f15e29] [cursor=pointer]:
+            - checkbox "Remember Me" [ref=f15e30]
+            - generic [ref=f15e31]: Remember Me
+          - link "Lupa Password?" [ref=f15e32] [cursor=pointer]:
+            - /url: /forgot-password.html
+        - button " Login" [ref=f15e33] [cursor=pointer]:
+          - generic [ref=f15e34]:
+            - generic [ref=f15e35]: 
+            - text: Login
+      - generic [ref=f15e36]: atau
+      - paragraph [ref=f15e40]:
+        - text: Belum punya akun?
+        - link "Daftar Sekarang" [ref=f15e41] [cursor=pointer]:
+          - /url: /register.html
+    - paragraph [ref=f15e42]:
+      - link " Kembali ke Beranda" [ref=f15e43] [cursor=pointer]:
+        - /url: /
+        - generic [ref=f15e44]: 
+        - text: Kembali ke Beranda

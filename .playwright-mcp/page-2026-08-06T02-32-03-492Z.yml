@@ -1,0 +1,300 @@
+- generic [active] [ref=f8e1]:
+  - navigation [ref=f8e2]:
+    - generic [ref=f8e3]:
+      - link "Beranda SMART FUND" [ref=f8e4] [cursor=pointer]:
+        - /url: /
+        - img "SMART FUND Logo" [ref=f8e5]
+        - generic [ref=f8e6]: SMART FUND
+      - generic [ref=f8e7]:
+        - button "Toggle dark mode" [ref=f8e8] [cursor=pointer]:
+          - generic [ref=f8e9]: 
+        - text: 
+        - button "Buka menu" [ref=f8e10] [cursor=pointer]:
+          - generic [ref=f8e11]: 
+  - generic [ref=f8e14]:
+    - generic [ref=f8e15]:
+      - generic [ref=f8e16]:
+        - generic [ref=f8e17]: 
+        - text: Berizin & Diawasi OJK
+      - heading "Pinjaman Online Cepat & Aman untuk Kebutuhan Anda" [level=1] [ref=f8e18]
+      - paragraph [ref=f8e19]: SMART FUND membantu masyarakat memenuhi kebutuhan mendesak, modal usaha, renovasi rumah, pendidikan, hingga kebutuhan pribadi dengan proses praktis, transparan, dan aman.
+      - generic [ref=f8e20]:
+        - link " Simulasi Pinjaman" [ref=f8e21] [cursor=pointer]:
+          - /url: "#calculator"
+          - generic [ref=f8e22]: 
+          - text: Simulasi Pinjaman
+        - link " Ajukan Sekarang" [ref=f8e23] [cursor=pointer]:
+          - /url: /register.html
+          - generic [ref=f8e24]: 
+          - text: Ajukan Sekarang
+      - generic [ref=f8e25]:
+        - generic [ref=f8e26]:
+          - paragraph [ref=f8e27]: 50K+
+          - paragraph [ref=f8e28]: Nasabah
+        - generic [ref=f8e29]:
+          - paragraph [ref=f8e30]: 5%
+          - paragraph [ref=f8e31]: Bunga Mulai
+        - generic [ref=f8e32]:
+          - paragraph [ref=f8e33]: 24/7
+          - paragraph [ref=f8e34]: Layanan
+    - generic [ref=f8e38]:
+      - generic [ref=f8e39]:
+        - generic [ref=f8e40]:
+          - paragraph [ref=f8e41]: Pinjaman Hingga
+          - paragraph [ref=f8e42]: Rp500 Juta
+        - generic [ref=f8e43]: 
+      - generic [ref=f8e45]:
+        - generic [ref=f8e46]:
+          - generic [ref=f8e47]: 
+          - generic [ref=f8e48]: Bunga mulai 5% per tahun
+        - generic [ref=f8e49]:
+          - generic [ref=f8e50]: 
+          - generic [ref=f8e51]: Proses persetujuan cepat
+        - generic [ref=f8e52]:
+          - generic [ref=f8e53]: 
+          - generic [ref=f8e54]: Persyaratan mudah & sederhana
+        - generic [ref=f8e55]:
+          - generic [ref=f8e56]: 
+          - generic [ref=f8e57]: Aman & terpercaya (OJK)
+      - link "Mulai Pengajuan " [ref=f8e58] [cursor=pointer]:
+        - /url: /register.html
+        - text: Mulai Pengajuan
+        - generic [ref=f8e59]: 
+  - generic [ref=f8e61]:
+    - generic [ref=f8e62]:
+      - text: KEUNGGULAN
+      - heading "Mengapa Memilih SMART FUND?" [level=2] [ref=f8e63]
+      - paragraph [ref=f8e64]: Kami memberikan solusi pinjaman terbaik dengan berbagai keunggulan yang menguntungkan Anda
+    - generic [ref=f8e65]:
+      - generic [ref=f8e66]:
+        - generic [ref=f8e67]: "%"
+        - heading "Bunga Mulai 5%" [level=3] [ref=f8e69]
+        - paragraph [ref=f8e70]: Nikmati bunga kompetitif mulai 5% per tahun sehingga cicilan menjadi lebih ringan.
+      - generic [ref=f8e71]:
+        - generic [ref=f8e72]: 
+        - heading "Proses Cepat" [level=3] [ref=f8e74]
+        - paragraph [ref=f8e75]: Ajukan pinjaman secara online kapan saja tanpa proses yang rumit dan berbelit.
+      - generic [ref=f8e76]:
+        - generic [ref=f8e77]: 
+        - heading "Persyaratan Mudah" [level=3] [ref=f8e79]
+        - paragraph [ref=f8e80]: Dokumen sederhana dengan proses verifikasi yang praktis dan cepat.
+      - generic [ref=f8e81]:
+        - generic [ref=f8e82]: 
+        - heading "Aman & Terpercaya" [level=3] [ref=f8e84]
+        - paragraph [ref=f8e85]: Layanan berizin dan diawasi oleh Otoritas Jasa Keuangan (OJK) untuk keamanan nasabah.
+  - generic [ref=f8e87]:
+    - generic [ref=f8e88]:
+      - text: SIMULASI PINJAMAN
+      - heading "Hitung Cicilan Anda" [level=2] [ref=f8e89]
+      - paragraph [ref=f8e90]: Atur jumlah pinjaman dan tenor untuk melihat estimasi cicilan
+    - generic [ref=f8e92]:
+      - generic [ref=f8e93]:
+        - generic [ref=f8e94]:
+          - generic [ref=f8e95]:
+            - generic [ref=f8e96]: Jumlah Pinjaman
+            - generic [ref=f8e97]: Rp10.000.000
+          - slider [ref=f8e98]: "10000000"
+          - generic [ref=f8e99]:
+            - generic [ref=f8e100]: Rp1.000.000
+            - generic [ref=f8e101]: Rp500.000.000
+        - generic [ref=f8e102]:
+          - generic [ref=f8e103]: Tenor (Bulan)
+          - combobox [ref=f8e104]:
+            - option "6 Bulan"
+            - option "12 Bulan" [selected]
+            - option "24 Bulan"
+            - option "36 Bulan"
+            - option "48 Bulan"
+            - option "60 Bulan"
+        - button " Ajukan Sekarang" [ref=f8e105] [cursor=pointer]:
+          - generic [ref=f8e106]: 
+          - text: Ajukan Sekarang
+      - generic [ref=f8e107]:
+        - heading "Estimasi Cicilan" [level=3] [ref=f8e108]
+        - generic [ref=f8e109]:
+          - generic [ref=f8e110]:
+            - paragraph [ref=f8e111]: Cicilan per Bulan
+            - paragraph [ref=f8e112]: Rp856.075
+          - generic [ref=f8e113]:
+            - generic [ref=f8e114]:
+              - generic [ref=f8e115]: Total Bunga
+              - generic [ref=f8e116]: Rp272.898
+            - generic [ref=f8e117]:
+              - generic [ref=f8e118]: Total Pembayaran
+              - generic [ref=f8e119]: Rp10.272.898
+            - generic [ref=f8e120]:
+              - generic [ref=f8e121]: Suku Bunga
+              - generic [ref=f8e122]: 5% / tahun
+  - generic [ref=f8e124]:
+    - generic [ref=f8e125]:
+      - text: PENGAJUAN
+      - heading "Ajukan Pinjaman Anda" [level=2] [ref=f8e126]
+      - paragraph [ref=f8e127]: Isi data berikut untuk mengajukan pinjaman
+    - generic [ref=f8e128]:
+      - generic [ref=f8e130]:
+        - generic [ref=f8e131]: "1"
+        - generic [ref=f8e133]: "2"
+      - generic [ref=f8e134]:
+        - heading " Data Diri" [level=3] [ref=f8e135]:
+          - generic [ref=f8e136]: 
+          - text: Data Diri
+        - generic [ref=f8e137]:
+          - generic [ref=f8e138]: Nama Lengkap
+          - generic [ref=f8e139]:
+            - generic [ref=f8e140]: 
+            - textbox "Nama Lengkap" [ref=f8e141]:
+              - /placeholder: Masukkan nama lengkap
+        - generic [ref=f8e142]:
+          - generic [ref=f8e143]: Nomor HP
+          - generic [ref=f8e144]:
+            - generic [ref=f8e145]: 
+            - textbox "Nomor HP" [ref=f8e146]:
+              - /placeholder: 08xxxxxxxxxx
+        - button "Lanjut " [ref=f8e147] [cursor=pointer]:
+          - generic [ref=f8e148]: Lanjut
+          - generic [ref=f8e149]: 
+      - text:   
+  - generic [ref=f8e151]:
+    - generic [ref=f8e152]:
+      - text: TESTIMONI
+      - heading "Apa Kata Nasabah Kami" [level=2] [ref=f8e153]
+    - generic [ref=f8e154]:
+      - generic [ref=f8e155]:
+        - generic [ref=f8e156]:
+          - generic [ref=f8e157]:
+            - generic [ref=f8e158]: 
+            - generic [ref=f8e159]: 
+            - generic [ref=f8e160]: 
+            - generic [ref=f8e161]: 
+            - generic [ref=f8e162]: 
+          - paragraph [ref=f8e163]: "\"Saya sangat terbantu untuk biaya pendidikan anak. SMART FUND bisa diandalkan dan terpercaya.\""
+          - generic [ref=f8e164]:
+            - generic [ref=f8e165]: R
+            - generic [ref=f8e166]:
+              - paragraph [ref=f8e167]: Ratna Sari
+              - paragraph [ref=f8e168]: Guru, Denpasar
+        - generic [ref=f8e169]:
+          - generic [ref=f8e170]:
+            - generic [ref=f8e171]: 
+            - generic [ref=f8e172]: 
+            - generic [ref=f8e173]: 
+            - generic [ref=f8e174]: 
+            - generic [ref=f8e175]: 
+          - paragraph [ref=f8e176]: "\"Untuk kebutuhan biaya persalinan, SMART FUND benar-benar membantu. Prosesnya cepat dan aman.\""
+          - generic [ref=f8e177]:
+            - generic [ref=f8e178]: M
+            - generic [ref=f8e179]:
+              - paragraph [ref=f8e180]: Maya Anggraini
+              - paragraph [ref=f8e181]: Ibu Rumah Tangga, Makassar
+        - generic [ref=f8e182]:
+          - generic [ref=f8e183]:
+            - generic [ref=f8e184]: 
+            - generic [ref=f8e185]: 
+            - generic [ref=f8e186]: 
+            - generic [ref=f8e187]: 
+            - generic [ref=f8e188]: 
+          - paragraph [ref=f8e189]: "\"Platform pinjaman online terpercaya. Berizin OJK jadi lebih aman. Proses verifikasi cepat dan praktis.\""
+          - generic [ref=f8e190]:
+            - generic [ref=f8e191]: A
+            - generic [ref=f8e192]:
+              - paragraph [ref=f8e193]: Ahmad Fauzi
+              - paragraph [ref=f8e194]: Karyawan, Surabaya
+      - generic [ref=f8e195]:
+        - button "Slide 1" [ref=f8e196] [cursor=pointer]
+        - button "Slide 2" [ref=f8e197] [cursor=pointer]
+        - button "Slide 3" [ref=f8e198] [cursor=pointer]
+        - button "Slide 4" [ref=f8e199] [cursor=pointer]
+  - generic [ref=f8e201]:
+    - generic [ref=f8e202]:
+      - text: FAQ
+      - heading "Pertanyaan Umum" [level=2] [ref=f8e203]
+    - generic [ref=f8e204]:
+      - button "How do I apply for a loan at SMART FUND? " [ref=f8e206] [cursor=pointer]:
+        - generic [ref=f8e207]: How do I apply for a loan at SMART FUND?
+        - generic [ref=f8e208]: 
+      - button "What is the interest rate? " [ref=f8e210] [cursor=pointer]:
+        - generic [ref=f8e211]: What is the interest rate?
+        - generic [ref=f8e212]: 
+      - button "How much can I borrow? " [ref=f8e214] [cursor=pointer]:
+        - generic [ref=f8e215]: How much can I borrow?
+        - generic [ref=f8e216]: 
+      - button "Is SMART FUND safe and trusted? " [ref=f8e218] [cursor=pointer]:
+        - generic [ref=f8e219]: Is SMART FUND safe and trusted?
+        - generic [ref=f8e220]: 
+      - button "How long does approval take? " [ref=f8e222] [cursor=pointer]:
+        - generic [ref=f8e223]: How long does approval take?
+        - generic [ref=f8e224]: 
+      - button "What documents are needed? " [ref=f8e226] [cursor=pointer]:
+        - generic [ref=f8e227]: What documents are needed?
+        - generic [ref=f8e228]: 
+  - generic [ref=f8e230]:
+    - heading "Siap Mengajukan Pinjaman?" [level=2] [ref=f8e231]
+    - paragraph [ref=f8e232]: Daftar sekarang dan nikmati kemudahan pinjaman online dengan bunga kompetitif
+    - link " Daftar Sekarang" [ref=f8e233] [cursor=pointer]:
+      - /url: /register.html
+      - generic [ref=f8e234]: 
+      - text: Daftar Sekarang
+  - contentinfo [ref=f8e235]:
+    - generic [ref=f8e236]:
+      - generic [ref=f8e237]:
+        - generic [ref=f8e238]:
+          - generic [ref=f8e239]:
+            - img "SMART FUND Logo" [ref=f8e240]
+            - generic [ref=f8e241]: SMART FUND
+          - paragraph [ref=f8e242]: Platform pinjaman online terpercaya berizin OJK. Solusi keuangan untuk masa depan Anda.
+        - generic [ref=f8e243]:
+          - heading "Perusahaan" [level=4] [ref=f8e244]
+          - list [ref=f8e245]:
+            - listitem [ref=f8e246]:
+              - link "Keunggulan" [ref=f8e247] [cursor=pointer]:
+                - /url: "#features"
+            - listitem [ref=f8e248]:
+              - link "Simulasi" [ref=f8e249] [cursor=pointer]:
+                - /url: "#calculator"
+            - listitem [ref=f8e250]:
+              - link "Testimoni" [ref=f8e251] [cursor=pointer]:
+                - /url: "#testimoni"
+            - listitem [ref=f8e252]:
+              - link "FAQ" [ref=f8e253] [cursor=pointer]:
+                - /url: "#faq"
+        - generic [ref=f8e254]:
+          - heading "Layanan" [level=4] [ref=f8e255]
+          - list [ref=f8e256]:
+            - listitem [ref=f8e257]:
+              - link "Daftar" [ref=f8e258] [cursor=pointer]:
+                - /url: /register.html
+            - listitem [ref=f8e259]:
+              - link "Masuk" [ref=f8e260] [cursor=pointer]:
+                - /url: /login.html
+        - generic [ref=f8e261]:
+          - heading "Kontak" [level=4] [ref=f8e262]
+          - list [ref=f8e263]:
+            - listitem [ref=f8e264]:
+              - generic [ref=f8e265]: 
+              - text: cs@smartfund.id
+            - listitem [ref=f8e266]:
+              - generic [ref=f8e267]: 
+              - text: 0800-1234-5678
+            - listitem [ref=f8e268]:
+              - generic [ref=f8e269]: 
+              - text: Jakarta, Indonesia
+          - generic [ref=f8e270]:
+            - link "Facebook" [ref=f8e271] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=f8e272]: 
+            - link "Instagram" [ref=f8e273] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=f8e274]: 
+            - link "Twitter" [ref=f8e275] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=f8e276]: 
+            - link "WhatsApp" [ref=f8e277] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=f8e278]: 
+      - generic [ref=f8e279]:
+        - paragraph [ref=f8e280]: © 2026 SMART FUND. All rights reserved. Berizin & diawasi OJK.
+        - generic [ref=f8e281]:
+          - link "Syarat & Ketentuan" [ref=f8e282] [cursor=pointer]:
+            - /url: "#"
+          - link "Kebijikan Privasi" [ref=f8e283] [cursor=pointer]:
+            - /url: "#"
