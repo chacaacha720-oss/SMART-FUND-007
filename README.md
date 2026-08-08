@@ -333,10 +333,6 @@ TELEGRAM_ADMIN_CHAT_ID=your_chat_id
 SITE_URL=https://yourdomain.com
 ```
 
-## 📝 Demo OTP
-
-Untuk keperluan demo, OTP menggunakan kode dummy:
-- **Registrasi**: OTP Email & SMS = `123456`
 - **Forgot Password**: OTP ditampilkan di response API & console
 
 > Di production, integrasikan dengan email gateway (Nodemailer) dan SMS gateway.
