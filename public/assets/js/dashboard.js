@@ -236,7 +236,7 @@ async function loadPageData(page) {
     const res = await api('/loans/my');
     const container = document.getElementById('historyContainer');
     const emptyState = document.getElementById('historyEmptyState');
-    if (res.success && res.data.length) {
+    if (res.success && Array.isArray(res.data) && res.data.length) {
       emptyState.classList.add('hidden');
       container.innerHTML = res.data.map((l, idx) => `
         <div class="loan-history-card bg-white dark:bg-slate-900 dark:border-slate-700 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm p-5 sm:p-6 transition-all duration-300 hover:shadow-md dark:hover:border-slate-600">
