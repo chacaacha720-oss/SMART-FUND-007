@@ -4,6 +4,15 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      force_deploy:
+        description: 'Force redeploy even if no Railway project is linked'
+        required: false
+        default: 'false'
+
+env:
+  SERVICE_NAME: smart-fund
+  RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
 
 jobs:
   deploy:
@@ -25,9 +34,19 @@ jobs:
       - name: Install Railway CLI
         run: npm install -g @railway/cli
 
-      - name: Deploy to Railway
-        env:
-          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
+      - name: Link Railway project if configured
         run: |
-          railway up --service smart-fund --detach
-          sleep 30
+          if [ -n "$RAILWAY_PROJECT_ID" ]; then
+            echo "Linking to existing Railway project ID: $RAILWAY_PROJECT_ID"
+            railway link --project "$RAILWAY_PROJECT_ID"
+          else
+            echo "RAILWAY_PROJECT_ID not set. If this is the first deployment,"
+            echo "please deploy via Railway dashboard (GitHub integration)."
+            echo "Or set RAILWAY_PROJECT_ID in GitHub repository secrets."
+            echo "Continuing anyway — Railway CLI may auto-create on first run."
+          fi
+
+      - name: Deploy to Railway
+        run: |
+          railway up --detach
+          echo "Deployment initiated for $SERVICE_NAME"
