@@ -179,7 +179,14 @@ async function loadDashboard() {
   document.getElementById('statTagihan').textContent = formatRupiah(availableBalance);
   document.getElementById('balanceAmount').textContent = formatRupiah(d.saldoPinjaman);
   document.getElementById('balanceLimit').textContent = formatRupiah(d.limitPinjaman);
-  document.getElementById('limitAmount').textContent = formatRupiah(d.limitPinjaman);
+  const limitEl = document.getElementById('limitAmount');
+  limitEl.textContent = formatRupiah(d.limitPinjaman);
+  limitEl.classList.add('whitespace-nowrap', 'overflow-x-auto');
+  // Fallback: jika angka panjang, turunkan ukuran font di HP
+  if (limitEl.scrollWidth > limitEl.clientWidth) {
+    limitEl.classList.add('text-2xl');
+    limitEl.classList.remove('sm:text-4xl');
+  }
   const statusText = d.statusAkun === 'active' ? I18N.t('status.active') : d.statusAkun === 'frozen' ? I18N.t('status.frozen') : d.statusAkun;
   document.getElementById('accountStatus').textContent = statusText;
   document.getElementById('balanceStatus').textContent = d.statusAkun === 'active' ? I18N.t('status.active') : I18N.t('status.frozen');

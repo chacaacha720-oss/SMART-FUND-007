@@ -992,6 +992,36 @@ tbody tr:hover {
 .dark .loan-history-card .badge-rejected { background: rgba(220, 38, 38, 0.15); color: #f87171; border-color: rgba(220, 38, 38, 0.4); }
 .dark .loan-history-card .badge-completed{ background: rgba(139, 92, 246, 0.15); color: #a78bfa; border-color: rgba(139, 92, 246, 0.4); }
 
+/* Comprehensive dark mode coverage for history card elements */
+.loan-history-card {
+  background-color: #ffffff;
+  border-color: #e2e8f0;
+}
+.dark .loan-history-card {
+  background-color: #111827;
+  border-color: #334155;
+}
+.loan-history-card .text-slate-600 { color: #64748b; }
+.loan-history-card .text-slate-500 { color: #94a3b8; }
+.loan-history-card .text-slate-900 { color: #0f172a; }
+.loan-history-card .text-slate-700 { color: #334155; }
+.loan-history-card .border-t { border-top-color: #e2e8f0; }
+.dark .loan-history-card .text-slate-600 { color: #94a3b8; }
+.dark .loan-history-card .text-slate-500 { color: #94a3b8; }
+.dark .loan-history-card .text-slate-900 { color: #e2e8f0; }
+.dark .loan-history-card .text-slate-700 { color: #cbd5e1; }
+.dark .loan-history-card .text-slate-400 { color: #94a3b8; }
+.dark .loan-history-card .text-slate-300 { color: #cbd5e1; }
+.dark .loan-history-card .text-slate-200 { color: #e2e8f0; }
+.dark .loan-history-card .text-white { color: #e2e8f0; }
+.dark .loan-history-card .border-t { border-top-color: #334155; }
+.dark .loan-history-card .border-slate-100 { border-color: #1f2937; }
+.dark .loan-history-card .bg-white { background-color: #111827; }
+.loan-history-card .border-t.border-slate-100,
+.loan-history-card hr { border-top: 1px solid #e2e8f0; }
+.dark .loan-history-card .border-t.border-slate-100,
+.dark .loan-history-card hr { border-top: 1px solid #334155; }
+
 /* ============================================
    17. Toast
    ============================================ */
