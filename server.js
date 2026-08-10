@@ -156,8 +156,15 @@ app.use(session(sessionConfig));
 // ============================================
 // STATIC FILES
 // ============================================
+// Static assets — short cache so CSS/JS updates deploy instantly
+app.use('/assets', express.static(path.join(__dirname, 'public', 'assets'), {
+  maxAge: '0',
+  etag: true,
+  lastModified: true,
+}));
+// Everything else in public — no cache
 app.use(express.static(path.join(__dirname, 'public'), {
-  maxAge: '1d',
+  maxAge: '0',
   etag: true,
   lastModified: true,
 }));
