@@ -1,1 +1,0 @@
-"{\"locale\":\"en-US\",\"currency\":\"USD\",\"success\":true,\"message\":\"SMART FUND API is running\",\"time\":\"2026-08-06T02:33:08.532Z\"}"
