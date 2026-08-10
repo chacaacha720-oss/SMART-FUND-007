@@ -225,19 +225,43 @@ async function loadDashboard() {
 async function loadPageData(page) {
   if (page === 'history') {
     const res = await api('/loans/my');
-    const tbody = document.getElementById('historyTable');
+    const container = document.getElementById('historyContainer');
+    const emptyState = document.getElementById('historyEmptyState');
     if (res.success && res.data.length) {
-      tbody.innerHTML = res.data.map((l) => `
-        <tr class="table-row hover:bg-slate-50 dark:hover:bg-slate-800/30">
-          <td class="px-4 py-3 font-semibold text-slate-700">#${l.id}</td>
-          <td class="px-4 py-3 text-slate-700">${formatRupiah(l.amount)}</td>
-          <td class="px-4 py-3 text-slate-700">${l.tenor} bln</td>
-          <td class="px-4 py-3 text-slate-700">${formatRupiah(l.monthly_payment)}</td>
-          <td class="px-4 py-3">${statusBadge(l.status)}</td>
-          <td class="px-4 py-3 text-slate-500 text-sm">${formatDate(l.created_at)}</td>
-        </tr>`).join('');
+      emptyState.classList.add('hidden');
+      container.innerHTML = res.data.map((l, idx) => `
+        <div class="loan-history-card bg-white dark:bg-slate-900 dark:border-slate-700 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm p-5 sm:p-6 transition-all duration-300 hover:shadow-md dark:hover:border-slate-600">
+          <div class="flex items-start justify-between mb-4">
+            <span class="text-sm font-semibold text-slate-600 dark:text-slate-400">#${idx + 1}</span>
+            ${statusBadge(l.status)}
+          </div>
+          <div class="mb-4">
+            <p class="text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Jumlah Pinjaman</p>
+            <p class="text-2xl font-extrabold text-slate-900 dark:text-white leading-tight">${formatRupiah(l.amount)}</p>
+          </div>
+          <div class="border-t border-slate-100 dark:border-slate-700 my-4"></div>
+          <div class="grid grid-cols-2 gap-3 sm:gap-4 mb-4 text-left">
+            <div>
+              <p class="text-xs font-medium text-slate-500 dark:text-slate-400">Tenor</p>
+              <p class="text-sm font-semibold text-slate-700 dark:text-slate-200 mt-0.5">${l.tenor} bln</p>
+            </div>
+            <div>
+              <p class="text-xs font-medium text-slate-500 dark:text-slate-400">Cicilan / Bulan</p>
+              <p class="text-sm font-semibold text-slate-700 dark:text-slate-200 mt-0.5">${formatRupiah(l.monthly_payment)}</p>
+            </div>
+          </div>
+          <div class="border-t border-slate-100 dark:border-slate-700 my-4"></div>
+          <div class="flex items-center justify-between text-sm">
+            <div class="flex items-center text-slate-500 dark:text-slate-400">
+              <i class="fas fa-calendar mr-1.5 text-xs"></i>
+              <span>Diajukan</span>
+            </div>
+            <span class="text-slate-700 dark:text-slate-300 font-medium">${formatDate(l.created_at)}</span>
+          </div>
+        </div>`).join('');
     } else {
-      tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-400">${I18N.t('dash.noApplications')}</td></tr>`;
+      emptyState.classList.remove('hidden');
+      container.innerHTML = '';
     }
   }
 }
