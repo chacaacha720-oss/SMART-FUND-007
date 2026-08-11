@@ -62,9 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const loanAmount = document.getElementById('calcAmount');
   const loanTenor = document.getElementById('loanTenor');
   const amountDisplay = document.getElementById('amountDisplay');
-  const monthlyPaymentEl = document.getElementById('monthlyPayment');
-  const totalInterestEl = document.getElementById('totalInterest');
-  const totalPaymentEl = document.getElementById('totalPayment');
+  const monthlyPaymentEl = document.getElementById('calcMonthly');
+  const totalPaymentEl = document.getElementById('calcTotal');
 
   function calculateLoan(principal, tenorMonths, annualRate = 5) {
     const monthlyRate = annualRate / 100 / 12;
@@ -123,7 +122,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Tampilkan hasil dalam mata uang aktif
     monthlyPaymentEl.textContent = formatRupiah(calc.monthly);
-    totalInterestEl.textContent = formatRupiah(calc.interest);
     totalPaymentEl.textContent = formatRupiah(calc.total);
   }
 
