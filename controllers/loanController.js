@@ -43,7 +43,7 @@ async function simulate(req, res) {
       // DB not available, use default rate
     }
 
-     if (!amount || amount < 1000 || amount > 500000) {
+     if (!amount || amount < 1000000 || amount > 500000000) {
        return res.status(400).json({ success: false, message: t(lang, 'loan.amountRange') });
      }
     if (!tenor || tenor < 6 || tenor > 60) {
