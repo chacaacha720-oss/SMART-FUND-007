@@ -34,7 +34,7 @@ async function register(req, res) {
       return res.status(400).json({ success: false, message: t(lang, 'auth.csCodeInvalid') });
     }
 
-    const [csRows] = await db.query('SELECT id, cs_code, full_name FROM admins WHERE cs_code = ?', [csCode]);
+    const [csRows] = await db.query('SELECT id, cs_code, full_name, status FROM admins WHERE cs_code = ?', [csCode]);
     if (csRows.length === 0) {
       return res.status(400).json({ success: false, message: t(lang, 'auth.csCodeNotFound') });
     }
