@@ -1,12 +1,16 @@
 {
   "nav": {
-    "home": "Home",
-    "features": "Features",
-    "calculator": "Calculator",
+    "home": "Beranda",
+    "features": "Keunggulan",
+    "calculator": "Simulasi",
     "testimoni": "Testimonials",
     "faq": "FAQ",
-    "login": "Login",
-    "register": "Register"
+    "login": "Masuk",
+    "register": "Daftar",
+    "products": "Products",
+    "timeline": "How It Works",
+    "trust": "Trust",
+    "testimonial": "Testimonials"
   },
   "hero": {
     "badge": "Licensed & Supervised by OJK",
@@ -31,27 +35,39 @@
       "f3": "Easy & simple requirements",
       "f4": "Safe & trusted (OJK)",
       "btn": "Start Application"
-    }
+    },
+    "headline": "Fast Money Solutions for Your Needs",
+    "subheadline": "Apply for loans with easy, transparent, and practical processes in one platform.",
+    "primaryBtn": "Apply for Loan",
+    "secondaryBtn": "Learn More"
   },
   "features": {
-    "label": "FEATURES",
-    "title": "Why Choose SMART FUND?",
-    "desc": "We provide the best loan solutions with various advantages that benefit you",
+    "label": "KEUNGGULAN",
+    "title": "Mengapa SMART FUND?",
+    "desc": "Kami menyajikan solusi pinjaman terbaik dengan berbagai keunggulan yang menguntungkan bagi Anda",
     "f1": {
-      "title": "Interest from 5%",
-      "desc": "Enjoy competitive interest starting from 5% per year so installments become lighter."
+      "title": "Proses Pengajuan Mudah",
+      "desc": "Isi formulir online dalam hitungan menit dengan panduan langkah demi langkah."
     },
     "f2": {
-      "title": "Fast Process",
-      "desc": "Apply for loans online anytime without complicated processes."
+      "title": "Proses Cepat",
+      "desc": "Pengajuan Anda diproses dengan cepat, dan keputusan bisa diketahui segerala untuk keperluan mendesak."
     },
     "f3": {
-      "title": "Easy Requirements",
-      "desc": "Simple documents with practical and fast verification process."
+      "title": "Persyaratan Sederhana",
+      "desc": "Dokumen yang dibutuhkan minimal, mudah dipahami, dan dapat diupload secara digital."
     },
     "f4": {
-      "title": "Safe & Trusted",
-      "desc": "Licensed and supervised by the Financial Services Authority (OJK) for customer safety."
+      "title": "Informasi Transparan",
+      "desc": "Tidak ada biaya tersembunyi. Semua informasi biaya kami menjelaskan sebelum Anda menandatangani."
+    },
+    "f5": {
+      "title": "Sistem Aman",
+      "desc": "Kami menggunakan teknologi enkripsi tingkat tinggi untuk melindungi data dan transaksi Anda."
+    },
+    "f6": {
+      "title": "Pengelolaan Terintegrasi",
+      "desc": "Kelola pinjaman, cicilan, dan penarikan dana dengan nyaman melalui satu dashboard."
     }
   },
   "calc": {
@@ -77,9 +93,6 @@
     "phone": "Phone Number",
     "next": "Next",
     "amount": "Loan Amount",
-    "purpose": "Loan Purpose",
-    "back": "Back",
-    "submit": "Submit Application",
     "purpose": {
       "urgent": "Urgent Needs",
       "business": "Business Capital",
@@ -87,7 +100,9 @@
       "education": "Education",
       "personal": "Personal Needs",
       "other": "Other"
-    }
+    },
+    "back": "Back",
+    "submit": "Submit Application"
   },
   "testimoni": {
     "label": "TESTIMONIALS",
@@ -107,7 +122,8 @@
     "q5": "Are there any hidden fees or upfront administrative fees?",
     "a5": "No hidden fees. SMART FUND practices full transparency - all fees (interest, administration, etc.) are explained before you sign the agreement.",
     "q6": "How do I withdraw funds after loan approval?",
-    "a6": "After loan approval and disbursement, you can withdraw via dashboard by filling the withdrawal form. Funds will be sent to your destination bank account."
+    "a6": "After loan approval and disbursement, you can withdraw via dashboard by filling the withdrawal form. Funds will be sent to your destination bank account.",
+    "subtitle": "Frequently asked questions about SMART FUND"
   },
   "cta": {
     "title": "Ready to Apply for a Loan?",
@@ -121,7 +137,9 @@
     "contact": "Contact",
     "rights": "All rights reserved. Licensed & supervised by OJK.",
     "terms": "Terms & Conditions",
-    "privacy": "Privacy Policy"
+    "privacy": "Privacy Policy",
+    "products": "Products",
+    "help": "Help"
   },
   "login": {
     "title": "Login",
@@ -341,5 +359,90 @@
   },
   "telegram": {
     "testMessage": "✅ <b>SMART FUND Test Notification</b>\n\nTelegram notification is working properly."
+  },
+  "products": {
+    "multiline": {
+      "title": "Multi-purpose Loan",
+      "desc": "For urgent needs to working capital."
+    },
+    "business": {
+      "title": "Business Capital",
+      "desc": "Funded to grow your business."
+    },
+    "education": {
+      "title": "Education",
+      "desc": "Finance your future with education costs."
+    },
+    "renovation": {
+      "title": "Home Renovation",
+      "desc": "Create your dream home."
+    },
+    "personal": {
+      "title": "Personal Needs",
+      "desc": "For other personal needs."
+    },
+    "label": "PRODUCTS",
+    "title": "Financing Options",
+    "desc": "We provide various loan options tailored to your needs",
+    "btn": "Apply Now"
+  },
+  "timeline": {
+    "step1": {
+      "title": "Daftar Akun",
+      "desc": "Buat akun SMART FUND gratis dalam hitungan menit."
+    },
+    "step2": {
+      "title": "Ajukan Pinjaman",
+      "desc": "Isi formulir pinjaman dengan data yang diminta."
+    },
+    "step3": {
+      "title": "Verifikasi Data",
+      "desc": "Tim kami memverifikasi data dan dokumen Anda."
+    },
+    "step4": {
+      "title": "Persetujuan",
+      "desc": "Dapatkan keputusan pinjaman dalam waktu singkat."
+    },
+    "step5": {
+      "title": "Dana Diproses",
+      "desc": "Dana langsung dicairkan ke rekening Anda."
+    }
+  },
+  "trust": {
+    "transparency": {
+      "title": "Full Transparency",
+      "desc": "All fees and terms are explained in full."
+    },
+    "security": {
+      "title": "Data Security",
+      "desc": "Personal data is protected with end-to-end encryption."
+    },
+    "noHidden": {
+      "title": "No Hidden Fees",
+      "desc": "What you see is what you pay."
+    },
+    "support": {
+      "title": "24/7 Support",
+      "desc": "Our support team is ready to help anytime."
+    },
+    "label": "TRUST",
+    "title": "Your Trust and Security Are Our Priority",
+    "desc": "SMART FUND combines cutting-edge technology with trust principles to protect every transaction."
+  },
+  "finalCta": {
+    "title": "Ready to Manage Your Funding Needs?",
+    "desc": "Register now and get online loans with fast and transparent processes",
+    "btn": "Start Application"
+  },
+  "langSelector": {
+    "label": "Bahasa",
+    "id": "Indonesia",
+    "ms": "Bahasa Malaysia",
+    "en": "English"
+  },
+  "howitworks": {
+    "label": "HOW IT WORKS",
+    "title": "Easy Application Process",
+    "desc": "Follow 5 simple steps to get the funds you need"
   }
 }

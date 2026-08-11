@@ -1,6 +1,6 @@
 /* ============================================
    SMART FUND - Landing Page Logic
-   Calculator, Multi-step form, FAQ, Dark mode
+   Calculator, FAQ, Dark mode, Language, Mobile menu
    ============================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -10,48 +10,59 @@ document.addEventListener('DOMContentLoaded', () => {
   // ============================================
   // NAVBAR
   // ============================================
-  const navbar = document.getElementById('navbar');
+  const navbar = document.querySelector('header');
   window.addEventListener('scroll', () => {
-    if (window.scrollY > 20) navbar.classList.add('navbar-shadow');
-    else navbar.classList.remove('navbar-shadow');
+    if (window.scrollY > 20) {
+      navbar.classList.add('shadow-md', 'bg-white/80', 'dark:bg-slate-900/80');
+    } else {
+      navbar.classList.remove('shadow-md', 'bg-white/80', 'dark:bg-slate-900/80');
+    }
   });
 
-  // Mobile menu overlay (fullscreen)
+  // Mobile menu
   const mobileMenuBtn = document.getElementById('mobileMenuBtn');
   const mobileMenu = document.getElementById('mobileMenu');
+  const closeMobileMenu = document.getElementById('closeMobileMenu');
   if (mobileMenuBtn && mobileMenu) {
-    const openMenu = () => {
-      mobileMenu.classList.add('active');
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.remove('hidden');
       mobileMenuBtn.setAttribute('aria-expanded', 'true');
       document.body.style.overflow = 'hidden';
-    };
+    });
     const closeMenu = () => {
-      mobileMenu.classList.remove('active');
+      mobileMenu.classList.add('hidden');
       mobileMenuBtn.setAttribute('aria-expanded', 'false');
       document.body.style.overflow = '';
     };
-    mobileMenuBtn.addEventListener('click', openMenu);
+    closeMobileMenu?.addEventListener('click', closeMenu);
     mobileMenu.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeMenu));
-    const closeBtn = document.getElementById('mobileMenuClose');
-    if (closeBtn) closeBtn.addEventListener('click', closeMenu);
-    // Close when clicking overlay background
-    mobileMenu.addEventListener('click', (e) => {
-      if (e.target === mobileMenu) closeMenu();
-    });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
   }
 
-  // Dark mode toggle
+  // ============================================
+  // DARK MODE
+  // ============================================
   const darkToggle = document.getElementById('darkToggle');
   if (darkToggle) {
+    const applySavedTheme = () => {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
+    };
+    applySavedTheme();
+
     const updateIcon = () => {
-      darkToggle.innerHTML = DarkMode.isDark()
-        ? '<i class="fas fa-sun text-amber-500"></i>'
-        : '<i class="fas fa-moon text-slate-600"></i>';
+      if (document.documentElement.classList.contains('dark')) {
+        darkToggle.innerHTML = '<i class="fas fa-sun text-amber-500"></i>';
+      } else {
+        darkToggle.innerHTML = '<i class="fas fa-moon text-slate-600"></i>';
+      }
     };
     updateIcon();
     darkToggle.addEventListener('click', () => {
-      DarkMode.toggle();
+      document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
       updateIcon();
     });
   }
@@ -61,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ============================================
   const loanAmount = document.getElementById('calcAmount');
   const loanTenor = document.getElementById('loanTenor');
-  const amountDisplay = document.getElementById('amountDisplay');
+  const amountDisplay = document.getElementById('calcAmountDisplay');
   const monthlyPaymentEl = document.getElementById('calcMonthly');
   const totalPaymentEl = document.getElementById('calcTotal');
 
@@ -73,35 +84,30 @@ document.addEventListener('DOMContentLoaded', () => {
     return { monthly, total, interest };
   }
 
-   // Range min/max per mata uang - IDR range
-   const LOAN_LIMITS = {
-     min: 1000000,    // Rp1.000.000
-     max: 500000000,  // Rp500.000.000
-     step: 100000,    // Rp100.000
-     defaultVal: 50000000, // Rp50.000.000
-   };
+  const LOAN_LIMITS = {
+    min: 1000000,
+    max: 500000000,
+    step: 1000000,
+    defaultVal: 50000000,
+  };
 
   function updateCalculatorRange() {
     if (!loanAmount) return;
-    // Slider selalu menggunakan nilai dalam mata uang set
     loanAmount.min = LOAN_LIMITS.min;
     loanAmount.max = LOAN_LIMITS.max;
     loanAmount.step = LOAN_LIMITS.step;
-    // Set ke nilai default
     const currentVal = parseInt(loanAmount.value, 10);
     if (!currentVal || currentVal < LOAN_LIMITS.min || currentVal > LOAN_LIMITS.max) {
       loanAmount.value = LOAN_LIMITS.defaultVal;
     }
-    // Update min/max labels dengan format currency
-    const minLabel = document.getElementById('calcMinLabel');
-    const maxLabel = document.getElementById('calcMaxLabel');
-    if (minLabel) minLabel.textContent = formatRupiah(LOAN_LIMITS.min);
-    if (maxLabel) maxLabel.textContent = formatRupiah(LOAN_LIMITS.max);
+  }
+
+  function formatNumber(num) {
+    return new Intl.NumberFormat('id-ID').format(Math.round(num));
   }
 
   function updateCalculator() {
     if (!loanAmount) return;
-    // Slider value selalu dalam IDR
     const amount = parseInt(loanAmount.value, 10);
     const tenor = parseInt(loanTenor.value, 10);
 
@@ -114,154 +120,103 @@ document.addEventListener('DOMContentLoaded', () => {
       return updateCalculator();
     }
 
-    // Tampilkan nilai amount dalam mata uang aktif
-    amountDisplay.textContent = formatRupiah(amount);
+    amountDisplay.textContent = formatNumber(amount);
+    document.getElementById('calcTenorDisplay').textContent = tenor;
 
-    // Kalkulasi bunga selalu dalam IDR (5% per tahun)
     const calc = calculateLoan(amount, tenor, 5);
-
-    // Tampilkan hasil dalam mata uang aktif
-    monthlyPaymentEl.textContent = formatRupiah(calc.monthly);
-    totalPaymentEl.textContent = formatRupiah(calc.total);
+    monthlyPaymentEl.textContent = 'Rp' + formatNumber(calc.monthly);
+    totalPaymentEl.textContent = 'Rp' + formatNumber(calc.total);
   }
 
   if (loanAmount) {
     updateCalculatorRange();
     loanAmount.addEventListener('input', updateCalculator);
-    loanTenor.addEventListener('change', updateCalculator);
+    loanTenor?.addEventListener('input', updateCalculator);
     updateCalculator();
   }
 
-  // Apply now button -> check login
-  const applyNowBtn = document.getElementById('applyNowBtn') || document.getElementById('heroApplyBtn');
-  if (applyNowBtn) {
-    applyNowBtn.addEventListener('click', () => {
-      const token = Token.get();
-      if (!token) {
-        Swal.fire({
-          icon: 'info',
-          title: I18N.t('notif.loginRequired'),
-          text: I18N.t('notif.loginRequiredDesc'),
-          showCancelButton: true,
-          confirmButtonColor: '#2563eb',
-          cancelButtonColor: '#64748b',
-          confirmButtonText: I18N.t('notif.loginNow'),
-          cancelButtonText: I18N.t('notif.register'),
-        }).then((result) => {
-          if (result.isConfirmed) window.location.href = `${BASE_PATH}/login.html`;
-          else if (result.dismiss === Swal.DismissReason.cancel) window.location.href = `${BASE_PATH}/register.html`;
-        });
-      } else {
-        // Pre-fill form & scroll
-        document.getElementById('formAmount').value = loanAmount.value;
-        document.getElementById('formTenor').value = loanTenor.value;
-        document.getElementById('apply').scrollIntoView({ behavior: 'smooth' });
-      }
-    });
-  }
-
   // ============================================
-  // MULTI STEP FORM
+  // CTA BUTTONS
   // ============================================
-  const step1 = document.getElementById('step1');
-  const step2 = document.getElementById('step2');
-  const step1Indicator = document.getElementById('step1Indicator');
-  const step2Indicator = document.getElementById('step2Indicator');
-  const stepLine1 = document.getElementById('stepLine1');
-  const nextStepBtn = document.getElementById('nextStepBtn');
-  const prevStepBtn = document.getElementById('prevStepBtn');
-  const submitLoanBtn = document.getElementById('submitLoanBtn');
+  const heroApplyBtn = document.getElementById('heroApplyBtn');
+  const calcApplyBtn = document.getElementById('calcApplyBtn');
+  const finalCtaBtn = document.getElementById('finalCtaBtn');
+  const howItWorksApplyBtn = document.getElementById('howItWorksApplyBtn');
+  const heroLearnMore = document.getElementById('heroLearnMore');
 
-  let currentStep = 1;
-
-  function goToStep(step) {
-    currentStep = step;
-    if (step === 1) {
-      step1.classList.remove('hidden');
-      step2.classList.add('hidden');
-      step1Indicator.classList.remove('complete', 'inactive');
-      step1Indicator.classList.add('active');
-      step2Indicator.classList.remove('active', 'complete');
-      step2Indicator.classList.add('inactive');
-      stepLine1.classList.remove('bg-blue-500');
-      stepLine1.classList.add('bg-slate-200');
-    } else {
-      step1.classList.add('hidden');
-      step2.classList.remove('hidden');
-      step1Indicator.classList.remove('active', 'inactive');
-      step1Indicator.classList.add('complete');
-      step2Indicator.classList.remove('inactive', 'complete');
-      step2Indicator.classList.add('active');
-      stepLine1.classList.remove('bg-slate-200');
-      stepLine1.classList.add('bg-blue-500');
+  const scrollToSection = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      const offset = el.offsetTop - 80;
+      window.scrollTo({ top: offset, behavior: 'smooth' });
     }
-  }
+  };
 
-  if (nextStepBtn) {
-    nextStepBtn.addEventListener('click', () => {
-      const fullName = document.getElementById('formFullName').value.trim();
-      const phone = document.getElementById('formPhone').value.trim();
-      if (!fullName) return showToast(`${I18N.t('apply.fullName')} ${I18N.t('val.required')}`, 'error');
-      if (fullName.length < 3) return showToast(I18N.t('val.nameMin'), 'error');
-      if (!phone) return showToast(`${I18N.t('apply.phone')} ${I18N.t('val.required')}`, 'error');
-      if (!/^(\+62|62|0)8[1-9]\d{6,11}$/.test(phone.replace(/[\s-]/g, ''))) return showToast(I18N.t('val.phoneInvalid'), 'error');
-      goToStep(2);
-    });
-  }
-
-  if (prevStepBtn) prevStepBtn.addEventListener('click', () => goToStep(1));
-
-  if (submitLoanBtn) {
-    submitLoanBtn.addEventListener('click', async () => {
-      const token = Token.get();
-      if (!token) {
-        Swal.fire({
-          icon: 'info',
-          title: I18N.t('notif.loginRequired'),
-          text: I18N.t('notif.loginRequiredDesc'),
-          showCancelButton: true,
-          confirmButtonColor: '#2563eb',
-          cancelButtonColor: '#64748b',
-          confirmButtonText: I18N.t('notif.loginNow'),
-          cancelButtonText: I18N.t('notif.register'),
-        }).then((r) => {
-          if (r.isConfirmed) window.location.href = `${BASE_PATH}/login.html`;
-          else if (r.dismiss === Swal.DismissReason.cancel) window.location.href = `${BASE_PATH}/register.html`;
-        });
-        return;
-      }
-
-      const amount = parseFloat(document.getElementById('formAmount').value);
-      const tenor = parseInt(document.getElementById('formTenor').value, 10);
-      const purpose = document.getElementById('formPurpose').value;
-
-      if (!amount || amount < LOAN_LIMITS.min || amount > LOAN_LIMITS.max) return showToast(I18N.t('val.amountRange'), 'error');
-      if (!tenor || tenor < 6 || tenor > 60) return showToast(I18N.t('val.tenorRange'), 'error');
-      if (!purpose) return showToast(I18N.t('val.purposeRequired'), 'error');
-
-      setBtnLoading(submitLoanBtn, true);
-      const res = await api('/loans/apply', {
-        method: 'POST',
-        body: { amount, tenor, purpose },
+  const handleApplyClick = () => {
+    const token = Token.get();
+    if (!token) {
+      Swal.fire({
+        icon: 'info',
+        title: I18N.t('notif.loginRequired'),
+        text: I18N.t('notif.loginRequiredDesc'),
+        showCancelButton: true,
+        confirmButtonColor: '#2563eb',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: I18N.t('notif.loginNow'),
+        cancelButtonText: I18N.t('notif.register'),
+      }).then((result) => {
+        if (result.isConfirmed) window.location.href = '/login.html';
+        else if (result.dismiss === Swal.DismissReason.cancel) window.location.href = '/register.html';
       });
-      setBtnLoading(submitLoanBtn, false);
+    } else {
+      scrollToSection('calculator');
+    }
+  };
 
-      if (res.success) {
-        await alertSuccess(I18N.t('notif.applySuccess'), `${I18N.t('notif.applySuccessDesc')} #${res.data.applicationId}`);
-        window.location.href = `${BASE_PATH}/dashboard.html`;
-      } else {
-        showToast(res.message || I18N.t('notif.applyFailed'), 'error');
-      }
-    });
-  }
+  [heroApplyBtn, calcApplyBtn, finalCtaBtn, howItWorksApplyBtn].forEach((btn) => {
+    if (btn) btn.addEventListener('click', handleApplyClick);
+  });
+
+  heroLearnMore?.addEventListener('click', () => scrollToSection('features'));
+  howItWorksApplyBtn?.addEventListener('click', () => scrollToSection('calculator'));
 
   // ============================================
-  // TESTIMONI CAROUSEL (auto-rotate setiap 30 detik)
+  // LANGUAGE SELECTOR
+  // ============================================
+  const langToggle = document.getElementById('langToggle');
+  const langMenu = document.getElementById('langMenu');
+  const langLabel = document.getElementById('langLabel');
+  let currentLang = I18N.getLang();
+  langLabel.textContent = currentLang.toUpperCase();
+
+  document.addEventListener('click', (e) => {
+    if (!langToggle?.contains(e.target) && !langMenu?.contains(e.target)) {
+      langMenu?.classList.add('hidden');
+    }
+  });
+
+  langToggle?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    langMenu?.classList.toggle('hidden');
+  });
+
+  document.querySelectorAll('.lang-option').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const lang = btn.getAttribute('data-lang');
+      I18N.setLang(lang);
+      I18N.apply();
+      langLabel.textContent = lang.toUpperCase();
+      langMenu?.classList.add('hidden');
+      window.location.reload();
+    });
+  });
+
+  // ============================================
+  // TESTIMONI CAROUSEL
   // ============================================
   const testimoniTrack = document.getElementById('testimoniTrack');
   const testimoniDots = document.getElementById('testimoniDots');
 
-  // 12 testimonial, dibagi per grup 3
   const allTestimoni = [
     { name: 'Budi Santoso', role: 'Pengusaha, Jakarta', rating: 5, text: 'Prosesnya cepat dan mudah. Saya berhasil mendapatkan modal usaha dalam waktu singkat. Terima kasih SMART FUND!' },
     { name: 'Siti Rahayu', role: 'Ibu Rumah Tangga, Bandung', rating: 5, text: 'Bunganya ringan dan transparan. Tidak ada biaya tersembunyi. Sangat membantu untuk renovasi rumah saya.' },
@@ -277,7 +232,6 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: 'Ratna Sari', role: 'Guru, Palembang', rating: 5, text: 'Saya sangat terbantu untuk biaya pendidikan anak. SMART FUND dapat diandalkan dan dapat dipercaya.' },
   ];
 
-  // Acak urutan testimoni (shuffle)
   function shuffleArray(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -286,7 +240,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return arr;
   }
 
-  // Kelompokkan testimoni per 3
   function chunkArray(arr, size) {
     const chunks = [];
     for (let i = 0; i < arr.length; i += size) {
@@ -295,100 +248,85 @@ document.addEventListener('DOMContentLoaded', () => {
     return chunks;
   }
 
-  if (testimoniTrack) {
-    const shuffled = shuffleArray([...allTestimoni]);
-    const groups = chunkArray(shuffled, 3);
-    let currentGroup = 0;
+  let testimonialGroups = [];
+  let currentTestimonialGroup = 0;
 
-    function renderTestimoniGroup(group) {
-      const cards = group.map((t, idx) => {
-        const stars = Array(t.rating).fill('<i class="fas fa-star"></i>').join('');
-        return `
-          <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 card-hover testimonial-card" data-aos="fade-up" data-aos-delay="${idx * 100}">
-            <div class="flex text-amber-400 mb-4">${stars}</div>
-            <p class="text-slate-600 mb-6 italic">"${t.text}"</p>
-            <div class="flex items-center gap-3">
-              <div class="w-14 h-14 rounded-full gradient-bg flex items-center justify-center text-white font-bold text-lg shadow-sm">
-                ${t.name.charAt(0)}
-              </div>
-              <div>
-                <p class="font-bold text-slate-900">${t.name}</p>
-                <p class="text-sm text-slate-500">${t.role}</p>
-              </div>
+  function renderTestimonialGroup(group) {
+    if (!testimoniTrack) return;
+    const cards = group.map((t, idx) => {
+      const stars = Array(t.rating).fill('<i class="fas fa-star text-amber-400"></i>').join('');
+      return `
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 sm:p-8 shadow-soft border border-slate-100 dark:border-slate-700 card-hover testimonial-card" data-aos="fade-up" data-aos-delay="${idx * 100}">
+          <div class="flex text-amber-400 mb-4">${stars}</div>
+          <p class="text-slate-600 dark:text-slate-300 mb-6 italic">"${t.text}"</p>
+          <div class="flex items-center gap-3">
+            <div class="w-14 h-14 rounded-full gradient-bg flex items-center justify-center text-white font-bold text-lg shadow-sm">
+              ${t.name.charAt(0)}
+            </div>
+            <div>
+              <p class="font-bold text-slate-900 dark:text-white">${t.name}</p>
+              <p class="text-sm text-slate-500 dark:text-slate-400">${t.role}</p>
             </div>
           </div>
-        `;
-      }).join('');
-      testimoniTrack.innerHTML = cards;
-      // Re-init AOS untuk animasi fade
-      if (typeof AOS !== 'undefined') {
-        setTimeout(() => AOS.refresh(), 50);
-      }
+        </div>
+      `;
+    }).join('');
+    testimoniTrack.innerHTML = `<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">${cards}</div>`;
+    if (typeof AOS !== 'undefined') {
+      setTimeout(() => AOS.refresh(), 50);
     }
+  }
 
-    function renderDots() {
-      if (!testimoniDots) return;
-      testimoniDots.innerHTML = groups.map((_, i) => `
-        <button class="testimoni-dot w-3 h-3 rounded-full transition ${i === currentGroup ? 'bg-blue-600 w-8' : 'bg-slate-300 hover:bg-slate-400'}" data-index="${i}" aria-label="Slide ${i + 1}"></button>
-      `).join('');
-      testimoniDots.querySelectorAll('.testimoni-dot').forEach((btn) => {
-        btn.addEventListener('click', () => {
-          currentGroup = parseInt(btn.dataset.index, 10);
-          updateTestimoni();
-        });
+  function renderDots() {
+    if (!testimoniDots) return;
+    testimoniDots.innerHTML = testimonialGroups.map((_, i) => `
+      <button class="testimonial-dot w-3 h-3 rounded-full transition ${i === currentTestimonialGroup ? 'bg-blue-600 w-8' : 'bg-slate-300 hover:bg-slate-400'}" data-index="${i}" aria-label="Slide ${i + 1}"></button>
+    `).join('');
+    testimoniDots.querySelectorAll('.testimonial-dot').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        currentTestimonialGroup = parseInt(btn.dataset.index, 10);
+        updateTestimonial();
       });
-    }
+    });
+  }
 
-    function updateTestimoni() {
-      // Fade out
-      testimoniTrack.style.opacity = '0';
-      setTimeout(() => {
-        renderTestimoniGroup(groups[currentGroup]);
-        renderDots();
-        // Fade in
-        testimoniTrack.style.opacity = '1';
-      }, 250);
-    }
+  function updateTestimonial() {
+    if (!testimoniTrack) return;
+    testimoniTrack.style.opacity = '0';
+    setTimeout(() => {
+      renderTestimonialGroup(testimonialGroups[currentTestimonialGroup]);
+      renderDots();
+      testimoniTrack.style.opacity = '1';
+    }, 250);
+  }
 
-    // Initial render
-    renderTestimoniGroup(groups[currentGroup]);
+  if (testimoniTrack) {
+    const shuffled = shuffleArray([...allTestimoni]);
+    testimonialGroups = chunkArray(shuffled, 3);
+    renderTestimonialGroup(testimonialGroups[currentTestimonialGroup]);
     renderDots();
     testimoniTrack.style.opacity = '1';
 
-    // Auto-rotate every 30 seconds
     let autoRotateInterval = setInterval(() => {
-      currentGroup = (currentGroup + 1) % groups.length;
-      updateTestimoni();
+      currentTestimonialGroup = (currentTestimonialGroup + 1) % testimonialGroups.length;
+      updateTestimonial();
     }, 30000);
 
-    // Pause when hover, resume when leave
-    const testimoniSection = document.getElementById('testimoni');
-    if (testimoniSection) {
-      testimoniSection.addEventListener('mouseenter', () => clearInterval(autoRotateInterval));
-      testimoniSection.addEventListener('mouseleave', () => {
+    const testimonialSection = document.getElementById('testimonial');
+    if (testimonialSection) {
+      testimonialSection.addEventListener('mouseenter', () => clearInterval(autoRotateInterval));
+      testimonialSection.addEventListener('mouseleave', () => {
         clearInterval(autoRotateInterval);
         autoRotateInterval = setInterval(() => {
-          currentGroup = (currentGroup + 1) % groups.length;
-          updateTestimoni();
+          currentTestimonialGroup = (currentTestimonialGroup + 1) % testimonialGroups.length;
+          updateTestimonial();
         }, 30000);
       });
     }
   }
 
   // ============================================
-  // LANGUAGE CHANGE - Update currency display
-  // ============================================
-  document.addEventListener('languageChanged', () => {
-    if (typeof updateCalculatorRange === 'function') {
-      updateCalculatorRange();
-    }
-    if (typeof updateCalculator === 'function') {
-      updateCalculator();
-    }
-  });
-
-  // ============================================
-  // FAQ - localized
+  // FAQ
   // ============================================
   const faqContainer = document.getElementById('faqContainer');
 
@@ -403,15 +341,17 @@ document.addEventListener('DOMContentLoaded', () => {
       { q: I18N.t('faq.q6'), a: I18N.t('faq.a6') },
     ];
     faqContainer.innerHTML = '';
-    faqs.forEach((faq, i) => {
+    faqs.forEach((faq) => {
       const item = document.createElement('div');
-      item.className = 'bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden';
+      item.className = 'bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm overflow-hidden';
       item.innerHTML = `
-        <button class="faq-btn w-full flex items-center justify-between p-5 text-left font-semibold text-slate-800 hover:bg-blue-50 transition">
+        <button class="faq-btn w-full flex items-center justify-between p-5 text-left font-semibold text-slate-800 dark:text-slate-200 hover:bg-blue-50 dark:hover:bg-slate-700/50 transition">
           <span>${faq.q}</span>
-          <i class="fas fa-chevron-down text-blue-600 transition-transform"></i>
+          <i class="fas fa-chevron-down text-blue-600 transition-transform duration-300"></i>
         </button>
-        <div class="faq-answer hidden p-5 pt-0 text-slate-600">${faq.a}</div>
+        <div class="faq-answer hidden max-h-0 overflow-hidden transition-all duration-300">
+          <div class="p-5 pt-0 text-slate-600 dark:text-slate-300 text-sm leading-relaxed">${faq.a}</div>
+        </div>
       `;
       faqContainer.appendChild(item);
       const btn = item.querySelector('.faq-btn');
@@ -419,6 +359,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const icon = btn.querySelector('i');
       btn.addEventListener('click', () => {
         answer.classList.toggle('hidden');
+        if (answer.classList.contains('hidden')) {
+          answer.style.maxHeight = '0px';
+        } else {
+          answer.style.maxHeight = answer.scrollHeight + 'px';
+        }
         icon.classList.toggle('rotate-180');
       });
     });
@@ -426,6 +371,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   renderFaq();
 
-  // Re-render FAQ on language change
-  document.addEventListener('languageChanged', renderFaq);
+  // Language change - re-render dynamic content
+  document.addEventListener('languageChanged', () => {
+    if (typeof updateCalculator === 'function') updateCalculator();
+    renderFaq();
+  });
 });

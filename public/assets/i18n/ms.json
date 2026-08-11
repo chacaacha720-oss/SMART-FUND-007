@@ -1,12 +1,16 @@
 {
   "nav": {
-    "home": "Laman Utama",
-    "features": "Kelebihan",
+    "home": "Beranda",
+    "features": "Keunggulan",
     "calculator": "Simulasi",
     "testimoni": "Testimoni",
     "faq": "FAQ",
-    "login": "Log Masuk",
-    "register": "Daftar"
+    "login": "Masuk",
+    "register": "Daftar",
+    "products": "Produk",
+    "timeline": "Cara Kerja",
+    "trust": "Kepercayaan",
+    "testimonial": "Testimoni"
   },
   "hero": {
     "badge": "Berlesen & Diawasi OJK",
@@ -31,27 +35,39 @@
       "f3": "Syarat mudah & ringkas",
       "f4": "Selamat & dipercayai (OJK)",
       "btn": "Mula Permohonan"
-    }
+    },
+    "headline": "Penyelesaian Dana Pantas untuk Keperluan Anda",
+    "subheadline": "Mohan pinjaman dengan proses mudah, telus, dan praktikal dalam satu platform.",
+    "primaryBtn": "Mohon Pinjaman",
+    "secondaryBtn": "Ketahui Lebih Lanjut"
   },
   "features": {
-    "label": "KELEBIHAN",
-    "title": "Mengapa Memilih SMART FUND?",
-    "desc": "Kami memberikan penyelesaian pinjaman terbaik dengan pelbagai kelebihan yang menguntungkan anda",
+    "label": "KEUNGGULAN",
+    "title": "Mengapa SMART FUND?",
+    "desc": "Kami menyajikan solusi pinjaman terbaik dengan berbagai keunggulan yang menguntungkan bagi Anda",
     "f1": {
-      "title": "Faedah Bermula 5%",
-      "desc": "Nikmati faedah kompetitif bermula 5% setahun supaya ansuran menjadi lebih ringan."
+      "title": "Proses Pengajuan Mudah",
+      "desc": "Isi formulir online dalam hitungan menit dengan panduan langkah demi langkah."
     },
     "f2": {
-      "title": "Proses Pantas",
-      "desc": "Mohon pinjaman dalam talian pada bila-bila masa tanpa proses yang rumit."
+      "title": "Proses Cepat",
+      "desc": "Pengajuan Anda diproses dengan cepat, dan keputusan bisa diketahui segerala untuk keperluan mendesak."
     },
     "f3": {
-      "title": "Syarat Mudah",
-      "desc": "Dokumen ringkas dengan proses pengesahan yang praktikal dan pantas."
+      "title": "Persyaratan Sederhana",
+      "desc": "Dokumen yang dibutuhkan minimal, mudah dipahami, dan dapat diupload secara digital."
     },
     "f4": {
-      "title": "Selamat & Dipercayai",
-      "desc": "Perkhidmatan berlesen dan diawasi oleh Otoriti Jasa Kewangan (OJK) untuk keselamatan pelanggan."
+      "title": "Informasi Transparan",
+      "desc": "Tidak ada biaya tersembunyi. Semua informasi biaya kami menjelaskan sebelum Anda menandatangani."
+    },
+    "f5": {
+      "title": "Sistem Aman",
+      "desc": "Kami menggunakan teknologi enkripsi tingkat tinggi untuk melindungi data dan transaksi Anda."
+    },
+    "f6": {
+      "title": "Pengelolaan Terintegrasi",
+      "desc": "Kelola pinjaman, cicilan, dan penarikan dana dengan nyaman melalui satu dashboard."
     }
   },
   "calc": {
@@ -77,9 +93,6 @@
     "phone": "Nombor HP",
     "next": "Seterusnya",
     "amount": "Jumlah Pinjaman",
-    "purpose": "Tujuan Pinjaman",
-    "back": "Kembali",
-    "submit": "Hantar Permohonan",
     "purpose": {
       "urgent": "Keperluan Mendesak",
       "business": "Modal Perniagaan",
@@ -87,7 +100,9 @@
       "education": "Pendidikan",
       "personal": "Keperluan Peribadi",
       "other": "Lain-lain"
-    }
+    },
+    "back": "Kembali",
+    "submit": "Hantar Permohonan"
   },
   "testimoni": {
     "label": "TESTIMONI",
@@ -107,7 +122,8 @@
     "q5": "Adakah ada yuran tersembunyi atau yuran pentadbiran awal?",
     "a5": "Tiada yuran tersembunyi. SMART FUND mengamalkan ketelusan penuh - semua yuran (faedah, pentadbiran, dll) akan diterangkan sebelum anda menandatangani perjanjian.",
     "q6": "Bagaimana cara penarikan dana selepas pinjaman diluluskan?",
-    "a6": "Selepas pinjaman diluluskan dan dana cair, anda boleh membuat penarikan melalui dashboard dengan mengisi borang penarikan. Dana akan dihantar ke akaun bank tujuan anda."
+    "a6": "Selepas pinjaman diluluskan dan dana cair, anda boleh membuat penarikan melalui dashboard dengan mengisi borang penarikan. Dana akan dihantar ke akaun bank tujuan anda.",
+    "subtitle": "Pertanyaan yang sering ditanyakan tentang SMART FUND"
   },
   "cta": {
     "title": "Bersedia Memohon Pinjaman?",
@@ -118,10 +134,12 @@
     "desc": "Platform pinjaman dalam talian yang dipercayai dan berlesen OJK. Penyelesaian kewangan untuk masa depan anda.",
     "company": "Syarikat",
     "services": "Perkhidmatan",
-    "contact": "Hubungi",
+    "contact": "Kontak",
     "rights": "Hak cipta terpelihara. Berlesen & diawasi OJK.",
     "terms": "Syarat & Ketentuan",
-    "privacy": "Dasar Privasi"
+    "privacy": "Dasar Privasi",
+    "products": "Produk",
+    "help": "Bantuan"
   },
   "login": {
     "title": "Log Masuk",
@@ -341,5 +359,90 @@
   },
   "telegram": {
     "testMessage": "✅ <b>Test Notifikasi SMART FUND</b>\n\nNotifikasi Telegram berfungsi dengan baik."
+  },
+  "products": {
+    "multiline": {
+      "title": "Pinjaman Multiguna",
+      "desc": "Untuk keperluan mendesak hingga modal perniagaan lancar."
+    },
+    "business": {
+      "title": "Modal Perniagaan",
+      "desc": "Didanai untuk mengembangkan perniagaan anda."
+    },
+    "education": {
+      "title": "Pendidikan",
+      "desc": "Biayai masa depan dengan kos pendidikan."
+    },
+    "renovation": {
+      "title": "Pengubahsuaian Rumah",
+      "desc": "Wujudkan rumah impian anda."
+    },
+    "personal": {
+      "title": "Keperluan Peribadi",
+      "desc": "Untuk keperluan peribadi lainnya."
+    },
+    "label": "PRODUK",
+    "title": "Pilihan Pembiayaan",
+    "desc": "Kami menyediakan berbagai opsi pinjaman yang disesuaikan dengan kebutuhan Anda",
+    "btn": "Ajukan Sekarang"
+  },
+  "timeline": {
+    "step1": {
+      "title": "Daftar Akun",
+      "desc": "Buat akun SMART FUND gratis dalam hitungan menit."
+    },
+    "step2": {
+      "title": "Ajukan Pinjaman",
+      "desc": "Isi formulir pinjaman dengan data yang diminta."
+    },
+    "step3": {
+      "title": "Verifikasi Data",
+      "desc": "Tim kami memverifikasi data dan dokumen Anda."
+    },
+    "step4": {
+      "title": "Persetujuan",
+      "desc": "Dapatkan keputusan pinjaman dalam waktu singkat."
+    },
+    "step5": {
+      "title": "Dana Diproses",
+      "desc": "Dana langsung dicairkan ke rekening Anda."
+    }
+  },
+  "trust": {
+    "transparency": {
+      "title": "Ketelusan Penuh",
+      "desc": "Semua yuran dan syarat kami terangkan sepenuhnya."
+    },
+    "security": {
+      "title": "Keselamatan Data",
+      "desc": "Data peribadi dilindungi dengan enkripsi end-to-end."
+    },
+    "noHidden": {
+      "title": "Tiada Yuran Tersembunyi",
+      "desc": "Apa yang anda lihat adalah apa yang anda bayar."
+    },
+    "support": {
+      "title": "Sokongan 24/7",
+      "desc": "Pasukan sokongan kami sedia membantu pada bila-bila masa."
+    },
+    "label": "KEPERCAYAAN",
+    "title": "Kepercayaan dan Keamanan Anda Prioritas Kami",
+    "desc": "SMART FUND menggabungkan teknologi mutakhir dengan prinsip kepercayaan untuk melindungi setiap transaksi Anda."
+  },
+  "finalCta": {
+    "title": "Siap Mengelola Kebutuhan Dana Anda?",
+    "desc": "Daftar sekarang dan dapatkan pinjaman online dengan proses cepat dan transparan",
+    "btn": "Mulai Pengajuan"
+  },
+  "langSelector": {
+    "label": "Bahasa",
+    "id": "Indonesia",
+    "ms": "Bahasa Malaysia",
+    "en": "English"
+  },
+  "howitworks": {
+    "label": "CARA KERJA",
+    "title": "Proses Pengajuan yang Mudah",
+    "desc": "Ikuti 5 langkah sederhana untuk mendapatkan dana yang Anda butuhkan"
   }
 }

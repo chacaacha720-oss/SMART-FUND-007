@@ -15,6 +15,18 @@ const I18N = {
       'nav.faq': 'FAQ',
       'nav.login': 'Masuk',
       'nav.register': 'Daftar',
+      'nav.products': 'Produk',
+      'nav.timeline': 'Cara Kerja',
+      'nav.trust': 'Kepercayaan',
+      'nav.testimonial': 'Testimoni',
+      'nav.products': 'Produk',
+      'nav.timeline': 'Cara Kerja',
+      'nav.trust': 'Kepercayaan',
+      'nav.testimonial': 'Testimoni',
+      'nav.products': 'Produk',
+      'nav.timeline': 'Cara Kerja',
+      'nav.trust': 'Kepercayaan',
+      'nav.testimonial': 'Testimoni',
 
       // ===== HERO =====
       'hero.badge': 'Berizin & Diawasi OJK',
@@ -34,6 +46,10 @@ const I18N = {
       'hero.card.f3': 'Persyaratan mudah & sederhana',
       'hero.card.f4': 'Aman & terpercaya (OJK)',
       'hero.card.btn': 'Mulai Pengajuan',
+      'hero.headline': 'Solusi Dana Cepat untuk Kebutuhan Anda',
+      'hero.subheadline': 'Ajukan pinjaman dengan proses mudah, transparan, dan praktis dalam satu platform.',
+      'hero.primaryBtn': 'Ajukan Pinjaman',
+      'hero.secondaryBtn': 'Pelajari Selengkapnya',
 
       // ===== FEATURES =====
       'features.label': 'KEUNGGULAN',
@@ -47,6 +63,56 @@ const I18N = {
       'features.f3.desc': 'Dokumen sederhana dengan proses verifikasi yang praktis dan cepat.',
       'features.f4.title': 'Aman & Terpercaya',
       'features.f4.desc': 'Layanan berizin dan diawasi oleh Otoritas Jasa Keuangan (OJK) untuk keamanan nasabah.',
+      'features.f5.title': 'Informasi Transparan',
+      'features.f5.desc': 'Semua biaya dan syarat kami jelaskan secara lengkap.',
+      'features.f6.title': 'Pengelolaan Terintegrasi',
+      'features.f6.desc': 'Kelola pinjaman, cicilan, dan penarikan dana dengan nyaman melalui satu dashboard.',
+
+      // ===== PRODUCTS =====
+      'products.label': 'PRODUK',
+      'products.title': 'Pilihan Pembiayaan',
+      'products.desc': 'Kami menyediakan berbagai opsi pinjaman yang disesuaikan dengan kebutuhan Anda',
+      'products.multiline.title': 'Pinjamain Multiguna',
+      'products.multiline.desc': 'Untuk keperluan mendesak hingga modal usaha lancar.',
+      'products.business.title': 'Modal Usaha',
+      'products.business.desc': 'Didanai untuk mengembangkan usaha Anda.',
+      'products.education.title': 'Pendidikan',
+      'products.education.desc': 'Biayai masa depan dengan biaya pendidikan.',
+      'products.renovation.title': 'Renovasi Rumah',
+      'products.renovation.desc': 'Wujudkan rumah impian Anda.',
+      'products.personal.title': 'Kebutuhan Pribadi',
+      'products.personal.desc': 'Untuk keperlukan pribadi lainnya.',
+      'products.btn': 'Ajukan Sekarang',
+
+      // ===== HOW IT WORKS =====
+      'howitworks.label': 'CARA KERJA',
+      'howitworks.title': 'Proses Pengajuan yang Mudah',
+      'howitworks.desc': 'Ikuti 5 langkah sederhana untuk mendapatkan dana yang Anda butuhkan',
+
+      // ===== TIMELINE =====
+      'timeline.step1.title': 'Daftar Akun',
+      'timeline.step1.desc': 'Buat akun SMART FUND gratis dalam hitungan menit.',
+      'timeline.step2.title': 'Ajukan Pinjaman',
+      'timeline.step2.desc': 'Isi formulir pinjaman dengan data yang diminta.',
+      'timeline.step3.title': 'Verifikasi Data',
+      'timeline.step3.desc': 'Tim kami memverifikasi data dan dokumen Anda.',
+      'timeline.step4.title': 'Persetujuan',
+      'timeline.step4.desc': 'Dapatkan keputusan pinjaman dalam waktu singkat.',
+      'timeline.step5.title': 'Dana Diproses',
+      'timeline.step5.desc': 'Dana langsung dicairkan ke rekening Anda.',
+
+      // ===== TRUST =====
+      'trust.label': 'KEPERCAYAAN',
+      'trust.title': 'Kepercayaan dan Keamanan Anda Prioritas Kami',
+      'trust.desc': 'SMART FUND menggabungkan teknologi mutakhir dengan prinsip kepercayaan untuk melindungi setiap transaksi Anda.',
+      'trust.transparency.title': 'Transparansi Penuh',
+      'trust.transparency.desc': 'Semua biaya dan syarat kami jelaskan secara lengkap.',
+      'trust.security.title': 'Keamanan Data',
+      'trust.security.desc': 'Data pribadi dilindungi dengan enkripsi end-to-end.',
+      'trust.noHidden.title': 'Tidak Ada Biaya Tersembunyi',
+      'trust.noHidden.desc': 'Apa yang Anda lihat adalah apa yang Anda bayar.',
+      'trust.support.title': 'Dukungan 24/7',
+      'trust.support.desc': 'Tim dukungan kami siap membantu kapan saja.',
 
       // ===== CALCULATOR =====
       'calc.label': 'SIMULASI PINJAMAN',
@@ -88,17 +154,30 @@ const I18N = {
       // ===== FAQ =====
       'faq.label': 'FAQ',
       'faq.title': 'Pertanyaan Umum',
+      'faq.subtitle': 'Pertanyaan yang sering ditanyakan tentang SMART FUND',
 
       // ===== CTA =====
       'cta.title': 'Siap Mengajukan Pinjaman?',
       'cta.desc': 'Daftar sekarang dan nikmati kemudahan pinjaman online dengan bunga kompetitif',
       'cta.btn': 'Daftar Sekarang',
 
+      // ===== FINAL CTA =====
+      'finalCta.title': 'Siap Mengelola Kebutuhan Dana Anda?',
+      'finalCta.desc': 'Daftar sekarang dan dapatkan pinjaman online dengan proses cepat dan transparan',
+      'finalCta.btn': 'Mulai Pengajuan',
+
+      // ===== FINAL CTA =====
+      'finalCta.title': 'Siap Mengelola Kebutuhan Dana Anda?',
+      'finalCta.desc': 'Daftar sekarang dan dapatkan pinjaman online dengan proses cepat dan transparan',
+      'finalCta.btn': 'Mulai Pengajuan',
+
       // ===== FOOTER =====
       'footer.desc': 'Platform pinjaman online terpercaya berizin OJK. Solusi keuangan untuk masa depan Anda.',
       'footer.company': 'Perusahaan',
       'footer.services': 'Layanan',
       'footer.contact': 'Kontak',
+      'footer.products': 'Produk',
+      'footer.help': 'Bantuan',
       'footer.rights': 'All rights reserved. Berizin & diawasi OJK.',
       'footer.terms': 'Syarat & Ketentuan',
       'footer.privacy': 'Kebijakan Privasi',
@@ -395,6 +474,10 @@ const I18N = {
       'hero.card.f3': 'Syarat mudah & ringkas',
       'hero.card.f4': 'Selamat & dipercayai (OJK)',
       'hero.card.btn': 'Mula Permohonan',
+      'hero.headline': 'Penyelesaian Dana Pantas untuk Keperlukan Anda',
+      'hero.subheadline': 'Mohan pinjaman dengan proses mudah, telus, dan praktikal dalam satu platform.',
+      'hero.primaryBtn': 'Mohon Pinjaman',
+      'hero.secondaryBtn': 'Ketahui Lebih Lanjut',
 
       // ===== FEATURES =====
       'features.label': 'KELEBIHAN',
@@ -408,6 +491,56 @@ const I18N = {
       'features.f3.desc': 'Dokumen ringkas dengan proses verifikasi yang praktikal dan cepat.',
       'features.f4.title': 'Selamat & Dipercayai',
       'features.f4.desc': 'Layanan berlesen dan diawasi oleh Otoriti Jasa Kewangan (OJK) untuk keselamatan pelanggan.',
+      'features.f5.title': 'Informasi Transparan',
+      'features.f5.desc': 'Semua yuran dan syarat kami terangkan sepenuhnya.',
+      'features.f6.title': 'Pengurusan Terintegrasi',
+      'features.f6.desc': 'Kelola pinjaman, ansuran, dan penarikan dana dengan selasa melalui satu dashboard.',
+
+      // ===== PRODUCTS =====
+      'products.label': 'PRODUK',
+      'products.title': 'Pilihan Pembiayaan',
+      'products.desc': 'Kami menyediakan pelbagai pilihan pinjaman yang sesuai dengan keperlukan anda',
+      'products.multiline.title': 'Pinjaman Multiguna',
+      'products.multiline.desc': 'Untuk keperluan mendesak hingga modal perniagaan lancar.',
+      'products.business.title': 'Modal Perniagaan',
+      'products.business.desc': 'Didanai untuk mengembangkan perniagaan anda.',
+      'products.education.title': 'Pendidikan',
+      'products.education.desc': 'Biayai masa depan dengan kos pendidikan.',
+      'products.renovation.title': 'Pengubahsuaian Rumah',
+      'products.renovation.desc': 'Wujudkan rumah impian anda.',
+      'products.personal.title': 'Keperluan Peribadi',
+      'products.personal.desc': 'Untuk keperluan peribadi lainnya.',
+      'products.btn': 'Ajukan Sekarang',
+
+      // ===== HOW IT WORKS =====
+      'howitworks.label': 'CARA KERJA',
+      'howitworks.title': 'Proses Pengajuan yang Mudah',
+      'howitworks.desc': 'Ikuti 5 langkah sederhana untuk mendapatkan dana yang Anda butuhkan',
+
+      // ===== TIMELINE =====
+      'timeline.step1.title': 'Daftar Akun',
+      'timeline.step1.desc': 'Buat akaun SMART FUND gratis dalam hitungan minit.',
+      'timeline.step2.title': 'Ajukan Pinjaman',
+      'timeline.step2.desc': 'Isi formulir pinjaman dengan data yang diminta.',
+      'timeline.step3.title': 'Verifikasi Data',
+      'timeline.step3.desc': 'Tim kami memverifikasi data dan dokumen Anda.',
+      'timeline.step4.title': 'Persetujuan',
+      'timeline.step4.desc': 'Dapatkan keputusan pinjaman dalam waktu singkat.',
+      'timeline.step5.title': 'Dana Diproses',
+      'timeline.step5.desc': 'Dana langsung dicairkan ke rekening Anda.',
+
+      // ===== TRUST =====
+      'trust.label': 'KEPERCAYAAN',
+      'trust.title': 'Kepercayaan dan Keamanan Anda Prioritas Kami',
+      'trust.desc': 'SMART FUND menggabungkan teknologi mutakhir dengan prinsip kepercayaan untuk melindungi setiap transaksi Anda.',
+      'trust.transparency.title': 'Ketelusan Penuh',
+      'trust.transparency.desc': 'Semua yuran dan syarat kami terangkan sepenuhnya.',
+      'trust.security.title': 'Keselamatan Data',
+      'trust.security.desc': 'Data peribadi dilindungi dengan enkripsi end-to-end.',
+      'trust.noHidden.title': 'Tiada Yuran Tersembunyi',
+      'trust.noHidden.desc': 'Apa yang anda lihat adalah apa yang anda bayar.',
+      'trust.support.title': 'Sokongan 24/7',
+      'trust.support.desc': 'Pasukan sokongan kami sedia membantu pada bila-bila masa.',
 
       // ===== CALCULATOR =====
       'calc.label': 'SIMULASI PINJAMAN',
@@ -449,6 +582,7 @@ const I18N = {
       // ===== FAQ =====
       'faq.label': 'FAQ',
       'faq.title': 'Soalan Lazim',
+      'faq.subtitle': 'Soalan yang sering ditanyakan tentang SMART FUND',
 
       // ===== CTA =====
       'cta.title': 'Bersedia Memohon Pinjaman?',
@@ -460,6 +594,8 @@ const I18N = {
       'footer.company': 'Syarikat',
       'footer.services': 'Layanan',
       'footer.contact': 'Hubungi',
+      'footer.products': 'Produk',
+      'footer.help': 'Bantuan',
       'footer.rights': 'Hak cipta terpelihara. Berlesen & diawasi OJK.',
       'footer.terms': 'Syarat & Ketentuan',
       'footer.privacy': 'Dasar Privasi',
@@ -709,6 +845,10 @@ const I18N = {
       'nav.faq': 'FAQ',
       'nav.login': 'Login',
       'nav.register': 'Register',
+      'nav.products': 'Products',
+      'nav.timeline': 'How It Works',
+      'nav.trust': 'Trust',
+      'nav.testimonial': 'Testimonials',
 
       // ===== HERO =====
       'hero.badge': 'Licensed & Supervised by OJK',
@@ -728,6 +868,10 @@ const I18N = {
       'hero.card.f3': 'Easy & simple requirements',
       'hero.card.f4': 'Safe & trusted (OJK)',
       'hero.card.btn': 'Start Application',
+      'hero.headline': 'Fast Money Solutions for Your Needs',
+      'hero.subheadline': 'Apply for loans with easy, transparent, and practical processes in one platform.',
+      'hero.primaryBtn': 'Apply for Loan',
+      'hero.secondaryBtn': 'Learn More',
 
       // ===== FEATURES =====
       'features.label': 'FEATURES',
@@ -741,6 +885,56 @@ const I18N = {
       'features.f3.desc': 'Simple documents with practical and fast verification process.',
       'features.f4.title': 'Safe & Trusted',
       'features.f4.desc': 'Licensed and supervised by the Financial Services Authority (OJK) for customer safety.',
+      'features.f5.title': 'Full Transparency',
+      'features.f5.desc': 'All fees and terms are explained in full.',
+      'features.f6.title': 'Integrated Management',
+      'features.f6.desc': 'Manage loans, installments, and withdrawals conveniently through one dashboard.',
+
+      // ===== PRODUCTS =====
+      'products.label': 'PRODUCTS',
+      'products.title': 'Financing Options',
+      'products.desc': 'We provide various loan options tailored to your needs',
+      'products.multiline.title': 'Multi-purpose Loan',
+      'products.multiline.desc': 'For urgent needs to working capital.',
+      'products.business.title': 'Business Capital',
+      'products.business.desc': 'Funded to grow your business.',
+      'products.education.title': 'Education',
+      'products.education.desc': 'Finance your future with education costs.',
+      'products.renovation.title': 'Home Renovation',
+      'products.renovation.desc': 'Create your dream home.',
+      'products.personal.title': 'Personal Needs',
+      'products.personal.desc': 'For other personal needs.',
+      'products.btn': 'Apply Now',
+
+      // ===== HOW IT WORKS =====
+      'howitworks.label': 'HOW IT WORKS',
+      'howitworks.title': 'Easy Application Process',
+      'howitworks.desc': 'Follow 5 simple steps to get the funds you need',
+
+      // ===== TIMELINE =====
+      'timeline.step1.title': 'Create Account',
+      'timeline.step1.desc': 'Create a SMART FUND account for free in seconds.',
+      'timeline.step2.title': 'Apply for Loan',
+      'timeline.step2.desc': 'Fill in the loan form with the required data.',
+      'timeline.step3.title': 'Data Verification',
+      'timeline.step3.desc': 'Our team verifies your data and documents.',
+      'timeline.step4.title': 'Approval',
+      'timeline.step4.desc': 'Get your loan decision quickly.',
+      'timeline.step5.title': 'Funds Processed',
+      'timeline.step5.desc': 'Funds are disbursed directly to your account.',
+
+      // ===== TRUST =====
+      'trust.label': 'TRUST',
+      'trust.title': 'Your Trust and Security Are Our Priority',
+      'trust.desc': 'SMART FUND combines cutting-edge technology with trust principles to protect every transaction.',
+      'trust.transparency.title': 'Full Transparency',
+      'trust.transparency.desc': 'All fees and terms are explained in full.',
+      'trust.security.title': 'Data Security',
+      'trust.security.desc': 'Personal data is protected with end-to-end encryption.',
+      'trust.noHidden.title': 'No Hidden Fees',
+      'trust.noHidden.desc': 'What you see is what you pay.',
+      'trust.support.title': '24/7 Support',
+      'trust.support.desc': 'Our support team is ready to help anytime.',
 
       // ===== CALCULATOR =====
       'calc.label': 'LOAN CALCULATOR',
@@ -782,17 +976,25 @@ const I18N = {
       // ===== FAQ =====
       'faq.label': 'FAQ',
       'faq.title': 'Frequently Asked Questions',
+      'faq.subtitle': 'Frequently asked questions about SMART FUND',
 
       // ===== CTA =====
       'cta.title': 'Ready to Apply for a Loan?',
       'cta.desc': 'Register now and enjoy easy online loans with competitive interest',
       'cta.btn': 'Register Now',
 
+      // ===== FINAL CTA =====
+      'finalCta.title': 'Ready to Manage Your Funding Needs?',
+      'finalCta.desc': 'Register now and get online loans with fast and transparent processes',
+      'finalCta.btn': 'Start Application',
+
       // ===== FOOTER =====
       'footer.desc': 'Trusted online loan platform licensed by OJK. Financial solutions for your future.',
       'footer.company': 'Company',
       'footer.services': 'Services',
       'footer.contact': 'Contact',
+      'footer.products': 'Products',
+      'footer.help': 'Help',
       'footer.rights': 'All rights reserved. Licensed & supervised by OJK.',
       'footer.terms': 'Terms & Conditions',
       'footer.privacy': 'Privacy Policy',
