@@ -81,6 +81,7 @@ async function showAdminApp(admin) {
     users: I18N.t('admin.users'),
     applications: I18N.t('admin.applications'),
     transactions: I18N.t('admin.transactions'),
+    'cs-codes': 'Kode CS',
     telegram: I18N.t('admin.telegram'),
     settings: I18N.t('admin.settings'),
   };
@@ -99,6 +100,12 @@ async function showAdminApp(admin) {
     closeSidebar();
     loadAdminPage(page);
   }
+
+  // Show/hide super admin menu items
+  const superAdminLinks = document.querySelectorAll('.super-admin-only');
+  superAdminLinks.forEach((l) => {
+    l.style.display = admin.role === 'super_admin' ? '' : 'none';
+  });
 
   // Logout
   document.getElementById('adminLogoutBtn').addEventListener('click', async () => {
@@ -121,12 +128,12 @@ async function showAdminApp(admin) {
   document.getElementById('appDisburseBtn').addEventListener('click', () => updateAppStatus('disbursed'));
 
   // Super admin application filters
-  const filterInputs = ['filterAdminCode', 'filterStatus', 'filterUserId', 'filterStart', 'filterEnd'];
+  const filterInputs = ['filterCsCode', 'filterStatus', 'filterUserId', 'filterStart', 'filterEnd'];
   filterInputs.forEach((id) => {
     const el = document.getElementById(id);
     if (el) {
       el.addEventListener('change', loadApplications);
-      if (id === 'filterAdminCode' || id === 'filterUserId') {
+      if (id === 'filterCsCode' || id === 'filterUserId') {
         let timeout;
         el.addEventListener('input', () => { clearTimeout(timeout); timeout = setTimeout(loadApplications, 500); });
       }
@@ -199,6 +206,7 @@ async function loadAdminPage(page) {
   if (page === 'applications') await loadApplications();
   if (page === 'transactions') await loadTransactions();
   if (page === 'withdrawals') await loadWithdrawals();
+  if (page === 'cs-codes') await loadCsCodes();
   if (page === 'telegram') {
     await loadTelegramConfig();
     await loadTelegramLogs();
@@ -307,12 +315,12 @@ async function loadApplications() {
   // Build query params for super admin filters
   const params = new URLSearchParams();
   if (currentAdmin && currentAdmin.role === 'super_admin') {
-    const ac = document.getElementById('filterAdminCode')?.value.trim();
+    const ac = document.getElementById('filterCsCode')?.value.trim();
     const st = document.getElementById('filterStatus')?.value;
     const uid = document.getElementById('filterUserId')?.value.trim();
     const sd = document.getElementById('filterStart')?.value;
     const ed = document.getElementById('filterEnd')?.value;
-    if (ac) params.append('admin_code', ac);
+    if (ac) params.append('cs_code', ac);
     if (st) params.append('status', st);
     if (uid) params.append('userId', uid);
     if (sd) params.append('start', sd);
@@ -327,7 +335,7 @@ async function loadApplications() {
     <tr class="table-row hover:bg-slate-50 dark:hover:bg-slate-800/30">
       <td class="px-4 py-3 font-semibold text-slate-700">#${a.id}</td>
       <td class="px-4 py-3 text-slate-700">${a.full_name}<div class="text-xs text-slate-400">${a.phone}</div></td>
-      <td class="px-4 py-3 text-slate-700 font-mono text-sm">${a.admin_code || a.la_admin_code || '-'}</td>
+       <td class="px-4 py-3 text-slate-700 font-mono text-sm">${a.cs_code || a.la_cs_code || '-'}</td>
       <td class="px-4 py-3 text-slate-700">${formatRupiah(a.amount)}</td>
       <td class="px-4 py-3 text-slate-700">${a.tenor} bulan</td>
       <td class="px-4 py-3 text-slate-500 text-sm">${a.purpose}</td>
@@ -371,7 +379,7 @@ async function viewApp(id) {
         </div>
       </div>
     </div>
-    ${a.admin_code ? `<div class="bg-amber-50 rounded-xl p-4 text-sm"><b>Kode Admin:</b> ${a.admin_code} | <b>Nama Admin:</b> ${a.admin_name || '-'}</div>` : ''}
+    ${a.cs_code ? `<div class="bg-amber-50 rounded-xl p-4 text-sm"><b>Kode CS:</b> ${a.cs_code} | <b>Nama CS:</b> ${a.cs_name || '-'}</div>` : ''}
     ${a.admin_note ? `<div class="bg-amber-50 rounded-xl p-4 text-sm"><b>Catatan Admin:</b> ${a.admin_note}</div>` : ''}
     <div>
       <label class="block text-sm font-semibold text-slate-700 mb-2">${I18N.t('admin.addNote')}</label>
@@ -699,3 +707,61 @@ const AdminSync = (() => {
 
   return { notifyDataChanged };
 })();
+
+// ============================================
+// CS CODE MANAGEMENT
+// ============================================
+async function loadCsCodes() {
+  const tbody = document.getElementById('csTable');
+  if (!tbody) return;
+  tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-400">Memuat...</td></tr>`;
+  const res = await api('/admin/cs-codes');
+  if (!res.success || !res.data) { tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-400">Gagal memuat</td></tr>`; return; }
+  tbody.innerHTML = res.data.map((a) => `
+    <tr class="table-row hover:bg-slate-50">
+      <td class="px-4 py-3 font-mono text-sm text-slate-700">${a.cs_code || '-'}</td>
+      <td class="px-4 py-3 text-slate-700">${a.full_name || '-'}</td>
+      <td class="px-4 py-3 text-slate-500 text-sm">${a.email || '-'}</td>
+      <td class="px-4 py-3">${a.role === 'super_admin' ? 'Super Admin' : 'Admin'}</td>
+      <td class="px-4 py-3">${a.status === 'active' ? '<span class="badge badge-active">Aktif</span>' : '<span class="badge badge-inactive">Nonaktif</span>'}</td>
+      <td class="px-4 py-3">
+        <button onclick="editCsCode(${a.id})" class="text-blue-600 hover:bg-blue-50 p-1 rounded" title="Edit"><i class="fas fa-pen"></i></button>
+        <button onclick="deleteCsCode(${a.id})" class="text-red-600 hover:bg-red-50 p-1 rounded" title="Hapus"><i class="fas fa-trash"></i></button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+async function editCsCode(id) {
+  const res = await api(`/admin/cs-codes/${id}`);
+  if (!res.success) return showToast(res.message || 'Gagal memuat', 'error');
+  const a = res.data;
+  const name = await promptAsync('Nama Lengkap', a.full_name || '');
+  if (name === null) return;
+  const status = confirm('Status nonaktif? OK=nonaktif, Cancel=aktif') ? 'inactive' : 'active';
+  const r = await api(`/admin/cs-codes/${id}`, { method: 'PUT', body: { fullName: name, status } });
+  if (r.success) { showToast(I18N.t('admin.csUpdated'), 'success'); await loadCsCodes(); }
+  else showToast(r.message || 'Gagal memperbarui', 'error');
+}
+
+async function deleteCsCode(id) {
+  const ok = await alertConfirm('Konfirmasi', 'Hapus kode CS ini? (hanya untuk pengguna non-super-admin)');
+  if (!ok) return;
+  const res = await api(`/admin/cs-codes/${id}`, { method: 'DELETE' });
+  if (res.success) { showToast(I18N.t('admin.csDeleted'), 'success'); await loadCsCodes(); }
+  else showToast(res.message || 'Gagal menghapus', 'error');
+}
+
+document.getElementById('btnCreateCs')?.addEventListener('click', async () => {
+  const username = await promptAsync('Username', 'cs01');
+  if (!username) return;
+  const email = await promptAsync('Email', 'cs01@smartfund.id');
+  if (!email) return;
+  const password = await promptAsync('Password', 'Password123');
+  if (!password) return;
+  const fullName = await promptAsync('Nama Lengkap', 'CS 01');
+  if (!fullName) return;
+  const res = await api('/admin/cs-codes', { method: 'POST', body: { username, email, password, fullName } });
+  if (res.success) { showToast(I18N.t('admin.csCreated') + ` (CS: ${res.data.cs_code})`, 'success'); await loadCsCodes(); }
+  else showToast(res.message || 'Gagal membuat', 'error');
+});
