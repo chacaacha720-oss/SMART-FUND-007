@@ -150,8 +150,8 @@
     "f1": "Proses pendaftaran pantas",
     "f2": "Auto log masuk selepas daftar",
     "f3": "Akses dashboard lengkap",
-    "adminCode": "Kod Admin",
-    "adminCodeHint": "Masukkan kod admin pendaftaran anda"
+    "csCode": "Kod CS",
+    "csCodeHint": "Masukkan kod CS pendaftaran anda"
   },
   "forgot": {
     "title": "Lupa Kata Laluan",
@@ -260,11 +260,11 @@
     "save": "Simpan",
     "cancel": "Batal",
     "close": "Tutup",
-    "adminCode": "Kod Admin",
-    "adminName": "Nama Admin",
-    "noAdminCode": "Anda belum berdaftar dengan kod admin. Hubungi admin untuk mendapatkan kod pendaftaran.",
-    "adminCodeLabel": "Kod Admin",
-    "adminCodeHint": "Masukkan kod admin pendaftaran anda"
+    "csCode": "Kod CS",
+    "csName": "Nama CS",
+    "noCsCode": "Anda belum mempunyai kod CS",
+    "csCodeLabel": "Kod CS",
+    "csCodeHint": "Masukkan kod CS pendaftaran anda"
   },
   "status": {
     "pending": "Menunggu",
@@ -290,8 +290,8 @@
     "otpRequired": "OTP mesti 6 digit",
     "minWithdraw": "Jumlah pengeluaran minimum RM 100",
     "withdrawRequired": "Semua data akaun diperlukan",
-    "adminCodeRequired": "Kod admin diperlukan",
-    "adminCodeInvalid": "Format kod admin tidak sah"
+    "csCodeRequired": "Kod CS diperlukan",
+    "csCodeInvalid": "Format kod CS tidak sah"
   },
   "notif": {
     "loginSuccess": "Log masuk berjaya! Mengalihkan...",

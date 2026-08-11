@@ -142,8 +142,8 @@ const I18N = {
       'register.f1': 'Proses registrasi cepat',
       'register.f2': 'Otomatis login setelah daftar',
       'register.f3': 'Akses dashboard lengkap',
-      'register.adminCode': 'Kode Admin',
-      'register.adminCodeHint': 'Masukkan kode admin pendaftaran Anda',
+      'register.csCode': 'Kode CS',
+      'register.csCodeHint': 'Masukkan kode CS pendaftaran Anda',
 
       // ===== FORGOT PASSWORD =====
       'forgot.title': 'Lupa Password',
@@ -271,11 +271,11 @@ const I18N = {
       'admin.save': 'Simpan',
       'admin.cancel': 'Batal',
       'admin.close': 'Tutup',
-      'admin.adminCode': 'Kode Admin',
-      'admin.adminName': 'Nama Admin',
-      'admin.noAdminCode': 'Anda belum terdaftar dengan kode admin. Hubungi admin untuk mendapatkan kode pendaftaran.',
-      'admin.adminCodeLabel': 'Kode Admin',
-      'admin.adminCodeHint': 'Masukkan kode admin pendaftaran Anda',
+      'admin.csCode': 'Kode CS',
+      'admin.csName': 'Nama CS',
+      'admin.noCsCode': 'Anda belum terdaftar dengan kode CS. Hubungi admin untuk mendapatkan kode pendaftaran.',
+      'admin.csCodeLabel': 'Kode CS',
+      'admin.csCodeHint': 'Masukkan kode CS pendaftaran Anda',
 
       // ===== STATUS LABELS =====
       'status.pending': 'Menunggu',
@@ -285,6 +285,20 @@ const I18N = {
       'status.completed': 'Lunas',
       'status.active': 'Aktif',
       'status.frozen': 'Dibekukan',
+
+      // ===== CS CODE =====
+      'cs.title': 'Kode CS',
+      'cs.myCode': 'Kode CS Anda',
+      'cs.placeholder': 'Masukkan kode CS',
+      'cs.copySuccess': 'Berhasil menyalin kode CS',
+      'cs.noCsCode': 'Anda belum memiliki kode CS',
+      'admin.csManagement': 'Kelola Kode CS',
+      'admin.csList': 'Daftar Kode CS',
+      'admin.csCreated': 'Kode CS berhasil dibuat',
+      'admin.csUpdated': 'Kode CS berhasil diperbarui',
+      'admin.csDeleted': 'Kode CS berhasil dihapus',
+      'admin.csNotFound': 'Kode CS tidak ditemukan',
+      'admin.superAdminOnly': 'Hanya Super Admin yang dapat melakukan ini',
 
       // ===== VALIDATION =====
       'val.required': 'wajib diisi',
@@ -301,8 +315,8 @@ const I18N = {
       'val.otpRequired': 'OTP harus 6 digit',
       'val.minWithdraw': 'Nominal penarikan minimal Rp 100.000',
       'val.withdrawRequired': 'Semua data rekening wajib diisi',
-      'val.adminCodeRequired': 'Kode admin wajib diisi',
-      'val.adminCodeInvalid': 'Format kode admin tidak valid',
+      'val.csCodeRequired': 'Kode CS wajib diisi',
+      'val.csCodeInvalid': 'Format kode CS tidak valid',
 
       // ===== NOTIFICATIONS =====
       'notif.loginSuccess': 'Login berhasil! Mengalihkan...',
@@ -490,7 +504,7 @@ const I18N = {
       'register.f2': 'Auto log masuk selepas daftar',
       'register.f3': 'Akses dashboard lengkap',
       'register.adminCode': 'Kod Admin',
-      'register.adminCodeHint': 'Masukkan kod admin pendaftaran anda',
+      'register.csCodeHint': 'Masukkan kod CS pendaftaran anda',
 
       // ===== FORGOT PASSWORD =====
       'forgot.title': 'Lupa Kata Laluan',
@@ -600,10 +614,24 @@ const I18N = {
       'admin.cancel': 'Batal',
       'admin.close': 'Tutup',
       'admin.adminCode': 'Kod Admin',
-      'admin.adminName': 'Nama Admin',
-      'admin.noAdminCode': 'Anda belum berdaftar dengan kod admin. Hubungi admin untuk mendapatkan kod pendaftaran.',
+      'admin.csName': 'Nama CS',
+      'admin.noCsCode': 'Anda belum berdaftar dengan kod CS. Hubungi admin untuk mendapatkan kod pendaftaran.',
       'admin.adminCodeLabel': 'Kod Admin',
-      'admin.adminCodeHint': 'Masukkan kod admin pendaftaran anda',
+      'admin.csCodeHint': 'Masukkan kod CS pendaftaran anda',
+
+      // ===== CS CODE =====
+      'cs.title': 'Kode CS',
+      'cs.myCode': 'Kode CS Anda',
+      'cs.placeholder': 'Masukkan kode CS',
+      'cs.copySuccess': 'Berhasil menyalin kode CS',
+      'cs.noCsCode': 'Anda belum memiliki kode CS',
+      'admin.csManagement': 'Kelola Kode CS',
+      'admin.csList': 'Daftar Kode CS',
+      'admin.csCreated': 'Kode CS berhasil dibuat',
+      'admin.csUpdated': 'Kode CS berhasil diperbarui',
+      'admin.csDeleted': 'Kode CS berhasil dihapus',
+      'admin.csNotFound': 'Kode CS tidak ditemukan',
+      'admin.superAdminOnly': 'Hanya Super Admin yang dapat melakukan ini',
 
       // ===== VALIDATION =====
       'val.required': 'wajib diisi',
@@ -620,8 +648,8 @@ const I18N = {
       'val.otpRequired': 'OTP mesti 6 digit',
       'val.minWithdraw': 'Jumlah pengeluaran minimum RM 100',
       'val.withdrawRequired': 'Semua data akaun diperlukan',
-      'val.adminCodeRequired': 'Kod admin diperlukan',
-      'val.adminCodeInvalid': 'Format kod admin tidak sah',
+      'val.csCodeRequired': 'Kod CS diperlukan',
+      'val.csCodeInvalid': 'Format kod CS tidak sah',
 
       // ===== NOTIFICATIONS =====
       'notif.loginSuccess': 'Log masuk berjaya! Mengalihkan...',
@@ -809,7 +837,7 @@ const I18N = {
       'register.f2': 'Auto login after registration',
       'register.f3': 'Full dashboard access',
       'register.adminCode': 'Admin Code',
-      'register.adminCodeHint': 'Enter your admin registration code',
+      'register.csCodeHint': 'Enter your CS registration code',
 
       // ===== FORGOT PASSWORD =====
       'forgot.title': 'Forgot Password',
@@ -915,13 +943,27 @@ const I18N = {
       'admin.notePlaceholder': 'Note for this application...',
       'admin.adminCode': 'Admin Code',
       'admin.adminName': 'Admin Name',
-      'admin.noAdminCode': 'You are not registered with an admin code. Please contact admin to get a registration code.',
+      'admin.noCsCode': 'You are not registered with a CS code. Please contact admin to get a registration code.',
       'admin.adminCodeLabel': 'Admin Code',
-      'admin.adminCodeHint': 'Enter your admin registration code',
+      'admin.csCodeHint': 'Enter your CS registration code',
+
+      // ===== CS CODE =====
+      'cs.title': 'Kode CS',
+      'cs.myCode': 'Kode CS Anda',
+      'cs.placeholder': 'Masukkan kode CS',
+      'cs.copySuccess': 'Berhasil menyalin kode CS',
+      'cs.noCsCode': 'Anda belum memiliki kode CS',
+      'admin.csManagement': 'Kelola Kode CS',
+      'admin.csList': 'Daftar Kode CS',
+      'admin.csCreated': 'Kode CS berhasil dibuat',
+      'admin.csUpdated': 'Kode CS berhasil diperbarui',
+      'admin.csDeleted': 'Kode CS berhasil dihapus',
+      'admin.csNotFound': 'Kode CS tidak ditemukan',
+      'admin.superAdminOnly': 'Hanya Super Admin yang dapat melakukan ini',
 
       // ===== VALIDATION =====
-      'val.adminCodeRequired': 'Admin code is required',
-      'val.adminCodeInvalid': 'Invalid admin code format',
+      'val.csCodeRequired': 'CS code is required',
+      'val.csCodeInvalid': 'Invalid CS code format',
       'admin.confirmDelete': 'Delete User?',
       'admin.confirmDeleteText': 'User and all related data will be permanently deleted.',
       'admin.save': 'Save',
@@ -929,9 +971,9 @@ const I18N = {
       'admin.close': 'Close',
       'admin.adminCode': 'Admin Code',
       'admin.adminName': 'Admin Name',
-      'admin.noAdminCode': 'You are not registered with an admin code. Please contact admin to get a registration code.',
+      'admin.noCsCode': 'You are not registered with a CS code. Please contact admin to get a registration code.',
       'admin.adminCodeLabel': 'Admin Code',
-      'admin.adminCodeHint': 'Enter your admin registration code',
+      'admin.csCodeHint': 'Enter your CS registration code',
       'admin.adjustmentNote': (username) => `Balance adjustment by admin ${username}`,
       'admin.addition': 'Addition',
       'admin.reduction': 'Reduction',
@@ -944,6 +986,20 @@ const I18N = {
       'status.completed': 'Paid Off',
       'status.active': 'Active',
       'status.frozen': 'Frozen',
+
+      // ===== CS CODE =====
+      'cs.title': 'Kode CS',
+      'cs.myCode': 'Kode CS Anda',
+      'cs.placeholder': 'Masukkan kode CS',
+      'cs.copySuccess': 'Berhasil menyalin kode CS',
+      'cs.noCsCode': 'Anda belum memiliki kode CS',
+      'admin.csManagement': 'Kelola Kode CS',
+      'admin.csList': 'Daftar Kode CS',
+      'admin.csCreated': 'Kode CS berhasil dibuat',
+      'admin.csUpdated': 'Kode CS berhasil diperbarui',
+      'admin.csDeleted': 'Kode CS berhasil dihapus',
+      'admin.csNotFound': 'Kode CS tidak ditemukan',
+      'admin.superAdminOnly': 'Hanya Super Admin yang dapat melakukan ini',
 
       // ===== VALIDATION =====
       'val.required': 'is required',
@@ -960,8 +1016,8 @@ const I18N = {
       'val.otpRequired': 'OTP must be 6 digits',
       'val.minWithdraw': 'Minimum withdrawal amount $100',
       'val.withdrawRequired': 'All bank account data is required',
-      'val.adminCodeRequired': 'Admin code is required',
-      'val.adminCodeInvalid': 'Invalid admin code format',
+      'val.csCodeRequired': 'CS code is required',
+      'val.csCodeInvalid': 'Invalid CS code format',
 
       // ===== NOTIFICATIONS =====
       'notif.loginSuccess': 'Login successful! Redirecting...',

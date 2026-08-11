@@ -70,8 +70,9 @@
           <a class="admin-link" data-page="users"><i class="fas fa-users w-5"></i> Data User</a>
           <a class="admin-link" data-page="applications"><i class="fas fa-file-circle-check w-5"></i> Pengajuan</a>
           <a class="admin-link" data-page="transactions"><i class="fas fa-receipt w-5"></i> Transaksi</a>
-          <a class="admin-link" data-page="withdrawals"><i class="fas fa-money-bill-wave w-5"></i> Penarikan Dana</a>
-          <a class="admin-link" data-page="telegram"><i class="fab fa-telegram w-5"></i> Pengaturan Telegram</a>
+           <a class="admin-link" data-page="withdrawals"><i class="fas fa-money-bill-wave w-5"></i> Penarikan Dana</a>
+           <a class="admin-link super-admin-only" data-page="cs-codes"><i class="fas fa-key w-5"></i> Kelola Kode CS</a>
+           <a class="admin-link" data-page="telegram"><i class="fab fa-telegram w-5"></i> Pengaturan Telegram</a>
           <a class="admin-link" data-page="settings"><i class="fas fa-gear w-5"></i> Setting Website</a>
         </nav>
         <div class="p-4 border-t border-slate-700">
@@ -178,7 +179,7 @@
             <!-- Super Admin Filters -->
             <div id="appFilters" class="hidden bg-white rounded-2xl p-4 border border-slate-100 shadow-sm mb-4">
               <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
-                <input type="text" id="filterAdminCode" class="form-input text-sm" placeholder="Kode Admin (ADM001)" />
+                <input type="text" id="filterCsCode" class="form-input text-sm" placeholder="Kode CS (CS01)" />
                 <select id="filterStatus" class="form-select text-sm">
                   <option value="">Semua Status</option>
                   <option value="pending">Menunggu</option>
@@ -200,7 +201,7 @@
                     <tr>
                       <th>ID</th>
                       <th>Nama</th>
-                      <th>Kode Admin</th>
+                      <th>Kode CS</th>
                       <th>Jumlah</th>
                       <th>Tenor</th>
                       <th>Tujuan</th>
@@ -269,6 +270,35 @@
                   </thead>
                   <tbody id="withdrawTable">
                     <tr><td colspan="8" class="text-center py-8 text-slate-400">Memuat...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- CS CODES -->
+          <section id="apage-cs-codes" class="admin-content hidden">
+            <h2 class="text-2xl font-extrabold text-slate-900 mb-6">Kelola Kode CS</h2>
+            <div class="flex gap-3 mb-4">
+              <button id="btnCreateCs" class="btn btn-primary text-sm">
+                <i class="fas fa-plus mr-2"></i>Buat Kode CS
+              </button>
+            </div>
+            <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Kode CS</th>
+                      <th>Nama</th>
+                      <th>Email</th>
+                      <th>Role</th>
+                      <th>Status</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody id="csTable">
+                    <tr><td colspan="6" class="text-center py-8 text-slate-400">Memuat...</td></tr>
                   </tbody>
                 </table>
               </div>

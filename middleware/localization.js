@@ -8,7 +8,7 @@
  *  2. Cookie (lang cookie)
  *  3. Local Storage (handled client-side, communicated via X-Lang header)
  *  4. Browser Language (Accept-Language header)
-   * Default: 'ms' (Bahasa Malaysia)
+   * Default: 'id' (Bahasa Indonesia)
    *
    * Attaches to request:
    *  - req.lang       -> language code (id | ms | en)
@@ -26,7 +26,7 @@ const { detectLang, t, getLocaleConfig, formatCurrency, formatNumber, formatDate
 
 /**
  * Resolve the active language for a request.
-   * Priority: query ?lang= > X-Lang header > cookie > Accept-Language > default 'ms'
+    * Priority: query ?lang= > X-Lang header > cookie > Accept-Language > default 'id'
    */
 function resolveLanguage(req) {
   // 1. Explicit query parameter (?lang=en)
@@ -41,26 +41,26 @@ function resolveLanguage(req) {
     if (['id', 'ms', 'en'].includes(h)) return h;
   }
 
-  // 3. Cookie (lang=ms)
-  if (req.headers && req.headers.cookie) {
-    const match = req.headers.cookie.match(/(?:^|;\s*)lang=(id|ms|en)\b/i);
-    if (match) return match[1].toLowerCase();
-  }
+   // 3. Cookie (lang=id)
+   if (req.headers && req.headers.cookie) {
+     const match = req.headers.cookie.match(/(?:^|;\s*)lang=(id|ms|en)\b/i);
+     if (match) return match[1].toLowerCase();
+   }
 
-  // 4. Accept-Language header
-  if (req.headers && req.headers['accept-language']) {
-    const primary = req.headers['accept-language'].split(',')[0].split('-')[0].split(';')[0].trim().toLowerCase();
-    if (['id', 'ms', 'en'].includes(primary)) return primary;
-  }
+   // 4. Accept-Language header
+   if (req.headers && req.headers['accept-language']) {
+     const primary = req.headers['accept-language'].split(',')[0].split('-')[0].split(';')[0].trim().toLowerCase();
+     if (['id', 'ms', 'en'].includes(primary)) return primary;
+   }
 
-  // 5. Default
-  return 'ms';
+   // 5. Default
+   return 'id';
 }
 
 /**
  * Localization middleware - attach locale/currency/formatters to req
  * Also wraps res.json() to include locale/currency in every API response:
-   *   { locale: 'ms-MY', currency: 'MYR', ...originalResponse }
+    *   { locale: 'id-ID', currency: 'IDR', ...originalResponse }
    */
 function localizationMiddleware(req, res, next) {
   const lang = resolveLanguage(req);

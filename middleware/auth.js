@@ -17,7 +17,7 @@ if (process.env.NODE_ENV === 'production' && JWT_SECRET === 'dev_jwt_secret_not_
  * Verifikasi JWT token user (Bearer token)
  */
 async function authUser(req, res, next) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   try {
     const header = req.headers.authorization;
     if (!header || !header.startsWith('Bearer ')) {
@@ -30,7 +30,7 @@ async function authUser(req, res, next) {
       return res.status(403).json({ success: false, message: t(lang, 'auth.notUser') });
     }
 
-    const [rows] = await db.query('SELECT id, full_name, email, phone, status, admin_id FROM users WHERE id = ?', [decoded.id]);
+          const [rows] = await db.query('SELECT id, full_name, email, phone, status, cs_id FROM users WHERE id = ?', [decoded.id]);
     if (rows.length === 0) {
       return res.status(401).json({ success: false, message: t(lang, 'auth.userNotFound') });
     }
@@ -49,7 +49,7 @@ async function authUser(req, res, next) {
  * Verifikasi JWT token admin
  */
 async function authAdmin(req, res, next) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   try {
     const header = req.headers.authorization;
     if (!header || !header.startsWith('Bearer ')) {
@@ -62,7 +62,7 @@ async function authAdmin(req, res, next) {
       return res.status(403).json({ success: false, message: t(lang, 'auth.notAdmin') });
     }
 
-    const [rows] = await db.query('SELECT id, username, email, full_name, role, admin_code, status FROM admins WHERE id = ?', [decoded.id]);
+    const [rows] = await db.query('SELECT id, username, email, full_name, role, cs_code, status FROM admins WHERE id = ?', [decoded.id]);
     if (rows.length === 0) {
       return res.status(401).json({ success: false, message: t(lang, 'auth.adminNotFound') });
     }
@@ -86,7 +86,7 @@ async function optionalAuth(req, res, next) {
       const token = header.split(' ')[1];
       const decoded = jwt.verify(token, JWT_SECRET);
       if (decoded.role === 'user') {
-         const [rows] = await db.query('SELECT id, full_name, email, phone, status, admin_id FROM users WHERE id = ?', [decoded.id]);
+    const [rows] = await db.query('SELECT id, full_name, email, phone, status, cs_id FROM users WHERE id = ?', [decoded.id]);
          if (rows.length > 0 && rows[0].status !== 'frozen') req.user = rows[0];
       }
     }

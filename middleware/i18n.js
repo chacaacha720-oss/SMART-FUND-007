@@ -7,7 +7,7 @@
  * 2. Cookie (lang=ms)
  * 3. Custom X-Lang header (sent by frontend from localStorage)
  * 4. Accept-Language header
- * 5. Default: 'ms' (Bahasa Malaysia)
+ * 5. Default: 'id' (Bahasa Indonesia)
  *
  * Attaches to request:
  *  - req.lang       -> language code (id | ms | en)

@@ -42,8 +42,8 @@ function isStrongPassword(password) {
  * Validasi registrasi user
  */
 function validateRegister(req, res, next) {
-  const lang = req.lang || 'ms';
-  const { fullName, email, phone, password, confirmPassword } = req.body;
+  const lang = req.lang || 'id';
+    const { fullName, email, phone, password, confirmPassword, csCode } = req.body;
   const errors = [];
 
   if (!fullName || validator.isEmpty(fullName.trim())) errors.push(t(lang, 'val.nameRequired'));
@@ -54,10 +54,10 @@ function validateRegister(req, res, next) {
     if (!password || !isStrongPassword(password)) errors.push(t(lang, 'val.passwordWeak'));
     if (password !== confirmPassword) errors.push(t(lang, 'val.passwordMatch'));
 
-    // Validate admin code if provided (optional during registration step 1, required at step 2)
-    if (req.body.adminCode !== undefined) {
-      const adminCode = (req.body.adminCode || '').trim();
-      if (adminCode && !/^ADM\d{3}$/.test(adminCode)) errors.push(t(lang, 'val.adminCodeInvalid'));
+    // Validate CS code if provided
+    if (csCode !== undefined) {
+      const code = (csCode || '').trim();
+      if (code && !/^CS\d{2}$/.test(code)) errors.push(t(lang, 'val.csCodeInvalid'));
     }
 
   if (errors.length) return res.status(400).json({ success: false, message: errors[0], errors });
@@ -68,7 +68,7 @@ function validateRegister(req, res, next) {
  * Validasi login
  */
 function validateLogin(req, res, next) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   const { identifier, password } = req.body;
   const errors = [];
   if (!identifier || validator.isEmpty(identifier.trim())) errors.push(t(lang, 'val.identifierRequired'));
@@ -81,7 +81,7 @@ function validateLogin(req, res, next) {
  * Validasi pengajuan pinjaman
  */
 function validateLoanApplication(req, res, next) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   const { amount, tenor, purpose } = req.body;
   const errors = [];
 

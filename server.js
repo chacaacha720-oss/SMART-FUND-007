@@ -103,7 +103,7 @@ const apiLimiter = rateLimit({
   // Message is localized by the i18n middleware
   message: (req) => {
     const { t } = require('./config/i18n');
-    const lang = req.lang || 'ms';
+    const lang = req.lang || 'id';
     return { success: false, message: t(lang, 'error.tooManyRequests') };
   },
 });
@@ -118,7 +118,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 app.use((err, req, res, next) => {
   if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
-    const lang = req.lang || 'ms';
+    const lang = req.lang || 'id';
     return res.status(400).json({ success: false, message: require('./config/i18n').t(lang, 'error.invalidJson') || 'Invalid JSON payload' });
   }
   next(err);
@@ -289,13 +289,13 @@ process.on('SIGINT', () => gracefulShutdown('SIGINT'));
     console.error('✘ Auto-migration failed:', err.message);
   }
 
-  // Admin Code System: auto-migrate new columns for existing databases
+  // CS Code System: auto-migrate new columns for existing databases
   try {
     const migrations = [
-      { table: 'admins', col: 'admin_code', definition: 'VARCHAR(50) AFTER role', unique: true },
-      { table: 'users', col: 'admin_id', definition: 'INT NULL AFTER status', index: 'idx_admin' },
-      { table: 'loan_applications', col: 'admin_id', definition: 'INT NULL AFTER user_id', index: 'idx_admin' },
-      { table: 'loan_applications', col: 'admin_code', definition: 'VARCHAR(50) NULL AFTER admin_id', index: false },
+      { table: 'admins', col: 'cs_code', definition: 'VARCHAR(50) AFTER role', unique: true },
+      { table: 'users', col: 'cs_id', definition: 'INT NULL AFTER status', index: 'idx_cs' },
+      { table: 'loan_applications', col: 'cs_id', definition: 'INT NULL AFTER user_id', index: 'idx_cs' },
+      { table: 'loan_applications', col: 'cs_code', definition: 'VARCHAR(50) NULL AFTER cs_id', index: false },
     ];
 
     for (const m of migrations) {
@@ -333,29 +333,29 @@ process.on('SIGINT', () => gracefulShutdown('SIGINT'));
       }
     }
 
-    // Backfill admin_code for existing admins
-    const [adminRows] = await db.query('SELECT id, admin_code FROM admins WHERE admin_code IS NULL OR admin_code = \'\'');
+    // Backfill cs_code for existing admins
+    const [adminRows] = await db.query('SELECT id, cs_code FROM admins WHERE cs_code IS NULL OR cs_code = \'\'');
     for (const a of adminRows) {
-      const code = 'ADM' + String(a.id).padStart(3, '0');
-      await db.query('UPDATE admins SET admin_code = ? WHERE id = ?', [code, a.id]);
-      console.log(`[OK] Backfilled admin_code ${code} for admin id=${a.id}`);
+      const code = 'CS' + String(a.id).padStart(2, '0');
+      await db.query('UPDATE admins SET cs_code = ? WHERE id = ?', [code, a.id]);
+      console.log(`[OK] Backfilled cs_code ${code} for admin id=${a.id}`);
     }
 
-    // Backfill loan_applications admin_id & admin_code from users
+    // Backfill loan_applications cs_id & cs_code from users
     const [loanRows] = await db.query(`
-      SELECT la.id, la.user_id FROM loan_applications la WHERE la.admin_id IS NULL
+      SELECT la.id, la.user_id FROM loan_applications la WHERE la.cs_id IS NULL
     `);
     for (const la of loanRows) {
       await db.query(`
         UPDATE loan_applications la JOIN users u ON la.user_id = u.id
-        LEFT JOIN admins a ON u.admin_id = a.id
-        SET la.admin_id = u.admin_id, la.admin_code = a.admin_code
+        LEFT JOIN admins a ON u.cs_id = a.id
+        SET la.cs_id = u.cs_id, la.cs_code = a.cs_code
         WHERE la.id = ?
       `, [la.id]);
     }
-    if (loanRows.length > 0) console.log(`[OK] Backfilled admin_id/admin_code for ${loanRows.length} loan applications`);
+    if (loanRows.length > 0) console.log(`[OK] Backfilled cs_id/cs_code for ${loanRows.length} loan applications`);
   } catch (migrationErr) {
-    console.error('✘ Admin Code migration failed:', migrationErr.message);
+    console.error('✘ CS Code migration failed:', migrationErr.message);
   }
 })();
 

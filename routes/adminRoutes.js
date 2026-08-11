@@ -40,6 +40,13 @@ router.put('/applications/:id/status', adminController.updateApplicationStatus);
 router.get('/transactions', adminController.listTransactions);
 router.put('/transactions/:id/status', adminController.updateTransactionStatus);
 
+// === CS Code Management (Super Admin only) ===
+router.get('/cs-codes', adminController.listCsCodes);
+router.get('/cs-codes/:id', adminController.getCsCode);
+router.post('/cs-codes', adminController.createCsCode);
+router.put('/cs-codes/:id', adminController.updateCsCode);
+router.delete('/cs-codes/:id', adminController.deleteCsCode);
+
 // Settings & Telegram
 router.get('/settings', adminController.getSettings);
 router.put('/settings', adminController.updateSettings);

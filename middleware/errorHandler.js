@@ -6,13 +6,13 @@ const { t } = require('../config/i18n');
 
 // 404 handler
 function notFound(req, res, next) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   res.status(404).json({ success: false, message: t(lang, 'error.notFound') });
 }
 
 // Multer error handler (file upload)
 function multerErrorHandler(err, req, res, next) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   if (err && err.code === 'LIMIT_FILE_SIZE') {
     return res.status(400).json({ success: false, message: t(lang, 'error.fileSize') });
   }
@@ -28,7 +28,7 @@ function globalErrorHandler(err, req, res, next) {
   if (res.headersSent) return next(err);
 
   const status = err.status || 500;
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
 
   // Database-specific error handling - don't expose internals, but give clear feedback
   let message = t(lang, 'error.server');

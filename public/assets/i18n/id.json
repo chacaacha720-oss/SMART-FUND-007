@@ -150,8 +150,8 @@
     "f1": "Proses registrasi cepat",
     "f2": "Otomatis login setelah daftar",
     "f3": "Akses dashboard lengkap",
-    "adminCode": "Kode Admin",
-    "adminCodeHint": "Masukkan kode admin pendaftaran Anda"
+    "csCode": "Kode CS",
+    "csCodeHint": "Masukkan kode CS pendaftaran Anda"
   },
   "forgot": {
     "title": "Lupa Password",
@@ -260,11 +260,11 @@
     "save": "Simpan",
     "cancel": "Batal",
     "close": "Tutup",
-    "adminCode": "Kode Admin",
-    "adminName": "Nama Admin",
-    "noAdminCode": "Anda belum terdaftar dengan kode admin. Hubungi admin untuk mendapatkan kode pendaftaran.",
-    "adminCodeLabel": "Kode Admin",
-    "adminCodeHint": "Masukkan kode admin pendaftaran Anda"
+    "csCode": "Kode CS",
+    "csName": "Nama CS",
+    "noCsCode": "Anda belum memiliki kode CS",
+    "csCodeLabel": "Kode CS",
+    "csCodeHint": "Masukkan kode CS pendaftaran Anda"
   },
   "status": {
     "pending": "Menunggu",
@@ -290,8 +290,8 @@
     "otpRequired": "OTP harus 6 digit",
     "minWithdraw": "Nominal penarikan minimal Rp 100.000",
     "withdrawRequired": "Semua data rekening wajib diisi",
-    "adminCodeRequired": "Kode admin wajib diisi",
-    "adminCodeInvalid": "Format kode admin tidak valid"
+    "csCodeRequired": "Kode CS wajib diisi",
+    "csCodeInvalid": "Format kode CS tidak valid"
   },
   "notif": {
     "loginSuccess": "Login berhasil! Mengalihkan...",

@@ -12,13 +12,13 @@ const { t, formatCurrency, formatDate, formatDateTime } = require('../config/i18
  * Ringkasan dashboard user
  */
 async function dashboard(req, res) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   try {
     const userId = req.user.id;
 
     // Data user
     const [userRows] = await db.query(
-      'SELECT u.id, u.full_name, u.email, u.phone, u.balance, u.loan_limit, u.status, u.created_at, u.admin_id, a.admin_code as admin_kode, a.full_name as admin_name FROM users u LEFT JOIN admins a ON u.admin_id = a.id WHERE u.id = ?',
+      'SELECT u.id, u.full_name, u.email, u.phone, u.balance, u.loan_limit, u.status, u.created_at, u.cs_id, a.cs_code as cs_kode, a.full_name as cs_name FROM users u LEFT JOIN admins a ON u.cs_id = a.id WHERE u.id = ?',
       [userId]
     );
     if (userRows.length === 0) return res.status(404).json({ success: false, message: t(lang, 'user.notFound') });
@@ -61,8 +61,8 @@ async function dashboard(req, res) {
         statusPengajuan: lastApp.length ? lastApp[0] : null,
         riwayatTransaksi: transactions,
         unreadNotifications: unreadNotif[0].cnt,
-        admin_code: user.admin_kode,
-        admin_name: user.admin_name,
+        cs_code: user.cs_kode,
+        cs_name: user.cs_name,
       },
     });
   } catch (err) {
@@ -76,7 +76,7 @@ async function dashboard(req, res) {
  * Semua transaksi user
  */
 async function createWithdrawal(req, res) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   try {
     const amount = Number(req.body.amount);
     const bankName = sanitize((req.body.bankName || '').trim());
@@ -158,7 +158,7 @@ Nombor Akaun: ${accountNumber}
 }
 
 async function transactions(req, res) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   try {
     const [rows] = await db.query(
       `SELECT id, loan_id, type, amount, status, description, admin_note, created_at
@@ -177,7 +177,7 @@ async function transactions(req, res) {
  * Notifikasi user
  */
 async function notifications(req, res) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   try {
     const [rows] = await db.query(
       `SELECT id, title, message, type, is_read, created_at FROM notifications WHERE user_id = ? ORDER BY created_at DESC`,
@@ -195,7 +195,7 @@ async function notifications(req, res) {
  * Tandai notifikasi dibaca
  */
 async function readNotification(req, res) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   try {
     await db.query('UPDATE notifications SET is_read = 1 WHERE id = ? AND user_id = ?', [req.params.id, req.user.id]);
     return res.json({ success: true, message: t(lang, 'user.notifRead') });
@@ -210,7 +210,7 @@ async function readNotification(req, res) {
  * Update profil user
  */
 async function updateProfile(req, res) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   try {
     const { fullName, phone, nik, address, job, incomeRange } = req.body;
     const updates = [];
@@ -240,7 +240,7 @@ async function updateProfile(req, res) {
  * Pengaturan akun (ganti password)
  */
 async function updateSettings(req, res) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   try {
     const { currentPassword, newPassword } = req.body;
     if (!currentPassword || !newPassword) {
@@ -270,7 +270,7 @@ async function updateSettings(req, res) {
  * Upload KTP / dokumen
  */
 async function uploadDocument(req, res) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   try {
     if (!req.file) return res.status(400).json({ success: false, message: t(lang, 'user.fileNotFound') });
     await db.query('UPDATE users SET ktp_filename = ? WHERE id = ?', [req.file.filename, req.user.id]);

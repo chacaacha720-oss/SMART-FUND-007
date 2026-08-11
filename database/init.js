@@ -105,10 +105,10 @@ async function initDatabase() {
 
     // 2b. Auto-migrate: add new columns to existing tables (no-op if already present)
     const migrations = [
-      { table: 'admins', col: 'admin_code', definition: 'VARCHAR(50)' },
-      { table: 'users', col: 'admin_id', definition: 'INT NULL' },
-      { table: 'loan_applications', col: 'admin_id', definition: 'INT NULL' },
-      { table: 'loan_applications', col: 'admin_code', definition: 'VARCHAR(50) NULL' },
+      { table: 'admins', col: 'cs_code', definition: 'VARCHAR(50)' },
+      { table: 'users', col: 'cs_id', definition: 'INT NULL' },
+      { table: 'loan_applications', col: 'cs_id', definition: 'INT NULL' },
+      { table: 'loan_applications', col: 'cs_code', definition: 'VARCHAR(50) NULL' },
     ];
 
     for (const m of migrations) {
@@ -126,26 +126,26 @@ async function initDatabase() {
       }
     }
 
-    // Add indexes for admin_id if not exists
-    try {
-      const [idxCheck] = await conn.query(
-        "SELECT COUNT(*) as cnt FROM information_schema.statistics WHERE table_schema = DATABASE() AND table_name = 'users' AND index_name = 'idx_admin'"
-      );
-      if (idxCheck[0].cnt === 0) {
-        await conn.query('ALTER TABLE users ADD INDEX idx_admin (admin_id)');
-        console.log('[OK] Migrated: added idx_admin to users');
-      }
-    } catch (merr) { console.error('[WARN] Index migration failed:', merr.message); }
+     // Add indexes for cs_id if not exists
+     try {
+       const [idxCheck] = await conn.query(
+         "SELECT COUNT(*) as cnt FROM information_schema.statistics WHERE table_schema = DATABASE() AND table_name = 'users' AND index_name = 'idx_cs'"
+       );
+       if (idxCheck[0].cnt === 0) {
+         await conn.query('ALTER TABLE users ADD INDEX idx_cs (cs_id)');
+         console.log('[OK] Migrated: added idx_cs to users');
+       }
+     } catch (merr) { console.error('[WARN] Index migration failed:', merr.message); }
 
-    try {
-      const [idxCheck2] = await conn.query(
-        "SELECT COUNT(*) as cnt FROM information_schema.statistics WHERE table_schema = DATABASE() AND table_name = 'loan_applications' AND index_name = 'idx_admin'"
-      );
-      if (idxCheck2[0].cnt === 0) {
-        await conn.query('ALTER TABLE loan_applications ADD INDEX idx_admin (admin_id)');
-        console.log('[OK] Migrated: added idx_admin to loan_applications');
-      }
-    } catch (merr) { console.error('[WARN] Index migration failed:', merr.message); }
+     try {
+       const [idxCheck2] = await conn.query(
+         "SELECT COUNT(*) as cnt FROM information_schema.statistics WHERE table_schema = DATABASE() AND table_name = 'loan_applications' AND index_name = 'idx_cs'"
+       );
+       if (idxCheck2[0].cnt === 0) {
+         await conn.query('ALTER TABLE loan_applications ADD INDEX idx_cs (cs_id)');
+         console.log('[OK] Migrated: added idx_cs to loan_applications');
+       }
+     } catch (merr) { console.error('[WARN] Index migration failed:', merr.message); }
   } catch (err) {
     console.error('[ERROR] Failed to execute schema:', err.message);
     process.exit(1);
@@ -162,18 +162,17 @@ async function initDatabase() {
     if (rows.length === 0) {
       const hash = await bcrypt.hash(adminPassword, 12);
 
-      // Generate admin_code: ADM + 3-digit zero-padded number
-      // Default admin gets ADM001
+      // Generate cs_code: CS + 2-digit zero-padded number (CS01, CS02, ..., CS99)
       const [codeRows] = await conn.query("SELECT IFNULL(MAX(id), 0) + 1 AS next_id FROM admins");
       const nextId = codeRows[0].next_id;
-      const adminCode = 'ADM' + String(nextId).padStart(3, '0');
+      const csCode = 'CS' + String(nextId).padStart(2, '0');
 
       await conn.query(
-        `INSERT INTO admins (username, email, password_hash, full_name, admin_code, role, status)
+        `INSERT INTO admins (username, email, password_hash, full_name, cs_code, role, status)
          VALUES (?, ?, ?, ?, ?, 'super_admin', 'active')`,
-        [adminUsername, adminEmail, hash, adminFullName, adminCode]
+        [adminUsername, adminEmail, hash, adminFullName, csCode]
       );
-      console.log(`[OK] Default admin created -> username: ${adminUsername} | password: ${adminPassword} | admin_code: ${adminCode}`);
+      console.log(`[OK] Default admin created -> username: ${adminUsername} | password: ${adminPassword} | cs_code: ${csCode}`);
     } else {
       console.log('[SKIP] Default admin already exists');
     }
@@ -181,19 +180,19 @@ async function initDatabase() {
     console.error('[ERROR] Failed to create admin:', err.message);
   }
 
-  // 3b. Ensure existing admins have admin_code
-  try {
-    const [adminRows] = await conn.query('SELECT id, admin_code FROM admins ORDER BY id ASC');
-    for (const a of adminRows) {
-      if (!a.admin_code || a.admin_code === '') {
-        const code = 'ADM' + String(a.id).padStart(3, '0');
-        await conn.query('UPDATE admins SET admin_code = ? WHERE id = ?', [code, a.id]);
-        console.log(`[OK] Assigned admin_code ${code} to admin id=${a.id}`);
-      }
-    }
-  } catch (err) {
-    console.error('[ERROR] Failed to backfill admin_code:', err.message);
-  }
+   // 3b. Ensure existing admins have cs_code
+   try {
+     const [adminRows] = await conn.query('SELECT id, cs_code FROM admins ORDER BY id ASC');
+     for (const a of adminRows) {
+       if (!a.cs_code || a.cs_code === '') {
+         const code = 'CS' + String(a.id).padStart(2, '0');
+         await conn.query('UPDATE admins SET cs_code = ? WHERE id = ?', [code, a.id]);
+         console.log(`[OK] Assigned cs_code ${code} to admin id=${a.id}`);
+       }
+     }
+   } catch (err) {
+     console.error('[ERROR] Failed to backfill cs_code:', err.message);
+   }
 
   await conn.end();
   console.log('\n[DONE] Database initialization complete.');

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * SMART FUND - Backend Internationalization (i18n)
  * Supports: Indonesia (id), Malaysia (ms), English (en)
  *
@@ -77,6 +77,9 @@ const MESSAGES = {
     'auth.adminCodeInvalid': 'Kode admin tidak valid',
     'auth.adminCodeNotFound': 'Kode admin tidak ditemukan',
     'auth.adminInactive': 'Akun admin nonaktif.',
+    'auth.csCodeInvalid': 'Kode CS tidak valid. Format: CS01',
+    'auth.csCodeNotFound': 'Kode CS tidak ditemukan',
+    'auth.csInactive': 'Akun CS tidak aktif',
 
     // ===== Admin Auth =====
     'admin.userPassRequired': 'Username dan password wajib diisi',
@@ -185,6 +188,7 @@ const MESSAGES = {
     'val.purposeRequired': 'Tujuan pinjaman wajib diisi',
     'val.adminCodeRequired': 'Kode admin wajib diisi',
     'val.adminCodeInvalid': 'Format kode admin tidak valid',
+    'val.csCodeInvalid': 'Format kode CS tidak valid',
 
     // ===== Admin Code =====
     'admin.noAdminCode': 'Anda belum terdaftar dengan kode admin. Hubungi admin untuk mendapatkan kode pendaftaran.',
@@ -226,6 +230,31 @@ const MESSAGES = {
     'telegram.welcomeChat': (name) => `Halo ${name}, terima kasih telah mengajukan pinjaman di SMART FUND. Ada yang bisa kami bantu?`,
     'telegram.testMessage': '✅ <b>Test Notifikasi SMART FUND</b>\n\nNotifikasi Telegram berfungsi dengan baik.',
     'telegram.newWithdrawalTitle': 'PENARIKAN BARU',
+
+    // ===== CS Code =====
+    'cs.title': 'Kode CS',
+    'cs.myCode': 'Kode CS Anda',
+    'cs.placeholder': 'Masukkan kode CS',
+    'cs.copySuccess': 'Berhasil menyalin kode CS',
+    'cs.noCsCode': 'Anda belum memiliki kode CS',
+    'telegram.csData': 'Data CS',
+    'telegram.csCode': 'Kode CS',
+    'telegram.csName': 'Nama CS',
+
+    // ===== Admin CS =====
+    'admin.csManagement': 'Kelola Kode CS',
+    'admin.csList': 'Daftar Kode CS',
+    'admin.csCode': 'Kode CS',
+    'admin.csName': 'Nama CS',
+    'admin.csStatus': 'Status CS',
+    'admin.csCreate': 'Buat Kode CS',
+    'admin.csCreated': 'Kode CS berhasil dibuat',
+    'admin.csUpdated': 'Kode CS berhasil diperbarui',
+    'admin.csDeleted': 'Kode CS berhasil dihapus',
+    'admin.csNotFound': 'Kode CS tidak ditemukan',
+    'admin.csActive': 'Aktif',
+    'admin.csInactive': 'Tidak Aktif',
+    'admin.superAdminOnly': 'Hanya Super Admin yang dapat melakukan ini',
 
     // ===== Status Labels =====
     'status.pending': 'Menunggu',
@@ -272,6 +301,9 @@ const MESSAGES = {
     'auth.adminCodeInvalid': 'Kod admin tidak sah',
     'auth.adminCodeNotFound': 'Kod admin tidak dijumpai',
     'auth.adminInactive': 'Akaun admin tidak aktif.',
+    'auth.csCodeInvalid': 'Kod CS tidak sah. Format: CS01',
+    'auth.csCodeNotFound': 'Kod CS tidak dijumpai',
+    'auth.csInactive': 'Akaun CS tidak aktif',
 
     // ===== Admin Auth =====
     'admin.userPassRequired': 'Nama pengguna dan kata laluan diperlukan',
@@ -380,6 +412,7 @@ const MESSAGES = {
     'val.purposeRequired': 'Tujuan pinjaman diperlukan',
     'val.adminCodeRequired': 'Kod admin diperlukan',
     'val.adminCodeInvalid': 'Format kod admin tidak sah',
+    'val.csCodeInvalid': 'Format kod CS tidak sah',
 
     // ===== Admin Code =====
     'admin.noAdminCode': 'Anda belum berdaftar dengan kod admin. Hubungi admin untuk mendapatkan kod pendaftaran.',
@@ -421,6 +454,31 @@ const MESSAGES = {
     'telegram.welcomeChat': (name) => `Halo ${name}, terima kasih telah memohon pinjaman di SMART FUND. Ada yang boleh kami bantu?`,
     'telegram.testMessage': '✅ <b>Test Notifikasi SMART FUND</b>\n\nNotifikasi Telegram berfungsi dengan baik.',
     'telegram.newWithdrawalTitle': 'PENGELUARAN BARU',
+
+    // ===== CS Code =====
+    'cs.title': 'Kod CS',
+    'cs.myCode': 'Kod CS Anda',
+    'cs.placeholder': 'Masukkan kod CS',
+    'cs.copySuccess': 'Berjaya menyalin kod CS',
+    'cs.noCsCode': 'Anda belum mempunyai kod CS',
+    'telegram.csData': 'Data CS',
+    'telegram.csCode': 'Kod CS',
+    'telegram.csName': 'Nama CS',
+
+    // ===== Admin CS =====
+    'admin.csManagement': 'Kelola Kod CS',
+    'admin.csList': 'Senarai Kod CS',
+    'admin.csCode': 'Kod CS',
+    'admin.csName': 'Nama CS',
+    'admin.csStatus': 'Status CS',
+    'admin.csCreate': 'Buat Kod CS',
+    'admin.csCreated': 'Kod CS berjaya dibuat',
+    'admin.csUpdated': 'Kod CS berjaya dikemaskini',
+    'admin.csDeleted': 'Kod CS berjaya dihapus',
+    'admin.csNotFound': 'Kod CS tidak dijumpai',
+    'admin.csActive': 'Aktif',
+    'admin.csInactive': 'Tidak Aktif',
+    'admin.superAdminOnly': 'Hanya Super Admin yang boleh melakukan ini',
 
     // ===== Status Labels =====
     'status.pending': 'Menunggu',
@@ -467,6 +525,9 @@ const MESSAGES = {
     'auth.adminCodeInvalid': 'Invalid admin code',
     'auth.adminCodeNotFound': 'Admin code not found',
     'auth.adminInactive': 'Admin account is inactive.',
+    'auth.csCodeInvalid': 'CS code invalid. Format: CS01',
+    'auth.csCodeNotFound': 'CS code not found',
+    'auth.csInactive': 'CS account is inactive',
 
     // ===== Admin Auth =====
     'admin.userPassRequired': 'Username and password are required',
@@ -575,6 +636,7 @@ const MESSAGES = {
     'val.purposeRequired': 'Loan purpose is required',
     'val.adminCodeRequired': 'Admin code is required',
     'val.adminCodeInvalid': 'Invalid admin code format',
+    'val.csCodeInvalid': 'Invalid CS code format',
 
     // ===== Admin Code =====
     'admin.noAdminCode': 'You are not registered with an admin code. Please contact admin to get a registration code.',
@@ -617,6 +679,31 @@ const MESSAGES = {
     'telegram.testMessage': '✅ <b>SMART FUND Test Notification</b>\n\nTelegram notification is working properly.',
     'telegram.newWithdrawalTitle': 'NEW WITHDRAWAL',
 
+    // ===== CS Code =====
+    'cs.title': 'CS Code',
+    'cs.myCode': 'Your CS Code',
+    'cs.placeholder': 'Enter CS code',
+    'cs.copySuccess': 'CS code copied successfully',
+    'cs.noCsCode': 'You do not have a CS code',
+    'telegram.csData': 'CS Data',
+    'telegram.csCode': 'CS Code',
+    'telegram.csName': 'CS Name',
+
+    // ===== Admin CS =====
+    'admin.csManagement': 'Manage CS Codes',
+    'admin.csList': 'CS Code List',
+    'admin.csCode': 'CS Code',
+    'admin.csName': 'CS Name',
+    'admin.csStatus': 'CS Status',
+    'admin.csCreate': 'Create CS Code',
+    'admin.csCreated': 'CS code created successfully',
+    'admin.csUpdated': 'CS code updated successfully',
+    'admin.csDeleted': 'CS code deleted successfully',
+    'admin.csNotFound': 'CS code not found',
+    'admin.csActive': 'Active',
+    'admin.csInactive': 'Inactive',
+    'admin.superAdminOnly': 'Only Super Admin can do this',
+
     // ===== Status Labels =====
     'status.pending': 'Pending',
     'status.approved': 'Approved',
@@ -655,8 +742,8 @@ function detectLang(req) {
     return req.headers['x-lang'];
   }
 
-  // 4. Default to Bahasa Malaysia
-  return 'ms';
+   // 4. Default to Bahasa Indonesia
+   return 'id';
 }
 
 /**

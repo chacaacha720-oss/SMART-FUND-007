@@ -29,7 +29,7 @@ function calculateLoan(principal, tenorMonths, annualRatePercent = 5) {
  * Simulasi pinjaman (public)
  */
 async function simulate(req, res) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   try {
     const amount = parseFloat(req.body.amount);
     const tenor = parseInt(req.body.tenor, 10);
@@ -82,12 +82,14 @@ async function applyLoan(req, res) {
       return res.status(400).json({ success: false, message: t(lang, 'loan.purposeRequired') });
     }
 
-    // Get user with admin info (server-side derivation — never trust frontend)
     const [userRows] = await db.query(
-      `SELECT u.*, a.admin_code, a.full_name as admin_name
-       FROM users u LEFT JOIN admins a ON u.admin_id = a.id WHERE u.id = ?`,
+      `SELECT u.*, a.cs_code, a.full_name as cs_name
+       FROM users u LEFT JOIN admins a ON u.cs_id = a.id WHERE u.id = ?`,
       [userId]
     );
+
+    if (userRows.length === 0) return res.status(404).json({ success: false, message: t(lang, 'loan.userNotFound') });
+    const user = userRows[0];
 
     if (user.status === 'frozen') {
       return res.status(403).json({ success: false, message: t(lang, 'loan.accountFrozen') });
@@ -96,9 +98,9 @@ async function applyLoan(req, res) {
       return res.status(400).json({ success: false, message: t(lang, 'loan.exceedLimit', user.loan_limit) });
     }
 
-    // Reject if user has no admin assigned
-    if (!user.admin_id) {
-      return res.status(403).json({ success: false, message: t(lang, 'admin.noAdminCode') });
+    // Reject if user has no CS assigned
+    if (!user.cs_id) {
+      return res.status(403).json({ success: false, message: t(lang, 'cs.noCsCode') });
     }
 
     // Cek apakah ada pinjaman aktif yang belum lunas
@@ -114,11 +116,11 @@ async function applyLoan(req, res) {
     const rate = settings.length ? parseFloat(settings[0].setting_value) : 5;
     const calc = calculateLoan(amount, tenor, rate);
 
-    // Simpan pengajuan (admin_id & admin_code derived server-side)
+    // Simpan pengajuan (cs_id & cs_code derived server-side)
     const [result] = await db.query(
-      `INSERT INTO loan_applications (user_id, admin_id, admin_code, amount, purpose, tenor, monthly_payment, total_interest, total_payment, status)
+      `INSERT INTO loan_applications (user_id, cs_id, cs_code, amount, purpose, tenor, monthly_payment, total_interest, total_payment, status)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')`,
-      [userId, user.admin_id, user.admin_code, amount, purpose, tenor, calc.monthlyPayment, calc.totalInterest, calc.totalPayment]
+      [userId, user.cs_id, user.cs_code, amount, purpose, tenor, calc.monthlyPayment, calc.totalInterest, calc.totalPayment]
     );
     const loanId = result.insertId;
 
@@ -142,8 +144,8 @@ async function applyLoan(req, res) {
       applicationId: loanId,
       userId,
       lang,
-      adminCode: user.admin_code,
-      adminName: user.admin_name,
+      csCode: user.cs_code,
+      csName: user.cs_name,
     });
     await sendTelegram(tgData.message, { inlineKeyboard: tgData.inlineKeyboard });
 
@@ -158,7 +160,7 @@ async function applyLoan(req, res) {
         monthlyPayment: calc.monthlyPayment,
         totalInterest: calc.totalInterest,
         totalPayment: calc.totalPayment,
-        admin_code: user.admin_code,
+        cs_code: user.cs_code,
         status: 'pending',
       },
     });
@@ -173,12 +175,11 @@ async function applyLoan(req, res) {
  * Riwayat pengajuan user yang login
  */
 async function myLoans(req, res) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   try {
     const [rows] = await db.query(
-      `SELECT id, amount, purpose, tenor, monthly_payment, total_interest, total_payment, status, admin_note, created_at, approved_at, disbursed_at
-       FROM loan_applications WHERE user_id = ? ORDER BY created_at DESC`,
-      [req.user.id]
+       `SELECT id, amount, purpose, tenor, monthly_payment, total_interest, total_payment, status, admin_note, created_at, approved_at, disbursed_at, cs_code FROM loan_applications WHERE user_id = ? ORDER BY created_at DESC`,
+       [req.user.id]
     );
     return res.json({ success: true, data: rows });
   } catch (err) {
@@ -192,7 +193,7 @@ async function myLoans(req, res) {
  * Detail pinjaman user
  */
 async function loanDetail(req, res) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   try {
     const [rows] = await db.query(
       `SELECT * FROM loan_applications WHERE id = ? AND user_id = ?`,

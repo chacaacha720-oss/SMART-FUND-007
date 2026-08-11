@@ -20,7 +20,7 @@ const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
  * POST /api/admin/auth/login
  */
 async function adminLogin(req, res) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   try {
     const { username, password } = req.body;
     if (!username || !password) return res.status(400).json({ success: false, message: t(lang, 'admin.userPassRequired') });
@@ -42,7 +42,7 @@ async function adminLogin(req, res) {
       success: true,
       message: t(lang, 'admin.loginSuccess'),
       token,
-      data: { id: admin.id, username: admin.username, email: admin.email, full_name: admin.full_name, role: admin.role, admin_code: admin.admin_code },
+      data: { id: admin.id, username: admin.username, email: admin.email, full_name: admin.full_name, role: admin.role, cs_code: admin.cs_code },
     });
   } catch (err) {
     console.error('Admin login error:', err);
@@ -66,7 +66,7 @@ async function adminMe(req, res) {
  * Statistik dashboard admin
  */
 async function adminDashboard(req, res) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   try {
     const [[totalUser]] = await db.query('SELECT COUNT(*) as cnt FROM users');
     const [[totalPengajuan]] = await db.query('SELECT COUNT(*) as cnt FROM loan_applications');
@@ -88,11 +88,11 @@ async function adminDashboard(req, res) {
 
     // Pengajuan terbaru (super_admin melihat semua, admin melihat milik sendiri)
     const [recentApplications] = await db.query(`
-      SELECT la.id, la.amount, la.tenor, la.status, la.created_at, la.admin_code, u.full_name, u.phone
-      FROM loan_applications la JOIN users u ON la.user_id = u.id
-      ${req.admin.role === 'super_admin' ? '' : 'WHERE la.admin_id = ?'}
-      ORDER BY la.created_at DESC LIMIT 5
-    `, req.admin.role === 'super_admin' ? [] : [req.admin.id]);
+       SELECT la.id, la.amount, la.tenor, la.status, la.created_at, la.cs_code, u.full_name, u.phone
+       FROM loan_applications la JOIN users u ON la.user_id = u.id
+       ${req.admin.role === 'super_admin' ? '' : 'WHERE la.cs_id = ?'}
+       ORDER BY la.created_at DESC LIMIT 5
+     `, req.admin.role === 'super_admin' ? [] : [req.admin.id]);
 
     return res.json({
       success: true,
@@ -121,7 +121,7 @@ async function adminDashboard(req, res) {
  * GET /api/admin/users
  */
 async function listUsers(req, res) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   try {
     const [rows] = await db.query(
       `SELECT id, full_name, email, phone, nik, address, job, income_range, balance, loan_limit, status, ktp_filename, created_at, last_login
@@ -138,7 +138,7 @@ async function listUsers(req, res) {
  * GET /api/admin/users/:id
  */
 async function getUser(req, res) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   try {
     const [rows] = await db.query(
       `SELECT id, full_name, email, phone, nik, address, job, income_range, balance, loan_limit, status, ktp_filename, created_at, last_login
@@ -163,7 +163,7 @@ async function getUser(req, res) {
  * Edit user (saldo, limit, status, data)
  */
 async function updateUser(req, res) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   try {
     const { fullName, phone, nik, address, job, incomeRange, balance, loanLimit, status } = req.body;
     const updates = [];
@@ -229,7 +229,7 @@ async function updateUser(req, res) {
  * Ubah status user (active/frozen)
  */
 async function updateUserStatus(req, res) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   try {
     const { status } = req.body;
     if (!['active', 'frozen', 'pending', 'inactive'].includes(status)) {
@@ -252,7 +252,7 @@ async function updateUserStatus(req, res) {
  * DELETE /api/admin/users/:id
  */
 async function deleteUser(req, res) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   try {
     await db.query('DELETE FROM users WHERE id = ?', [req.params.id]);
     return res.json({ success: true, message: t(lang, 'admin.userDeleted') });
@@ -268,25 +268,23 @@ async function deleteUser(req, res) {
 
 /**
  * GET /api/admin/applications
- * Super admin: dapat filter query params (?admin_code=&status=&start=&end=&userId=)
- * Admin biasa: hanya lihat aplikasi di bawah admin_id-nya
- */
+     * Super admin: dapat filter query params (?cs_code=&status=&start=&end=&userId=)
+     * Admin biasa: hanya lihat aplikasi di bawah cs_id-nya
+     */
 async function listApplications(req, res) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   try {
     const isAdmin = req.admin.role !== 'super_admin';
     const conditions = [];
     const params = [];
 
     if (isAdmin) {
-      // Non-super admins only see their own users' applications
-      conditions.push('u.admin_id = ?');
+      conditions.push('u.cs_id = ?');
       params.push(req.admin.id);
     } else {
-      // Super admin filtering
-      if (req.query.admin_code) {
-        conditions.push('la.admin_code = ?');
-        params.push(req.query.admin_code);
+      if (req.query.cs_code) {
+        conditions.push('la.cs_code = ?');
+        params.push(req.query.cs_code);
       }
       if (req.query.status) {
         const validStatuses = ['pending', 'approved', 'rejected', 'disbursed', 'completed'];
@@ -312,11 +310,11 @@ async function listApplications(req, res) {
     const whereClause = conditions.length > 0 ? 'WHERE ' + conditions.join(' AND ') : '';
 
     const [rows] = await db.query(`
-      SELECT la.*, la.admin_code as la_admin_code, u.full_name, u.phone, u.email, u.balance, u.loan_limit, u.status as user_status,
-             a.full_name as admin_name
+      SELECT la.*, la.cs_code as la_cs_code, u.full_name, u.phone, u.email, u.balance, u.loan_limit, u.status as user_status,
+             a.full_name as cs_name
       FROM loan_applications la
       JOIN users u ON la.user_id = u.id
-      LEFT JOIN admins a ON la.admin_id = a.id
+      LEFT JOIN admins a ON la.cs_id = a.id
       ${whereClause}
       ORDER BY la.created_at DESC
     `, params);
@@ -332,13 +330,13 @@ async function listApplications(req, res) {
  * GET /api/admin/applications/:id
  */
 async function getApplication(req, res) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   try {
     const isAdmin = req.admin.role !== 'super_admin';
     const query = `
-      SELECT la.*, la.admin_code as la_admin_code, u.full_name, u.phone, u.email, u.nik, u.address, u.job, u.income_range, u.balance, u.loan_limit
+      SELECT la.*, la.cs_code as la_cs_code, u.full_name, u.phone, u.email, u.nik, u.address, u.job, u.income_range, u.balance, u.loan_limit
       FROM loan_applications la JOIN users u ON la.user_id = u.id
-      ${isAdmin ? 'WHERE la.admin_id = ? AND la.id = ?' : 'WHERE la.id = ?'}
+      ${isAdmin ? 'WHERE la.cs_id = ? AND la.id = ?' : 'WHERE la.id = ?'}
     `;
     const params = isAdmin ? [req.admin.id, req.params.id] : [req.params.id];
 
@@ -356,7 +354,7 @@ async function getApplication(req, res) {
  * Edit nominal, tenor, catatan
  */
 async function updateApplication(req, res) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   try {
     const { amount, tenor, adminNote } = req.body;
     const updates = [];
@@ -397,7 +395,7 @@ async function updateApplication(req, res) {
  * Approve / Reject / Disburse
  */
 async function updateApplicationStatus(req, res) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   try {
     const { status, adminNote } = req.body;
     const validStatus = ['pending', 'approved', 'rejected', 'disbursed', 'completed'];
@@ -406,7 +404,7 @@ async function updateApplicationStatus(req, res) {
     }
 
     const [appRows] = await db.query(
-      'SELECT * FROM loan_applications WHERE id = ?' + (req.admin.role !== 'super_admin' ? ' AND admin_id = ?' : ''),
+      'SELECT * FROM loan_applications WHERE id = ?' + (req.admin.role !== 'super_admin' ? ' AND cs_id = ?' : ''),
       req.admin.role !== 'super_admin' ? [req.params.id, req.admin.id] : [req.params.id]
     );
     if (appRows.length === 0) return res.status(404).json({ success: false, message: t(lang, 'admin.appNotFound') });
@@ -509,7 +507,7 @@ async function updateApplicationStatus(req, res) {
  * GET /api/admin/transactions
  */
 async function listTransactions(req, res) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   try {
     const [rows] = await db.query(`
       SELECT t.*, u.full_name, u.email FROM transactions t
@@ -528,7 +526,7 @@ async function listTransactions(req, res) {
  * Approve / Reject transaksi (withdrawal)
  */
 async function updateTransactionStatus(req, res) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   try {
     const { status, adminNote } = req.body;
     if (!['pending', 'approved', 'rejected', 'completed'].includes(status)) {
@@ -577,7 +575,7 @@ async function updateTransactionStatus(req, res) {
  * GET /api/admin/settings
  */
 async function getSettings(req, res) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   try {
     const [rows] = await db.query('SELECT * FROM settings ORDER BY id ASC');
     const settings = {};
@@ -593,7 +591,7 @@ async function getSettings(req, res) {
  * PUT /api/admin/settings
  */
 async function updateSettings(req, res) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   try {
     const entries = req.body.settings || req.body;
     for (const [key, value] of Object.entries(entries)) {
@@ -614,7 +612,7 @@ async function updateSettings(req, res) {
  * GET /api/admin/telegram/logs
  */
 async function telegramLogs(req, res) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   try {
     const [rows] = await db.query('SELECT * FROM telegram_logs ORDER BY created_at DESC LIMIT 100');
     return res.json({ success: true, data: rows });
@@ -629,7 +627,7 @@ async function telegramLogs(req, res) {
  * Test kirim pesan telegram
  */
 async function telegramTest(req, res) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   try {
     const result = await sendTelegram(t(lang, 'telegram.testMessage'));
     if (result.success) return res.json({ success: true, message: t(lang, 'admin.telegramTestSuccess') });
@@ -649,7 +647,7 @@ async function telegramTest(req, res) {
  * Update loan_limit for ALL users to a new value
  */
 async function bulkUpdateUserLimit(req, res) {
-  const lang = req.lang || 'ms';
+  const lang = req.lang || 'id';
   try {
     const { loanLimit } = req.body;
     const newLimit = parseFloat(loanLimit);
@@ -664,6 +662,112 @@ async function bulkUpdateUserLimit(req, res) {
     });
   } catch (err) {
     console.error('Bulk update user limit error:', err);
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
+  }
+}
+
+// ============================================
+// CS CODE MANAGEMENT (Super Admin only)
+// ============================================
+
+function checkSuperAdmin(req, res) {
+  if (req.admin.role !== 'super_admin') {
+    return res.status(403).json({ success: false, message: t(req.lang || 'id', 'admin.superAdminOnly') });
+  }
+  return true;
+}
+
+async function listCsCodes(req, res) {
+  if (!checkSuperAdmin(req, res)) return;
+  const lang = req.lang || 'id';
+  try {
+    const [rows] = await db.query(
+      'SELECT id, full_name, cs_code, role, status, last_login, created_at FROM admins ORDER BY id ASC'
+    );
+    return res.json({ success: true, data: rows });
+  } catch (err) {
+    console.error('List CS codes error:', err);
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
+  }
+}
+
+async function getCsCode(req, res) {
+  if (!checkSuperAdmin(req, res)) return;
+  const lang = req.lang || 'id';
+  try {
+    const [rows] = await db.query('SELECT id, full_name, cs_code, role, status, created_at FROM admins WHERE id = ?', [req.params.id]);
+    if (rows.length === 0) return res.status(404).json({ success: false, message: t(lang, 'admin.csNotFound') });
+    return res.json({ success: true, data: rows[0] });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
+  }
+}
+
+async function createCsCode(req, res) {
+  if (!checkSuperAdmin(req, res)) return;
+  const lang = req.lang || 'id';
+  try {
+    const { fullName, email, username, password, role } = req.body;
+    if (!username || !email || !password) {
+      return res.status(400).json({ success: false, message: t(lang, 'admin.csCode') + ' ' + t(lang, 'val.nameRequired') });
+    }
+
+    // Check existing
+    const [existing] = await db.query('SELECT id FROM admins WHERE username = ? OR email = ?', [username, email]);
+    if (existing.length) return res.status(409).json({ success: false, message: 'Username atau email sudah terdaftar' });
+
+    // Generate cs_code: CS + 2-digit zero-padded
+    const [codeRows] = await db.query("SELECT IFNULL(MAX(id), 0) + 1 AS next_id FROM admins");
+    const csCode = 'CS' + String(codeRows[0].next_id).padStart(2, '0');
+
+    const passwordHash = await bcrypt.hash(password, 12);
+    const [result] = await db.query(
+      `INSERT INTO admins (username, email, password_hash, full_name, cs_code, role, status) VALUES (?, ?, ?, ?, ?, ?, 'active')`,
+      [username, email, passwordHash, fullName || username, csCode, role || 'admin']
+    );
+
+    return res.json({ success: true, message: t(lang, 'admin.csCreated'), data: { id: result.insertId, cs_code: csCode } });
+  } catch (err) {
+    console.error('Create CS code error:', err);
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
+  }
+}
+
+async function updateCsCode(req, res) {
+  if (!checkSuperAdmin(req, res)) return;
+  const lang = req.lang || 'id';
+  try {
+    const { fullName, role, status } = req.body;
+    const fields = [];
+    const params = [];
+    if (fullName !== undefined) { fields.push('full_name = ?'); params.push(fullName); }
+    if (role !== undefined) { fields.push('role = ?'); params.push(role); }
+    if (status !== undefined) { fields.push('status = ?'); params.push(status); }
+    if (fields.length === 0) return res.status(400).json({ success: false, message: t(lang, 'admin.noDataChanged') });
+
+    params.push(req.params.id);
+    await db.query(`UPDATE admins SET ${fields.join(', ')} WHERE id = ?`, params);
+    return res.json({ success: true, message: t(lang, 'admin.csUpdated') });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
+  }
+}
+
+async function deleteCsCode(req, res) {
+  if (!checkSuperAdmin(req, res)) return;
+  const lang = req.lang || 'id';
+  try {
+    const [rows] = await db.query('SELECT id FROM admins WHERE id = ?', [req.params.id]);
+    if (rows.length === 0) return res.status(404).json({ success: false, message: t(lang, 'admin.csNotFound') });
+
+    // Prevent deleting self
+    if (Number(req.params.id) === req.admin.id) {
+      return res.status(400).json({ success: false, message: 'Tidak dapat menghapus akun sendiri' });
+    }
+
+    await db.query('DELETE FROM admins WHERE id = ?', [req.params.id]);
+    return res.json({ success: true, message: t(lang, 'admin.csDeleted') });
+  } catch (err) {
     return res.status(500).json({ success: false, message: t(lang, 'error.server') });
   }
 }
@@ -685,7 +789,12 @@ module.exports = {
   updateTransactionStatus,
   getSettings,
   updateSettings,
-   telegramLogs,
+  telegramLogs,
   telegramTest,
   bulkUpdateUserLimit,
+  listCsCodes,
+  getCsCode,
+  createCsCode,
+  updateCsCode,
+  deleteCsCode,
 };
