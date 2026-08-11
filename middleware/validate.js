@@ -88,7 +88,7 @@ function validateLoanApplication(req, res, next) {
   const amt = parseFloat(amount);
   const ten = parseInt(tenor, 10);
 
-   if (!amt || isNaN(amt) || amt < 1000 || amt > 500000) errors.push(t(lang, 'val.amountRange'));
+   if (!amt || isNaN(amt) || amt < 1000000 || amt > 500000000) errors.push(t(lang, 'val.amountRange'));
   if (!ten || isNaN(ten) || ten < 6 || ten > 60) errors.push(t(lang, 'val.tenorRange'));
   if (!purpose || validator.isEmpty(String(purpose).trim())) errors.push(t(lang, 'val.purposeRequired'));
 
