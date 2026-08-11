@@ -88,19 +88,19 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('applyPhone').value = currentUser.phone;
   document.getElementById('applyLimitInfo').textContent = formatRupiah(currentUser.loan_limit);
 
-  // Display admin code (read-only) at top of loan form
-  const adminCodeEl = document.getElementById('applyAdminCodeValue');
-  const adminNameEl = document.getElementById('applyAdminNameValue');
-  if (adminCodeEl) {
-    adminCodeEl.textContent = currentUser.admin_code || I18N.t('admin.noAdminCode', 'Tidak terdaftar');
-    adminCodeEl.className = currentUser.admin_code ? 'font-bold text-blue-700 text-lg' : 'font-bold text-red-500 text-lg';
+  // Display CS code (read-only) at top of loan form
+  const csCodeEl = document.getElementById('applyAdminCodeValue');
+  const csNameEl = document.getElementById('applyAdminNameValue');
+  if (csCodeEl) {
+    csCodeEl.textContent = currentUser.cs_code || I18N.t('cs.noCsCode', 'Tidak terdaftar');
+    csCodeEl.className = currentUser.cs_code ? 'font-bold text-blue-700 text-lg' : 'font-bold text-red-500 text-lg';
   }
-  if (adminNameEl) {
-    adminNameEl.textContent = currentUser.admin_name ? `Admin: ${currentUser.admin_name}` : 'Admin: -';
+  if (csNameEl) {
+    csNameEl.textContent = currentUser.cs_name ? `CS: ${currentUser.cs_name}` : 'CS: -';
   }
-  // Show admin code bar only on apply page
-  const adminCodeBar = document.getElementById('applyAdminCodeBar');
-  if (adminCodeBar) adminCodeBar.classList.remove('hidden');
+  // Show CS code bar only on apply page
+  const csCodeBar = document.getElementById('applyAdminCodeBar');
+  if (csCodeBar) csCodeBar.classList.remove('hidden');
 
   const applyInd1 = document.getElementById('applyInd1');
   const applyInd2 = document.getElementById('applyInd2');
@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!amount || amount < 1000000 || amount > 500000000) return showToast(i18n('val.amountRange', 'Jumlah Rp1.000.000 - Rp500.000.000'), 'error');
     if (amount > currentUser.loan_limit) return showToast(`${i18n('dash.limit', 'Limit')}: ${formatRupiah(currentUser.loan_limit)}`, 'error');
     if (!purpose) return showToast(i18n('val.purposeRequired', 'Tujuan wajib dipilih'), 'error');
-    if (!currentUser.admin_code) return showToast(I18N.t('admin.noAdminCode', 'Anda belum terdaftar dengan kode admin. Hubungi admin.'), 'error');
+    if (!currentUser.cs_code) return showToast(I18N.t('cs.noCsCode', 'Anda belum memiliki kode CS. Hubungi admin.'), 'error');
 
     const btn = document.getElementById('applySubmitBtn');
     setBtnLoading(btn, true);
@@ -368,8 +368,8 @@ async function submitWithdrawal(e) {
 
   const i18n = (key, fallback) => I18N.t(key) || fallback;
 
-   if (!amount || amount < 100) {
-     return showToast(i18n('val.minWithdraw', 'Jumlah pengeluaran minimum RM100'), 'error');
+   if (!amount || amount < 100000) {
+     return showToast(i18n('val.minWithdraw', 'Jumlah penarikan minimum Rp100.000'), 'error');
    }
    if (!bankName || !accountHolder || !accountNumber) {
      return showToast(i18n('val.withdrawRequired', 'Semua data akaun wajib diisi'), 'error');
