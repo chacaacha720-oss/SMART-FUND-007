@@ -82,8 +82,12 @@ async function applyLoan(req, res) {
       return res.status(400).json({ success: false, message: t(lang, 'loan.purposeRequired') });
     }
 
-    // Cek limit user
-    const [userRows] = await db.query('SELECT * FROM users WHERE id = ?', [userId]);
+    // Get user with admin info (server-side derivation — never trust frontend)
+    const [userRows] = await db.query(
+      `SELECT u.*, a.admin_code, a.full_name as admin_name
+       FROM users u LEFT JOIN admins a ON u.admin_id = a.id WHERE u.id = ?`,
+      [userId]
+    );
     if (userRows.length === 0) return res.status(404).json({ success: false, message: t(lang, 'loan.userNotFound') });
     const user = userRows[0];
 
@@ -92,6 +96,11 @@ async function applyLoan(req, res) {
     }
     if (amount > user.loan_limit) {
       return res.status(400).json({ success: false, message: t(lang, 'loan.exceedLimit', user.loan_limit) });
+    }
+
+    // Reject if user has no admin assigned
+    if (!user.admin_id) {
+      return res.status(403).json({ success: false, message: t(lang, 'admin.noAdminCode') });
     }
 
     // Cek apakah ada pinjaman aktif yang belum lunas
@@ -107,11 +116,11 @@ async function applyLoan(req, res) {
     const rate = settings.length ? parseFloat(settings[0].setting_value) : 5;
     const calc = calculateLoan(amount, tenor, rate);
 
-    // Simpan pengajuan
+    // Simpan pengajuan (admin_id & admin_code derived server-side)
     const [result] = await db.query(
-      `INSERT INTO loan_applications (user_id, amount, purpose, tenor, monthly_payment, total_interest, total_payment, status)
-       VALUES (?, ?, ?, ?, ?, ?, ?, 'pending')`,
-      [userId, amount, purpose, tenor, calc.monthlyPayment, calc.totalInterest, calc.totalPayment]
+      `INSERT INTO loan_applications (user_id, admin_id, admin_code, amount, purpose, tenor, monthly_payment, total_interest, total_payment, status)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')`,
+      [userId, user.admin_id, user.admin_code, amount, purpose, tenor, calc.monthlyPayment, calc.totalInterest, calc.totalPayment]
     );
     const loanId = result.insertId;
 
@@ -135,6 +144,8 @@ async function applyLoan(req, res) {
       applicationId: loanId,
       userId,
       lang,
+      adminCode: user.admin_code,
+      adminName: user.admin_name,
     });
     await sendTelegram(tgData.message, { inlineKeyboard: tgData.inlineKeyboard });
 
@@ -149,6 +160,7 @@ async function applyLoan(req, res) {
         monthlyPayment: calc.monthlyPayment,
         totalInterest: calc.totalInterest,
         totalPayment: calc.totalPayment,
+        admin_code: user.admin_code,
         status: 'pending',
       },
     });

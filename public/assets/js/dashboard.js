@@ -88,6 +88,20 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('applyPhone').value = currentUser.phone;
   document.getElementById('applyLimitInfo').textContent = formatRupiah(currentUser.loan_limit);
 
+  // Display admin code (read-only) at top of loan form
+  const adminCodeEl = document.getElementById('applyAdminCodeValue');
+  const adminNameEl = document.getElementById('applyAdminNameValue');
+  if (adminCodeEl) {
+    adminCodeEl.textContent = currentUser.admin_code || I18N.t('admin.noAdminCode', 'Tidak terdaftar');
+    adminCodeEl.className = currentUser.admin_code ? 'font-bold text-blue-700 text-lg' : 'font-bold text-red-500 text-lg';
+  }
+  if (adminNameEl) {
+    adminNameEl.textContent = currentUser.admin_name ? `Admin: ${currentUser.admin_name}` : 'Admin: -';
+  }
+  // Show admin code bar only on apply page
+  const adminCodeBar = document.getElementById('applyAdminCodeBar');
+  if (adminCodeBar) adminCodeBar.classList.remove('hidden');
+
   const applyInd1 = document.getElementById('applyInd1');
   const applyInd2 = document.getElementById('applyInd2');
   const applyLine1 = document.getElementById('applyLine1');
@@ -140,6 +154,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!amount || amount < 1000000 || amount > 500000000) return showToast(i18n('val.amountRange', 'Jumlah Rp1.000.000 - Rp500.000.000'), 'error');
     if (amount > currentUser.loan_limit) return showToast(`${i18n('dash.limit', 'Limit')}: ${formatRupiah(currentUser.loan_limit)}`, 'error');
     if (!purpose) return showToast(i18n('val.purposeRequired', 'Tujuan wajib dipilih'), 'error');
+    if (!currentUser.admin_code) return showToast(I18N.t('admin.noAdminCode', 'Anda belum terdaftar dengan kode admin. Hubungi admin.'), 'error');
 
     const btn = document.getElementById('applySubmitBtn');
     setBtnLoading(btn, true);

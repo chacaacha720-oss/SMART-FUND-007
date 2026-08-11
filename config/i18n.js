@@ -74,6 +74,9 @@ const MESSAGES = {
     'auth.resetTokenInvalid': 'Token tidak valid atau kadaluarsa',
     'auth.passwordChanged': 'Password berhasil diubah. Silakan login.',
     'auth.userNotFound404': 'User tidak ditemukan',
+    'auth.adminCodeInvalid': 'Kode admin tidak valid',
+    'auth.adminCodeNotFound': 'Kode admin tidak ditemukan',
+    'auth.adminInactive': 'Akun admin nonaktif.',
 
     // ===== Admin Auth =====
     'admin.userPassRequired': 'Username dan password wajib diisi',
@@ -160,6 +163,12 @@ const MESSAGES = {
     'val.amountRange': 'Jumlah pinjaman harus Rp1.000.000 - Rp500.000.000',
     'val.tenorRange': 'Tenor harus 6 - 60 bulan',
     'val.purposeRequired': 'Tujuan pinjaman wajib diisi',
+    'val.adminCodeRequired': 'Kode admin wajib diisi',
+    'val.adminCodeInvalid': 'Format kode admin tidak valid',
+
+    // ===== Admin Code =====
+    'admin.noAdminCode': 'Anda belum terdaftar dengan kode admin. Hubungi admin untuk mendapatkan kode pendaftaran.',
+    'admin.codeNotFound': 'Kode admin tidak ditemukan',
 
     // ===== Error Handler =====
     'error.notFound': 'Endpoint tidak ditemukan',
@@ -178,6 +187,9 @@ const MESSAGES = {
     'telegram.name': 'Nama',
     'telegram.phone': 'No. HP',
     'telegram.email': 'Email',
+    'telegram.adminData': 'Data Admin',
+    'telegram.adminCode': 'Kode Admin',
+    'telegram.adminName': 'Nama Admin',
     'telegram.loanDetail': 'Detail Pinjaman',
     'telegram.amount': 'Jumlah',
     'telegram.tenor': 'Tenor',
@@ -236,6 +248,9 @@ const MESSAGES = {
     'auth.resetTokenInvalid': 'Token tidak sah atau tamat tempoh',
     'auth.passwordChanged': 'Kata laluan berjaya diubah. Sila log masuk.',
     'auth.userNotFound404': 'Pengguna tidak dijumpai',
+    'auth.adminCodeInvalid': 'Kod admin tidak sah',
+    'auth.adminCodeNotFound': 'Kod admin tidak dijumpai',
+    'auth.adminInactive': 'Akaun admin tidak aktif.',
 
     // ===== Admin Auth =====
     'admin.userPassRequired': 'Nama pengguna dan kata laluan diperlukan',
@@ -322,6 +337,12 @@ const MESSAGES = {
     'val.amountRange': 'Jumlah pinjaman mesti RM1,000 - RM500,000',
     'val.tenorRange': 'Tempoh mesti 6 - 60 bulan',
     'val.purposeRequired': 'Tujuan pinjaman diperlukan',
+    'val.adminCodeRequired': 'Kod admin diperlukan',
+    'val.adminCodeInvalid': 'Format kod admin tidak sah',
+
+    // ===== Admin Code =====
+    'admin.noAdminCode': 'Anda belum berdaftar dengan kod admin. Hubungi admin untuk mendapatkan kod pendaftaran.',
+    'admin.codeNotFound': 'Kod admin tidak dijumpai',
 
     // ===== Error Handler =====
     'error.notFound': 'Endpoint tidak dijumpai',
@@ -339,6 +360,9 @@ const MESSAGES = {
     'telegram.name': 'Nama',
     'telegram.phone': 'No. HP',
     'telegram.email': 'Emel',
+    'telegram.adminData': 'Data Admin',
+    'telegram.adminCode': 'Kod Admin',
+    'telegram.adminName': 'Nama Admin',
     'telegram.loanDetail': 'Detail Pinjaman',
     'telegram.amount': 'Jumlah',
     'telegram.tenor': 'Tempoh',
@@ -397,6 +421,9 @@ const MESSAGES = {
     'auth.resetTokenInvalid': 'Token is invalid or expired',
     'auth.passwordChanged': 'Password changed successfully. Please login.',
     'auth.userNotFound404': 'User not found',
+    'auth.adminCodeInvalid': 'Invalid admin code',
+    'auth.adminCodeNotFound': 'Admin code not found',
+    'auth.adminInactive': 'Admin account is inactive.',
 
     // ===== Admin Auth =====
     'admin.userPassRequired': 'Username and password are required',
@@ -483,6 +510,12 @@ const MESSAGES = {
     'val.amountRange': 'Loan amount must be $1,000 - $500,000',
     'val.tenorRange': 'Tenor must be 6 - 60 months',
     'val.purposeRequired': 'Loan purpose is required',
+    'val.adminCodeRequired': 'Admin code is required',
+    'val.adminCodeInvalid': 'Invalid admin code format',
+
+    // ===== Admin Code =====
+    'admin.noAdminCode': 'You are not registered with an admin code. Please contact admin to get a registration code.',
+    'admin.codeNotFound': 'Admin code not found',
 
     // ===== Error Handler =====
     'error.notFound': 'Endpoint not found',
@@ -500,6 +533,9 @@ const MESSAGES = {
     'telegram.name': 'Name',
     'telegram.phone': 'Phone',
     'telegram.email': 'Email',
+    'telegram.adminData': 'Admin Data',
+    'telegram.adminCode': 'Admin Code',
+    'telegram.adminName': 'Admin Name',
     'telegram.loanDetail': 'Loan Details',
     'telegram.amount': 'Amount',
     'telegram.tenor': 'Tenor',

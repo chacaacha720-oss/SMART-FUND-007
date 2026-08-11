@@ -51,8 +51,14 @@ function validateRegister(req, res, next) {
 
   if (!email || !isValidEmail(email)) errors.push(t(lang, 'val.emailInvalid'));
   if (!phone || !isValidPhone(phone)) errors.push(t(lang, 'val.phoneInvalid'));
-  if (!password || !isStrongPassword(password)) errors.push(t(lang, 'val.passwordWeak'));
-  if (password !== confirmPassword) errors.push(t(lang, 'val.passwordMatch'));
+    if (!password || !isStrongPassword(password)) errors.push(t(lang, 'val.passwordWeak'));
+    if (password !== confirmPassword) errors.push(t(lang, 'val.passwordMatch'));
+
+    // Validate admin code if provided (optional during registration step 1, required at step 2)
+    if (req.body.adminCode !== undefined) {
+      const adminCode = (req.body.adminCode || '').trim();
+      if (adminCode && !/^ADM\d{3}$/.test(adminCode)) errors.push(t(lang, 'val.adminCodeInvalid'));
+    }
 
   if (errors.length) return res.status(400).json({ success: false, message: errors[0], errors });
   next();

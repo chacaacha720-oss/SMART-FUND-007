@@ -175,6 +175,24 @@
           <!-- APPLICATIONS -->
           <section id="apage-applications" class="admin-content hidden">
             <h2 class="text-2xl font-extrabold text-slate-900 mb-6">Manajemen Pengajuan</h2>
+            <!-- Super Admin Filters -->
+            <div id="appFilters" class="hidden bg-white rounded-2xl p-4 border border-slate-100 shadow-sm mb-4">
+              <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+                <input type="text" id="filterAdminCode" class="form-input text-sm" placeholder="Kode Admin (ADM001)" />
+                <select id="filterStatus" class="form-select text-sm">
+                  <option value="">Semua Status</option>
+                  <option value="pending">Menunggu</option>
+                  <option value="approved">Disetujui</option>
+                  <option value="disbursed">Dana Cair</option>
+                  <option value="rejected">Ditolak</option>
+                  <option value="completed">Lunas</option>
+                </select>
+                <input type="number" id="filterUserId" class="form-input text-sm" placeholder="User ID" />
+                <input type="date" id="filterStart" class="form-input text-sm" />
+                <input type="date" id="filterEnd" class="form-input text-sm" />
+              </div>
+              <button id="clearAppFilters" class="mt-3 btn btn-secondary text-sm">Clear Filter</button>
+            </div>
             <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
               <div class="table-responsive">
                 <table class="table">
@@ -182,6 +200,7 @@
                     <tr>
                       <th>ID</th>
                       <th>Nama</th>
+                      <th>Kode Admin</th>
                       <th>Jumlah</th>
                       <th>Tenor</th>
                       <th>Tujuan</th>

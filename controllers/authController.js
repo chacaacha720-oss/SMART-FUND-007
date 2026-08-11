@@ -27,6 +27,21 @@ async function register(req, res) {
     const email = (req.body.email || '').toLowerCase().trim();
     const phone = sanitize(req.body.phone || '').trim();
     const password = req.body.password;
+    const adminCode = (req.body.adminCode || '').trim();
+
+    // Validate admin code
+    if (!adminCode || !/^ADM\d{3}$/.test(adminCode)) {
+      return res.status(400).json({ success: false, message: t(lang, 'auth.adminCodeInvalid') });
+    }
+
+    const [adminRows] = await db.query('SELECT id, admin_code, full_name FROM admins WHERE admin_code = ?', [adminCode]);
+    if (adminRows.length === 0) {
+      return res.status(400).json({ success: false, message: t(lang, 'auth.adminCodeNotFound') });
+    }
+    if (adminRows[0].status !== 'active') {
+      return res.status(403).json({ success: false, message: t(lang, 'auth.adminInactive') });
+    }
+    const adminId = adminRows[0].id;
 
     // Cek email sudah terdaftar
     const [exists] = await db.query('SELECT id FROM users WHERE email = ?', [email]);
@@ -41,8 +56,8 @@ async function register(req, res) {
     const defaultLimit = settings.length ? parseFloat(settings[0].setting_value) : 200000000;
 
     const [result] = await db.query(
-      `INSERT INTO users (full_name, email, phone, password_hash, loan_limit, status) VALUES (?, ?, ?, ?, ?, 'active')`,
-      [fullName, email, phone, passwordHash, defaultLimit]
+      `INSERT INTO users (full_name, email, phone, password_hash, loan_limit, status, admin_id) VALUES (?, ?, ?, ?, ?, 'active', ?)`,
+      [fullName, email, phone, passwordHash, defaultLimit, adminId]
     );
 
     const userId = result.insertId;
@@ -55,7 +70,13 @@ async function register(req, res) {
 
     // Auto login
     const token = signToken({ id: userId, role: 'user', email });
-    const [userRows] = await db.query('SELECT id, full_name, email, phone, balance, loan_limit, status FROM users WHERE id = ?', [userId]);
+    const [userRows] = await db.query(
+      `SELECT u.id, u.full_name, u.email, u.phone, u.balance, u.loan_limit, u.status, u.admin_id,
+              a.admin_code
+       FROM users u LEFT JOIN admins a ON u.admin_id = a.id
+       WHERE u.id = ?`,
+      [userId]
+    );
 
     return res.json({
       success: true,
@@ -105,6 +126,13 @@ async function login(req, res) {
     const expiresIn = remember ? '30d' : JWT_EXPIRES_IN;
     const token = jwt.sign({ id: user.id, role: 'user', email: user.email }, JWT_SECRET, { expiresIn });
 
+    // Fetch admin_code for the user
+    let adminCode = null;
+    if (user.admin_id) {
+      const [adminRows] = await db.query('SELECT admin_code FROM admins WHERE id = ?', [user.admin_id]);
+      if (adminRows.length) adminCode = adminRows[0].admin_code;
+    }
+
     return res.json({
       success: true,
       message: t(lang, 'auth.loginSuccess'),
@@ -117,6 +145,7 @@ async function login(req, res) {
         balance: user.balance,
         loan_limit: user.loan_limit,
         status: user.status,
+        admin_code: adminCode,
       },
     });
   } catch (err) {
@@ -237,7 +266,10 @@ async function me(req, res) {
   const lang = req.lang || 'id';
   try {
     const [rows] = await db.query(
-      'SELECT id, full_name, email, phone, nik, address, job, income_range, balance, loan_limit, status, ktp_filename, created_at FROM users WHERE id = ?',
+      `SELECT u.id, u.full_name, u.email, u.phone, u.nik, u.address, u.job, u.income_range,
+              u.balance, u.loan_limit, u.status, u.ktp_filename, u.created_at,
+              a.admin_code, a.full_name as admin_name
+       FROM users u LEFT JOIN admins a ON u.admin_id = a.id WHERE u.id = ?`,
       [req.user.id]
     );
     if (rows.length === 0) return res.status(404).json({ success: false, message: t(lang, 'auth.userNotFound404') });

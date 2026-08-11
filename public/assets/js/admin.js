@@ -120,6 +120,24 @@ async function showAdminApp(admin) {
   document.getElementById('appRejectBtn').addEventListener('click', () => updateAppStatus('rejected'));
   document.getElementById('appDisburseBtn').addEventListener('click', () => updateAppStatus('disbursed'));
 
+  // Super admin application filters
+  const filterInputs = ['filterAdminCode', 'filterStatus', 'filterUserId', 'filterStart', 'filterEnd'];
+  filterInputs.forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('change', loadApplications);
+      if (id === 'filterAdminCode' || id === 'filterUserId') {
+        let timeout;
+        el.addEventListener('input', () => { clearTimeout(timeout); timeout = setTimeout(loadApplications, 500); });
+      }
+    }
+  });
+  const clearBtn = document.getElementById('clearAppFilters');
+  if (clearBtn) clearBtn.addEventListener('click', () => {
+    filterInputs.forEach((id) => { const el = document.getElementById(id); if (el) el.value = ''; });
+    loadApplications();
+  });
+
   // Telegram actions
   document.getElementById('tgSaveBtn').addEventListener('click', saveTelegramSettings);
   document.getElementById('tgTestBtn').addEventListener('click', testTelegram);
@@ -280,14 +298,36 @@ async function deleteUser(id) {
 // APPLICATIONS
 // ============================================
 async function loadApplications() {
-  const res = await api('/admin/applications');
+  // Show filters only for super admin
+  const filterBar = document.getElementById('appFilters');
+  if (filterBar) {
+    filterBar.classList.toggle('hidden', currentAdmin.role !== 'super_admin');
+  }
+
+  // Build query params for super admin filters
+  const params = new URLSearchParams();
+  if (currentAdmin && currentAdmin.role === 'super_admin') {
+    const ac = document.getElementById('filterAdminCode')?.value.trim();
+    const st = document.getElementById('filterStatus')?.value;
+    const uid = document.getElementById('filterUserId')?.value.trim();
+    const sd = document.getElementById('filterStart')?.value;
+    const ed = document.getElementById('filterEnd')?.value;
+    if (ac) params.append('admin_code', ac);
+    if (st) params.append('status', st);
+    if (uid) params.append('userId', uid);
+    if (sd) params.append('start', sd);
+    if (ed) params.append('end', ed);
+  }
+
+  const res = await api(`/admin/applications?${params.toString()}`);
   if (!res.success) return;
   const tbody = document.getElementById('appsTable');
-  if (!res.data.length) { tbody.innerHTML = `<tr><td colspan="7" class="text-center py-8 text-slate-400">${I18N.t('admin.noApplications')}</td></tr>`; return; }
+  if (!res.data.length) { tbody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-slate-400">${I18N.t('admin.noApplications')}</td></tr>`; return; }
   tbody.innerHTML = res.data.map((a) => `
     <tr class="table-row hover:bg-slate-50 dark:hover:bg-slate-800/30">
       <td class="px-4 py-3 font-semibold text-slate-700">#${a.id}</td>
       <td class="px-4 py-3 text-slate-700">${a.full_name}<div class="text-xs text-slate-400">${a.phone}</div></td>
+      <td class="px-4 py-3 text-slate-700 font-mono text-sm">${a.admin_code || a.la_admin_code || '-'}</td>
       <td class="px-4 py-3 text-slate-700">${formatRupiah(a.amount)}</td>
       <td class="px-4 py-3 text-slate-700">${a.tenor} bln</td>
       <td class="px-4 py-3 text-slate-500 text-sm">${a.purpose}</td>
@@ -331,6 +371,7 @@ async function viewApp(id) {
         </div>
       </div>
     </div>
+    ${a.admin_code ? `<div class="bg-amber-50 rounded-xl p-4 text-sm"><b>Kode Admin:</b> ${a.admin_code} | <b>Nama Admin:</b> ${a.admin_name || '-'}</div>` : ''}
     ${a.admin_note ? `<div class="bg-amber-50 rounded-xl p-4 text-sm"><b>Catatan Admin:</b> ${a.admin_note}</div>` : ''}
     <div>
       <label class="block text-sm font-semibold text-slate-700 mb-2">${I18N.t('admin.addNote')}</label>

@@ -124,6 +124,7 @@ async function buildLoanApplicationMessage(data) {
   const {
     fullName, phone, email, amount, tenor, purpose,
     monthlyPayment, totalInterest, totalPayment, applicationId, userId, lang,
+    adminCode, adminName,
   } = data;
 
   const language = lang || 'id';
@@ -145,6 +146,16 @@ async function buildLoanApplicationMessage(data) {
     [{ text: t(language, 'telegram.chatUser'), url: chatUrl }],
   ];
 
+  let adminSection = '';
+  if (adminCode) {
+    adminSection = `
+👨‍💼 <b>${t(language, 'telegram.adminData')}:</b>
+• ${t(language, 'telegram.adminCode')}: ${adminCode}
+• ${t(language, 'telegram.adminName')}: ${adminName || '-'}
+
+`;
+  }
+
   const message = `
 🔔 <b>${t(language, 'telegram.newLoanTitle')}</b>
 
@@ -153,7 +164,7 @@ async function buildLoanApplicationMessage(data) {
 • ${t(language, 'telegram.phone')}: ${phone}
 • ${t(language, 'telegram.email')}: ${email}
 • ID User: #${userId}
-
+${adminSection}
 💰 <b>${t(language, 'telegram.loanDetail')}:</b>
 • ${t(language, 'telegram.amount')}: ${fmt(amount)}
 • ${t(language, 'telegram.tenor')}: ${tenor} ${t(language, 'telegram.month')}

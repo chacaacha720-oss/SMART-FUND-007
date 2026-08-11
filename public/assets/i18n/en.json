@@ -149,7 +149,9 @@
     "back": "Back to Home",
     "f1": "Fast registration process",
     "f2": "Auto login after registration",
-    "f3": "Full dashboard access"
+    "f3": "Full dashboard access",
+    "adminCode": "Admin Code",
+    "adminCodeHint": "Enter your admin registration code"
   },
   "forgot": {
     "title": "Forgot Password",
@@ -257,7 +259,12 @@
     "confirmDeleteText": "User and all related data will be permanently deleted.",
     "save": "Save",
     "cancel": "Cancel",
-    "close": "Close"
+    "close": "Close",
+    "adminCode": "Admin Code",
+    "adminName": "Admin Name",
+    "noAdminCode": "You are not registered with an admin code. Please contact admin to get a registration code.",
+    "adminCodeLabel": "Admin Code",
+    "adminCodeHint": "Enter your admin registration code"
   },
   "status": {
     "pending": "Pending",
@@ -282,7 +289,9 @@
     "purposeRequired": "Loan purpose is required",
     "otpRequired": "OTP must be 6 digits",
     "minWithdraw": "Minimum withdrawal amount $100",
-    "withdrawRequired": "All bank account data is required"
+    "withdrawRequired": "All bank account data is required",
+    "adminCodeRequired": "Admin code is required",
+    "adminCodeInvalid": "Invalid admin code format"
   },
   "notif": {
     "loginSuccess": "Login successful! Redirecting...",

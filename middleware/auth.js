@@ -30,7 +30,7 @@ async function authUser(req, res, next) {
       return res.status(403).json({ success: false, message: t(lang, 'auth.notUser') });
     }
 
-    const [rows] = await db.query('SELECT id, full_name, email, phone, status FROM users WHERE id = ?', [decoded.id]);
+    const [rows] = await db.query('SELECT id, full_name, email, phone, status, admin_id FROM users WHERE id = ?', [decoded.id]);
     if (rows.length === 0) {
       return res.status(401).json({ success: false, message: t(lang, 'auth.userNotFound') });
     }
@@ -62,7 +62,7 @@ async function authAdmin(req, res, next) {
       return res.status(403).json({ success: false, message: t(lang, 'auth.notAdmin') });
     }
 
-    const [rows] = await db.query('SELECT id, username, email, full_name, role, status FROM admins WHERE id = ?', [decoded.id]);
+    const [rows] = await db.query('SELECT id, username, email, full_name, role, admin_code, status FROM admins WHERE id = ?', [decoded.id]);
     if (rows.length === 0) {
       return res.status(401).json({ success: false, message: t(lang, 'auth.adminNotFound') });
     }
@@ -86,8 +86,8 @@ async function optionalAuth(req, res, next) {
       const token = header.split(' ')[1];
       const decoded = jwt.verify(token, JWT_SECRET);
       if (decoded.role === 'user') {
-        const [rows] = await db.query('SELECT id, full_name, email, phone, status FROM users WHERE id = ?', [decoded.id]);
-        if (rows.length > 0 && rows[0].status !== 'frozen') req.user = rows[0];
+         const [rows] = await db.query('SELECT id, full_name, email, phone, status, admin_id FROM users WHERE id = ?', [decoded.id]);
+         if (rows.length > 0 && rows[0].status !== 'frozen') req.user = rows[0];
       }
     }
   } catch (e) {

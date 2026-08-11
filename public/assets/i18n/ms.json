@@ -149,7 +149,9 @@
     "back": "Kembali ke Laman Utama",
     "f1": "Proses pendaftaran pantas",
     "f2": "Auto log masuk selepas daftar",
-    "f3": "Akses dashboard lengkap"
+    "f3": "Akses dashboard lengkap",
+    "adminCode": "Kod Admin",
+    "adminCodeHint": "Masukkan kod admin pendaftaran anda"
   },
   "forgot": {
     "title": "Lupa Kata Laluan",
@@ -257,7 +259,12 @@
     "confirmDeleteText": "Pengguna dan semua data berkaitan akan dihapus secara kekal.",
     "save": "Simpan",
     "cancel": "Batal",
-    "close": "Tutup"
+    "close": "Tutup",
+    "adminCode": "Kod Admin",
+    "adminName": "Nama Admin",
+    "noAdminCode": "Anda belum berdaftar dengan kod admin. Hubungi admin untuk mendapatkan kod pendaftaran.",
+    "adminCodeLabel": "Kod Admin",
+    "adminCodeHint": "Masukkan kod admin pendaftaran anda"
   },
   "status": {
     "pending": "Menunggu",
@@ -282,7 +289,9 @@
     "purposeRequired": "Tujuan pinjaman wajib dipilih",
     "otpRequired": "OTP mesti 6 digit",
     "minWithdraw": "Jumlah pengeluaran minimum RM 100",
-    "withdrawRequired": "Semua data akaun diperlukan"
+    "withdrawRequired": "Semua data akaun diperlukan",
+    "adminCodeRequired": "Kod admin diperlukan",
+    "adminCodeInvalid": "Format kod admin tidak sah"
   },
   "notif": {
     "loginSuccess": "Log masuk berjaya! Mengalihkan...",

@@ -91,6 +91,14 @@
               </div>
             </div>
             <div>
+              <label class="form-label" for="adminCode">Kode Admin</label>
+              <div class="relative">
+                <i class="fas fa-key absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input type="text" id="adminCode" placeholder="ADM001" class="form-input pl-11 uppercase" />
+              </div>
+              <p class="form-hint">Masukkan kode admin pendaftaran Anda</p>
+            </div>
+            <div>
               <label class="form-label" for="password">Password</label>
               <div class="relative">
                 <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
@@ -217,6 +225,9 @@
         if (!/[a-zA-Z]/.test(password) || !/[0-9]/.test(password)) return showToast('Password harus mengandung huruf dan angka', 'error');
         if (password !== confirm) return showToast('Password tidak cocok', 'error');
 
+        const adminCode = document.getElementById('adminCode').value.trim().toUpperCase();
+        if (!adminCode || !/^ADM\d{3}$/.test(adminCode)) return showToast('Kode admin tidak valid (format: ADM000)', 'error');
+
         goStep(2);
       });
 
@@ -233,6 +244,7 @@
           phone: document.getElementById('phone').value.trim(),
           password: document.getElementById('password').value,
           confirmPassword: document.getElementById('confirmPassword').value,
+          adminCode: document.getElementById('adminCode').value.trim().toUpperCase(),
         };
 
         setBtnLoading(submitBtn, true);

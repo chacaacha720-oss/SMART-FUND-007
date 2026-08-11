@@ -18,7 +18,7 @@ async function dashboard(req, res) {
 
     // Data user
     const [userRows] = await db.query(
-      'SELECT id, full_name, email, phone, balance, loan_limit, status, created_at FROM users WHERE id = ?',
+      'SELECT u.id, u.full_name, u.email, u.phone, u.balance, u.loan_limit, u.status, u.created_at, u.admin_id, a.admin_code as admin_kode, a.full_name as admin_name FROM users u LEFT JOIN admins a ON u.admin_id = a.id WHERE u.id = ?',
       [userId]
     );
     if (userRows.length === 0) return res.status(404).json({ success: false, message: t(lang, 'user.notFound') });
@@ -61,6 +61,8 @@ async function dashboard(req, res) {
         statusPengajuan: lastApp.length ? lastApp[0] : null,
         riwayatTransaksi: transactions,
         unreadNotifications: unreadNotif[0].cnt,
+        admin_code: user.admin_kode,
+        admin_name: user.admin_name,
       },
     });
   } catch (err) {

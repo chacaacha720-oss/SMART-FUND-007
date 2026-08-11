@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS admins (
   email VARCHAR(100) NOT NULL UNIQUE,
   password_hash VARCHAR(255) NOT NULL,
   full_name VARCHAR(100),
+  admin_code VARCHAR(50) NOT NULL UNIQUE,
   role ENUM('super_admin','admin','operator') DEFAULT 'admin',
   status ENUM('active','inactive') DEFAULT 'active',
   last_login DATETIME NULL,
@@ -40,6 +41,7 @@ CREATE TABLE IF NOT EXISTS users (
   income_range VARCHAR(50) NULL,
   balance DECIMAL(15,2) DEFAULT 0.00,
   loan_limit DECIMAL(15,2) DEFAULT 5000000.00,
+  admin_id INT NULL,
   status ENUM('active','frozen','pending','inactive') DEFAULT 'active',
   ktp_filename VARCHAR(255) NULL,
   remember_token VARCHAR(255) NULL,
@@ -48,7 +50,9 @@ CREATE TABLE IF NOT EXISTS users (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   INDEX idx_email (email),
   INDEX idx_phone (phone),
-  INDEX idx_status (status)
+  INDEX idx_status (status),
+  INDEX idx_admin (admin_id),
+  FOREIGN KEY (admin_id) REFERENCES admins(id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
 -- --------------------------------------------
@@ -57,6 +61,8 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS loan_applications (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
+  admin_id INT NULL,
+  admin_code VARCHAR(50) NULL,
   amount DECIMAL(15,2) NOT NULL,
   purpose VARCHAR(255) NOT NULL,
   tenor INT NOT NULL,
@@ -71,8 +77,10 @@ CREATE TABLE IF NOT EXISTS loan_applications (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (admin_id) REFERENCES admins(id) ON DELETE SET NULL,
   INDEX idx_status (status),
-  INDEX idx_user (user_id)
+  INDEX idx_user (user_id),
+  INDEX idx_admin (admin_id)
 ) ENGINE=InnoDB;
 
 -- --------------------------------------------
@@ -199,4 +207,5 @@ ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value);
 -- --------------------------------------------
 -- Default Admin (password: Admin@12345)
 -- NOTE: password_hash di-generate oleh bcrypt pada saat init.js
+-- admin_code di-generate oleh init.js sebagai ADM001
 -- --------------------------------------------

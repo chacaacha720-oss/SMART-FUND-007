@@ -288,6 +288,75 @@ process.on('SIGINT', () => gracefulShutdown('SIGINT'));
   } catch (err) {
     console.error('✘ Auto-migration failed:', err.message);
   }
+
+  // Admin Code System: auto-migrate new columns for existing databases
+  try {
+    const migrations = [
+      { table: 'admins', col: 'admin_code', definition: 'VARCHAR(50) AFTER role', unique: true },
+      { table: 'users', col: 'admin_id', definition: 'INT NULL AFTER status', index: 'idx_admin' },
+      { table: 'loan_applications', col: 'admin_id', definition: 'INT NULL AFTER user_id', index: 'idx_admin' },
+      { table: 'loan_applications', col: 'admin_code', definition: 'VARCHAR(50) NULL AFTER admin_id', index: false },
+    ];
+
+    for (const m of migrations) {
+      try {
+        const [check] = await db.query(
+          'SELECT COUNT(*) as cnt FROM information_schema.columns WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?',
+          [m.table, m.col]
+        );
+        if (check[0].cnt === 0) {
+          await db.query(`ALTER TABLE ${m.table} ADD COLUMN ${m.col} ${m.definition}`);
+          console.log(`[OK] Migrated: added ${m.col} to ${m.table}`);
+        }
+        if (m.unique) {
+          const [idxCheck] = await db.query(
+            'SELECT COUNT(*) as cnt FROM information_schema.table_constraints WHERE table_schema = DATABASE() AND table_name = ? AND constraint_name = ? AND constraint_type = \'UNIQUE\'',
+            [m.table, `uk_${m.table}_${m.col}`]
+          );
+          if (idxCheck[0].cnt === 0) {
+            await db.query(`ALTER TABLE ${m.table} ADD CONSTRAINT uk_${m.table}_${m.col} UNIQUE (${m.col})`);
+            console.log(`[OK] Migrated: added unique constraint on ${m.table}.${m.col}`);
+          }
+        }
+        if (m.index) {
+          const [idxCheck2] = await db.query(
+            "SELECT COUNT(*) as cnt FROM information_schema.statistics WHERE table_schema = DATABASE() AND table_name = ? AND index_name = ?",
+            [m.table, m.index]
+          );
+          if (idxCheck2[0].cnt === 0) {
+            await db.query(`ALTER TABLE ${m.table} ADD INDEX ${m.index} (${m.col})`);
+            console.log(`[OK] Migrated: added index ${m.index} to ${m.table}`);
+          }
+        }
+      } catch (merr) {
+        console.error(`[WARN] Migration failed for ${m.table}.${m.col}:`, merr.message);
+      }
+    }
+
+    // Backfill admin_code for existing admins
+    const [adminRows] = await db.query('SELECT id, admin_code FROM admins WHERE admin_code IS NULL OR admin_code = \'\'');
+    for (const a of adminRows) {
+      const code = 'ADM' + String(a.id).padStart(3, '0');
+      await db.query('UPDATE admins SET admin_code = ? WHERE id = ?', [code, a.id]);
+      console.log(`[OK] Backfilled admin_code ${code} for admin id=${a.id}`);
+    }
+
+    // Backfill loan_applications admin_id & admin_code from users
+    const [loanRows] = await db.query(`
+      SELECT la.id, la.user_id FROM loan_applications la WHERE la.admin_id IS NULL
+    `);
+    for (const la of loanRows) {
+      await db.query(`
+        UPDATE loan_applications la JOIN users u ON la.user_id = u.id
+        LEFT JOIN admins a ON u.admin_id = a.id
+        SET la.admin_id = u.admin_id, la.admin_code = a.admin_code
+        WHERE la.id = ?
+      `, [la.id]);
+    }
+    if (loanRows.length > 0) console.log(`[OK] Backfilled admin_id/admin_code for ${loanRows.length} loan applications`);
+  } catch (migrationErr) {
+    console.error('✘ Admin Code migration failed:', migrationErr.message);
+  }
 })();
 
 module.exports = app;
