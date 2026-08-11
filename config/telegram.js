@@ -14,7 +14,7 @@ const DEFAULT_TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '8654004646
 const DEFAULT_TELEGRAM_ADMIN_CHAT_ID = process.env.TELEGRAM_ADMIN_CHAT_ID || '8176355378';
 const DEFAULT_TELEGRAM_BOT_USERNAME = process.env.TELEGRAM_BOT_USERNAME || 'smartfundx_bot';
 const DEFAULT_TELEGRAM_ADMIN_USERNAME = process.env.TELEGRAM_ADMIN_USERNAME || 'cs_smartfund';
-const KYC_MESSAGE = `Verifikasi / KYC belum aktif lakukan verifikasi\n\nUntuk melanjutkan penarikan`;
+const KYC_MESSAGE = `Pengesahan / KYC belum aktif. Sila lakukan pengesahan\n\nUntuk melanjutkan pengeluaran`;
 
 async function getTelegramSettings() {
   try {
@@ -61,8 +61,8 @@ async function sendTelegram(message, options = {}) {
   });
 
   if (!botToken || !chatId || botToken === 'YOUR_TELEGRAM_BOT_TOKEN_HERE') {
-    const details = 'Bot token / chat id belum dikonfigurasi atau masih menggunakan placeholder.';
-    console.warn('[Telegram] Bot token / chat id belum dikonfigurasi. Pesan tidak terkirim.');
+    const details = 'Token bot / ID chat belum dikonfigurasi atau masih menggunakan placeholder.';
+    console.warn('[Telegram] Token bot / ID chat belum dikonfigurasi. Mesej tidak berjaya dihantar.');
     await logTelegram(null, message, 'failed', details);
     return { success: false, error: 'not_configured', message: details };
   }
@@ -89,7 +89,7 @@ async function sendTelegram(message, options = {}) {
       console.log('[Telegram] Notification sent to admin');
       return { success: true, data };
     }
-    const errMsg = 'Telegram API mengembalikan response yang tidak valid.';
+    const errMsg = 'Telegram API mengembalikan respons yang tidak sah.';
     await logTelegram(chatId, message, 'failed', errMsg, payload);
     return { success: false, error: 'unknown', message: errMsg };
   } catch (err) {
@@ -127,7 +127,7 @@ async function buildLoanApplicationMessage(data) {
     adminCode, adminName,
   } = data;
 
-  const language = lang || 'id';
+  const language = lang || 'ms';
   const fmt = (n) => formatCurrency(language, n);
   const date = formatDateTime(language, new Date().toISOString());
   const config = await getTelegramSettings();
@@ -195,7 +195,7 @@ function parseTelegramStartParam(text) {
 
 async function sendTelegramText(botToken, chatId, text) {
   if (!botToken || !chatId) {
-    return { success: false, message: 'Bot token / chat id belum dikonfigurasi.' };
+    return { success: false, message: 'Token bot / ID chat belum dikonfigurasi.' };
   }
 
   try {
@@ -211,7 +211,7 @@ async function sendTelegramText(botToken, chatId, text) {
       return { success: true, data };
     }
 
-    return { success: false, message: data.description || 'Gagal mengirim pesan Telegram' };
+    return { success: false, message: data.description || 'Gagal menghantar mesej Telegram' };
   } catch (err) {
     const details = err.response && err.response.data && err.response.data.description
       ? err.response.data.description
@@ -223,7 +223,7 @@ async function sendTelegramText(botToken, chatId, text) {
 async function handleTelegramWebhookUpdate(update, botTokenOverride) {
   const message = update && update.message;
   if (!message || !message.chat || !message.chat.id) {
-    return { success: false, message: 'Update Telegram tidak valid.' };
+    return { success: false, message: 'Kemas kini Telegram tidak sah.' };
   }
 
   const startParam = parseTelegramStartParam(message.text);
@@ -231,7 +231,7 @@ async function handleTelegramWebhookUpdate(update, botTokenOverride) {
     const config = await getTelegramSettings();
     const botToken = botTokenOverride || config.botToken;
     if (!botToken) {
-      return { success: false, message: 'Bot token belum dikonfigurasi.' };
+      return { success: false, message: 'Token bot belum dikonfigurasi.' };
     }
 
     const replyToUser = await sendTelegramText(botToken, message.chat.id, KYC_MESSAGE);
@@ -261,25 +261,16 @@ async function buildWithdrawalNotification(data) {
     accountNumber, accountHolder, amount, lang,
   } = data;
 
-  const language = lang || 'id';
-  const fmt = (n) => new Intl.NumberFormat(language === 'id' ? 'id-ID' : language === 'ms' ? 'ms-MY' : 'en-US').format(n);
-  const currencySymbol = language === 'id' || language === 'ms' ? 'Rp' : '$';
-  const date = new Date().toLocaleString(language === 'id' ? 'id-ID' : 'en-US', {
-    timeZone: 'Asia/Jakarta',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-  });
+  const language = lang || 'ms';
+  const fmt = (n) => formatCurrency(language, n);
+  const date = formatDateTime(language, new Date().toISOString());
 
-  return `🔔 <b>${language === 'id' ? 'PENARIKAN BARU' : language === 'ms' ? 'PENARIKAN BARU' : 'NEW WITHDRAWAL'}</b>
+  return `🔔 <b>${t(language, 'telegram.newWithdrawalTitle', 'PENGELUARAN BARU')}</b>
 
-ID Penarikan:
+ID Pengeluaran:
 <b>${withdrawalId}</b>
 
-ID Member:
+ID Pengguna:
 ${userId}
 
 Nama:
@@ -288,26 +279,26 @@ ${fullName}
 No HP:
 ${phone}
 
-Email:
+Emel:
 ${email}
 
 Bank:
 ${bank}
 
-Nomor Rekening:
+Nombor Akaun:
 ${accountNumber}
 
-Nama Rekening:
+Nama Akaun:
 ${accountHolder}
 
 Jumlah:
-${currencySymbol}${fmt(amount)}
+${fmt(amount)}
 
-Tanggal:
+Tarikh:
 ${date}
 
 Status:
-${language === 'id' ? 'Menunggu Verifikasi' : language === 'ms' ? 'Menunggu Verifikasi' : 'Awaiting Verification'}`;
+${t(language, 'withdraw.pending', 'Menunggu Pengesahan')}`;
 }
 
 /**
@@ -316,7 +307,7 @@ ${language === 'id' ? 'Menunggu Verifikasi' : language === 'ms' ? 'Menunggu Veri
 function buildAdminChatUrl(withdrawalId, fullName) {
   const config = getTelegramSettings ? null : null; // settings loaded async inside getTelegramSettings
   const botUsername = process.env.TELEGRAM_BOT_USERNAME || 'smartfundx_bot';
-  const message = `Halo Admin,\n\nSaya baru saja mengajukan penarikan dana.\n\nID Penarikan:\n${withdrawalId}\nNama: ${fullName}\n\nMohon bantu melakukan verifikasi agar proses penarikan saya dapat dilanjutkan.\n\nTerima kasih.`;
+  const message = `Halo Admin,\n\nSaya baru saja mengajukan pengeluaran dana.\n\nID Pengeluaran:\n${withdrawalId}\nNama: ${fullName}\n\nSila bantu lakukan pengesahan agar proses pengeluaran saya boleh diteruskan.\n\nTerima kasih.`;
   return `https://t.me/${botUsername}?start=withdraw_${withdrawalId}`;
 }
 
@@ -326,7 +317,7 @@ function buildAdminChatUrl(withdrawalId, fullName) {
 async function getAdminRedirectUrl(withdrawalId, fullName) {
   const config = await getTelegramSettings();
   const adminUsername = config.adminUsername || 'cs_smartfund';
-  const message = `Halo Admin,\n\nSaya baru saja mengajukan penarikan dana.\n\nID Penarikan:\n${withdrawalId}\nNama: ${fullName}\n\nMohon bantu melakukan verifikasi agar proses penarikan saya dapat dilanjutkan.\n\nTerima kasih`;
+  const message = `Halo Admin,\n\nSaya baru saja mengajukan pengeluaran dana.\n\nID Pengeluaran:\n${withdrawalId}\nNama: ${fullName}\n\nSila bantu lakukan pengesahan agar proses pengeluaran saya boleh diteruskan.\n\nTerima kasih`;
   return `https://t.me/${adminUsername}?text=${encodeURIComponent(message)}`;
 }
 

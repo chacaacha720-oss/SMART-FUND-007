@@ -17,7 +17,7 @@ if (process.env.NODE_ENV === 'production' && JWT_SECRET === 'dev_jwt_secret_not_
  * Verifikasi JWT token user (Bearer token)
  */
 async function authUser(req, res, next) {
-  const lang = req.lang || 'id';
+  const lang = req.lang || 'ms';
   try {
     const header = req.headers.authorization;
     if (!header || !header.startsWith('Bearer ')) {
@@ -49,7 +49,7 @@ async function authUser(req, res, next) {
  * Verifikasi JWT token admin
  */
 async function authAdmin(req, res, next) {
-  const lang = req.lang || 'id';
+  const lang = req.lang || 'ms';
   try {
     const header = req.headers.authorization;
     if (!header || !header.startsWith('Bearer ')) {

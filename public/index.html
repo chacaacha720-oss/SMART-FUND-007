@@ -1,516 +1,589 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<html lang="ms">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>SMART FUND - Pinjaman Online Terpercaya | Bunga Mulai 5%</title>
-  <meta name="description" content="SMART FUND - Platform pinjaman online terpercaya berizin OJK. Bunga mulai 5% per tahun, proses cepat, persyaratan mudah. Ajukan pinjaman Rp1jt - Rp500jt." />
-  <meta name="keywords" content="pinjaman online, pinjaman uang, smart fund, fintech, OJK, kredivo, akulaku" />
+  <title>SMART FUND - Pinjaman Dalam Talian | Faedah Mula 5%</title>
+  <meta name="description" content="SMART FUND - Platform pinjaman dalam talian yang dipercayai dan berlesen OJK. Faedah bermula 5% setahun. Proses praktikal, telus, dan selamat untuk keperluan mendesak, modal perniagaan, pengubahsuaian rumah, pendidikan, hingga keperluan peribani." />
+  <meta name="keywords" content="pinjaman dalam talian, pinjaman wang, smart fund, fintech, OJK, simulasi pinjaman, kalkulator pinjaman" />
   <link rel="icon" type="image/png" href="/favicon.png" />
-
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       darkMode: 'class',
-      theme: { extend: { colors: { primary: '#2563eb', secondary: '#0ea5e9' } } },
+      theme: {
+        extend: {
+          colors: { primary: '#2563eb', secondary: '#0ea5e9' },
+          fontFamily: { jakarta: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'] },
+          animation: { 'fade-up': 'fade-up 0.6s ease-out', 'zoom-in': 'zoom-in 0.4s ease-out', 'pulse-slow': 'pulse 3s ease-in-out infinite', 'float': 'float 3s ease-in-out infinite' },
+          keyframes: {
+            'fade-up': { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+            'zoom-in': { '0%': { opacity: '0', transform: 'scale(0.95)' }, '100%': { opacity: '1', transform: 'scale(1)' } },
+            'float': { '0%, 100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-10px)' } }
+          }
+        }
+      };
     };
   </script>
-
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-
-  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-
-  <!-- AOS Animation -->
   <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
-
-  <!-- SweetAlert2 -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" />
-
-  <!-- Custom CSS -->
   <link rel="stylesheet" href="/assets/css/style.css" />
+  <script src="/assets/js/i18n.js"></script>
 </head>
-  <body class="font-jakarta">
-  <!-- Page Loader -->
-  <div id="pageLoader" class="page-loader">
-    <div class="text-center">
-      <div class="loader-logo mx-auto mb-4"></div>
-      <p class="text-blue-600 font-bold text-lg">SMART FUND</p>
-    </div>
-  </div>
+<body class="font-jakarta text-slate-700 antialiased">
+  <div id="pageLoader" class="page-loader"><div class="loader-logo mx-auto"></div></div>
 
-  <!-- ============================================ NAVBAR ============================================ -->
-  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/95 shadow-sm">
-    <div class="container mx-auto flex items-center justify-between h-16 md:h-20">
-      <!-- Logo -->
-      <a href="/" class="flex items-center gap-2.5 group" aria-label="Beranda SMART FUND">
-        <img src="/assets/img/logo.png" alt="SMART FUND Logo" loading="eager" width="40" height="40" class="object-contain transition-transform duration-300 animate-float" />
-        <span class="text-xl font-extrabold gradient-text">SMART FUND</span>
+  <!-- Navbar -->
+  <header class="navbar navbar-expand-lg navbar-transparent fixed w-full top-0 z-50 transition-all duration-300">
+    <div class="container mx-auto flex items-center justify-between px-4 sm:px-6 py-3">
+      <a href="/" class="flex items-center gap-2.5 group" aria-label="Laman Utama SMART FUND">
+        <img src="/assets/img/logo.png" alt="SMART FUND Logo" loading="lazy" width="40" height="40" class="object-contain transition-transform duration-300 animate-float" />
+        <span class="text-xl lg:text-2xl font-extrabold gradient-text">SMART FUND</span>
       </a>
-
-      <!-- Desktop Menu -->
       <div class="hidden lg:flex items-center gap-8">
-        <a href="#home" class="text-slate-700 hover:text-blue-600 font-medium transition">Beranda</a>
-        <a href="#features" class="text-slate-700 hover:text-blue-600 font-medium transition">Keunggulan</a>
-        <a href="#calculator" class="text-slate-700 hover:text-blue-600 font-medium transition">Simulasi</a>
-        <a href="#testimoni" class="text-slate-700 hover:text-blue-600 font-medium transition">Testimoni</a>
-        <a href="#faq" class="text-slate-700 hover:text-blue-600 font-medium transition">FAQ</a>
+        <a href="#features" class="nav-link">Kelebihan</a>
+        <a href="#calculator" class="nav-link">Simulasi</a>
+        <a href="#testimonial" class="nav-link">Testimoni</a>
+        <a href="#faq" class="nav-link">FAQ</a>
+        <a href="#apply" class="nav-link">Permohonan</a>
       </div>
-
-      <!-- Actions -->
       <div class="flex items-center gap-3">
-        <button id="darkToggle" class="icon-btn" aria-label="Toggle dark mode">
-          <i class="fas fa-moon text-slate-600"></i>
+        <button id="langToggle" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+          <i class="fas fa-globe text-xs"></i>
+          <span id="langLabel">Bahasa</span>
         </button>
-        <a href="/login.html" class="hidden sm:inline-block px-5 py-2.5 text-blue-600 font-semibold hover:text-blue-700 transition ">Masuk</a>
-        <a href="/register.html" class="btn btn-primary btn-shine hidden sm:inline-flex items-center gap-1">
-          <i class="fas fa-user-plus"></i> Daftar
-        </a>
-        <button id="mobileMenuBtn" class="lg:hidden icon-btn" aria-label="Buka menu" aria-expanded="false" aria-controls="mobileMenu">
-          <i class="fas fa-bars text-slate-600"></i>
-        </button>
+        <button id="darkToggle" class="icon-btn" aria-label="Toggle dark mode"><i class="fas fa-moon text-slate-600"></i></button>
+        <a href="/login.html" class="btn btn-ghost btn-sm">Masuk</a>
+        <a href="/register.html" class="btn btn-primary btn-sm">Daftar</a>
       </div>
+      <button id="mobileMenuBtn" class="lg:hidden icon-btn" aria-label="Buka menu"><i class="fas fa-bars text-xl text-slate-700"></i></button>
     </div>
-  </nav>
+  </header>
 
-  <!-- Mobile Menu Overlay (fullscreen) -->
-  <div id="mobileMenu" class="mobile-menu-overlay" aria-hidden="true">
-    <button id="mobileMenuClose" class="mobile-menu-close-btn" aria-label="Tutup menu">
-      <i class="fas fa-xmark"></i>
-    </button>
-    <div class="mobile-menu-inner">
-      <a href="#home">Beranda</a>
-      <a href="#features">Keunggulan</a>
-      <a href="#calculator">Simulasi</a>
-      <a href="#testimoni">Testimoni</a>
-      <a href="#faq">FAQ</a>
-      <a href="/login.html">Masuk</a>
-      <a href="/register.html">Daftar Sekarang</a>
-    </div>
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="hidden lg:hidden fixed top-0 left-0 w-full h-screen bg-white dark:bg-slate-900 z-[60] overflow-y-auto pt-20 pb-8 px-6">
+    <nav class="flex flex-col gap-4 text-center">
+      <a href="#features" class="text-xl py-3 text-slate-700 dark:text-slate-300 hover:text-blue-600">Kelebihan</a>
+      <a href="#calculator" class="text-xl py-3 text-slate-700 dark:text-slate-300 hover:text-blue-600">Simulasi</a>
+      <a href="#testimonial" class="text-xl py-3 text-slate-700 dark:text-slate-300 hover:text-blue-600">Testimoni</a>
+      <a href="#faq" class="text-xl py-3 text-slate-700 dark:text-slate-300 hover:text-blue-600">FAQ</a>
+      <a href="#apply" class="text-xl py-3 text-slate-700 dark:text-slate-300 hover:text-blue-600">Permohonan</a>
+      <div class="flex flex-col gap-3 mt-6">
+        <a href="/login.html" class="btn btn-ghost">Masuk</a>
+        <a href="/register.html" class="btn btn-primary">Daftar</a>
+      </div>
+    </nav>
+    <button id="closeMobileMenu" class="absolute top-5 right-5 icon-btn" aria-label="Tutup menu"><i class="fas fa-times text-xl text-slate-700"></i></button>
   </div>
-</nav>
 
-  <!-- ============================================ HERO ============================================ -->
-  <section id="home" class="relative pt-16 md:pt-20 pb-12 md:pb-16 hero-pattern overflow-hidden">
-    <div class="container mx-auto">
-      <div class="grid lg:grid-cols-2 gap-10 md:gap-12 items-center">
-        <!-- Left -->
-        <div data-aos="fade-right">
-          <span class="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-full text-sm font-semibold mb-6 animate-bounce-in">
-            <i class="fas fa-shield-halved" aria-hidden="true"></i> Berizin & Diawasi OJK
+  <!-- Hero -->
+  <section class="hero-section pt-20 pb-12 min-h-screen flex items-center relative overflow-hidden">
+    <div class="container mx-auto px-4 sm:px-6 relative z-10">
+      <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div class="space-y-6 sm:space-y-8" data-aos="fade-right">
+          <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300 text-sm font-medium">
+            <i class="fas fa-shield-halved"></i> Berlesen & Diawasi OJK
           </span>
-          <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight text-slate-900 mb-6">
-            Pinjaman Online <span class="gradient-text">Cepat & Aman</span> untuk Kebutuhan Anda
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-white leading-tight">
+            <span class="block">Pinjaman Dalam Talian</span>
+            <span class="block gradient-text">Cepat & Selamat</span>
+            <span class="block">untuk Keperluan Anda</span>
           </h1>
-          <p class="text-lg text-slate-600 mb-8 max-w-xl">
-            SMART FUND membantu masyarakat memenuhi kebutuhan mendesak, modal usaha, renovasi rumah, pendidikan, hingga kebutuhan pribadi dengan proses praktis, transparan, dan aman.
+          <p class="text-lg text-slate-600 dark:text-slate-300 max-w-lg">
+            SMART FUND membantu masyarakat memenuhi keperluan mendesak, modal perniagaan, pengubahsuaian rumah, pendidikan, hingga keperluan peribadi dengan proses yang praktikal, telus, dan selamat.
           </p>
-          <div class="flex flex-wrap gap-4 mb-8">
-            <a href="#calculator" class="btn btn-primary btn-shine">
+
+          <div class="stats-grid grid grid-cols-3 gap-4 mt-6 mb-8">
+            <div class="stat-card text-center p-4 bg-white dark:bg-slate-800 rounded-2xl shadow border border-slate-100 dark:border-slate-700">
+              <div class="text-2xl font-extrabold gradient-text">500+</div>
+              <div class="text-xs text-slate-500 dark:text-slate-400">Pelanggan</div>
+            </div>
+            <div class="stat-card text-center p-4 bg-white dark:bg-slate-800 rounded-2xl shadow border border-slate-100 dark:border-slate-700">
+              <div class="text-2xl font-extrabold gradient-text">5%</div>
+              <div class="text-xs text-slate-500 dark:text-slate-400">Faedah Bermula</div>
+            </div>
+            <div class="stat-card text-center p-4 bg-white dark:bg-slate-800 rounded-2xl shadow border border-slate-100 dark:border-slate-700">
+              <div class="text-2xl font-extrabold gradient-text">180+</div>
+              <div class="text-xs text-slate-500 dark:text-slate-400">Perkhidmatan</div>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a href="#apply" class="btn btn-primary btn-lg">
+              <i class="fas fa-rocket mr-2"></i> Mohon Sekarang
+            </a>
+            <a href="#calculator" class="btn btn-ghost btn-lg">
               <i class="fas fa-calculator mr-2"></i> Simulasi Pinjaman
             </a>
-            <a href="/register.html" class="btn btn-secondary">
-              <i class="fas fa-rocket mr-2"></i> Ajukan Sekarang
+          </div>
+        </div>
+
+        <div class="relative" data-aos="fade-left">
+          <div class="relative bg-white dark:bg-slate-800 rounded-[28px] shadow-2xl border border-slate-100 dark:border-slate-700 overflow-hidden">
+            <img id="calculatorPreview" src="/assets/img/calculator-preview.png" alt="Simulasi Pinjaman" class="w-full h-auto object-cover" />
+            <div class="p-6 sm:p-8 bg-slate-50 dark:bg-slate-900/50">
+              <div class="space-y-4">
+                <div class="flex items-center justify-between p-3 bg-white dark:bg-slate-800 rounded-xl">
+                  <span class="text-sm text-slate-600 dark:text-slate-300">Jumlah Pinjaman</span>
+                  <span class="font-bold text-slate-900 dark:text-white">RM50,000</span>
+                </div>
+                <div class="flex items-center justify-between p-3 bg-white dark:bg-slate-800 rounded-xl">
+                  <span class="text-sm text-slate-600 dark:text-slate-300">Tempoh</span>
+                  <span class="font-bold text-slate-900 dark:text-white">12 Bulan</span>
+                </div>
+                <div class="flex items-center justify-between p-3 gradient-bg text-white rounded-xl">
+                  <span class="text-sm opacity-90">Ansuran/Bulan</span>
+                  <span class="font-bold text-xl">RM4,320</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="absolute -top-4 -right-4 w-24 h-24 bg-blue-500/10 rounded-full blur-2xl"></div>
+          <div class="absolute -bottom-4 -left-4 w-24 h-24 bg-amber-500/10 rounded-full blur-2xl"></div>
+        </div>
+      </div>
+    </div>
+    <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white dark:from-slate-900 pointer-events-none"></div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="section-padding py-20">
+    <div class="container mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12" data-aos="fade-up">
+        <span class="inline-block px-4 py-1.5 bg-blue-100 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300 text-xs font-semibold rounded-full mb-4">KELEBIHAN</span>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white mb-4">Mengapa Memilih SMART FUND?</h2>
+        <p class="text-slate-600 dark:text-slate-300 max-w2xl mx-auto\">
+          Kami memberikan penyelesaian pinjaman terbaik dengan pelbagai kelebihan yang menguntungkan anda
+        </p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        <div class="card card-bg" data-aos="fade-up" data-aos-delay="100">
+          <div class="w-14 h-14 bg-blue-100 dark:bg-blue-950/30 rounded-2xl flex items-center justify-center mb-5">
+            <i class="fas fa-percentage text-2xl text-blue-600"></i>
+          </div>
+          <h3 class="font-bold text-lg text-slate-900 dark:text-white mb-2">Faedah Bermula 5%</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-300">Nikmati faedah kompetitif bermula 5% setahun supaya ansuran menjadi lebih ringan.</p>
+        </div>
+        <div class="card card-bg" data-aos="fade-up" data-aos-delay="200">
+          <div class="w-14 h-14 bg-blue-100 dark:bg-blue-950/30 rounded-2xl flex items-center justify-center mb-5">
+            <i class="fas fa-bolt text-2xl text-blue-600"></i>
+          </div>
+          <h3 class="font-bold text-lg text-slate-900 dark:text-white mb-2">Proses Pantas</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-300">Mohon pinjaman dalam talian pada bila-bila masa tanpa proses yang rumit.</p>
+        </div>
+        <div class="card card-bg" data-aos="fade-up" data-aos-delay="300">
+          <div class="w-14 h-14 bg-blue-100 dark:bg-blue-950/30 rounded-2xl flex items-center justify-center mb-5">
+            <i class="fas fa-file-check text-2xl text-blue-600"></i>
+          </div>
+          <h3 class="font-bold text-lg text-slate-900 dark:text-white mb-2">Syarat Mudah</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-300">Dokumen ringkas dengan proses pengesahan yang praktikal dan pantas.</p>
+        </div>
+        <div class="card card-bg" data-aos="fade-up" data-aos-delay="400">
+          <div class="w-14 h-14 bg-blue-100 dark:bg-blue-950/30 rounded-2xl flex items-center justify-center mb-5">
+            <i class="fas fa-shield-alt text-2xl text-blue-600"></i>
+          </div>
+          <h3 class="font-bold text-lg text-slate-900 dark:text-white mb-2">Selamat & Dipercayai</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-300">Perkhidmatan berlesen dan diawasi oleh Otoriti Jasa Kewangan (OJK) untuk keselamatan pelanggan.</p>
+        </div>
+        <div class="card card-bg" data-aos="fade-up" data-aos-delay="500">
+          <div class="w-14 h-14 bg-blue-100 dark:bg-blue-950/30 rounded-2xl flex items-center justify-center mb-5">
+            <i class="fas fa-wallet text-2xl text-blue-600"></i>
+          </div>
+          <h3 class="font-bold text-lg text-slate-900 dark:text-white mb-2">Dana Lulus</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-300">Dana disalurkan dalam 1x24 jam setelah kelulusan, langsung ke akaun anda.</p>
+        </div>
+        <div class="card card-bg" data-aos="fade-up" data-aos-delay="600">
+          <div class="w-14 h-14 bg-blue-100 dark:bg-blue-950/30 rounded-2xl flex items-center justify-center mb-5">
+            <i class="fas fa-mobile-screen text-2xl text-blue-600"></i>
+          </div>
+          <h3 class="font-bold text-lg text-slate-900 dark:text-white mb-2">100% Digital</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-300">Proses seluruhnya dalam talian melalui aplikasi, tiada perlu kertas kosong.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Calculator -->
+  <section id="calculator" class="section-padding py-20 bg-slate-50 dark:bg-slate-800/50">
+    <div class="container mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12" data-aos="fade-up">
+        <span class="inline-block px-4 py-1.5 bg-blue-100 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300 text-xs font-semibold rounded-full mb-4">SIMULASI PINJAMAN</span>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white mb-4">Kira Ansuran Anda</h2>
+        <p class="text-slate-600 dark:text-slate-300 max-w-xl mx-auto">Tetapkan jumlah pinjaman dan tempoh untuk melihat anggaran ansuran</p>
+      </div>
+      <div class="max-w-4xl mx-auto" data-aos="fade-up" data-aos-delay="200">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-slate-100 dark:border-slate-700 p-6 sm:p-8">
+          <div class="space-y-6">
+            <div class="space-y-2">
+              <div class="flex justify-between">
+                <label class="form-label">Jumlah Pinjaman</label>
+                <span class="text-sm font-semibold gradient-text">RM<span id="calcAmountDisplay">50,000</span></span>
+              </div>
+              <input type="range" id="calcAmount" min="1000" max="500000" value="50000" step="1000" />
+              <div class="flex justify-between text-xs text-slate-500 dark:text-slate-400">
+                <span>RM1,000</span>
+                <span>RM500,000</span>
+              </div>
+            </div>
+            <div class="space-y-2">
+              <div class="flex justify-between">
+                <label class="form-label">Tempoh (Bulan)</label>
+                <span class="text-sm font-semibold gradient-text" id="calcTenorDisplay">12</span>
+              </div>
+              <input type="range" id="calcTenor" min="6" max="60" value="12" step="1" />
+              <div class="flex justify-between text-xs text-slate-500 dark:text-slate-400">
+                <span>6 Bulan</span>
+                <span>60 Bulan</span>
+              </div>
+            </div>
+            <div class="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-4 mt-6">
+              <div class="grid grid-cols-3 gap-4 text-center">
+                <div>
+                  <span class="text-xs text-slate-500 dark:text-slate-400">Kadar Faedah</span>
+                  <div class="text-lg font-bold gradient-text" id="calcRate">5%</div>
+                </div>
+                <div>
+                  <span class="text-xs text-slate-500 dark:text-slate-400">Ansuran Sebulan</span>
+                  <div class="text-lg font-bold text-slate-900 dark:text-white" id="calcMonthly">—</div>
+                </div>
+                <div>
+                  <span class="text-xs text-slate-500 dark:text-slate-400">Jumlah Bayaran</span>
+                  <div class="text-lg font-bold text-slate-900 dark:text-white" id="calcTotal">—</div>
+                </div>
+              </div>
+            </div>
+            <a href="/register.html" class="btn btn-primary w-full btn-lg">
+              <i class="fas fa-rocket mr-2"></i> Mohon Sekarang
             </a>
           </div>
-          <!-- Stats -->
-          <div class="stats-grid">
-            <div class="hero-stat bg-white/60 rounded-xl p-4 text-center">
-              <p class="text-2xl md:text-3xl font-extrabold gradient-text">50K+</p>
-              <p class="text-sm text-slate-500">Nasabah</p>
-            </div>
-            <div class="hero-stat bg-white/60 rounded-xl p-4 text-center">
-              <p class="text-2xl md:text-3xl font-extrabold gradient-text">5%</p>
-              <p class="text-sm text-slate-500">Bunga Mulai</p>
-            </div>
-            <div class="hero-stat bg-white/60 rounded-xl p-4 text-center">
-              <p class="text-2xl md:text-3xl font-extrabold gradient-text">24/7</p>
-              <p class="text-sm text-slate-500">Layanan</p>
-            </div>
-          </div>
         </div>
+      </div>
+    </div>
+  </section>
 
-        <!-- Right - Hero Card -->
-        <div data-aos="fade-left" class="relative">
-          <div class="absolute -top-8 -right-8 w-64 h-64 bg-blue-200 rounded-full opacity-20 animate-float-slow"></div>
-          <div class="absolute -bottom-8 -left-8 w-64 h-64 bg-cyan-200 rounded-full opacity-20 animate-float"></div>
-          <div class="relative bg-white rounded-3xl shadow-2xl p-6 md:p-8 border border-slate-100 hover-lift">
-            <div class="flex items-center justify-between mb-6">
+  <!-- Apply -->
+  <section id="apply" class="section-padding py-20">
+    <div class="container mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12">
+        <span class="inline-block px-4 py-1.5 bg-blue-100 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300 text-xs font-semibold rounded-full mb-4">PERMOHONAN</span>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white mb-4">Mohon Pinjaman Anda</h2>
+        <p class="text-slate-600 dark:text-slate-300 max-w-xl mx-auto">Isi data berikut untuk memohon pinjaman</p>
+      </div>
+      <div class="max-w-3xl mx-auto">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-slate-100 dark:border-slate-700 p-6 sm:p-8" data-aos="fade-up">
+          <div class="grid md:grid-cols-2 gap-6">
+            <div class="space-y-5">
               <div>
-                <p class="text-sm text-slate-500">Pinjaman Hingga</p>
-                <p class="text-3xl font-extrabold text-slate-900">Rp500 Juta</p>
+                <label class="form-label" for="appFullName">Nama Penuh</label>
+                <input type="text" id="appFullName" placeholder="Nama penuh anda" class="form-input" />
               </div>
-              <div class="w-14 h-14 gradient-bg rounded-2xl flex items-center justify-center text-white text-2xl">
-                <i class="fas fa-hand-holding-dollar"></i>
-              </div>
-            </div>
-            <div class="space-y-4">
-              <div class="flex items-center gap-3 p-3 bg-green-50 rounded-xl">
-                <i class="fas fa-circle-check text-green-600 text-xl"></i>
-                <span class="text-slate-700 font-medium">Bunga mulai 5% per tahun</span>
-              </div>
-              <div class="flex items-center gap-3 p-3 bg-blue-50 rounded-xl">
-                <i class="fas fa-bolt text-blue-600 text-xl"></i>
-                <span class="text-slate-700 font-medium">Proses persetujuan cepat</span>
-              </div>
-              <div class="flex items-center gap-3 p-3 bg-purple-50 rounded-xl">
-                <i class="fas fa-file-circle-check text-purple-600 text-xl"></i>
-                <span class="text-slate-700 font-medium">Persyaratan mudah & sederhana</span>
-              </div>
-              <div class="flex items-center gap-3 p-3 bg-amber-50 rounded-xl">
-                <i class="fas fa-shield-halved text-amber-600 text-xl"></i>
-                <span class="text-slate-700 font-medium">Aman & terpercaya (OJK)</span>
-              </div>
-            </div>
-            <a href="/register.html" class="mt-6 block w-full py-4 gradient-bg text-white font-bold rounded-xl text-center shadow-lg hover:shadow-xl transition btn-shine">
-              Mulai Pengajuan <i class="fas fa-arrow-right ml-2"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================ FEATURES ============================================ -->
-  <section id="features" class="py-16 md:py-24 bg-white">
-    <div class="container mx-auto">
-      <div class="text-center mb-16" data-aos="fade-up">
-        <span class="text-blue-600 font-semibold">KEUNGGULAN</span>
-        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mt-2">Mengapa Memilih SMART FUND?</h2>
-        <p class="text-slate-600 mt-4 max-w-2xl mx-auto">Kami memberikan solusi pinjaman terbaik dengan berbagai keunggulan yang menguntungkan Anda</p>
-      </div>
-
-      <div class="feature-grid">
-        <!-- Feature 1 -->
-        <div class="card-hover bg-white rounded-2xl p-8 border border-slate-100 shadow-sm stagger-1" data-aos="fade-up" data-aos-delay="0">
-          <div class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mb-6 feature-icon">
-            <i class="fas fa-percent text-green-600 text-2xl"></i>
-          </div>
-          <h3 class="text-xl font-bold text-slate-900 mb-3">Bunga Mulai 5%</h3>
-          <p class="text-slate-600">Nikmati bunga kompetitif mulai 5% per tahun sehingga cicilan menjadi lebih ringan.</p>
-        </div>
-        <!-- Feature 2 -->
-        <div class="card-hover bg-white rounded-2xl p-8 border border-slate-100 shadow-sm stagger-2" data-aos="fade-up" data-aos-delay="100">
-          <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6 feature-icon">
-            <i class="fas fa-bolt text-blue-600 text-2xl"></i>
-          </div>
-          <h3 class="text-xl font-bold text-slate-900 mb-3">Proses Cepat</h3>
-          <p class="text-slate-600">Ajukan pinjaman secara online kapan saja tanpa proses yang rumit dan berbelit.</p>
-        </div>
-        <!-- Feature 3 -->
-        <div class="card-hover bg-white rounded-2xl p-8 border border-slate-100 shadow-sm stagger-3" data-aos="fade-up" data-aos-delay="200">
-          <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mb-6 feature-icon">
-            <i class="fas fa-file-circle-check text-purple-600 text-2xl"></i>
-          </div>
-          <h3 class="text-xl font-bold text-slate-900 mb-3">Persyaratan Mudah</h3>
-          <p class="text-slate-600">Dokumen sederhana dengan proses verifikasi yang praktis dan cepat.</p>
-        </div>
-        <!-- Feature 4 -->
-        <div class="card-hover bg-white rounded-2xl p-8 border border-slate-100 shadow-sm stagger-4" data-aos="fade-up" data-aos-delay="300">
-          <div class="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center mb-6 feature-icon">
-            <i class="fas fa-shield-halved text-amber-600 text-2xl"></i>
-          </div>
-          <h3 class="text-xl font-bold text-slate-900 mb-3">Aman & Terpercaya</h3>
-          <p class="text-slate-600">Layanan berizin dan diawasi oleh Otoritas Jasa Keuangan (OJK) untuk keamanan nasabah.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================ LOAN CALCULATOR ============================================ -->
-  <section id="calculator" class="py-16 md:py-24 gradient-bg-soft">
-    <div class="container mx-auto max-w-5xl">
-      <div class="text-center mb-12" data-aos="fade-up">
-        <span class="text-blue-600 font-semibold">SIMULASI PINJAMAN</span>
-        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mt-2">Hitung Cicilan Anda</h2>
-        <p class="text-slate-600 mt-4">Atur jumlah pinjaman dan tenor untuk melihat estimasi cicilan</p>
-      </div>
-
-      <div class="bg-white rounded-3xl shadow-2xl p-6 md:p-10 border border-slate-100 hover-lift" data-aos="zoom-in">
-        <div class="grid md:grid-cols-2 gap-8">
-          <!-- Input -->
-          <div class="space-y-8">
-            <!-- Amount -->
-            <div>
-              <div class="flex justify-between items-center mb-3">
-                <label class="font-semibold text-slate-700">Jumlah Pinjaman</label>
-                <span id="amountDisplay" class="text-blue-600 font-bold text-lg">Rp 10.000.000</span>
-              </div>
-              <input type="range" id="loanAmount" min="1000000" max="500000000" step="1000000" value="10000000" class="sf-slider w-full" />
-              <div class="flex justify-between text-xs text-slate-400 mt-2">
-                <span id="calcMinLabel">Rp 1.000.000</span>
-                <span id="calcMaxLabel">Rp 500.000.000</span>
-              </div>
-            </div>
-
-            <!-- Tenor -->
-            <div>
-              <label class="block font-semibold text-slate-700 mb-3">Tenor (Bulan)</label>
-              <select id="loanTenor" class="form-select">
-                <option value="6">6 Bulan</option>
-                <option value="12" selected>12 Bulan</option>
-                <option value="24">24 Bulan</option>
-                <option value="36">36 Bulan</option>
-                <option value="48">48 Bulan</option>
-                <option value="60">60 Bulan</option>
-              </select>
-            </div>
-
-            <button id="applyNowBtn" class="btn btn-primary w-full">
-              <i class="fas fa-paper-plane mr-2"></i> Ajukan Sekarang
-            </button>
-          </div>
-
-          <!-- Output -->
-          <div class="bg-gradient-to-br from-blue-600 to-cyan-500 rounded-2xl p-6 md:p-8 text-white">
-            <h3 class="text-lg font-semibold mb-6 opacity-90">Estimasi Cicilan</h3>
-            <div class="space-y-6">
               <div>
-                <p class="text-sm opacity-80">Cicilan per Bulan</p>
-                <p id="monthlyPayment" class="text-3xl md:text-4xl font-extrabold">Rp 0</p>
+                <label class="form-label" for="appPhone">Nombor HP</label>
+                <input type="tel" id="appPhone" placeholder="08xxxxxxxxxx" class="form-input" />
               </div>
-              <div class="border-t border-white/20 pt-6 space-y-4">
-                <div class="flex justify-between">
-                  <span class="opacity-80">Total Bunga</span>
-                  <span id="totalInterest" class="font-bold">Rp 0</span>
+              <div>
+                <label class="form-label" for="appAmount">Jumlah Pinjaman</label>
+                <select id="appAmount" class="form-input">
+                  <option>Pilih jumlah pinjaman</option>
+                  <option>RM5,000</option>
+                  <option>RM10,000</option>
+                  <option>RM25,000</option>
+                  <option>RM50,000</option>
+                  <option>RM100,000</option>
+                  <option>RM200,000</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label" for="appTenor">Tempoh (Bulan)</label>
+                <select id="appTenor" class="form-input">
+                  <option>6 Bulan</option>
+                  <option selected>12 Bulan</option>
+                  <option>18 Bulan</option>
+                  <option>24 Bulan</option>
+                  <option>36 Bulan</option>
+                  <option>48 Bulan</option>
+                  <option>60 Bulan</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label" for="appPurpose">Tujuan Pinjaman</label>
+                <select id="appPurpose" class="form-input">
+                  <option value="">Pilih tujuan pinjaman</option>
+                  <option value="urgent">Keperluan Mendesak</option>
+                  <option value="business">Modal Perniagaan</option>
+                  <option value="renovation">Pengubahsuaian Rumah</option>
+                  <option value="education">Pendidikan</option>
+                  <option value="personal">Keperluan Peribadi</option>
+                  <option value="other">Lain-lain</option>
+                </select>
+              </div>
+            </div>
+            <div class="space-y-5">
+              <div class="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-6 h-fit">
+                <h3 class="font-bold text-slate-900 dark:text-white mb-4">Ringkasan Pinjaman</h3>
+                <div class="space-y-3">
+                  <div class="flex justify-between py-2 border-b border-slate-200 dark:border-slate-700">
+                    <span class="text-sm text-slate-600 dark:text-slate-300">Jumlah Pinjaman</span>
+                    <span class="font-semibold text-slate-900 dark:text-white">—</span>
+                  </div>
+                  <div class="flex justify-between py-2 border-b border-slate-200 dark:border-slate-700">
+                    <span class="text-sm text-slate-600 dark:text-slate-300">Faedah</span>
+                    <span class="font-semibold text-slate-900 dark:text-white">5% setahun</span>
+                  </div>
+                  <div class="flex justify-between py-2 border-b border-slate-200 dark:border-slate-700">
+                    <span class="text-sm text-slate-600 dark:text-slate-300">Tempoh</span>
+                    <span class="font-semibold text-slate-900 dark:text-white">12 Bulan</span>
+                  </div>
+                  <div class="flex justify-between py-3 pt-3">
+                    <span class="text-base font-bold text-slate-900 dark:text-white">Ansuran/Bulan</span>
+                    <span class="font-bold text-xl gradient-text">—</span>
+                  </div>
                 </div>
-                <div class="flex justify-between">
-                  <span class="opacity-80">Total Pembayaran</span>
-                  <span id="totalPayment" class="font-bold">Rp 0</span>
+              </div>
+              <button id="applySubmit" class="btn btn-primary w-full btn-lg">
+                <span class="btn-text"><i class="fas fa-paper-plane mr-2"></i> Hantar Permohonan</span>
+              </button>
+              <p class="text-xs text-slate-500 text-center">Dengan mengisi formulir ini, anda menyetujui Syarat & Ketentuan SMART FUND.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial -->
+  <section id="testimonial" class="section-padding py-20 bg-slate-50 dark:bg-slate-800/50">
+    <div class="container mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12">
+        <span class="inline-block px-4 py-1.5 bg-blue-100 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300 text-xs font-semibold rounded-full mb-4">TESTIMONI</span>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white mb-4">Apa Kata Pelanggan Kami</h2>
+      </div>
+      <div class="max-w-4xl mx-auto">
+        <div class="swiper testimonial-swiper" id="testimonialSwiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <div class="testimonial-card bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-slate-100 dark:border-slate-700 p-8 text-center">
+                <div class="flex justify-center gap-1 mb-4">
+                  <i class="fas fa-star text-amber-400"></i>
+                  <i class="fas fa-star text-amber-400"></i>
+                  <i class="fas fa-star text-amber-400"></i>
+                  <i class="fas fa-star text-amber-400"></i>
+                  <i class="fas fa-star text-amber-400"></i>
                 </div>
-                <div class="flex justify-between">
-                  <span class="opacity-80">Suku Bunga</span>
-                  <span class="font-bold">5% / tahun</span>
+                <p class="text-slate-700 dark:text-slate-300 mb-6">Platform pinjaman dalam talian terpercaya. Berlesen OJK jadi lebih selamat. Proses pengesahan cepat dan praktikal.</p>
+                <div class="flex items-center justify-center gap-3">
+                  <img src="/assets/img/avatar.png" alt="avatar" class="w-12 h-12 rounded-full object-cover" />
+                  <div class="text-left">
+                    <div class="font-bold text-slate-900 dark:text-white">Ahmad Fauzi</div>
+                    <div class="text-sm text-slate-500 dark:text-slate-400">Karyawan, Johor Bahru</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="testimonial-card bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-slate-100 dark:border-slate-700 p-8 text-center">
+                <div class="flex justify-center gap-1 mb-4">
+                  <i class="fas fa-star text-amber-400"></i>
+                  <i class="fas fa-star text-amber-400"></i>
+                  <i class="fas fa-star text-amber-400"></i>
+                  <i class="fas fa-star text-amber-400"></i>
+                  <i class="fas fa-star text-amber-400"></i>
+                </div>
+                <p class="text-slate-700 dark:text-slate-300 mb-6">Faedah sangat kompetitif berbanding institusi lain. Proses pinjaman pantas, dalam sehari pun sudah berputus hulu.</p>
+                <div class="flex items-center justify-center gap-3">
+                  <img src="/assets/img/avatar.png" alt="avatar" class="w-12 h-12 rounded-full object-cover" />
+                  <div class="text-left">
+                    <div class="font-bold text-slate-900 dark:text-white">Siti Aisyah</div>
+                    <div class="text-sm text-slate-500 dark:text-slate-400">Pengusaha, Kuala Lumpur</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="testimonial-card bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-slate-100 dark:border-slate-700 p-8 text-center">
+                <div class="flex justify-center gap-1 mb-4">
+                  <i class="fas fa-star text-amber-400"></i>
+                  <i class="fas fa-star text-amber-400"></i>
+                  <i class="fas fa-star text-amber-400"></i>
+                  <i class="fas fa-star text-amber-400"></i>
+                  <i class="fas fa-star text-amber-400"></i>
+                </div>
+                <p class="text-slate-700 dark:text-slate-300 mb-6">Sangat membantu untuk modal perniagaan. Dana cair dalam 1x24 jam selepas diluluskan. Sangat menarik!</p>
+                <div class="flex items-center justify-center gap-3">
+                  <img src="/assets/img/avatar.png" alt="avatar" class="w-12 h-12 rounded-full object-cover" />
+                  <div class="text-left">
+                    <div class="font-bold text-slate-900 dark:text-white">Mohd Rizal</div>
+                    <div class="text-sm text-slate-500 dark:text-slate-400">Perniagaan F&B, Penang</div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+          <div class="swiper-pagination mt-8"></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ============================================ MULTI STEP FORM ============================================ -->
-  <section id="apply" class="py-16 md:py-24 bg-white">
-    <div class="container mx-auto max-w-3xl">
-      <div class="text-center mb-12" data-aos="fade-up">
-        <span class="text-blue-600 font-semibold">PENGAJUAN</span>
-        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mt-2">Ajukan Pinjaman Anda</h2>
-        <p class="text-slate-600 mt-4">Isi data berikut untuk mengajukan pinjaman</p>
+  <!-- FAQ -->
+  <section id="faq" class="section-padding py-20">
+    <div class="container mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12">
+        <span class="inline-block px-4 py-1.5 bg-blue-100 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300 text-xs font-semibold rounded-full mb-4">FAQ</span>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white mb-4">Soalan Lazim</h2>
+        <p class="text-slate-600 dark:text-slate-300 max-w-xl mx-auto">Pertanyaan yang sering ditanya tentang SMART FUND</p>
       </div>
-
-      <div class="bg-white rounded-3xl shadow-xl p-6 md:p-10 border border-slate-100 hover-lift" data-aos="fade-up">
-        <!-- Steps -->
-        <div class="flex items-center justify-center mb-10">
-          <div class="flex items-center gap-2">
-            <div id="step1Indicator" class="step-indicator active">1</div>
-            <div class="w-12 h-1 bg-slate-200 rounded" id="stepLine1"></div>
-            <div id="step2Indicator" class="step-indicator inactive">2</div>
+      <div class="max-w-3xl mx-auto">
+        <div class="accordion space-y-3">
+          <div class="accordion-item">
+            <button class="accordion-header">Bagaimana cara mendaftar?</button>
+            <div class="accordion-content">Klik butang "Daftar" di atas, isi data diri lengkap, dan setuju dengan syarat. Akaun anda aktif seketika.</div>
           </div>
-        </div>
-
-        <!-- Step 1: Data Diri -->
-        <div id="step1" class="space-y-5">
-          <h3 class="text-xl font-bold text-slate-900 mb-4"><i class="fas fa-user text-blue-600 mr-2"></i> Data Diri</h3>
-          <div>
-            <label class="form-label" for="formFullName">Nama Lengkap</label>
-            <div class="relative">
-              <i class="fas fa-id-card absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-              <input type="text" id="formFullName" placeholder="Masukkan nama lengkap" class="form-input pl-11" />
-            </div>
+          <div class="accordion-item">
+            <button class="accordion-header">Berapa lama proses kelulusan?</button>
+            <div class="accordion-content">Kami memproses permohonan dalam 1-2 jam bekerja. Anda akan menerima notifikasi pada status permohonan.</div>
           </div>
-          <div>
-            <label class="form-label" for="formPhone">Nomor HP</label>
-            <div class="relative">
-              <i class="fas fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-              <input type="tel" id="formPhone" placeholder="08xxxxxxxxxx" class="form-input pl-11" />
-            </div>
+          <div class="accordion-item">
+            <button class="accordion-header">Apakah faedah pinjaman?</button>
+            <div class="accordion-content">Faedah kami bermula 5% setahun, bergantung pada jumlah dan tempoh pinjaman.</div>
           </div>
-          <button id="nextStepBtn" class="btn btn-primary w-full">
-            <span>Lanjut</span> <i class="fas fa-arrow-right ml-2"></i>
-          </button>
-        </div>
-
-        <!-- Step 2: Data Pinjaman -->
-        <div id="step2" class="space-y-5 hidden">
-          <h3 class="text-xl font-bold text-slate-900 mb-4"><i class="fas fa-money-bill-wave text-blue-600 mr-2"></i> Data Pinjaman</h3>
-          <div>
-            <label class="form-label" for="formAmount">Jumlah Pinjaman</label>
-            <input type="number" id="formAmount" placeholder="10000000" min="1000000" max="500000000" class="form-input" />
-            <p class="form-hint">Min Rp1.000.000 - Max Rp500.000.000</p>
+          <div class="accordion-item">
+            <button class="accordion-header">Bagaimana cara bayar cicilan?</button>
+            <div class="accordion-content">Semua pembayaran dilakukan melalui akaun dalam talian atau aplikasi. Anda akan menerima notifikasi pemeliharaan sebelum jatuh tempo.</div>
           </div>
-          <div>
-            <label class="form-label" for="formTenor">Tenor</label>
-            <select id="formTenor" class="form-select">
-              <option value="6">6 Bulan</option>
-              <option value="12">12 Bulan</option>
-              <option value="24">24 Bulan</option>
-              <option value="36">36 Bulan</option>
-              <option value="48">48 Bulan</option>
-              <option value="60">60 Bulan</option>
-            </select>
-          </div>
-          <div>
-            <label class="form-label" for="formPurpose">Tujuan Pinjaman</label>
-            <select id="formPurpose" class="form-select">
-              <option value="">Pilih tujuan</option>
-              <option value="Kebutuhan Mendesak">Kebutuhan Mendesak</option>
-              <option value="Modal Usaha">Modal Usaha</option>
-              <option value="Renovasi Rumah">Renovasi Rumah</option>
-              <option value="Pendidikan">Pendidikan</option>
-              <option value="Kebutuhan Pribadi">Kebutuhan Pribadi</option>
-              <option value="Lainnya">Lainnya</option>
-            </select>
-          </div>
-          <div class="flex gap-3">
-            <button id="prevStepBtn" class="btn btn-secondary"><i class="fas fa-arrow-left mr-1"></i> Kembali</button>
-            <button id="submitLoanBtn" class="flex-1 btn btn-primary">
-              <i class="fas fa-paper-plane mr-2"></i> Submit Pengajuan
-            </button>
+          <div class="accordion-item">
+            <button class="accordion-header">Apakah SMART FUND selamat?</button>
+            <div class="accordion-content">Ya, SMART FUND berlesen dan diawasi oleh Otoriti Jasa Kewangan (OJK), memberikan rasa selamat untuk setiap pelanggan.</div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ============================================ TESTIMONI ============================================ -->
-  <section id="testimoni" class="py-16 md:py-24 gradient-bg-soft">
-    <div class="container mx-auto">
-      <div class="text-center mb-16" data-aos="fade-up">
-        <span class="text-blue-600 font-semibold">TESTIMONI</span>
-        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mt-2">Apa Kata Nasabah Kami</h2>
-      </div>
-
-      <div id="testimoniCarousel" class="relative">
-        <div id="testimoniTrack" class="testi-grid transition-opacity duration-500"></div>
-        <!-- Indicator dots -->
-        <div id="testimoniDots" class="flex justify-center gap-2 mt-8"></div>
+  <!-- CTA -->
+  <section class="section-padding py-20">
+    <div class="container mx-auto px-4 sm:px-6">
+      <div class="bg-gradient-to-r from-blue-600 to-secondary rounded-3xl shadow-2xl text-center py-12 sm:py-16 px-6 sm:px-8 text-white" data-aos="zoom-in">
+        <h2 class="text-3xl sm:text-4xl font-extrabold mb-4">Sedia untuk Memohon Pinjaman?</h2>
+        <p class="text-lg opacity-90 mb-8 max-w-2xl mx-auto">Daftar sekarang dan nikmati kemudahan pinjaman dalam talian dengan faedah kompetitif</p>
+        <a href="/register.html" class="btn btn-secondary btn-lg">Daftar Sekarang</a>
       </div>
     </div>
   </section>
 
-  <!-- ============================================ FAQ ============================================ -->
-  <section id="faq" class="py-16 md:py-24 bg-white">
-    <div class="container mx-auto max-w-3xl">
-      <div class="text-center mb-12" data-aos="fade-up">
-        <span class="text-blue-600 font-semibold">FAQ</span>
-        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mt-2">Pertanyaan Umum</h2>
-      </div>
-      <div class="space-y-4" id="faqContainer">
-        <!-- FAQ items injected by JS -->
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================ CTA ============================================ -->
-  <section class="py-16 gradient-bg">
-    <div class="container mx-auto text-center text-white" data-aos="zoom-in">
-      <h2 class="text-3xl md:text-4xl font-extrabold mb-4 animate-float">Siap Mengajukan Pinjaman?</h2>
-      <p class="text-lg opacity-90 mb-8">Daftar sekarang dan nikmati kemudahan pinjaman online dengan bunga kompetitif</p>
-      <a href="/register.html" class="inline-block btn btn-primary btn-shine">
-        <i class="fas fa-user-plus mr-2"></i> Daftar Sekarang
-      </a>
-    </div>
-  </section>
-
-  <!-- ============================================ FOOTER ============================================ -->
-  <footer class="bg-slate-900 text-slate-300 pt-16 pb-8">
-    <div class="container mx-auto">
-      <div class="footer-grid">
-        <div>
-          <div class="flex items-center gap-2.5 mb-4">
-            <img src="/assets/img/logo.png" alt="SMART FUND Logo" loading="lazy" width="40" height="40" class="object-contain" />
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-slate-300 py-12 sm:py-16">
+    <div class="container mx-auto px-4 sm:px-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+        <div class="space-y-4">
+          <a href="/" class="flex items-center gap-2.5">
+            <img src="/assets/img/logo.png" alt="SMART FUND Logo" loading="lazy" width="36" height="36" class="object-contain" />
             <span class="text-xl font-extrabold text-white">SMART FUND</span>
+          </a>
+          <p class="text-sm text-slate-400">Platform pinjaman dalam talian yang dipercayui dan berlesen OJK. Penyelesaian kewangan untuk masa depan anda.</p>
+          <div class="flex gap-3">
+            <a href="#" class="icon-btn"><i class="fab fa-whatsapp text-green-500"></i></a>
+            <a href="#" class="icon-btn"><i class="fab fa-telegram text-blue-500"></i></a>
+            <a href="#" class="icon-btn"><i class="fab fa-instagram text-pink-500"></i></a>
           </div>
-          <p class="text-sm text-slate-400">Platform pinjaman online terpercaya berizin OJK. Solusi keuangan untuk masa depan Anda.</p>
         </div>
-        <div>
-          <h4 class="font-bold text-white mb-4">Perusahaan</h4>
-          <ul class="space-y-2 text-sm">
-            <li><a href="#features" class="hover:text-blue-400 transition">Keunggulan</a></li>
-            <li><a href="#calculator" class="hover:text-blue-400 transition">Simulasi</a></li>
-            <li><a href="#testimoni" class="hover:text-blue-400 transition">Testimoni</a></li>
-            <li><a href="#faq" class="hover:text-blue-400 transition">FAQ</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="font-bold text-white mb-4">Layanan</h4>
-          <ul class="space-y-2 text-sm">
-            <li><a href="/register.html" class="hover:text-blue-400 transition">Daftar</a></li>
-            <li><a href="/login.html" class="hover:text-blue-400 transition">Masuk</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="font-bold text-white mb-4">Kontak</h4>
-          <ul class="space-y-2 text-sm">
-            <li><i class="fas fa-envelope mr-2" aria-hidden="true"></i> cs@smartfund.id</li>
-            <li><i class="fas fa-phone mr-2" aria-hidden="true"></i> 0800-1234-5678</li>
-            <li><i class="fas fa-location-dot mr-2" aria-hidden="true"></i> Jakarta, Indonesia</li>
-          </ul>
-          <div class="flex gap-3 mt-4">
-            <a href="#" class="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-blue-600 transition" aria-label="Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
-            <a href="#" class="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-blue-600 transition" aria-label="Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
-            <a href="#" class="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-blue-600 transition" aria-label="Twitter"><i class="fab fa-twitter" aria-hidden="true"></i></a>
-            <a href="#" class="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-blue-600 transition" aria-label="WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:col-span-3">
+          <div class="space-y-4">
+            <h3 class="text-white font-bold mb-4">Syarikat</h3>
+            <ul class="space-y-2 text-sm">
+              <li><a href="#" class="hover:text-white transition">Tentang Kami</a></li>
+              <li><a href="#" class="hover:text-white transition">Kerja Kami</a></li>
+              <li><a href="#" class="hover:text-white transition">Blog</a></li>
+              <li><a href="#" class="hover:text-white transition">Hubungi</a></li>
+            </ul>
+          </div>
+          <div class="space-y-4">
+            <h3 class="text-white font-bold mb-4">Perkhidmatan</h3>
+            <ul class="space-y-2 text-sm">
+              <li><a href="#" class="hover:text-white transition">Pinjaman Online</a></li>
+              <li><a href="#" class="hover:text-white transition">Simulasi Pinjaman</a></li>
+              <li><a href="#" class="hover:text-white transition">Pengurusan Pinjaman</a></li>
+              <li><a href="#" class="hover:text-white transition">Pengeluaran Dana</a></li>
+            </ul>
+          </div>
+          <div class="space-y-4">
+            <h3 class="text-white font-bold mb-4">Hubungi</h3>
+            <ul class="space-y-2 text-sm">
+              <li><a href="mailto:support@smartfund.com" class="hover:text-white transition">sedia@smartfund.com</a></li>
+              <li><span class="text-green-500">0896 7987 5858</span></li>
+              <li><a href="https://t.me/cs_smartfund" target="_blank" class="hover:text-white transition">@cs_smartfund</a></li>
+            </ul>
+          </div>
+          <div class="space-y-4">
+            <h3 class="text-white font-bold mb-4">Unduh Aplikasi</h3>
+            <div class="flex gap-2">
+              <a href="#" class="hover:text-white transition"><i class="fab fa-google-play text-2xl"></i></a>
+              <a href="#" class="hover:text-white transition"><i class="fab fa-apple text-2xl"></i></a>
+            </div>
           </div>
         </div>
       </div>
-      <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-        <p class="text-sm text-slate-400">&copy; 2026 SMART FUND. All rights reserved. Berizin & diawasi OJK.</p>
-        <div class="flex gap-6 text-sm">
-          <a href="#" class="hover:text-blue-400 transition">Syarat & Ketentuan</a>
-          <a href="#" class="hover:text-blue-400 transition">Kebijikan Privasi</a>
-        </div>
+      <div class="border-t border-slate-800 pt-6 text-center text-sm text-slate-500">
+        <p>&copy; 2026 SMART FUND. Hak cipta terpelihara. Berlesen & diawasi OJK.</p>
       </div>
     </div>
   </footer>
 
-  <!-- Scripts -->
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-  <script src="/assets/js/i18n.js"></script>
   <script src="/assets/js/currency.js"></script>
   <script src="/assets/js/api.js"></script>
   <script src="/assets/js/main.js"></script>
+  <script src="/assets/js/locale.js"></script>
+  <script src="/assets/js/i18n.js"></script>
   <script>
-    // Navbar scroll effect
-    const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 50) {
-        navbar.classList.add('navbar-shadow');
-      } else {
-        navbar.classList.remove('navbar-shadow');
-      }
-    });
+    I18N.init();
+    I18N.setLang('ms');
+    I18N.apply();
+  </script>
+  <script>
+    (() => {
+      const darkToggle = document.getElementById('darkToggle');
+      const updateIcon = () => {
+        if (!darkToggle) return;
+        darkToggle.innerHTML = DarkMode.isDark()
+          ? '<i class="fas fa-sun text-amber-500"></i>'
+          : '<i class="fas fa-moon text-slate-600"></i>';
+      };
+      updateIcon();
+      darkToggle?.addEventListener('click', () => {
+        DarkMode.toggle();
+        updateIcon();
+      });
 
-    // Mobile menu overlay (fullscreen)
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    const mobileMenuClose = document.getElementById('mobileMenuClose');
+      // Mobile menu
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const closeMobileMenu = document.getElementById('closeMobileMenu');
+      const mobileMenu = document.getElementById('mobileMenu');
+      mobileMenuBtn?.addEventListener('click', () => mobileMenu.classList.remove('hidden'));
+      closeMobileMenu?.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+      document.querySelectorAll('#mobileMenu a').forEach((a) => {
+        a.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+      });
 
-    function openMobileMenu() {
-      if (!mobileMenu) return;
-      mobileMenu.classList.add('active');
-      if (mobileMenuBtn) mobileMenuBtn.setAttribute('aria-expanded', 'true');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeMobileMenu() {
-      if (!mobileMenu) return;
-      mobileMenu.classList.remove('active');
-      if (mobileMenuBtn) mobileMenuBtn.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
-    }
+      // Language toggle (desktop dropdown is replaced by i18n dropdown)
+      const langToggle = document.getElementById('langToggle');
+      const langLabel = document.getElementById('langLabel');
+      const currentLang = I18N.getLang();
+      langLabel.textContent = I18N.t('lang.label', 'Bahasa');
 
-    if (mobileMenuBtn && mobileMenuClose) {
-      mobileMenuBtn.addEventListener('click', openMobileMenu);
-      mobileMenuClose.addEventListener('click', closeMobileMenu);
-      mobileMenu.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeMobileMenu));
-      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMobileMenu(); });
-    }
+      langToggle?.addEventListener('click', () => {
+        const langs = ['id', 'ms', 'en'];
+        const labels = [I18N.t('lang.id', 'Indonesia'), I18N.t('lang.ms', 'Bahasa Malaysia'), I18N.t('lang.en', 'English')];
+        const currentIndex = langs.indexOf(currentLang);
+        const nextIndex = (currentIndex + 1) % langs.length;
+        I18N.setLang(langs[nextIndex]);
+        I18N.apply();
+        langLabel.textContent = labels[nextIndex];
+        window.location.reload();
+      });
+    })();
   </script>
 </body>
 </html>
-

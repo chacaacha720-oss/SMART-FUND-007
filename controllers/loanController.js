@@ -29,7 +29,7 @@ function calculateLoan(principal, tenorMonths, annualRatePercent = 5) {
  * Simulasi pinjaman (public)
  */
 async function simulate(req, res) {
-  const lang = req.lang || 'id';
+  const lang = req.lang || 'ms';
   try {
     const amount = parseFloat(req.body.amount);
     const tenor = parseInt(req.body.tenor, 10);
@@ -43,9 +43,9 @@ async function simulate(req, res) {
       // DB not available, use default rate
     }
 
-    if (!amount || amount < 1000000 || amount > 500000000) {
-      return res.status(400).json({ success: false, message: t(lang, 'loan.amountRange') });
-    }
+     if (!amount || amount < 1000 || amount > 500000) {
+       return res.status(400).json({ success: false, message: t(lang, 'loan.amountRange') });
+     }
     if (!tenor || tenor < 6 || tenor > 60) {
       return res.status(400).json({ success: false, message: t(lang, 'loan.tenorRange') });
     }
@@ -88,8 +88,6 @@ async function applyLoan(req, res) {
        FROM users u LEFT JOIN admins a ON u.admin_id = a.id WHERE u.id = ?`,
       [userId]
     );
-    if (userRows.length === 0) return res.status(404).json({ success: false, message: t(lang, 'loan.userNotFound') });
-    const user = userRows[0];
 
     if (user.status === 'frozen') {
       return res.status(403).json({ success: false, message: t(lang, 'loan.accountFrozen') });
@@ -175,7 +173,7 @@ async function applyLoan(req, res) {
  * Riwayat pengajuan user yang login
  */
 async function myLoans(req, res) {
-  const lang = req.lang || 'id';
+  const lang = req.lang || 'ms';
   try {
     const [rows] = await db.query(
       `SELECT id, amount, purpose, tenor, monthly_payment, total_interest, total_payment, status, admin_note, created_at, approved_at, disbursed_at
@@ -194,7 +192,7 @@ async function myLoans(req, res) {
  * Detail pinjaman user
  */
 async function loanDetail(req, res) {
-  const lang = req.lang || 'id';
+  const lang = req.lang || 'ms';
   try {
     const [rows] = await db.query(
       `SELECT * FROM loan_applications WHERE id = ? AND user_id = ?`,
