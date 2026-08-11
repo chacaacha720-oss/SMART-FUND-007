@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     e.preventDefault();
     const username = document.getElementById('adminUsername').value.trim();
     const password = adminPwdInput.value;
-    if (!username || !password) return showToast(I18N.t('admin.userPassRequired', 'Username dan password wajib diisi'), 'error');
+    if (!username || !password) return showToast('Nama pengguna dan kata laluan wajib diisi', 'error');
 
     const btn = document.getElementById('adminLoginBtn');
     setBtnLoading(btn, true);
@@ -46,10 +46,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (res.success) {
       AdminToken.set(res.token, true);
-      showToast(I18N.t('admin.loginSuccess', 'Login admin berhasil!'), 'success');
+      showToast('Log masuk admin berjaya!', 'success');
       setTimeout(() => showAdminApp(res.data), 500);
     } else {
-      showToast(res.message || I18N.t('admin.loginFailed', 'Login gagal'), 'error');
+      showToast(res.message || 'Log masuk gagal', 'error');
     }
   });
 });
@@ -259,10 +259,10 @@ async function saveUser() {
   const res = await api(`/admin/users/${currentUserId}`, { method: 'PUT', body });
   setBtnLoading(btn, false);
   if (res.success) {
-    showToast(I18N.t('admin.userUpdated', 'User berhasil diperbarui'), 'success');
+    showToast('Pengguna berjaya dikemas kini', 'success');
     closeUserModal();
     await loadUsers();
-    // Beri tahu tab user bahwa data berubah
+    // Beri tahu tab lain (dashboard pengguna) bahwa data berubah.
     AdminSync.notifyDataChanged();
   }
   else showToast(res.message || I18N.t('admin.noDataChanged'), 'error');
@@ -272,7 +272,7 @@ async function deleteUser(id) {
   const ok = await alertConfirm(I18N.t('admin.confirmDelete'), I18N.t('admin.confirmDeleteText'), I18N.t('admin.deleteUser'), I18N.t('admin.cancel'));
   if (!ok) return;
   const res = await api(`/admin/users/${id}`, { method: 'DELETE' });
-  if (res.success) { showToast(I18N.t('admin.userDeleted', 'User dihapus'), 'success'); await loadUsers(); }
+   if (res.success) {     showToast('Pengguna berjaya dipadamkan', 'success'); await loadUsers(); }
   else showToast(res.message || I18N.t('admin.noDataChanged'), 'error');
 }
 
@@ -289,7 +289,7 @@ async function loadApplications() {
       <td class="px-4 py-3 font-semibold text-slate-700">#${a.id}</td>
       <td class="px-4 py-3 text-slate-700">${a.full_name}<div class="text-xs text-slate-400">${a.phone}</div></td>
       <td class="px-4 py-3 text-slate-700">${formatRupiah(a.amount)}</td>
-      <td class="px-4 py-3 text-slate-700">${a.tenor} bln</td>
+      <td class="px-4 py-3 text-slate-700">${a.tenor} bulan</td>
       <td class="px-4 py-3 text-slate-500 text-sm">${a.purpose}</td>
       <td class="px-4 py-3">${statusBadge(a.status)}</td>
       <td class="px-4 py-3">
@@ -310,7 +310,7 @@ async function viewApp(id) {
         <h4 class="font-bold text-slate-800 mb-3"><i class="fas fa-user text-blue-600 mr-2"></i> Data Peminjam</h4>
         <div class="space-y-2 text-sm">
           <div class="flex justify-between"><span class="text-slate-500">Nama</span><span class="font-semibold">${a.full_name}</span></div>
-          <div class="flex justify-between"><span class="text-slate-500">Email</span><span class="font-semibold">${a.email}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">Emel</span><span class="font-semibold">${a.email}</span></div>
           <div class="flex justify-between"><span class="text-slate-500">No. HP</span><span class="font-semibold">${a.phone}</span></div>
           <div class="flex justify-between"><span class="text-slate-500">NIK</span><span class="font-semibold">${a.nik || '-'}</span></div>
           <div class="flex justify-between"><span class="text-slate-500">Alamat</span><span class="font-semibold text-right">${a.address || '-'}</span></div>
@@ -318,16 +318,16 @@ async function viewApp(id) {
         </div>
       </div>
       <div class="bg-blue-50 rounded-xl p-4">
-        <h4 class="font-bold text-slate-800 mb-3"><i class="fas fa-money-bill-wave text-blue-600 mr-2"></i> Detail Pinjaman</h4>
+        <h4 class="font-bold text-slate-800 mb-3"><i class="fas fa-money-bill-wave text-blue-600 mr-2"></i> Butiran Pinjaman</h4>
         <div class="space-y-2 text-sm">
           <div class="flex justify-between"><span class="text-slate-500">Jumlah</span><span class="font-bold">${formatRupiah(a.amount)}</span></div>
-          <div class="flex justify-between"><span class="text-slate-500">Tenor</span><span class="font-semibold">${a.tenor} bulan</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">Tempoh</span><span class="font-semibold">${a.tenor} bulan</span></div>
           <div class="flex justify-between"><span class="text-slate-500">Tujuan</span><span class="font-semibold">${a.purpose}</span></div>
-          <div class="flex justify-between"><span class="text-slate-500">Cicilan/Bulan</span><span class="font-semibold">${formatRupiah(a.monthly_payment)}</span></div>
-          <div class="flex justify-between"><span class="text-slate-500">Total Bunga</span><span class="font-semibold">${formatRupiah(a.total_interest)}</span></div>
-          <div class="flex justify-between"><span class="text-slate-500">Total Bayar</span><span class="font-bold">${formatRupiah(a.total_payment)}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">Ansuran/Bulan</span><span class="font-semibold">${formatRupiah(a.monthly_payment)}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">Jumlah Faedah</span><span class="font-semibold">${formatRupiah(a.total_interest)}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">Jumlah Bayar</span><span class="font-bold">${formatRupiah(a.total_payment)}</span></div>
           <div class="flex justify-between"><span class="text-slate-500">Status</span>${statusBadge(a.status)}</div>
-          <div class="flex justify-between"><span class="text-slate-500">Tanggal</span><span class="font-semibold">${formatDateTime(a.created_at)}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">Tarikh</span><span class="font-semibold">${formatDateTime(a.created_at)}</span></div>
         </div>
       </div>
     </div>
@@ -350,15 +350,16 @@ async function updateAppStatus(status) {
   if (!currentAppId) return;
   const note = document.getElementById('appNote')?.value || '';
   const labels = { approved: I18N.t('admin.approve'), rejected: I18N.t('admin.reject'), disbursed: I18N.t('admin.disburse') };
-  const ok = await alertConfirm(`${I18N.t('admin.confirmDelete', 'Yakin ingin mengubah status')} #${currentAppId}?`, status === 'disbursed' ? I18N.t('admin.disburse') + ': Saldo user akan bertambah otomatis.' : '');
+  const ok = await alertConfirm(`Adakah anda ingin mengubah status #${currentAppId}?`, status === 'disbursed' ? I18N.t('admin.disburse') + ': Baki pengguna akan bertambah secara automatik.' : '');
   if (!ok) return;
   const res = await api(`/admin/applications/${currentAppId}/status`, { method: 'PUT', body: { status, adminNote: note } });
   if (res.success) {
-    showToast(`${I18N.t('admin.applications')} ${status === 'approved' ? I18N.t('status.approved') : status === 'rejected' ? I18N.t('status.rejected') : I18N.t('admin.disbursed').toLowerCase()}`, 'success');
+    const statusText = status === 'approved' ? I18N.t('status.approved') : status === 'rejected' ? I18N.t('status.rejected') : I18N.t('status.disbursed');
+    showToast(`${I18N.t('admin.applications')} ${statusText}`, 'success');
     closeAppModal();
     await loadApplications();
     await loadAdminDashboard();
-    // Beri tahu tab user bahwa status pengajuan berubah
+     // Beri tahu tab pengguna bahwa status permohonan berubah
     AdminSync.notifyDataChanged();
   } else {
     showToast(res.message || I18N.t('admin.noDataChanged'), 'error');
@@ -395,9 +396,10 @@ async function updateTxStatus(id, status) {
   if (!ok) return;
   const res = await api(`/admin/transactions/${id}/status`, { method: 'PUT', body: { status } });
   if (res.success) {
-    showToast(`Transaksi ${status}`, 'success');
+    const statusText = { pending: 'Menunggu', approved: 'Disetujui', rejected: 'Ditolak', completed: 'Selesai' };
+   showToast(`Transaksi ${statusText[status] || status}`, 'success');
     await loadTransactions();
-    // Beri tahu tab user bahwa status transaksi berubah
+    // Beri tahu tab pengguna bahwa status transaksi berubah
     AdminSync.notifyDataChanged();
   }
   else showToast(res.message || I18N.t('admin.noDataChanged'), 'error');
@@ -418,9 +420,9 @@ async function loadWithdrawals(search = '', filter = '') {
     return;
   }
   const statusMap = {
-    menunggu_verifikasi: { text: 'Menunggu Verifikasi', cls: 'badge-pending' },
+    menunggu_verifikasi: { text: 'Menunggu Pengesahan', cls: 'badge-pending' },
     diproses: { text: 'Diproses', cls: 'badge-active' },
-    berhasil: { text: 'Berhasil', cls: 'badge-approved' },
+    berhasil: { text: 'Berjaya', cls: 'badge-approved' },
     ditolak: { text: 'Ditolak', cls: 'badge-rejected' },
   };
   tbody.innerHTML = res.data.map((w) => `
@@ -461,27 +463,27 @@ if (wdFilter) {
 
 async function viewWithdrawal(id) {
   const res = await api(`/admin/withdrawals/${id}`);
-  if (!res.success) { showToast(res.message || 'Gagal memuat detail', 'error'); return; }
+    if (!res.success) { showToast(res.message || 'Gagal memuatkan butiran', 'error'); return; }
   const w = res.data;
   const statusLabels = {
-    menunggu_verifikasi: 'Menunggu Verifikasi',
+    menunggu_verifikasi: 'Menunggu Pengesahan',
     diproses: 'Diproses',
-    berhasil: 'Berhasil',
+    berhasil: 'Berjaya',
     ditolak: 'Ditolak',
   };
   Swal.fire({
-    title: `Detail Penarikan ${w.withdrawal_id}`,
+     title: `Butiran Pengeluaran ${w.withdrawal_id}`,
     html: `
       <div class="text-left space-y-2 text-sm">
         <p><b>Nama:</b> ${w.nama}</p>
-        <p><b>Email:</b> ${w.email}</p>
-        <p><b>No HP:</b> ${w.no_hp}</p>
-        <p><b>Bank:</b> ${w.bank}</p>
-        <p><b>No Rekening:</b> ${w.no_rekening}</p>
-        <p><b>Nama Rekening:</b> ${w.nama_rekening}</p>
-        <p><b>Jumlah:</b> ${formatRupiah(w.jumlah)}</p>
-        <p><b>Status:</b> ${statusLabels[w.status] || w.status}</p>
-        <p><b>Dibuat:</b> ${formatDateTime(w.created_at)}</p>
+         <p><b>Emel:</b> ${w.email}</p>
+         <p><b>No HP:</b> ${w.no_hp}</p>
+         <p><b>Bank:</b> ${w.bank}</p>
+         <p><b>Nombor Akaun:</b> ${w.no_rekening}</p>
+         <p><b>Nama Akaun:</b> ${w.nama_rekening}</p>
+         <p><b>Jumlah:</b> ${formatRupiah(w.jumlah)}</p>
+         <p><b>Status:</b> ${statusLabels[w.status] || w.status}</p>
+         <p><b>Dibuat:</b> ${formatDateTime(w.created_at)}</p>
         ${w.catatan ? `<p><b>Catatan:</b> ${w.catatan}</p>` : ''}
       </div>`,
     confirmButtonText: 'OK',
@@ -489,15 +491,15 @@ async function viewWithdrawal(id) {
 }
 
 async function updateWithdrawStatus(id, status) {
-  const statusLabel = { diproses: 'diproses', berhasil: 'Disetujui', ditolak: 'Ditolak' };
-  const ok = await alertConfirm(`Yakin ingin ${statusLabel[status]} penarikan ${id}?`, '');
+   const statusLabel = { diproses: 'Diproses', berhasil: 'Disetujui', ditolak: 'Ditolak' };
+   const ok = await alertConfirm(`Adakah anda ingin ${statusLabel[status]} pengeluaran ${id}?`, '');
   if (!ok) return;
 
   let note = '';
   if (status === 'ditolak') {
     const noteRes = await Swal.fire({
       input: 'textarea',
-      inputLabel: 'Alasan penolakan (opsional)',
+       inputLabel: 'Sebab penolakan (pilihan)',
       showCancelButton: true,
       cancelButtonText: 'Batal',
     });
@@ -507,7 +509,7 @@ async function updateWithdrawStatus(id, status) {
 
   const res = await api(`/admin/withdrawals/${id}/status`, { method: 'PUT', body: { status, catatan: note } });
   if (res.success) {
-    showToast(`Status penarikan ${id} diperbarui`, 'success');
+     showToast(`Status pengeluaran ${id} dikemas kini`, 'success');
     await loadWithdrawals();
     AdminSync.notifyDataChanged();
   }
@@ -534,7 +536,7 @@ async function saveTelegramSettings() {
   };
 
   if (!settings.telegram_bot_token || !settings.telegram_admin_chat_id) {
-    showToast(I18N.t('admin.telegram') + ': Bot Token dan Chat ID wajib diisi', 'error');
+    showToast('Token Bot dan ID Chat wajib diisi', 'error');
     return;
   }
 
@@ -544,7 +546,7 @@ async function saveTelegramSettings() {
   setBtnLoading(btn, false);
 
   if (res.success) {
-    showToast(I18N.t('admin.telegramTestSuccess', 'Pengaturan Telegram berhasil disimpan'), 'success');
+    showToast('Tetapan Telegram berjaya disimpan', 'success');
     await loadTelegramLogs();
   } else {
     showToast(res.message || I18N.t('admin.noDataChanged'), 'error');
@@ -559,7 +561,7 @@ async function loadTelegramLogs() {
   el.innerHTML = res.data.slice(0, 20).map((l) => `
     <div class="p-3 ${l.status === 'sent' ? 'bg-green-50' : 'bg-red-50'} rounded-xl text-sm">
       <div class="flex justify-between mb-1">
-        <span class="font-semibold ${l.status === 'sent' ? 'text-green-700' : 'text-red-700'}">${l.status === 'sent' ? '✓ Terkirim' : '✗ Gagal'}</span>
+        <span class="font-semibold ${l.status === 'sent' ? 'text-green-700' : 'text-red-700'}">${l.status === 'sent' ? '✓ Dihantar' : '✗ Gagal'}</span>
         <span class="text-xs text-slate-400">${formatDateTime(l.created_at)}</span>
       </div>
       <p class="text-slate-600 text-xs truncate">${l.message.substring(0, 80)}...</p>
@@ -568,7 +570,7 @@ async function loadTelegramLogs() {
 
 async function testTelegram() {
   const res = await api('/admin/telegram/test', { method: 'POST' });
-  if (res.success) { showToast(I18N.t('admin.telegramTestSuccess', 'Test telegram berhasil dikirim!'), 'success'); await loadTelegramLogs(); }
+  if (res.success) { showToast('Ujian telegram berjaya dihantar!', 'success'); await loadTelegramLogs(); }
   else showToast(res.message || I18N.t('admin.telegramTestFailed'), 'error');
 }
 
@@ -609,7 +611,7 @@ async function saveSettings(e) {
   setBtnLoading(btn, true);
   const res = await api('/admin/settings', { method: 'PUT', body: { settings } });
   setBtnLoading(btn, false);
-  if (res.success) showToast(I18N.t('admin.settingsSaved', 'Pengaturan berhasil disimpan'), 'success');
+  if (res.success) showToast('Tetapan berjaya disimpan', 'success');
   else showToast(res.message || I18N.t('admin.noDataChanged'), 'error');
 }
 
@@ -623,7 +625,7 @@ const AdminSync = (() => {
   let channel = null;
   let channelError = false;
 
-  // Register BroadcastChannel (fallback ke polling jika gagal)
+  // Daftar BroadcastChannel (fallback ke polling jika gagal)
   try {
     channel = new BroadcastChannel('smartfund_sync');
   } catch (e) {
@@ -640,7 +642,7 @@ const AdminSync = (() => {
     }
   }
 
-  // Terima pesan dari tab user (misal user mengajukan pinjaman/penarikan)
+  // Terima pesan dari tab user (misal user mengajukan pinjaman/pengeluaran)
   if (channel && !channelError) {
     channel.onmessage = (event) => {
       const msg = event.data;

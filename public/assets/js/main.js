@@ -74,30 +74,30 @@ document.addEventListener('DOMContentLoaded', () => {
     return { monthly, total, interest };
   }
 
-  // Range min/max per mata uang - slider tetap dalam IDR untuk konsistensi
-  const LOAN_LIMITS_IDR = {
-    min: 1000000,    // Rp 1.000.000 (≈ RM 290, ≈ $ 62)
-    max: 500000000,   // Rp 500.000.000 (≈ RM 145.000, ≈ $ 31.000)
-    step: 1000000,   // Rp 1.000.000
-    defaultVal: 10000000, // Rp 10.000.000
+  // Range min/max per mata uang - slider menggunakan MYR untuk ms
+  const LOAN_LIMITS = {
+    min: 1000,    // RM1,000
+    max: 500000,   // RM500,000
+    step: 1000,   // RM1,000
+    defaultVal: 50000, // RM50,000
   };
 
   function updateCalculatorRange() {
     if (!loanAmount) return;
-    // Slider selalu menggunakan IDR untuk konsistensi logika
-    loanAmount.min = LOAN_LIMITS_IDR.min;
-    loanAmount.max = LOAN_LIMITS_IDR.max;
-    loanAmount.step = LOAN_LIMITS_IDR.step;
-    // Set ke nilai default dalam IDR
+    // Slider selalu menggunakan nilai dalam mata uang set
+    loanAmount.min = LOAN_LIMITS.min;
+    loanAmount.max = LOAN_LIMITS.max;
+    loanAmount.step = LOAN_LIMITS.step;
+    // Set ke nilai default
     const currentVal = parseInt(loanAmount.value, 10);
-    if (!currentVal || currentVal < LOAN_LIMITS_IDR.min || currentVal > LOAN_LIMITS_IDR.max) {
-      loanAmount.value = LOAN_LIMITS_IDR.defaultVal;
+    if (!currentVal || currentVal < LOAN_LIMITS.min || currentVal > LOAN_LIMITS.max) {
+      loanAmount.value = LOAN_LIMITS.defaultVal;
     }
     // Update min/max labels dengan format currency
     const minLabel = document.getElementById('calcMinLabel');
     const maxLabel = document.getElementById('calcMaxLabel');
-    if (minLabel) minLabel.textContent = formatRupiah(LOAN_LIMITS_IDR.min);
-    if (maxLabel) maxLabel.textContent = formatRupiah(LOAN_LIMITS_IDR.max);
+    if (minLabel) minLabel.textContent = formatRupiah(LOAN_LIMITS.min);
+    if (maxLabel) maxLabel.textContent = formatRupiah(LOAN_LIMITS.max);
   }
 
   function updateCalculator() {
@@ -106,12 +106,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const amount = parseInt(loanAmount.value, 10);
     const tenor = parseInt(loanTenor.value, 10);
 
-    if (isNaN(amount) || amount < LOAN_LIMITS_IDR.min) {
-      loanAmount.value = LOAN_LIMITS_IDR.min;
+    if (isNaN(amount) || amount < LOAN_LIMITS.min) {
+      loanAmount.value = LOAN_LIMITS.min;
       return updateCalculator();
     }
-    if (amount > LOAN_LIMITS_IDR.max) {
-      loanAmount.value = LOAN_LIMITS_IDR.max;
+    if (amount > LOAN_LIMITS.max) {
+      loanAmount.value = LOAN_LIMITS.max;
       return updateCalculator();
     }
 
@@ -237,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const tenor = parseInt(document.getElementById('formTenor').value, 10);
       const purpose = document.getElementById('formPurpose').value;
 
-      if (!amount || amount < 1000000 || amount > 500000000) return showToast(I18N.t('val.amountRange'), 'error');
+      if (!amount || amount < 1000 || amount > 500000) return showToast(I18N.t('val.amountRange'), 'error');
       if (!tenor || tenor < 6 || tenor > 60) return showToast(I18N.t('val.tenorRange'), 'error');
       if (!purpose) return showToast(I18N.t('val.purposeRequired'), 'error');
 
@@ -265,18 +265,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 12 testimoni, dibagi per grup 3
   const allTestimoni = [
-    { name: 'Budi Santoso', role: 'Pengusaha, Jakarta', rating: 5, text: 'Prosesnya cepat dan mudah. Saya bisa mendapatkan modal usaha dalam waktu singkat. Terima kasih SMART FUND!' },
-    { name: 'Siti Rahayu', role: 'Ibu Rumah Tangga, Bandung', rating: 5, text: 'Bunganya ringan dan transparan. Tidak ada biaya tersembunyi. Sangat membantu untuk renovasi rumah saya.' },
-    { name: 'Ahmad Fauzi', role: 'Karyawan, Surabaya', rating: 5, text: 'Platform pinjaman online terpercaya. Berizin OJK jadi lebih aman. Proses verifikasi cepat dan praktis.' },
-    { name: 'Dewi Lestari', role: 'Mahasiswa, Yogyakarta', rating: 5, text: 'Dana pendidikan saya cair tepat waktu. Prosesnya sangat membantu untuk kelancaran studi saya.' },
-    { name: 'Rizky Pratama', role: 'Freelancer, Bali', rating: 5, text: 'Saya butuh modal mendadak untuk project klien. SMART FUND cair dalam 1 hari kerja. Mantap!' },
-    { name: 'Linda Kusuma', role: 'Dokter, Medan', rating: 5, text: 'Pelayanan customer service-nya ramah dan responsif. Cicilan ringan sesuai kemampuan saya.' },
-    { name: 'Hendra Wijaya', role: 'Petani, Semarang', rating: 5, text: 'Modal usaha pertanian saya jadi lancar. Bunganya sangat kompetitif dibanding tempat lain.' },
-    { name: 'Maya Anggraini', role: 'Ibu Rumah Tangga, Makassar', rating: 5, text: 'Untuk kebutuhan biaya persalinan, SMART FUND benar-benar membantu. Prosesnya cepat dan aman.' },
-    { name: 'Andi Setiawan', role: 'PNS, Palembang', rating: 5, text: 'Renovasi rumah saya berjalan lancar dengan bantuan pinjaman dari SMART FUND. Recommended!' },
-    { name: 'Fitri Handayani', role: 'Wiraswasta, Bogor', rating: 5, text: 'Tidak ada biaya tersembunyi, semuanya transparan. Admin verifikasi sangat cepat dan profesional.' },
-    { name: 'Joko Susilo', role: 'Mekanik, Malang', rating: 5, text: 'Buka usaha bengkel jadi lebih mudah. Pinjaman cair tanpa ribet dan syarat yang mudah.' },
-    { name: 'Ratna Sari', role: 'Guru, Denpasar', rating: 5, text: 'Saya sangat terbantu untuk biaya pendidikan anak. SMART FUND bisa diandalkan dan terpercaya.' },
+    { name: 'Budi Santoso', role: 'Pengusaha, Kuala Lumpur', rating: 5, text: 'Prosesnya cepat dan mudah. Saya berjaya mendapatkan modal perniagaan dalam masa singkat. Terima kasih SMART FUND!' },
+    { name: 'Siti Rahayu', role: 'Ibu Rumah Tangga, Johor Bahru', rating: 5, text: 'Faedahnya ringan dan telus. Tiada caj tersembunyi. Sangat membantu untuk pengubahsuaian rumah saya.' },
+    { name: 'Ahmad Fauzi', role: 'Karyawan, Penang', rating: 5, text: 'Platform pinjaman dalam talian yang dipercayui. Berlesen OJK jadi lebih selamat. Proses pengesahan cepat dan praktikal.' },
+    { name: 'Dewi Lestari', role: 'Pelajar, Universiti Malaya', rating: 5, text: 'Dana pendidikan saya dicairkan tepat masa. Prosesnya sangat membantu untuk kelancaran pengajian saya.' },
+    { name: 'Rizky Pratama', role: 'Bebas Seribu, Langkawi', rating: 5, text: 'Saya memerlukan modal mendadak untuk projek klien. SMART FUND dicairkan dalam 1 hari bekerja. Hebat!' },
+    { name: 'Linda Kusuma', role: 'Doktor, Kuala Terengganu', rating: 5, text: 'Perkhidmatan khidmat pelanggan-nya mesra dan responsif. Ansuran ringan selaras dengan kemampuan saya.' },
+    { name: 'Hendra Wijaya', role: 'Petani, Kedah', rating: 5, text: 'Modal perniagaan pertanian saya menjadi lancar. Faedahnya sangat kompetitif berbanding tempat lain.' },
+    { name: 'Maya Anggraini', role: 'Ibu Rumah Tangga, Ipoh', rating: 5, text: 'Untuk keperluan kos persalinan, SMART FUND benar-benar membantu. Prosesnya pantas dan selamat.' },
+    { name: 'Andi Setiawan', role: 'PNS, Putrajaya', rating: 5, text: 'Pengubahsuaian rumah saya berjalan lancar dengan bantuan pinjaman dari SMART FUND. Digalakkan!' },
+    { name: 'Fitri Handayani', role: 'Wiraswasta, Shah Alam', rating: 5, text: 'Tiada caj tersembunyi, semuanya telus. Admin pengesahan sangat pantas dan profesional.' },
+    { name: 'Joko Susilo', role: 'Mekanik, Malacca', rating: 5, text: 'Membuka perniagaan bengkel menjadi lebih mudah. Pinjaman dicairkan tanpa ribet dan syarat yang mudah.' },
+    { name: 'Ratna Sari', role: 'Guru, Kuantan', rating: 5, text: 'Saya sangat terbantu untuk kos pendidikan anak. SMART FUND boleh diandalkan dan dipercayai.' },
   ];
 
   // Acak urutan testimoni (shuffle)

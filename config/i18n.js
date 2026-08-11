@@ -114,6 +114,26 @@ const MESSAGES = {
     'user.fileNotFound': 'File tidak ditemukan',
     'user.docUploaded': 'Dokumen berhasil diupload',
 
+    // ===== Withdrawal Controller =====
+    'withdraw.allFieldsRequired': 'Semua field wajib diisi',
+    'withdraw.invalidAmount': 'Jumlah penarikan harus berupa angka positif',
+    'withdraw.minAmount': (amount) => `Jumlah penarikan minimum adalah Rp${Number(amount).toLocaleString('id-ID')}`,
+    'withdraw.invalidAccount': 'Nomor rekening hanya boleh mengandung angka',
+    'withdraw.insufficientBalance': 'Saldo tidak mencukupi untuk penarikan',
+    'withdraw.notFound': 'Penarikan tidak ditemukan',
+    'withdraw.invalidStatus': 'Status tidak valid',
+    'withdraw.success': 'Penarikan berhasil diajukan',
+    'withdraw.statusUpdated': 'Status penarikan berhasil diperbarui',
+    'withdraw.processed': 'Diproses',
+    'withdraw.processedMsg': (id) => `Penarikan ${id} sedang diproses`,
+    'withdraw.successMsg': (id) => `Penarikan ${id} berhasil diproses`,
+    'withdraw.rejected': 'Ditolak',
+    'withdraw.rejectedMsg': (id, note) => `Penarikan ${id} ditolak. ${note || ''}`,
+    'withdraw.pending': 'Menunggu Verifikasi',
+    'withdraw.pendingMsg': (id) => `Penarikan ${id} menunggu verifikasi`,
+    'withdraw.notifTitle': 'Penarikan Diajukan',
+    'withdraw.notifMsg': (id) => `Penarikan ${id} sedang menunggu verifikasi`,
+
     // ===== Admin Controller =====
     'admin.statusInvalid': 'Status tidak valid',
     'admin.noDataChanged': 'Tidak ada data diubah',
@@ -193,6 +213,7 @@ const MESSAGES = {
     'telegram.chatUser': '💬 Chat User',
     'telegram.welcomeChat': (name) => `Halo ${name}, terima kasih telah mengajukan pinjaman di SMART FUND. Ada yang bisa kami bantu?`,
     'telegram.testMessage': '✅ <b>Test Notifikasi SMART FUND</b>\n\nNotifikasi Telegram berfungsi dengan baik.',
+    'telegram.newWithdrawalTitle': 'PENARIKAN BARU',
 
     // ===== Status Labels =====
     'status.pending': 'Menunggu',
@@ -276,6 +297,26 @@ const MESSAGES = {
     'user.fileNotFound': 'Fail tidak dijumpai',
     'user.docUploaded': 'Dokumen berjaya dimuat naik',
 
+    // ===== Withdrawal Controller =====
+    'withdraw.allFieldsRequired': 'Semua medan wajib diisi',
+    'withdraw.invalidAmount': 'Jumlah pengeluaran mesti nombor positif',
+    'withdraw.minAmount': (amount) => `Jumlah pengeluaran minimum ialah RM${Number(amount).toLocaleString('ms-MY')}`,
+    'withdraw.invalidAccount': 'Nombor akaun hanya boleh mengandungi angka',
+    'withdraw.insufficientBalance': 'Baki tidak mencukupi untuk pengeluaran',
+    'withdraw.notFound': 'Pengeluaran tidak dijumpai',
+    'withdraw.invalidStatus': 'Status tidak sah',
+    'withdraw.success': 'Permintaan pengeluaran berjaya diajukan',
+    'withdraw.statusUpdated': 'Status pengeluaran berjaya dikemas kini',
+    'withdraw.processed': 'Diproses',
+    'withdraw.processedMsg': (id) => `Pengeluaran ${id} sedang diproses`,
+    'withdraw.successMsg': (id) => `Pengeluaran ${id} berjaya diproses`,
+    'withdraw.rejected': 'Ditolak',
+    'withdraw.rejectedMsg': (id, note) => `Pengeluaran ${id} ditolak. ${note || ''}`,
+    'withdraw.pending': 'Menunggu Pengesahan',
+    'withdraw.pendingMsg': (id) => `Pengeluaran ${id} menunggu pengesahan`,
+    'withdraw.notifTitle': 'Permintaan Pengeluaran Diterima',
+    'withdraw.notifMsg': (id) => `Pengeluaran ${id} sedang menunggu pengesahan`,
+
     // ===== Admin Controller =====
     'admin.statusInvalid': 'Status tidak sah',
     'admin.noDataChanged': 'Tiada data diubah',
@@ -329,6 +370,7 @@ const MESSAGES = {
     'error.fileImage': 'Hanya fail imej (JPG/PNG) yang dibenarkan',
     'error.server': 'Berlaku ralat pelayan',
     'error.tooManyRequests': 'Terlalu banyak permintaan. Cuba lagi nanti.',
+    'error.invalidJson': 'Format JSON tidak sah',
 
     // ===== Health =====
     'health.running': 'SMART FUND API berjalan',
@@ -354,6 +396,7 @@ const MESSAGES = {
     'telegram.chatUser': '💬 Chat Pengguna',
     'telegram.welcomeChat': (name) => `Halo ${name}, terima kasih telah memohon pinjaman di SMART FUND. Ada yang boleh kami bantu?`,
     'telegram.testMessage': '✅ <b>Test Notifikasi SMART FUND</b>\n\nNotifikasi Telegram berfungsi dengan baik.',
+    'telegram.newWithdrawalTitle': 'PENGELUARAN BARU',
 
     // ===== Status Labels =====
     'status.pending': 'Menunggu',
@@ -437,6 +480,26 @@ const MESSAGES = {
     'user.fileNotFound': 'File not found',
     'user.docUploaded': 'Document uploaded successfully',
 
+    // ===== Withdrawal Controller =====
+    'withdraw.allFieldsRequired': 'All fields are required',
+    'withdraw.invalidAmount': 'Withdrawal amount must be a positive number',
+    'withdraw.minAmount': (amount) => `Minimum withdrawal amount is $${Number(amount).toLocaleString('en-US')}`,
+    'withdraw.invalidAccount': 'Account number can only contain numbers',
+    'withdraw.insufficientBalance': 'Insufficient balance for withdrawal',
+    'withdraw.notFound': 'Withdrawal not found',
+    'withdraw.invalidStatus': 'Invalid status',
+    'withdraw.success': 'Withdrawal request submitted',
+    'withdraw.statusUpdated': 'Withdrawal status updated',
+    'withdraw.processed': 'Processing',
+    'withdraw.processedMsg': (id) => `Withdrawal ${id} is being processed`,
+    'withdraw.successMsg': (id) => `Withdrawal ${id} has been processed successfully`,
+    'withdraw.rejected': 'Rejected',
+    'withdraw.rejectedMsg': (id, note) => `Withdrawal ${id} has been rejected. ${note || ''}`,
+    'withdraw.pending': 'Awaiting Verification',
+    'withdraw.pendingMsg': (id) => `Withdrawal ${id} is awaiting verification`,
+    'withdraw.notifTitle': 'Withdrawal Request Received',
+    'withdraw.notifMsg': (id) => `Withdrawal ${id} is awaiting verification`,
+
     // ===== Admin Controller =====
     'admin.statusInvalid': 'Invalid status',
     'admin.noDataChanged': 'No data to update',
@@ -490,6 +553,7 @@ const MESSAGES = {
     'error.fileImage': 'Only image files (JPG/PNG) are allowed',
     'error.server': 'An error occurred on the server',
     'error.tooManyRequests': 'Too many requests. Please try again later.',
+    'error.invalidJson': 'Invalid JSON format',
 
     // ===== Health =====
     'health.running': 'SMART FUND API is running',
@@ -515,6 +579,7 @@ const MESSAGES = {
     'telegram.chatUser': '💬 Chat User',
     'telegram.welcomeChat': (name) => `Hello ${name}, thank you for applying for a loan at SMART FUND. How can we help?`,
     'telegram.testMessage': '✅ <b>SMART FUND Test Notification</b>\n\nTelegram notification is working properly.',
+    'telegram.newWithdrawalTitle': 'NEW WITHDRAWAL',
 
     // ===== Status Labels =====
     'status.pending': 'Pending',
@@ -554,8 +619,8 @@ function detectLang(req) {
     return req.headers['x-lang'];
   }
 
-  // 4. Default to Indonesian
-  return 'id';
+  // 4. Default to Bahasa Malaysia
+  return 'ms';
 }
 
 /**
@@ -566,8 +631,8 @@ function detectLang(req) {
  * @returns {string} Translated message
  */
 function t(lang, key, ...args) {
-  const messages = MESSAGES[lang] || MESSAGES.id;
-  const msg = messages[key] || MESSAGES.id[key] || key;
+  const messages = MESSAGES[lang] || MESSAGES.ms;
+  const msg = messages[key] || MESSAGES.ms[key] || key;
   if (typeof msg === 'function') return msg(...args);
   return msg;
 }
@@ -576,7 +641,7 @@ function t(lang, key, ...args) {
  * Get locale configuration for a language
  */
 function getLocaleConfig(lang) {
-  return LOCALE_CONFIG[lang] || LOCALE_CONFIG.id;
+  return LOCALE_CONFIG[lang] || LOCALE_CONFIG.ms;
 }
 
 /**

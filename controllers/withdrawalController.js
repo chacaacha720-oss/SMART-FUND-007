@@ -1,9 +1,9 @@
 /**
  * SMART FUND - Withdrawal Controller
- * Sistem Penarikan Dana
+ * Sistem Pengeluaran Dana
  */
 const db = require('../config/db');
-const { t } = require('../config/i18n');
+const { t, formatCurrency } = require('../config/i18n');
 const telegram = require('../config/telegram');
 
 /**
@@ -22,7 +22,7 @@ function generateWithdrawalId() {
  * Submit withdrawal request
  */
 async function createWithdrawal(req, res) {
-  const lang = req.lang || 'id';
+  const lang = req.lang || 'ms';
   try {
     const { nama, email, no_hp, bank, no_rekening, nama_rekening, jumlah, catatan } = req.body;
     const userId = req.user.id;
@@ -33,37 +33,37 @@ async function createWithdrawal(req, res) {
     );
     const settingMap = {};
     settings.forEach(s => { settingMap[s.setting_key] = s.setting_value; });
-    const minWithdrawal = parseFloat(settingMap.min_withdrawal) || 100000;
+    const minWithdrawal = parseFloat(settingMap.min_withdrawal) || 100;
 
     // Validate required fields
     if (!nama || !email || !no_hp || !bank || !no_rekening || !nama_rekening || !jumlah) {
-      return res.status(400).json({ success: false, message: t(lang, 'withdraw.allFieldsRequired', 'Semua field wajib diisi') });
+      return res.status(400).json({ success: false, message: t(lang, 'withdraw.allFieldsRequired') });
     }
 
     // Validate jumlah
     const amount = parseFloat(jumlah);
     if (isNaN(amount) || amount <= 0) {
-      return res.status(400).json({ success: false, message: t(lang, 'withdraw.invalidAmount', 'Jumlah penarikan harus berupa angka positif') });
+      return res.status(400).json({ success: false, message: t(lang, 'withdraw.invalidAmount') });
     }
 
     if (amount < minWithdrawal) {
-      return res.status(400).json({ success: false, message: t(lang, 'withdraw.minAmount', `Jumlah penarikan minimum adalah Rp${minWithdrawal.toLocaleString()}`) });
+      return res.status(400).json({ success: false, message: t(lang, 'withdraw.minAmount', minWithdrawal) });
     }
 
     // Validate no_rekening (only numbers)
     if (!/^\d+$/.test(no_rekening)) {
-      return res.status(400).json({ success: false, message: t(lang, 'withdraw.invalidAccount', 'Nomor rekening hanya boleh mengandung angka') });
+      return res.status(400).json({ success: false, message: t(lang, 'withdraw.invalidAccount') });
     }
 
     // Get user data and check balance
     const [userRows] = await db.query('SELECT id, full_name, email, phone, balance, loan_limit FROM users WHERE id = ?', [userId]);
     if (userRows.length === 0) {
-      return res.status(404).json({ success: false, message: t(lang, 'auth.userNotFound', 'Pengguna tidak ditemukan') });
+      return res.status(404).json({ success: false, message: t(lang, 'auth.userNotFound') });
     }
     const user = userRows[0];
 
     if (user.balance < amount) {
-      return res.status(400).json({ success: false, message: t(lang, 'withdraw.insufficientBalance', 'Saldo tidak mencukupi untuk penarikan') });
+      return res.status(400).json({ success: false, message: t(lang, 'withdraw.insufficientBalance') });
     }
 
     // Generate unique withdrawal ID
@@ -87,7 +87,7 @@ async function createWithdrawal(req, res) {
     // Create notification for user
     await db.query(
       'INSERT INTO notifications (user_id, title, message, type) VALUES (?, ?, ?, ?)',
-      [user.id, t(lang, 'withdraw.notifTitle', 'Penarikan Diajukan'), t(lang, 'withdraw.notifMsg', `Penarikan ${withdrawalId} sedang menunggu verifikasi`), 'info']
+      [user.id, t(lang, 'withdraw.notifTitle', withdrawalId), t(lang, 'withdraw.notifMsg', withdrawalId), 'info']
     );
 
   // Send Telegram notification
@@ -122,7 +122,7 @@ async function createWithdrawal(req, res) {
 
     return res.json({
       success: true,
-      message: t(lang, 'withdraw.success', 'Penarikan berhasil diajukan'),
+      message: t(lang, 'withdraw.success'),
       data: {
         withdrawalId,
         telegramSent,
@@ -131,7 +131,7 @@ async function createWithdrawal(req, res) {
     });
   } catch (err) {
     console.error('Create withdrawal error:', err);
-    return res.status(500).json({ success: false, message: t(lang, 'error.server', 'Terjadi kesalahan server') });
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
   }
 }
 
@@ -140,7 +140,7 @@ async function createWithdrawal(req, res) {
  * List all withdrawals for admin
  */
 async function listWithdrawals(req, res) {
-  const lang = req.lang || 'id';
+  const lang = req.lang || 'ms';
   try {
     const { status, search, dateFrom, dateTo } = req.query;
     let where = [];
@@ -176,7 +176,7 @@ async function listWithdrawals(req, res) {
     return res.json({ success: true, data: rows });
   } catch (err) {
     console.error('List withdrawals error:', err);
-    return res.status(500).json({ success: false, message: t(lang, 'error.server', 'Terjadi kesalahan server') });
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
   }
 }
 
@@ -185,7 +185,7 @@ async function listWithdrawals(req, res) {
  * Get current user's withdrawals
  */
 async function getUserWithdrawals(req, res) {
-  const lang = req.lang || 'id';
+  const lang = req.lang || 'ms';
   try {
     const userId = req.user.id;
     const [rows] = await db.query(
@@ -195,7 +195,7 @@ async function getUserWithdrawals(req, res) {
     return res.json({ success: true, data: rows });
   } catch (err) {
     console.error('Get user withdrawals error:', err);
-    return res.status(500).json({ success: false, message: t(lang, 'error.server', 'Terjadi kesalahan server') });
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
   }
 }
 
@@ -204,7 +204,7 @@ async function getUserWithdrawals(req, res) {
  * Get single withdrawal detail
  */
 async function getWithdrawal(req, res) {
-  const lang = req.lang || 'id';
+  const lang = req.lang || 'ms';
   try {
     const [rows] = await db.query(
       `SELECT w.*, u.full_name as user_name, u.email as user_email 
@@ -214,12 +214,12 @@ async function getWithdrawal(req, res) {
       [req.params.id]
     );
     if (rows.length === 0) {
-      return res.status(404).json({ success: false, message: t(lang, 'withdraw.notFound', 'Penarikan tidak ditemukan') });
+      return res.status(404).json({ success: false, message: t(lang, 'withdraw.notFound') });
     }
     return res.json({ success: true, data: rows[0] });
   } catch (err) {
     console.error('Get withdrawal error:', err);
-    return res.status(500).json({ success: false, message: t(lang, 'error.server', 'Terjadi kesalahan server') });
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
   }
 }
 
@@ -228,12 +228,12 @@ async function getWithdrawal(req, res) {
  * Update withdrawal status
  */
 async function updateWithdrawalStatus(req, res) {
-  const lang = req.lang || 'id';
+  const lang = req.lang || 'ms';
   try {
     const { status, catatan } = req.body;
     const validStatuses = ['menunggu_verifikasi', 'diproses', 'berhasil', 'ditolak'];
     if (!validStatuses.includes(status)) {
-      return res.status(400).json({ success: false, message: t(lang, 'withdraw.invalidStatus', 'Status tidak valid') });
+      return res.status(400).json({ success: false, message: t(lang, 'withdraw.invalidStatus') });
     }
 
     const [result] = await db.query(
@@ -242,7 +242,7 @@ async function updateWithdrawalStatus(req, res) {
     );
 
     if (result.affectedRows === 0) {
-      return res.status(404).json({ success: false, message: t(lang, 'withdraw.notFound', 'Penarikan tidak ditemukan') });
+      return res.status(400).json({ success: false, message: t(lang, 'withdraw.notFound') });
     }
 
     // Get withdrawal data for notification
@@ -257,16 +257,16 @@ async function updateWithdrawalStatus(req, res) {
       await db.query('UPDATE users SET balance = balance - ? WHERE id = ?', [wd.jumlah, wd.member_id]);
       await db.query(
         'INSERT INTO transactions (user_id, type, amount, status, description) VALUES (?, ?, ?, ?, ?)',
-        [wd.member_id, 'withdrawal', wd.jumlah, 'completed', `Penarikan ${req.params.id} berhasil diproses`]
+        [wd.member_id, 'withdrawal', wd.jumlah, 'completed', `Pengeluaran ${req.params.id} berjaya diproses`]
       );
     }
 
     // Notify user
     const statusMessages = {
-      diproses: { title: t(lang, 'withdraw.processed', 'Diproses'), msg: t(lang, 'withdraw.processedMsg', `Penarikan ${req.params.id} sedang diproses`), type: 'info' },
-      berhasil: { title: t(lang, 'withdraw.success', 'Berhasil'), msg: t(lang, 'withdraw.successMsg', `Penarikan ${req.params.id} berhasil diproses`), type: 'success' },
-      ditolak: { title: t(lang, 'withdraw.rejected', 'Ditolak'), msg: t(lang, 'withdraw.rejectedMsg', `Penarikan ${req.params.id} ditolak. ${catatan || ''}`), type: 'error' },
-      menunggu_verifikasi: { title: t(lang, 'withdraw.pending', 'Menunggu Verifikasi'), msg: t(lang, 'withdraw.pendingMsg', `Penarikan ${req.params.id} menunggu verifikasi`), type: 'warning' },
+      diproses: { title: t(lang, 'withdraw.processed'), msg: t(lang, 'withdraw.processedMsg', req.params.id), type: 'info' },
+      berhasil: { title: t(lang, 'withdraw.success'), msg: t(lang, 'withdraw.successMsg', req.params.id), type: 'success' },
+      ditolak: { title: t(lang, 'withdraw.rejected'), msg: t(lang, 'withdraw.rejectedMsg', req.params.id, catatan), type: 'error' },
+      menunggu_verifikasi: { title: t(lang, 'withdraw.pending'), msg: t(lang, 'withdraw.pendingMsg', req.params.id), type: 'warning' },
     };
     const notif = statusMessages[status];
     await db.query(
@@ -281,16 +281,16 @@ async function updateWithdrawalStatus(req, res) {
 
     // Send Telegram notification for important status changes
     if (status === 'berhasil' || status === 'ditolak') {
-      const statusText = status === 'berhasil' ? '✅ Berhasil' : '❌ Ditolak';
-      const formattedAmount = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(wd.jumlah);
-      const adminMsg = `🔄 Status Update: ${req.params.id}\n\nUser: ${wd.user_name}\nJumlah: ${formattedAmount}\nStatus: ${statusText}`;
+      const statusText = status === 'berhasil' ? t(lang, 'withdraw.successMsg', req.params.id) : t(lang, 'withdraw.rejectedMsg', req.params.id);
+      const formattedAmount = formatCurrency(lang, wd.jumlah);
+      const adminMsg = `🔔 Status Dikemaskini: ${req.params.id}\n\nPengguna: ${wd.user_name}\nJumlah: ${formattedAmount}\nStatus: ${statusText}`;
       await sendTelegram(adminMsg, { parseMode: 'HTML' });
     }
 
-    return res.json({ success: true, message: t(lang, 'withdraw.statusUpdated', 'Status penarikan berhasil diperbarui') });
+    return res.json({ success: true, message: t(lang, 'withdraw.statusUpdated') });
   } catch (err) {
     console.error('Update withdrawal status error:', err);
-    return res.status(500).json({ success: false, message: t(lang, 'error.server', 'Terjadi kesalahan server') });
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
   }
 }
 
@@ -302,3 +302,5 @@ module.exports = {
   getWithdrawal,
   updateWithdrawalStatus,
 };
+
+

@@ -353,11 +353,11 @@ async function submitWithdrawal(e) {
 
   const i18n = (key, fallback) => I18N.t(key) || fallback;
 
-  if (!amount || amount < 100000) {
-    return showToast(i18n('val.minWithdraw', 'Nominal penarikan minimal Rp 100.000'), 'error');
-  }
-  if (!bankName || !accountHolder || !accountNumber) {
-    return showToast(i18n('val.withdrawRequired', 'Semua data rekening wajib diisi'), 'error');
+   if (!amount || amount < 100) {
+     return showToast(i18n('val.minWithdraw', 'Jumlah pengeluaran minimum RM100'), 'error');
+   }
+   if (!bankName || !accountHolder || !accountNumber) {
+     return showToast(i18n('val.withdrawRequired', 'Semua data akaun wajib diisi'), 'error');
   }
 
   const btn = document.getElementById('withdrawSubmitBtn');
@@ -375,15 +375,15 @@ async function submitWithdrawal(e) {
 
     closeWithdrawModal();
     await loadDashboard();
-    // Beritahu admin (tab lain) bahwa ada penarikan baru
+    // Beritahu admin (tab lain) bahawa ada pengeluaran baru
     document.dispatchEvent(new CustomEvent('withdrawSuccess'));
 
     if (typeof Swal !== 'undefined') {
       await Swal.fire({
         icon: 'warning',
-        title: i18n('notif.verifyWithdrawTitle', 'Segera Verifikasi Penarikan'),
+         title: i18n('notif.verifyWithdrawTitle', 'Segera Sahkan Pengeluaran'),
         html: `
-          <p class="text-slate-600 mb-4">${i18n('notif.verifyWithdrawDesc', 'penarikan anda telah di kirim. Silakan hubungi admin untuk mendapatkan code pencairan')}</p>
+           <p class="text-slate-600 mb-4">${i18n('notif.verifyWithdrawDesc', 'pengajuan pengeluaran anda telah dihantar. Sila hubungi admin untuk mendapatkan kod pengcairan')}</p>
         `,
         confirmButtonText: i18n('notif.chatTelegram', '💬 Chat Admin via Telegram'),
         showDenyButton: true,
@@ -391,11 +391,11 @@ async function submitWithdrawal(e) {
         allowOutsideClick: false,
       }).then((result) => {
         if (result.isConfirmed) {
-          const chatMessage = 'Halo Admin, saya baru saja mengajukan penarikan.\nMohon bantu confirmasi untuk melanjutkan penarikan saya.';
+          const chatMessage = 'Halo Admin, saya baru saja mengajukan pengeluaran.\nSila bantu pengesahan untuk melanjutkan pengeluaran saya.';
           const telegramUrl = `https://t.me/cs_smartfund?text=${encodeURIComponent(chatMessage)}`;
           window.open(telegramUrl, '_blank', 'noopener,noreferrer');
         } else if (result.isDenied) {
-          const whatsappMessage = 'Halo Admin, saya baru saja mengajukan penarikan.\nMohon bantu confirmasi untuk melanjutkan penarikan saya.';
+          const whatsappMessage = 'Halo Admin, saya baru saja mengajukan pengeluaran.\nSila bantu pengesahan untuk melanjutkan pengeluaran saya.';
           const whatsappUrl = `https://wa.me/6289679875858?text=${encodeURIComponent(whatsappMessage)}`;
           window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
         }
@@ -410,31 +410,31 @@ async function submitWithdrawal(e) {
 }
 
 async function openLoanAdminConfirmation(applicationId, amount, tenor, purpose) {
-  const chatTitle = `Pengajuan #${applicationId} berhasil dikirim`;
-  const chatMessage = `Halo Admin, saya baru saja mengajukan pinjaman. Mohon bantu verifikasi agar pengajuan pinjaman saya dapat segera diproses.`;
+  const chatTitle = `Permohonan #${applicationId} berjaya dihantar`;
+  const chatMessage = `Halo Admin, saya baru saja mengajukan pinjaman. Sila bantu pengesahan agar permohonan pinjaman saya dapat segera diproses.`;
 
   await Swal.fire({
-    icon: 'success',
-    title: 'Pengajuan Berhasil',
-    html: `
-      <div class="text-left space-y-4">
-        <p class="text-slate-600">Pengajuan pinjaman Anda telah berhasil dikirim.</p>
-        <p class="text-slate-600">Status saat ini:</p>
-        <p class="text-slate-600 font-medium">Menunggu Persetujuan Admin.</p>
-        <p class="text-slate-600">Untuk mempercepat proses verifikasi,<br>silakan hubungi Admin melalui salah satu<br>media berikut agar pengajuan pinjaman Anda<br>segera diproses.</p>
-        <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-slate-700">
-          <p class="font-semibold text-slate-800 mb-2"><i class="fas fa-circle-info mr-1 text-blue-600"></i> Hubungi Admin</p>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <button id="loanTelegramChatBtn" class="w-full rounded-xl bg-sky-500 text-white px-4 py-3 font-semibold hover:bg-sky-600 transition">
-              <i class="fab fa-telegram-plane mr-2"></i> 💬 Chat Admin via Telegram
-            </button>
-            <button id="loanWhatsappChatBtn" class="w-full rounded-xl bg-emerald-500 text-white px-4 py-3 font-semibold hover:bg-emerald-600 transition">
-              <i class="fab fa-whatsapp mr-2"></i> 📱 Chat Admin via WhatsApp
-            </button>
-          </div>
-        </div>
-      </div>
-    `,
+     icon: 'success',
+     title: 'Permohonan Berjaya',
+     html: `
+       <div class="text-left space-y-4">
+         <p class="text-slate-600">Permohonan pinjaman anda telah berjaya dihantar.</p>
+         <p class="text-slate-600">Status semasa:</p>
+         <p class="text-slate-600 font-medium">Menunggu Persetujuan Admin.</p>
+         <p class="text-slate-600">Untuk mempercepatkan proses pengesahan,<br>sila hubungi Admin melalui salah satu<br>media berikut agar permohonan pinjaman anda<br>segera diproses.</p>
+         <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-slate-700">
+           <p class="font-semibold text-slate-800 mb-2"><i class="fas fa-circle-info mr-1 text-blue-600"></i> Hubungi Admin</p>
+           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+             <button id="loanTelegramChatBtn" class="w-full rounded-xl bg-sky-500 text-white px-4 py-3 font-semibold hover:bg-sky-600 transition">
+               <i class="fab fa-telegram-plane mr-2"></i> &#128446; Chat Admin melalui Telegram
+             </button>
+             <button id="loanWhatsappChatBtn" class="w-full rounded-xl bg-emerald-500 text-white px-4 py-3 font-semibold hover:bg-emerald-600 transition">
+               <i class="fab fa-whatsapp mr-2"></i> &#128240; Chat Admin melalui WhatsApp
+             </button>
+           </div>
+         </div>
+       </div>
+     `,
     showCancelButton: true,
     showConfirmButton: false,
     cancelButtonText: 'Tutup',
@@ -455,7 +455,7 @@ async function openLoanAdminConfirmation(applicationId, amount, tenor, purpose) 
     },
   });
 
-  showToast(`${chatTitle}. Admin akan segera menerima notifikasi.`, 'success');
+   showToast(`${chatTitle}. Admin akan segera menerima notifikasi.`, 'success');
 }
 
 async function markNotifRead(id) {
@@ -488,7 +488,7 @@ const SyncChannel = (() => {
   let channelError = false;
   let lastData = '';
 
-  // Register BroadcastChannel (fallback ke polling jika gagal)
+  // Daftar BroadcastChannel (fallback ke polling jika gagal)
   try {
     channel = new BroadcastChannel('smartfund_sync');
   } catch (e) {
@@ -515,7 +515,7 @@ const SyncChannel = (() => {
         const syncEl = document.getElementById('syncIndicator');
         if (syncEl) {
           syncEl.classList.remove('hidden');
-          syncEl.textContent = `🔄 ${I18N.t('dash.dataUpdated', 'Data telah diperbarui')} ${formatDateTime(new Date().toISOString())}`;
+          syncEl.textContent = `🔄 ${I18N.t('dash.dataUpdated', 'Data telah dikemaskini')} ${formatDateTime(new Date().toISOString())}`;
           setTimeout(() => syncEl.classList.add('hidden'), 5000);
         }
       }
@@ -542,7 +542,7 @@ const SyncChannel = (() => {
         const syncEl = document.getElementById('syncIndicator');
         if (syncEl) {
           syncEl.classList.remove('hidden');
-          syncEl.textContent = `🔄 ${I18N.t('dash.dataUpdated', 'Data telah diperbarui')} ${formatDateTime(new Date().toISOString())}`;
+          syncEl.textContent = `🔄 ${I18N.t('dash.dataUpdated', 'Data telah dikemaskini')} ${formatDateTime(new Date().toISOString())}`;
           setTimeout(() => syncEl.classList.add('hidden'), 5000);
         }
         // Update baseline signature
@@ -557,7 +557,7 @@ const SyncChannel = (() => {
 
   /**
    * Beri tahu tab lain bahwa data berubah (dipanggil saat user
-   * mengajukan pinjaman/penarikan agar admin langsung tahu).
+   * mengajukan pinjaman/pengeluaran agar admin langsung tahu).
    */
   function notifyDataChanged() {
     if (channel && !channelError) {
@@ -574,7 +574,7 @@ const SyncChannel = (() => {
   return { notifyDataChanged };
 })();
 
-// Hook agar notifikasi ke admin dikirim saat user mengubah data
-// (submit pinjaman / penarikan). Fetchisasi dilakukan di handler asli.
+// Hook agar notifikasi ke admin dihantar saat user mengubah data
+// (submit pinjaman / pengeluaran). Fetchisasi dilakukan di handler asli.
 document.addEventListener('applySuccess', () => SyncChannel.notifyDataChanged());
 document.addEventListener('withdrawSuccess', () => SyncChannel.notifyDataChanged());

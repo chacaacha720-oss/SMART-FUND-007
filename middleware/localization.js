@@ -8,26 +8,26 @@
  *  2. Cookie (lang cookie)
  *  3. Local Storage (handled client-side, communicated via X-Lang header)
  *  4. Browser Language (Accept-Language header)
- * Default: 'id' (Bahasa Indonesia)
- *
- * Attaches to request:
- *  - req.lang       -> language code (id | ms | en)
- *  - req.language   -> same as req.lang (alias)
- *  - req.locale     -> locale string (id-ID | ms-MY | en-US)
- *  - req.currency   -> currency code (IDR | MYR | USD)
- *  - req.t          -> translation fn: req.t(key, ...args)
- *  - req.fmtCurrency -> formatCurrency fn: req.fmtCurrency(amount)
- *  - req.fmtNumber   -> formatNumber fn: req.fmtNumber(num)
- *  - req.fmtDate     -> formatDate fn: req.fmtDate(dateStr)
- *  - req.fmtDateTime -> formatDateTime fn: req.fmtDateTime(dateStr)
- *  - req.statusLabel -> statusLabel fn: req.statusLabel(status)
- */
+   * Default: 'ms' (Bahasa Malaysia)
+   *
+   * Attaches to request:
+   *  - req.lang       -> language code (id | ms | en)
+   *  - req.language   -> same as req.lang (alias)
+   *  - req.locale     -> locale string (id-ID | ms-MY | en-US)
+   *  - req.currency   -> currency code (IDR | MYR | USD)
+   *  - req.t          -> translation fn: req.t(key, ...args)
+   *  - req.fmtCurrency -> formatCurrency fn: req.fmtCurrency(amount)
+   *  - req.fmtNumber   -> formatNumber fn: req.fmtNumber(num)
+   *  - req.fmtDate     -> formatDate fn: req.fmtDate(dateStr)
+   *  - req.fmtDateTime -> formatDateTime fn: req.fmtDateTime(dateStr)
+   *  - req.statusLabel -> statusLabel fn: req.statusLabel(status)
+   */
 const { detectLang, t, getLocaleConfig, formatCurrency, formatNumber, formatDate, formatDateTime, statusLabel } = require('../config/i18n');
 
 /**
  * Resolve the active language for a request.
- * Priority: query ?lang= > X-Lang header > cookie > Accept-Language > default 'id'
- */
+   * Priority: query ?lang= > X-Lang header > cookie > Accept-Language > default 'ms'
+   */
 function resolveLanguage(req) {
   // 1. Explicit query parameter (?lang=en)
   if (req.query && req.query.lang) {
@@ -54,14 +54,14 @@ function resolveLanguage(req) {
   }
 
   // 5. Default
-  return 'id';
+  return 'ms';
 }
 
 /**
  * Localization middleware - attach locale/currency/formatters to req
  * Also wraps res.json() to include locale/currency in every API response:
- *   { locale: 'id-ID', currency: 'IDR', ...originalResponse }
- */
+   *   { locale: 'ms-MY', currency: 'MYR', ...originalResponse }
+   */
 function localizationMiddleware(req, res, next) {
   const lang = resolveLanguage(req);
   const config = getLocaleConfig(lang);

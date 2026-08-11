@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="ms">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Registrasi - SMART FUND</title>
+  <title>Daftar Akaun - SMART FUND</title>
+  <meta name="description" content="SMART FUND - Platform pinjaman dalam talian yang dipercayai dan berlesen OJK. Faedah bermula 5% setahun. Daftar sekarang dan nikmati kemudahan pinjaman dalam talian." />
+  <meta name="keywords" content="pinjaman dalam talian, pinjaman wang, smart fund, fintech, OJK, daftar" />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>tailwind.config = { darkMode: 'class' };</script>
@@ -22,16 +24,16 @@
     <div class="hidden lg:flex lg:w-1/2 gradient-bg relative overflow-hidden">
       <div class="absolute inset-0 hero-pattern"></div>
       <div class="relative z-10 flex flex-col justify-between p-8 lg:p-12 text-white">
-        <a href="/" class="flex items-center gap-2.5 group" aria-label="Beranda SMART FUND">
+        <a href="/" class="flex items-center gap-2.5 group" aria-label="Laman Utama SMART FUND">
           <img src="/assets/img/logo.png" alt="SMART FUND Logo" loading="eager" width="40" height="40" class="object-contain transition-transform duration-300 animate-float" />
           <span class="text-xl lg:text-2xl font-extrabold">SMART FUND</span>
         </a>
         <div>
-          <h1 class="text-3xl lg:text-4xl font-extrabold leading-tight mb-4">Bergabung dengan SMART FUND 🚀</h1>
-          <p class="text-lg opacity-90 mb-8">Daftar sekarang dan nikmati kemudahan pinjaman online dengan bunga kompetitif mulai 5% per tahun.</p>
+          <h1 class="text-3xl lg:text-4xl font-extrabold leading-tight mb-4">Sertai SMART FUND 🚀</h1>
+          <p class="text-lg opacity-90 mb-8">Daftar sekarang dan nikmati kemudahan pinjaman dalam talian dengan faedah kompetitif bermula 5% setahun.</p>
           <div class="space-y-4">
-            <div class="flex items-center gap-3"><i class="fas fa-circle-check text-xl"></i><span>Proses registrasi cepat</span></div>
-            <div class="flex items-center gap-3"><i class="fas fa-circle-check text-xl"></i><span>Otomatis login setelah daftar</span></div>
+            <div class="flex items-center gap-3"><i class="fas fa-circle-check text-xl"></i><span>Pendaftaran pantas</span></div>
+            <div class="flex items-center gap-3"><i class="fas fa-circle-check text-xl"></i><span>Auto log masuk selepas daftar</span></div>
             <div class="flex items-center gap-3"><i class="fas fa-circle-check text-xl"></i><span>Akses dashboard lengkap</span></div>
           </div>
         </div>
@@ -50,8 +52,8 @@
         <div class="bg-white rounded-3xl shadow-xl p-6 sm:p-8 border border-slate-100 hover-lift animate-zoom-in">
           <div class="flex justify-between items-center mb-6">
             <div>
-              <h2 class="text-2xl font-extrabold text-slate-900">Daftar Akun</h2>
-              <p class="text-slate-500 text-sm mt-1">Buat akun SMART FUND baru</p>
+              <h2 class="text-2xl font-extrabold text-slate-900">Daftar Akaun</h2>
+              <p class="text-slate-500 text-sm mt-1">Buat akaun SMART FUND baru</p>
             </div>
             <button id="darkToggle" class="icon-btn" aria-label="Toggle dark mode">
               <i class="fas fa-moon text-slate-600"></i>
@@ -70,44 +72,44 @@
           <!-- Step 1: Data Pribadi -->
           <div id="regStep1" class="space-y-4">
             <div>
-              <label class="form-label" for="fullName">Nama Lengkap</label>
+              <label class="form-label" for="fullName">Nama Penuh</label>
               <div class="relative">
                 <i class="fas fa-id-card absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                <input type="text" id="fullName" placeholder="Nama lengkap Anda" class="form-input pl-11" />
+                <input type="text" id="fullName" placeholder="Nama penuh anda" class="form-input pl-11" />
               </div>
             </div>
             <div>
-              <label class="form-label" for="email">Email</label>
+              <label class="form-label" for="email">Emel</label>
               <div class="relative">
                 <i class="fas fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
                 <input type="email" id="email" placeholder="email@example.com" class="form-input pl-11" />
               </div>
             </div>
             <div>
-              <label class="form-label" for="phone">Nomor HP</label>
+              <label class="form-label" for="phone">Nombor HP</label>
               <div class="relative">
                 <i class="fas fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
                 <input type="tel" id="phone" placeholder="0812xxxxxxxx" class="form-input pl-11" />
               </div>
             </div>
             <div>
-              <label class="form-label" for="password">Password</label>
+              <label class="form-label" for="password">Kata Laluan</label>
               <div class="relative">
                 <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                <input type="password" id="password" placeholder="Min 6 karakter (huruf & angka)" class="form-input pl-11 pr-12" />
+                <input type="password" id="password" placeholder="Min 6 aksara (huruf & nombor)" class="form-input pl-11 pr-12" />
                 <button type="button" id="togglePwd1" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600" aria-label="Toggle password visibility"><i class="fas fa-eye"></i></button>
               </div>
             </div>
             <div>
-              <label class="form-label" for="confirmPassword">Konfirmasi Password</label>
+              <label class="form-label" for="confirmPassword">Sahkan Kata Laluan</label>
               <div class="relative">
                 <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                <input type="password" id="confirmPassword" placeholder="Ulangi password" class="form-input pl-11 pr-12" />
+                <input type="password" id="confirmPassword" placeholder="Ulangi kata laluan" class="form-input pl-11 pr-12" />
                 <button type="button" id="togglePwd2" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600" aria-label="Toggle password visibility"><i class="fas fa-eye"></i></button>
               </div>
             </div>
             <button id="toStep2Btn" class="btn btn-primary w-full">
-              <span>Lanjut</span> <i class="fas fa-arrow-right ml-2"></i>
+              <span>Seterusnya</span> <i class="fas fa-arrow-right ml-2"></i>
             </button>
           </div>
 
@@ -120,18 +122,18 @@
               <h3 class="font-bold text-slate-900">Syarat & Ketentuan</h3>
             </div>
             <div class="bg-slate-50 rounded-xl p-4 max-h-40 overflow-y-auto text-sm text-slate-600 border border-slate-200">
-              <p class="mb-2">Dengan mendaftar di SMART FUND, Anda menyetujui:</p>
+              <p class="mb-2">Dengan mendaftar di SMART FUND, anda bersetuju dengan:</p>
               <ul class="list-disc list-inside space-y-1">
-                <li>Data yang dimasukkan adalah benar dan dapat dipertanggungjawabkan.</li>
-                <li>Pinjaman akan diproses sesuai kebijakan dan ketentuan SMART FUND.</li>
-                <li>Bunga dikenakan mulai 5% per tahun sesuai tenor.</li>
-                <li>Platform berizin dan diawasi OJK.</li>
-                <li>Pengajuan dapat disetujui atau ditolak oleh admin.</li>
+                <li>Data yang dimasukkan adalah betul dan boleh dipertanggungjawabkan.</li>
+                <li>Pinjaman akan diproses mengikut dasar dan syarat SMART FUND.</li>
+                <li>Faedah dikenakan bermula 5% setahun mengikut tempoh.</li>
+                <li>Platform berlesen dan diawasi OJK.</li>
+                <li>Permohonan boleh diluluskan atau ditolak oleh admin.</li>
               </ul>
             </div>
             <label class="flex items-start gap-3 cursor-pointer p-3 rounded-xl hover:bg-blue-50 transition">
               <input type="checkbox" id="agreeTerms" class="w-5 h-5 mt-0.5 rounded border-slate-300 text-blue-600 focus:ring-blue-500" />
-              <span class="text-sm text-slate-700">Saya menyetujui <a href="#" class="text-blue-600 font-semibold">Syarat & Ketentuan</a> serta <a href="#" class="text-blue-600 font-semibold">Kebijikan Privasi</a> SMART FUND</span>
+              <span class="text-sm text-slate-700">Saya bersetuju dengan <a href="#" class="text-blue-600 font-semibold">Syarat & Ketentuan</a> dan <a href="#" class="text-blue-600 font-semibold">Dasar Privasi</a> SMART FUND</span>
             </label>
             <div class="flex gap-3">
               <button id="backTo1Btn" class="btn btn-secondary"><i class="fas fa-arrow-left"></i></button>
@@ -142,13 +144,13 @@
           </div>
 
           <p class="text-center text-slate-600 text-sm mt-6">
-            <span>Sudah punya akun?</span>
-            <a href="/login.html" class="text-blue-600 font-bold hover:underline">Masuk</a>
+            <span>Sudah ada akaun?</span>
+            <a href="/login.html" class="text-blue-600 font-bold hover:underline">Log Masuk</a>
           </p>
         </div>
 
         <p class="text-center text-sm text-slate-400 mt-6">
-          <a href="/" class="hover:text-blue-600"><i class="fas fa-arrow-left mr-1"></i> Kembali ke Beranda</a>
+          <a href="/" class="hover:text-blue-600"><i class="fas fa-arrow-left mr-1"></i> Kembali ke Laman Utama</a>
         </p>
       </div>
     </div>
@@ -210,12 +212,12 @@
         const password = document.getElementById('password').value;
         const confirm = document.getElementById('confirmPassword').value;
 
-        if (!fullName || fullName.length < 3) return showToast('Nama lengkap minimal 3 karakter', 'error');
-        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showToast('Email tidak valid', 'error');
-        if (!phone || !/^((\+62|62|0)8[1-9]\d{6,11})$/.test(phone.replace(/[\s-]/g, ''))) return showToast('Nomor HP tidak valid', 'error');
-        if (!password || password.length < 6) return showToast('Password minimal 6 karakter', 'error');
-        if (!/[a-zA-Z]/.test(password) || !/[0-9]/.test(password)) return showToast('Password harus mengandung huruf dan angka', 'error');
-        if (password !== confirm) return showToast('Password tidak cocok', 'error');
+        if (!fullName || fullName.length < 3) return showToast('Nama penuh minimum 3 aksara', 'error');
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showToast('Emel tidak sah', 'error');
+        if (!phone || !/^((\+62|62|0)8[1-9]\d{6,11})$/.test(phone.replace(/[\s-]/g, ''))) return showToast('Nombor HP tidak sah', 'error');
+        if (!password || password.length < 6) return showToast('Kata laluan minimum 6 aksara', 'error');
+        if (!/[a-zA-Z]/.test(password) || !/[0-9]/.test(password)) return showToast('Kata laluan mesti mengandungi huruf & nombor', 'error');
+        if (password !== confirm) return showToast('Sahkan kata laluan tidak sepadan', 'error');
 
         goStep(2);
       });
@@ -225,7 +227,7 @@
       // Step 2 -> submit
       const submitBtn = document.getElementById('submitRegBtn');
       submitBtn.addEventListener('click', async () => {
-        if (!document.getElementById('agreeTerms').checked) return showToast('Anda harus menyetujui syarat & ketentuan', 'error');
+        if (!document.getElementById('agreeTerms').checked) return showToast('Anda mesti bersetuju dengan Syarat & Ketentuan', 'error');
 
         const body = {
           fullName: document.getElementById('fullName').value.trim(),
@@ -241,14 +243,13 @@
 
         if (res.success) {
           Token.set(res.token, false);
-          showToast('Registrasi berhasil! Mengarahkan ke dashboard...', 'success');
+          showToast('Pendaftaran berjaya! Mengarahkan ke dashboard...', 'success');
           setTimeout(() => (window.location.href = `${BASE_PATH}/dashboard.html`), 800);
         } else {
-          showToast(res.message || 'Registrasi gagal', 'error');
+          showToast(res.message || 'Pendaftaran gagal', 'error');
         }
       });
     });
   </script>
 </body>
 </html>
-

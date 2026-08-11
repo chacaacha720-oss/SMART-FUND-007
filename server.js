@@ -103,7 +103,7 @@ const apiLimiter = rateLimit({
   // Message is localized by the i18n middleware
   message: (req) => {
     const { t } = require('./config/i18n');
-    const lang = req.lang || 'id';
+    const lang = req.lang || 'ms';
     return { success: false, message: t(lang, 'error.tooManyRequests') };
   },
 });
@@ -118,7 +118,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 app.use((err, req, res, next) => {
   if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
-    const lang = req.lang || 'id';
+    const lang = req.lang || 'ms';
     return res.status(400).json({ success: false, message: require('./config/i18n').t(lang, 'error.invalidJson') || 'Invalid JSON payload' });
   }
   next(err);

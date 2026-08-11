@@ -4,7 +4,7 @@
    ============================================ */
 
 const I18N = {
-  currentLang: 'id',
+   currentLang: 'ms',
   translations: {
     id: {
       // ===== NAVBAR =====
@@ -579,12 +579,12 @@ const I18N = {
       'admin.reject': 'Tolak',
       'admin.disburse': 'Cairkan Dana',
       'admin.editUser': 'Edit Pengguna',
-      'admin.deleteUser': 'Hapus Pengguna',
+      'admin.deleteUser': 'Padamkan Pengguna',
       'admin.viewApp': 'Lihat Detail',
-      'admin.addNote': 'Tambah Catatan Admin',
-      'admin.notePlaceholder': 'Catatan untuk permohonan ini...',
-      'admin.confirmDelete': 'Hapus Pengguna?',
-      'admin.confirmDeleteText': 'Pengguna dan semua data berkaitan akan dihapus secara kekal.',
+      'admin.addNote': 'Tambah Nota Admin',
+      'admin.notePlaceholder': 'Nota untuk permohonan ini...',
+      'admin.confirmDelete': 'Padamkan Pengguna?',
+      'admin.confirmDeleteText': 'Pengguna dan semua data berkaitan akan dipadam secara kekal.',
       'admin.save': 'Simpan',
       'admin.cancel': 'Batal',
       'admin.close': 'Tutup',
@@ -627,11 +627,11 @@ const I18N = {
       'notif.withdrawFailed': 'Gagal menghantar pengeluaran',
       'notif.withdrawSent': 'Permintaan pengeluaran telah dihantar',
       'notif.verifyWithdrawTitle': 'Segera Sahkan Pengeluaran',
-      'notif.verifyWithdrawDesc': 'pengajuan pengeluaran anda telah di hantar. Silahkan hubungi admin untuk mendapatkan code pencairan',
+      'notif.verifyWithdrawDesc': 'permohonan pengeluaran anda telah dihantar. Sila hubungi admin untuk mendapatkan kod pengcairan',
       'notif.chatTelegram': '💬 Chat Admin melalui Telegram',
       'notif.chatWhatsapp': 'WhatsApp Admin',
       'notif.chatMessage': 'Hai Admin, saya baru sahaja menghantar pengeluaran. Sila bantu pengesahan untuk meneruskan pengeluaran saya.',
-      'notif.whatsappMessage': 'Pengesahan / KYC belum aktif lakukan pengesahan\n\nUntuk meneruskan pengeluaran',
+      'notif.whatsappMessage': 'Pengesahan / KYC belum aktif, sila lakukan pengesahan\n\nUntuk meneruskan pengeluaran',
 
       // ===== FAQ =====
       'faq.q1': 'Bagaimana cara memohon pinjaman di SMART FUND?',
@@ -1015,16 +1015,16 @@ const I18N = {
     if (saved && this.translations[saved]) {
       this.currentLang = saved;
     } else {
-      const browserLang = (navigator.language || 'id').toLowerCase().split('-')[0];
-      this.currentLang = this.translations[browserLang] ? browserLang : 'id';
+      const browserLang = (navigator.language || 'ms').toLowerCase().split('-')[0];
+      this.currentLang = this.translations[browserLang] ? browserLang : 'ms';
     }
     // Load translations from JSON files, then apply
     this.loadFromFiles(this.currentLang).then(() => this.apply());
   },
 
   t(key) {
-    const lang = this.translations[this.currentLang] || this.translations.id;
-    return lang[key] || this.translations.id[key] || key;
+    const lang = this.translations[this.currentLang] || this.translations.ms;
+    return lang[key] || this.translations.ms[key] || key;
   },
 
   setLang(lang) {

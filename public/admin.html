@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="ms">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Admin Dashboard - SMART FUND</title>
+  <title>Papar Kakitangan - SMART FUND</title>
+  <meta name="description" content="SMART FUND Admin - Portal pengurusan pinjaman, pengguna, transaksi, dan tetapan." />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>tailwind.config = { darkMode: 'class' };</script>
@@ -11,354 +12,361 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <script src="/assets/js/i18n.js"></script>
   <link rel="stylesheet" href="/assets/css/style.css" />
+  <script src="/assets/js/i18n.js"></script>
+  <script src="/assets/js/locale.js"></script>
 </head>
-  <body class="font-jakarta bg-slate-50">
+<body class="font-jakarta text-slate-700 antialiased bg-slate-50 dark:bg-slate-900">
   <div id="pageLoader" class="page-loader"><div class="loader-logo mx-auto"></div></div>
 
-  <!-- Login Screen -->
-  <div id="loginScreen" class="min-h-screen flex items-center justify-center p-4 sm:p-6">
+  <!-- Admin Login Form (shown when no token) -->
+  <div id="adminLoginPage" class="min-h-screen flex items-center justify-center bg-slate-100 dark:bg-slate-800">
     <div class="w-full max-w-md">
-      <div class="flex items-center gap-2.5 justify-center mb-8 group">
-        <img src="/assets/img/logo.png" alt="SMART FUND Logo" loading="eager" width="48" height="48" class="object-contain transition-transform duration-300 animate-float" />
-        <span class="text-2xl font-extrabold gradient-text">SMART FUND</span>
+      <div class="text-center mb-8">
+        <img src="/assets/img/logo.png" alt="SMART FUND Logo" width="48" height="48" class="mx-auto" />
+        <span class="text-2xl font-extrabold gradient-text block mt-2">SMART FUND</span>
       </div>
-      <div class="bg-white rounded-3xl shadow-xl p-6 sm:p-8 border border-slate-100 hover-lift animate-zoom-in">
-        <h2 class="text-2xl font-extrabold text-slate-900 mb-2">Admin Login</h2>
-        <p class="text-slate-500 text-sm mb-6">Masuk ke dashboard admin SMART FUND</p>
-        <form id="adminLoginForm" class="space-y-4">
+      <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-slate-100 dark:border-slate-700 p-8">
+        <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white text-center mb-2">Log Masuk Admin</h2>
+        <p class="text-slate-500 dark:text-slate-300 text-sm text-center mb-6">Log masuk ke dashboard admin SMART FUND</p>
+        <form id="adminLoginForm" class="space-y-5">
           <div>
-            <label class="form-label" for="adminUsername">Username</label>
+            <label class="form-label" for="adminUsername">Nama Pengguna</label>
             <div class="relative">
               <i class="fas fa-user absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
               <input type="text" id="adminUsername" placeholder="admin" class="form-input pl-11" />
             </div>
           </div>
           <div>
-            <label class="form-label" for="adminPassword">Password</label>
+            <label class="form-label" for="adminPassword">Kata Laluan</label>
             <div class="relative">
               <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-              <input type="password" id="adminPassword" placeholder="••••••••" class="form-input pl-11 pr-12" />
-              <button type="button" id="toggleAdminPwd" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400" aria-label="Toggle password visibility"><i class="fas fa-eye"></i></button>
+              <input type="password" id="adminPassword" placeholder="Masukkan kata laluan" class="form-input pl-11 pr-12" />
+              <button type="button" id="toggleAdminPwd" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600" aria-label="Toggle password visibility">
+                <i class="fas fa-eye"></i>
+              </button>
             </div>
           </div>
           <button type="submit" id="adminLoginBtn" class="btn btn-primary w-full">
-            <span class="btn-text"><i class="fas fa-right-to-bracket mr-2"></i> Login Admin</span>
+            <span class="btn-text">Log Masuk Admin</span>
           </button>
         </form>
-        <p class="text-center text-slate-400 text-sm mt-6"><a href="/" class="hover:text-blue-600"><i class="fas fa-arrow-left mr-1"></i> Kembali ke Beranda</a></p>
       </div>
+      <p class="text-center text-sm text-slate-400 mt-6">
+        <a href="/" class="text-blue-600 hover:underline"><i class="fas fa-arrow-left mr-1"></i> Kembali ke Laman Utama</a>
+      </p>
     </div>
   </div>
 
-  <!-- Admin Dashboard -->
-  <div id="adminApp" class="hidden">
-    <div id="sidebarOverlay" class="sidebar-overlay"></div>
-    <div class="flex min-h-screen">
+  <!-- Admin Dashboard (shown when logged in) -->
+  <div id="adminPanel" class="hidden">
+    <header class="bg-white dark:bg-slate-800 shadow-sm fixed w-full top-0 z-50">
+      <div class="container mx-auto flex items-center justify-between px-4 sm:px-6 py-3">
+        <a href="/" class="flex items-center gap-2.5" aria-label="Laman Utama SMART FUND">
+          <img src="/assets/img/logo.png" alt="SMART FUND Logo" width="36" height="36" class="object-contain" />
+          <span class="text-xl font-extrabold gradient-text">SMART FUND</span>
+        </a>
+        <div class="flex items-center gap-3">
+          <span class="hidden sm:block text-sm text-slate-600 dark:text-slate-300" id="adminName">Nama Admin</span>
+          <button id="darkToggle" class="icon-btn" aria-label="Toggle dark mode"><i class="fas fa-moon text-slate-600"></i></button>
+          <button id="adminUserMenuBtn" class="flex items-center gap-2 px-3 py-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+            <img src="/assets/img/avatar.png" alt="avatar" class="w-8 h-8 rounded-full object-cover" />
+            <i class="fas fa-chevron-down text-xs text-slate-400"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="flex pt-16">
       <!-- Sidebar -->
-      <aside id="adminSidebar" class="sidebar admin-sidebar-dark w-72 flex flex-col fixed md:sticky top-0 h-screen z-[1000]">
-        <div class="p-6 border-b border-slate-700">
-          <div class="flex items-center gap-2.5">
-            <img src="/assets/img/logo.png" alt="SMART FUND Logo" loading="lazy" width="40" height="40" class="object-contain animate-float" />
-            <div><span class="text-lg font-extrabold block">SMART FUND</span><span class="text-xs text-slate-400">Admin Panel</span></div>
-          </div>
-        </div>
-        <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
-          <a class="admin-link active" data-page="dashboard"><i class="fas fa-gauge-high w-5"></i> Dashboard</a>
-          <a class="admin-link" data-page="users"><i class="fas fa-users w-5"></i> Data User</a>
-          <a class="admin-link" data-page="applications"><i class="fas fa-file-circle-check w-5"></i> Pengajuan</a>
-          <a class="admin-link" data-page="transactions"><i class="fas fa-receipt w-5"></i> Transaksi</a>
-          <a class="admin-link" data-page="withdrawals"><i class="fas fa-money-bill-wave w-5"></i> Penarikan Dana</a>
-          <a class="admin-link" data-page="telegram"><i class="fab fa-telegram w-5"></i> Pengaturan Telegram</a>
-          <a class="admin-link" data-page="settings"><i class="fas fa-gear w-5"></i> Setting Website</a>
+      <aside class="hidden md:block w-64 bg-white dark:bg-slate-800 shadow-sm min-h-screen pt-4">
+        <nav class="space-y-1 px-3">
+          <a href="#" data-tab="overview" class="sidebar-link sidebar-link-active">
+            <i class="fas fa-gauge-high mr-3"></i> Gambaran Dashboard
+          </a>
+          <a href="#" data-tab="users" class="sidebar-link">
+            <i class="fas fa-users mr-3"></i> Data Pengguna
+          </a>
+          <a href="#" data-tab="applications" class="sidebar-link">
+            <i class="fas fa-file-signature mr-3"></i> Permohonan
+          </a>
+          <a href="#" data-tab="transactions" class="sidebar-link">
+            <i class="fas fa-exchange-alt mr-3"></i> Transaksi & Pengeluaran
+          </a>
+          <a href="#" data-tab="telegram" class="sidebar-link">
+            <i class="fas fa-paper-plane mr-3"></i> Tetapan Telegram
+          </a>
+          <a href="#" data-tab="settings" class="sidebar-link">
+            <i class="fas fa-cog mr-3"></i> Tetapan Laman
+          </a>
+          <button id="adminLogoutBtn" class="sidebar-link w-full">
+            <i class="fas fa-sign-out-alt mr-3"></i> Log Keluar
+          </button>
         </nav>
-        <div class="p-4 border-t border-slate-700">
-          <a id="adminLogoutBtn" class="text-red-400 hover:bg-red-500/10 rounded-xl flex items-center gap-3 px-4 py-3 cursor-pointer"><i class="fas fa-right-from-bracket w-5"></i> Logout</a>
-        </div>
-      </aside>
+      </div>
 
-      <!-- Main -->
-      <div class="flex-1 flex flex-col min-w-0">
-        <header class="topbar">
-          <div class="flex items-center justify-between px-4 md:px-6 h-16">
-            <div class="flex items-center gap-3">
-              <button id="adminMenuToggle" class="md:hidden icon-btn" aria-label="Buka menu navigasi">
-                <i class="fas fa-bars text-slate-600"></i>
-              </button>
-              <h1 id="adminPageTitle" class="text-lg font-bold text-slate-900">Dashboard</h1>
-            </div>
-            <div class="flex items-center gap-3">
-              <button id="darkToggle" class="icon-btn" aria-label="Toggle dark mode">
-                <i class="fas fa-moon text-slate-600"></i>
-              </button>
-              <div class="flex items-center gap-2">
-                <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white font-bold" id="adminAvatar" aria-label="Admin avatar">A</div>
-                <div class="hidden sm:block">
-                  <p id="adminName" class="text-sm font-bold text-slate-900">Admin</p>
-                  <p class="text-xs text-slate-500" id="adminRole">Super Admin</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </header>
+      <!-- Main Content -->
+      <main class="flex-1 overflow-x-hidden">
+        <div class="p-4 sm:p-6 lg:p-8">
 
-        <main class="flex-1 p-4 md:p-6 overflow-y-auto">
-          <!-- DASHBOARD -->
-          <section id="apage-dashboard" class="admin-content">
-            <h2 class="text-2xl font-extrabold text-slate-900 mb-6">Dashboard Overview</h2>
-            <div class="stats-grid mb-6">
-              <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm stat-card stagger-1">
-                <div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center feature-icon"><i class="fas fa-users text-blue-600"></i></div><p class="text-sm text-slate-500">Total User</p></div>
-                <p id="aTotalUser" class="text-2xl font-extrabold text-slate-900">0</p>
+          <!-- Overview Tab -->
+          <section id="tab-overview" class="admin-section active-section">
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mb-6">Gambaran Dashboard</h1>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+              <div class="stat-card bg-white dark:bg-slate-800 rounded-2xl shadow border border-slate-100 dark:border-slate-700 p-5 text-center">
+                <div class="text-3xl font-extrabold gradient-text" id="statTotalUser">—</div>
+                <div class="text-sm text-slate-500 dark:text-slate-400">Jumlah Pengguna</div>
               </div>
-              <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm stat-card stagger-2">
-                <div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center feature-icon"><i class="fas fa-file-circle-check text-purple-600"></i></div><p class="text-sm text-slate-500">Total Pengajuan</p></div>
-                <p id="aTotalPengajuan" class="text-2xl font-extrabold text-slate-900">0</p>
+              <div class="stat-card bg-white dark:bg-slate-800 rounded-2xl shadow border border-slate-100 dark:border-slate-700 p-5 text-center">
+                <div class="text-3xl font-extrabold gradient-text" id="statTotalApp">—</div>
+                <div class="text-sm text-slate-500 dark:text-slate-400">Jumlah Permohonan</div>
               </div>
-              <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm stat-card stagger-3">
-                <div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center feature-icon"><i class="fas fa-clock text-amber-600"></i></div><p class="text-sm text-slate-500">Pinjaman Aktif</p></div>
-                <p id="aPinjamanAktif" class="text-2xl font-extrabold text-slate-900">0</p>
+              <div class="stat-card bg-white dark:bg-slate-800 rounded-2xl shadow border border-slate-100 dark:border-slate-700 p-5 text-center">
+                <div class="text-3xl font-extrabold gradient-text" id="statActiveLoan">—</div>
+                <div class="text-sm text-slate-500 dark:text-slate-400">Pinjaman Aktif</div>
               </div>
-              <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm stat-card stagger-4">
-                <div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center feature-icon"><i class="fas fa-money-bill-wave text-green-600"></i></div><p class="text-sm text-slate-500">Dana Cair</p></div>
-                <p id="aDanaCair" class="text-2xl font-extrabold text-slate-900">Rp 0</p>
+              <div class="stat-card bg-white dark:bg-slate-800 rounded-2xl shadow border border-slate-100 dark:border-slate-700 p-5 text-center">
+                <div class="text-3xl font-extrabold gradient-text" id="statDisbursed">—</div>
+                <div class="text-sm text-slate-500 dark:text-slate-400">Dana Dicairkan</div>
               </div>
-              <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm stat-card stagger-5">
-                <div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center feature-icon"><i class="fas fa-check-circle text-indigo-600"></i></div><p class="text-sm text-slate-500">Pinjaman Lunas</p></div>
-                <p id="aPinjamanLunas" class="text-2xl font-extrabold text-slate-900">0</p>
+              <div class="stat-card bg-white dark:bg-slate-800 rounded-2xl shadow border border-slate-100 dark:border-slate-700 p-5 text-center">
+                <div class="text-3xl font-extrabold gradient-text" id="statPaid">—</div>
+                <div class="text-sm text-slate-500 dark:text-slate-400">Pinjaman Lunas</div>
               </div>
-              <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm stat-card stagger-6">
-                <div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-cyan-100 rounded-xl flex items-center justify-center feature-icon"><i class="fas fa-user-check text-cyan-600"></i></div><p class="text-sm text-slate-500">User Aktif</p></div>
-                <p id="aUserAktif" class="text-2xl font-extrabold text-slate-900">0</p>
-              </div>
-            </div>
-            <div class="grid lg:grid-cols-3 gap-6">
-              <div class="lg:col-span-2 bg-white rounded-2xl p-6 border border-slate-100 shadow-sm stat-card">
-                <h3 class="font-bold text-slate-900 mb-4">Grafik Statistik</h3>
-                <canvas id="statsChart" height="100" aria-label="Grafik statistik dashboard"></canvas>
-              </div>
-              <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm stat-card">
-                <h3 class="font-bold text-slate-900 mb-4">Pengajuan Terbaru</h3>
-                <div id="recentApps" class="space-y-3"></div>
+              <div class="stat-card bg-white dark:bg-slate-800 rounded-2xl shadow border border-slate-100 dark:border-slate-700 p-5 text-center">
+                <div class="text-3xl font-extrabold gradient-text" id="statActiveUser">—</div>
+                <div class="text-sm text-slate-500 dark:text-slate-400">Pengguna Aktif</div>
               </div>
             </div>
-          </section>
 
-          <!-- USERS -->
-          <section id="apage-users" class="admin-content hidden">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-              <h2 class="text-2xl font-extrabold text-slate-900">Data User</h2>
-              <input type="text" id="userSearch" placeholder="Cari user..." class="form-input max-w-xs w-full sm:w-auto" />
+            <div class="bg-white dark:bg-slate-800 rounded-3xl shadow border border-slate-100 dark:border-slate-700 p-6 mb-6">
+              <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-4">Graf Statistik</h2>
+              <canvas id="statsChart" height="120"></canvas>
             </div>
-            <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-              <div class="table-responsive">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Nama</th>
-                      <th>Email</th>
-                      <th>Saldo</th>
-                      <th>Limit</th>
-                      <th>Status</th>
-                      <th>Aksi</th>
-                    </tr>
+
+            <div class="bg-white dark:bg-slate-800 rounded-3xl shadow border border-slate-100 dark:border-slate-700 p-6">
+              <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-4">Permohonan Terbaru</h2>
+              <div id="recentApps" class="overflow-x-auto">
+                <table class="w-full text-sm">
+                  <thead class="bg-slate-50 dark:bg-slate-900/50">
+                    <tr><th class="text-left p-3">ID</th><th class="text-left p-3">Nama</th><th class="text-left p-3">Jumlah</th><th class="text-left p-3">Status</th><th class="text-left p-3">Tarikh</th><th class="text-right p-3">Tindakan</th></tr>
                   </thead>
-                  <tbody id="usersTable"></tbody>
+                  <tbody id="recentAppsBody"></tbody>
                 </table>
               </div>
             </div>
           </section>
 
-          <!-- APPLICATIONS -->
-          <section id="apage-applications" class="admin-content hidden">
-            <h2 class="text-2xl font-extrabold text-slate-900 mb-6">Manajemen Pengajuan</h2>
-            <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-              <div class="table-responsive">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Nama</th>
-                      <th>Jumlah</th>
-                      <th>Tenor</th>
-                      <th>Tujuan</th>
-                      <th>Status</th>
-                      <th>Aksi</th>
-                    </tr>
-                  </thead>
-                  <tbody id="appsTable"></tbody>
-                </table>
-              </div>
+          <!-- Users Tab -->
+          <section id="tab-users" class="admin-section hidden">
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mb-6">Data Pengguna</h1>
+            <div class="flex justify-between items-center mb-4">
+              <input type="text" id="userSearch" placeholder="Cari pengguna..." class="form-input max-w-md" />
+              <button id="syncUsersBtn" class="btn btn-secondary btn-sm"><i class="fas fa-sync-alt"></i> Sinkron</button>
+            </div>
+            <div class="bg-white dark:bg-slate-800 rounded-3xl shadow border border-slate-100 dark:border-slate-700 overflow-hidden">
+              <table class="w-full text-sm">
+                <thead class="bg-slate-50 dark:bg-slate-900/50">
+                  <tr><th class="text-left p-3">ID</th><th class="text-left p-3">Nama</th><th class="text-left p-3">Emel</th><th class="text-left p-3">No HP</th><th class="text-left p-3">Baki</th><th class="text-left p-3">Had Pinjaman</th><th class="text-left p-3">Status</th><th class="text-right p-3">Tindakan</th></tr>
+                </thead>
+                <tbody id="usersTableBody">
+                  <tr><td colspan="8" class="text-center py-8 text-slate-500">Tiada pengguna</td></tr>
+                </tbody>
+              </table>
             </div>
           </section>
 
-          <!-- TRANSACTIONS -->
-          <section id="apage-transactions" class="admin-content hidden">
-            <h2 class="text-2xl font-extrabold text-slate-900 mb-6">Manajemen Transaksi & Withdraw</h2>
-            <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-              <div class="table-responsive">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>User</th>
-                      <th>Tipe</th>
-                      <th>Jumlah</th>
-                      <th>Status</th>
-                      <th>Tanggal</th>
-                      <th>Aksi</th>
-                    </tr>
-                  </thead>
-                  <tbody id="txTable"></tbody>
-                </table>
-              </div>
+          <!-- Applications Tab -->
+          <section id="tab-applications" class="admin-section hidden">
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mb-6">Permohonan</h1>
+            <div class="bg-white dark:bg-slate-800 rounded-3xl shadow border border-slate-100 dark:border-slate-700 overflow-hidden">
+              <table class="w-full text-sm">
+                <thead class="bg-slate-50 dark:bg-slate-900/50">
+                  <tr><th class="text-left p-3">ID</th><th class="text-left p-3">Nama</th><th class="text-left p-3">Jumlah</th><th class="text-left p-3">Faedah</th><th class="text-left p-3">Tempoh</th><th class="text-left p-3">Tujuan</th><th class="text-left p-3">Status</th><th class="text-right p-3">Tindakan</th></tr>
+                </thead>
+                <tbody id="applicationsTableBody">
+                  <tr><td colspan="8" class="text-center py-8 text-slate-500">Tiada permohonan</td></tr>
+                </tbody>
+              </table>
             </div>
           </section>
 
-          <!-- WITHDRAWALS -->
-          <section id="apage-withdrawals" class="admin-content hidden">
-            <div class="flex justify-between items-center mb-6">
-              <h2 class="text-2xl font-extrabold text-slate-900">Manajemen Penarikan Dana</h2>
-              <div class="flex gap-3">
-                <input type="text" id="withdrawSearch" placeholder="Cari ID, nama, email..." class="px-4 py-2 rounded-xl border border-slate-200 focus:outline-none" />
-                <select id="withdrawFilter" class="px-4 py-2 rounded-xl border border-slate-200 bg-white">
-                  <option value="">Semua Status</option>
-                  <option value="menunggu_verifikasi">Menunggu Verifikasi</option>
-                  <option value="diproses">Diproses</option>
-                  <option value="berhasil">Berhasil</option>
-                  <option value="ditolak">Ditolak</option>
-                </select>
-              </div>
-            </div>
-            <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-              <div class="table-responsive">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>ID Penarikan</th>
-                      <th>Nama</th>
-                      <th>Email</th>
-                      <th>Bank</th>
-                      <th>Jumlah</th>
-                      <th>Status</th>
-                      <th>Tanggal</th>
-                      <th>Aksi</th>
-                    </tr>
-                  </thead>
-                  <tbody id="withdrawTable">
-                    <tr><td colspan="8" class="text-center py-8 text-slate-400">Memuat...</td></tr>
-                  </tbody>
-                </table>
-              </div>
+          <!-- Transactions Tab -->
+          <section id="tab-transactions" class="admin-section hidden">
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mb-6">Transaksi & Pengeluaran</h1>
+            <div class="bg-white dark:bg-slate-800 rounded-3xl shadow border border-slate-100 dark:border-slate-700 overflow-hidden">
+              <table class="w-full text-sm">
+                <thead class="bg-slate-50 dark:bg-slate-900/50">
+                  <tr><th class="text-left p-3">ID</th><th class="text-left p-3">Pengguna</th><th class="text-left p-3">Jenis</th><th class="text-left p-3">Jumlah</th><th class="text-left p-3">Status</th><th class="text-left p-3">Tarikh</th><th class="text-right p-3">Tindakan</th></tr>
+                </thead>
+                <tbody id="transactionsTableBody">
+                  <tr><td colspan="7" class="text-center py-8 text-slate-500">Tiada transaksi</td></tr>
+                </tbody>
+              </table>
             </div>
           </section>
 
-          <!-- TELEGRAM -->
-          <section id="apage-telegram" class="admin-content hidden">
-            <h2 class="text-2xl font-extrabold text-slate-900 mb-6">Pengaturan Telegram</h2>
-            <div class="grid lg:grid-cols-2 gap-6">
-              <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
-                <h3 class="font-bold text-slate-900 mb-4"><i class="fab fa-telegram text-blue-500 mr-2"></i> Konfigurasi Bot</h3>
-                <div class="space-y-4 text-sm">
+          <!-- Telegram Tab -->
+          <section id="tab-telegram" class="admin-section hidden">
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mb-6">Tetapan Telegram</h1>
+            <div class="bg-white dark:bg-slate-800 rounded-3xl shadow border border-slate-100 dark:border-slate-700 p-6">
+              <form id="telegramForm" class="space-y-5">
+                <div class="grid md:grid-cols-2 gap-5">
                   <div>
-                    <label class="form-label" for="tgToken">Bot Token</label>
-                    <input type="password" id="tgToken" class="form-input" placeholder="123456:ABCDEF..." />
+                    <label class="form-label" for="tgBotToken">Bot Token</label>
+                    <input type="text" id="tgBotToken" placeholder="8654004646:AAG..." class="form-input" />
                   </div>
                   <div>
                     <label class="form-label" for="tgChatId">Chat ID</label>
-                    <input type="text" id="tgChatId" class="form-input" placeholder="123456789" />
+                    <input type="text" id="tgChatId" placeholder="8176355378" class="form-input" />
                   </div>
                   <div>
-                    <label class="form-label" for="tgBotUser">Bot Username</label>
-                    <input type="text" id="tgBotUser" class="form-input" placeholder="smartfundonline_bot" />
+                    <label class="form-label" for="tgBotUsername">Nama Pengguna Bot</label>
+                    <input type="text" id="tgBotUsername" placeholder="smartfundx_bot" class="form-input" />
+                  </div>
+                  <div>
+                    <label class="form-label" for="tgAdminUsername">Nama Pengguna Admin</label>
+                    <input type="text" id="tgAdminUsername" placeholder="cs_smartfund" class="form-input" />
                   </div>
                 </div>
-                <div class="flex flex-col sm:flex-row gap-3 mt-4">
-                  <button id="tgSaveBtn" class="flex-1 btn btn-primary"><i class="fas fa-save mr-2"></i> Simpan Pengaturan</button>
-                  <button id="tgTestBtn" class="flex-1 btn btn-secondary"><i class="fas fa-paper-plane mr-2"></i> Test Notifikasi</button>
+                <div class="flex gap-3">
+                  <button id="tgSaveBtn" class="btn btn-primary">Simpan Tetapan</button>
+                  <button id="tgTestBtn" class="btn btn-secondary">Uji Notifikasi</button>
                 </div>
-                <p class="text-xs text-slate-400 mt-3">Pengaturan ini akan disimpan ke database settings dan dipakai saat bot mengirim notifikasi.</p>
-              </div>
-              <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
-                <h3 class="font-bold text-slate-900 mb-4"><i class="fas fa-history text-blue-600 mr-2"></i> Log Telegram</h3>
-                <div id="tgLogs" class="space-y-2 max-h-96 overflow-y-auto"></div>
+              </form>
+
+              <div class="mt-8">
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-3">Log Telegram</h3>
+                <div class="overflow-x-auto">
+                  <table class="w-full text-sm">
+                    <thead class="bg-slate-50 dark:bg-slate-900/50">
+                      <tr><th class="text-left p-3">Masa</th><th class="text-left p-3">Status</th><th class="text-left p-3">Mesej</th></tr>
+                    </thead>
+                    <tbody id="telegramLogsBody">
+                      <tr><td colspan="3" class="text-center py-6 text-slate-500">Tiada log</td></tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </section>
 
-          <!-- SETTINGS -->
-          <section id="apage-settings" class="admin-content hidden">
-            <h2 class="text-2xl font-extrabold text-slate-900 mb-6">Setting Website</h2>
-            <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-100 shadow-sm max-w-3xl">
-              <form id="settingsForm" class="space-y-4">
-                <div class="grid md:grid-cols-2 gap-4">
-                  <div><label class="form-label" for="setSiteName">Nama Website</label><input type="text" id="setSiteName" class="form-input" /></div>
-                  <div><label class="form-label" for="setTagline">Tagline</label><input type="text" id="setTagline" class="form-input" /></div>
-                  <div><label class="form-label" for="setMinLoan">Pinjaman Min</label><input type="number" id="setMinLoan" class="form-input" /></div>
-                  <div><label class="form-label" for="setMaxLoan">Pinjaman Max</label><input type="number" id="setMaxLoan" class="form-input" /></div>
-                  <div><label class="form-label" for="setMinTenor">Tenor Min (bulan)</label><input type="number" id="setMinTenor" class="form-input" /></div>
-                  <div><label class="form-label" for="setMaxTenor">Tenor Max (bulan)</label><input type="number" id="setMaxTenor" class="form-input" /></div>
-                  <div><label class="form-label" for="setInterest">Bunga (% / tahun)</label><input type="number" step="0.1" id="setInterest" class="form-input" /></div>
-                  <div><label class="form-label" for="setDefaultLimit">Limit Default User</label><input type="number" id="setDefaultLimit" class="form-input" /></div>
-                  <div><label class="form-label" for="setContactEmail">Email Kontak</label><input type="email" id="setContactEmail" class="form-input" /></div>
-                  <div><label class="form-label" for="setContactPhone">Telepon Kontak</label><input type="text" id="setContactPhone" class="form-input" /></div>
+          <!-- Settings Tab -->
+          <section id="tab-settings" class="admin-section hidden">
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mb-6">Tetapan Laman</h1>
+            <div class="bg-white dark:bg-slate-800 rounded-3xl shadow border border-slate-100 dark:border-slate-700 p-6">
+              <form id="settingsForm" class="space-y-5">
+                <div class="grid md:grid-cols-2 gap-5">
+                  <div>
+                    <label class="form-label" for="settingSiteName">Nama Laman</label>
+                    <input type="text" id="settingSiteName" placeholder="SMART FUND" class="form-input" />
+                  </div>
+                  <div>
+                    <label class="form-label" for="settingTagline">Tagline</label>
+                    <input type="text" id="settingTagline" placeholder="Pinjaman dalam talian dengan faedah 5%" class="form-input" />
+                  </div>
+                  <div>
+                    <label class="form-label" for="settingMinLoan">Pinjaman Min (RM)</label>
+                    <input type="number" id="settingMinLoan" class="form-input" />
+                  </div>
+                  <div>
+                    <label class="form-label" for="settingMaxLoan">Pinjaman Maks (RM)</label>
+                    <input type="number" id="settingMaxLoan" class="form-input" />
+                  </div>
+                  <div>
+                    <label class="form-label" for="settingTenorMin">Tenor Min (bulan)</label>
+                    <input type="number" id="settingTenorMin" class="form-input" />
+                  </div>
+                  <div>
+                    <label class="form-label" for="settingTenorMax">Tenor Maks (bulan)</label>
+                    <input type="number" id="settingTenorMax" class="form-input" />
+                  </div>
+                  <div>
+                    <label class="form-label" for="settingInterestRate">Kadar Faedah (% / tahun)</label>
+                    <input type="number" id="settingInterestRate" class="form-input" />
+                  </div>
+                  <div>
+                    <label class="form-label" for="settingDefaultLimit">Had Default Pengguna</label>
+                    <input type="number" id="settingDefaultLimit" class="form-input" />
+                  </div>
+                  <div>
+                    <label class="form-label" for="settingContactEmail">Emel Kontak</label>
+                    <input type="email" id="settingContactEmail" class="form-input" />
+                  </div>
+                  <div>
+                    <label class="form-label" for="settingContactPhone">Telefon Kontak</label>
+                    <input type="text" id="settingContactPhone" class="form-input" />
+                  </div>
                 </div>
-                <button type="submit" id="settingsSaveBtn" class="btn btn-primary"><span class="btn-text"><i class="fas fa-save mr-2"></i> Simpan Pengaturan</span></button>
+                <div class="flex gap-3">
+                  <button id="settingsSaveBtn" class="btn btn-primary">Simpan Tetapan</button>
+                  <button type="button" id="settingsSyncBtn" class="btn btn-secondary">Sinkron</button>
+                </div>
               </form>
             </div>
           </section>
-        </main>
-      </div>
-    </div>
-  </div>
 
-  <!-- User Detail Modal -->
-  <div id="userModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/50 p-4">
-    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col">
-      <div class="p-5 border-b border-slate-100 flex justify-between items-center">
-        <h3 class="font-bold text-slate-900"><i class="fas fa-user text-blue-600 mr-2"></i> Detail & Edit User</h3>
-        <button onclick="closeUserModal()" class="text-slate-400 hover:text-slate-600" aria-label="Tutup modal">Tutup</button>
-      </div>
-      <div class="flex-1 overflow-y-auto p-6 space-y-4">
-        <div class="grid md:grid-cols-2 gap-4">
-          <div><label class="form-label" for="editUserName">Nama</label><input type="text" id="editUserName" class="form-input" /></div>
-          <div><label class="form-label" for="editUserEmail">Email</label><input type="email" id="editUserEmail" readonly class="form-input bg-slate-50" /></div>
-          <div><label class="form-label" for="editUserPhone">Phone</label><input type="tel" id="editUserPhone" class="form-input" /></div>
-          <div><label class="form-label" for="editUserStatus">Status</label><select id="editUserStatus" class="form-select"><option value="active">Aktif</option><option value="frozen">Dibekikan</option><option value="pending">Pending</option><option value="inactive">Nonaktif</option></select></div>
-          <div><label class="form-label" for="editUserBalance">Saldo</label><input type="number" id="editUserBalance" class="form-input" /></div>
-          <div><label class="form-label" for="editUserLimit">Limit Pinjaman</label><input type="number" id="editUserLimit" class="form-input" /></div>
         </div>
-      </div>
-      <div class="p-5 border-t border-slate-100 flex flex-col sm:flex-row gap-3">
-        <button onclick="closeUserModal()" class="btn btn-secondary">Batal</button>
-        <button id="saveUserBtn" class="flex-1 btn btn-primary"><span class="btn-text"><i class="fas fa-save mr-2"></i> Simpan</span></button>
-      </div>
+      </main>
     </div>
   </div>
 
   <!-- Application Detail Modal -->
-  <div id="appModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/50 p-4">
-    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col">
-      <div class="p-5 border-b border-slate-100 flex justify-between items-center">
-        <h3 class="font-bold text-slate-900"><i class="fas fa-file-circle-check text-blue-600 mr-2"></i> Detail Pengajuan</h3>
-        <button onclick="closeAppModal()" class="text-slate-400 hover:text-slate-600" aria-label="Tutup modal">Tutup</button>
-      </div>
-      <div id="appModalBody" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
-      <div class="p-5 border-t border-slate-100 flex flex-wrap gap-3">
-        <button onclick="closeAppModal()" class="btn btn-secondary">Tutup</button>
-        <button id="appRejectBtn" class="btn bg-red-500 text-white hover:bg-red-600 transition"><i class="fas fa-times mr-1"></i> Reject</button>
-        <button id="appApproveBtn" class="btn bg-green-500 text-white hover:bg-green-600 transition"><i class="fas fa-check mr-1"></i> Approve</button>
-        <button id="appDisburseBtn" class="flex-1 btn btn-primary"><i class="fas fa-money-bill-wave mr-1"></i> Cairkan Dana</button>
+  <div id="appDetailModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[100] hidden">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-slate-100 dark:border-slate-700 w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto">
+      <div class="p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white">Butiran Permohonan</h3>
+          <button onclick="closeModal('appDetailModal')" class="text-slate-500 hover:text-slate-700"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="appDetailContent"></div>
       </div>
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+  <!-- User Edit Modal -->
+  <div id="userEditModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[100] hidden">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-slate-100 dark:border-slate-700 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+      <div class="p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white">Edit Pengguna</h3>
+          <button onclick="closeModal('userEditModal')" class="text-slate-500 hover:text-slate-700"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="userEditContent"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Withdraw Detail Modal -->
+  <div id="withdrawDetailModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[100] hidden">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-slate-100 dark:border-slate-700 w-full max-w-3xl mx-4 max-h-[90vh] overflow-y-auto">
+      <div class="p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white">Butiran Pengeluaran</h3>
+          <button onclick="closeModal('withdrawDetailModal')" class="text-slate-500 hover:text-slate-700"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="withdrawDetailContent"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function closeModal(id) { document.getElementById(id)?.classList.add('hidden'); }
+  </script>
   <script src="/assets/js/currency.js"></script>
   <script src="/assets/js/api.js"></script>
   <script src="/assets/js/admin.js"></script>
+  <script>
+    (() => {
+      const darkToggle = document.getElementById('darkToggle');
+      const updateIcon = () => {
+        darkToggle.innerHTML = DarkMode.isDark()
+          ? '<i class="fas fa-sun text-amber-500"></i>'
+          : '<i class="fas fa-moon text-slate-600"></i>';
+      };
+      updateIcon();
+      darkToggle?.addEventListener('click', () => { DarkMode.toggle(); updateIcon(); });
+    })();
+  </script>
 </body>
 </html>

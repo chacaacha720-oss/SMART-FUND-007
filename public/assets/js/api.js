@@ -51,7 +51,7 @@ async function api(endpoint, options = {}) {
   const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
 
   // Attach the active language so the backend localizes all responses
-  const activeLang = (typeof I18N !== 'undefined' && I18N.getLang) ? I18N.getLang() : 'id';
+  const activeLang = (typeof I18N !== 'undefined' && I18N.getLang) ? I18N.getLang() : 'ms';
   headers['X-Lang'] = activeLang;
 
   // Attach the right token based on the endpoint scope
@@ -83,12 +83,12 @@ async function api(endpoint, options = {}) {
           window.location.href = `${BASE_PATH}/admin.html`;
         }
       }
-      return { success: false, message: data.message || 'Terjadi kesalahan', errors: data.errors, data: data.data };
+      return { success: false, message: data.message || 'Berlaku ralat', errors: data.errors, data: data.data };
     }
     return data;
   } catch (err) {
     console.error('API Error:', err);
-    return { success: false, message: 'Tidak dapat terhubung ke server. Periksa koneksi Anda.' };
+    return { success: false, message: 'Tidak dapat menyambung ke pelayan. Semak sambungan anda.' };
   }
 }
 
@@ -99,7 +99,7 @@ async function api(endpoint, options = {}) {
 // ============================================
 
 function statusBadge(status) {
-  const lang = (typeof I18N !== 'undefined' && I18N.getLang) ? I18N.getLang() : 'id';
+  const lang = (typeof I18N !== 'undefined' && I18N.getLang) ? I18N.getLang() : 'ms';
   const map = {
     pending: { class: 'badge-pending', text: I18N.t('status.pending') },
     approved: { class: 'badge-approved', text: I18N.t('status.approved') },

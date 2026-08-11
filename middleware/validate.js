@@ -42,7 +42,7 @@ function isStrongPassword(password) {
  * Validasi registrasi user
  */
 function validateRegister(req, res, next) {
-  const lang = req.lang || 'id';
+  const lang = req.lang || 'ms';
   const { fullName, email, phone, password, confirmPassword } = req.body;
   const errors = [];
 
@@ -62,7 +62,7 @@ function validateRegister(req, res, next) {
  * Validasi login
  */
 function validateLogin(req, res, next) {
-  const lang = req.lang || 'id';
+  const lang = req.lang || 'ms';
   const { identifier, password } = req.body;
   const errors = [];
   if (!identifier || validator.isEmpty(identifier.trim())) errors.push(t(lang, 'val.identifierRequired'));
@@ -75,14 +75,14 @@ function validateLogin(req, res, next) {
  * Validasi pengajuan pinjaman
  */
 function validateLoanApplication(req, res, next) {
-  const lang = req.lang || 'id';
+  const lang = req.lang || 'ms';
   const { amount, tenor, purpose } = req.body;
   const errors = [];
 
   const amt = parseFloat(amount);
   const ten = parseInt(tenor, 10);
 
-  if (!amt || isNaN(amt) || amt < 1000000 || amt > 500000000) errors.push(t(lang, 'val.amountRange'));
+   if (!amt || isNaN(amt) || amt < 1000 || amt > 500000) errors.push(t(lang, 'val.amountRange'));
   if (!ten || isNaN(ten) || ten < 6 || ten > 60) errors.push(t(lang, 'val.tenorRange'));
   if (!purpose || validator.isEmpty(String(purpose).trim())) errors.push(t(lang, 'val.purposeRequired'));
 
