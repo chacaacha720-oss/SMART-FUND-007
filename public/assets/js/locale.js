@@ -11,7 +11,7 @@ const LocaleConfig = {
   },
 
   get(lang) {
-    return this.locales[lang] || this.locales.ms;
+    return this.locales[lang] || this.locales.id;
   },
 
   getLocale(lang) {
@@ -31,7 +31,7 @@ const LocaleConfig = {
   },
 
   current() {
-    const lang = (typeof I18N !== 'undefined' && I18N.getLang) ? I18N.getLang() : 'ms';
+    const lang = (typeof I18N !== 'undefined' && I18N.getLang) ? I18N.getLang() : 'id';
     return this.get(lang);
   },
 };

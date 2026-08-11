@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ============================================
   // LOAN CALCULATOR
   // ============================================
-  const loanAmount = document.getElementById('loanAmount');
+  const loanAmount = document.getElementById('calcAmount');
   const loanTenor = document.getElementById('loanTenor');
   const amountDisplay = document.getElementById('amountDisplay');
   const monthlyPaymentEl = document.getElementById('monthlyPayment');
@@ -74,13 +74,13 @@ document.addEventListener('DOMContentLoaded', () => {
     return { monthly, total, interest };
   }
 
-  // Range min/max per mata uang - slider menggunakan MYR untuk ms
-  const LOAN_LIMITS = {
-    min: 1000,    // RM1,000
-    max: 500000,   // RM500,000
-    step: 1000,   // RM1,000
-    defaultVal: 50000, // RM50,000
-  };
+   // Range min/max per mata uang - IDR range
+   const LOAN_LIMITS = {
+     min: 1000000,    // Rp1.000.000
+     max: 500000000,  // Rp500.000.000
+     step: 100000,    // Rp100.000
+     defaultVal: 50000000, // Rp50.000.000
+   };
 
   function updateCalculatorRange() {
     if (!loanAmount) return;
@@ -237,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const tenor = parseInt(document.getElementById('formTenor').value, 10);
       const purpose = document.getElementById('formPurpose').value;
 
-      if (!amount || amount < 1000 || amount > 500000) return showToast(I18N.t('val.amountRange'), 'error');
+      if (!amount || amount < LOAN_LIMITS.min || amount > LOAN_LIMITS.max) return showToast(I18N.t('val.amountRange'), 'error');
       if (!tenor || tenor < 6 || tenor > 60) return showToast(I18N.t('val.tenorRange'), 'error');
       if (!purpose) return showToast(I18N.t('val.purposeRequired'), 'error');
 
@@ -263,20 +263,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const testimoniTrack = document.getElementById('testimoniTrack');
   const testimoniDots = document.getElementById('testimoniDots');
 
-  // 12 testimoni, dibagi per grup 3
+  // 12 testimonial, dibagi per grup 3
   const allTestimoni = [
-    { name: 'Budi Santoso', role: 'Pengusaha, Kuala Lumpur', rating: 5, text: 'Prosesnya cepat dan mudah. Saya berjaya mendapatkan modal perniagaan dalam masa singkat. Terima kasih SMART FUND!' },
-    { name: 'Siti Rahayu', role: 'Ibu Rumah Tangga, Johor Bahru', rating: 5, text: 'Faedahnya ringan dan telus. Tiada caj tersembunyi. Sangat membantu untuk pengubahsuaian rumah saya.' },
-    { name: 'Ahmad Fauzi', role: 'Karyawan, Penang', rating: 5, text: 'Platform pinjaman dalam talian yang dipercayui. Berlesen OJK jadi lebih selamat. Proses pengesahan cepat dan praktikal.' },
-    { name: 'Dewi Lestari', role: 'Pelajar, Universiti Malaya', rating: 5, text: 'Dana pendidikan saya dicairkan tepat masa. Prosesnya sangat membantu untuk kelancaran pengajian saya.' },
-    { name: 'Rizky Pratama', role: 'Bebas Seribu, Langkawi', rating: 5, text: 'Saya memerlukan modal mendadak untuk projek klien. SMART FUND dicairkan dalam 1 hari bekerja. Hebat!' },
-    { name: 'Linda Kusuma', role: 'Doktor, Kuala Terengganu', rating: 5, text: 'Perkhidmatan khidmat pelanggan-nya mesra dan responsif. Ansuran ringan selaras dengan kemampuan saya.' },
-    { name: 'Hendra Wijaya', role: 'Petani, Kedah', rating: 5, text: 'Modal perniagaan pertanian saya menjadi lancar. Faedahnya sangat kompetitif berbanding tempat lain.' },
-    { name: 'Maya Anggraini', role: 'Ibu Rumah Tangga, Ipoh', rating: 5, text: 'Untuk keperluan kos persalinan, SMART FUND benar-benar membantu. Prosesnya pantas dan selamat.' },
-    { name: 'Andi Setiawan', role: 'PNS, Putrajaya', rating: 5, text: 'Pengubahsuaian rumah saya berjalan lancar dengan bantuan pinjaman dari SMART FUND. Digalakkan!' },
-    { name: 'Fitri Handayani', role: 'Wiraswasta, Shah Alam', rating: 5, text: 'Tiada caj tersembunyi, semuanya telus. Admin pengesahan sangat pantas dan profesional.' },
-    { name: 'Joko Susilo', role: 'Mekanik, Malacca', rating: 5, text: 'Membuka perniagaan bengkel menjadi lebih mudah. Pinjaman dicairkan tanpa ribet dan syarat yang mudah.' },
-    { name: 'Ratna Sari', role: 'Guru, Kuantan', rating: 5, text: 'Saya sangat terbantu untuk kos pendidikan anak. SMART FUND boleh diandalkan dan dipercayai.' },
+    { name: 'Budi Santoso', role: 'Pengusaha, Jakarta', rating: 5, text: 'Prosesnya cepat dan mudah. Saya berhasil mendapatkan modal usaha dalam waktu singkat. Terima kasih SMART FUND!' },
+    { name: 'Siti Rahayu', role: 'Ibu Rumah Tangga, Bandung', rating: 5, text: 'Bunganya ringan dan transparan. Tidak ada biaya tersembunyi. Sangat membantu untuk renovasi rumah saya.' },
+    { name: 'Ahmad Fauzi', role: 'Karyawan, Surabaya', rating: 5, text: 'Platform pinjaman online yang dapat dipercaya. Berlisensi OJK jadi lebih nyaman. Proses verifikasi cepat dan praktis.' },
+    { name: 'Dewi Lestari', role: 'Mahasiswi, Universitas Indonesia', rating: 5, text: 'Dana pendidikan saya diterima tepat waktu. Prosesnya sangat membantu untuk kelancaran kuliah saya.' },
+    { name: 'Rizky Pratama', role: 'Freelancer, Bali', rating: 5, text: 'Saya butuh modal mendadak untuk proyek klien. SMART FUND diterima dalam 1 hari kerja. Hebat!' },
+    { name: 'Linda Kusuma', role: 'Dokter, Medan', rating: 5, text: 'Pelayanan customer service-nya ramah dan responsif. Cicilan terasa ringan sesuai kemampuan saya.' },
+    { name: 'Hendra Wijaya', role: 'Petani, Yogyakarta', rating: 5, text: 'Modal usaha pertanian saya menjadi lancar. Bunganya sangat kompetitif dibandingkan tempat lain.' },
+    { name: 'Maya Anggraini', role: 'Ibu Rumah Tangga, Semarang', rating: 5, text: 'Untuk kebutuhan biaya melahirkan, SMART FUND benar-benar membantu. Prosesnya cepat dan aman.' },
+    { name: 'Andi Setiawan', role: 'Pegawai Negeri, Aceh', rating: 5, text: 'Renovasi rumah saya berjalan lancar dengan bantuan pinjaman dari SMART FUND. Sangat recommended!' },
+    { name: 'Fitri Handayani', role: 'Wiraswasta, Makassar', rating: 5, text: 'Tidak ada biaya tersembunyi, semua transparan. Admin verifikasi sangat cepat dan profesional.' },
+    { name: 'Joko Susilo', role: 'Mekanik, Malang', rating: 5, text: 'Buka usaha bengkel jadi lebih mudah. Pinjaman diterima tanpa ribet dan syarat yang mudah.' },
+    { name: 'Ratna Sari', role: 'Guru, Palembang', rating: 5, text: 'Saya sangat terbantu untuk biaya pendidikan anak. SMART FUND dapat diandalkan dan dapat dipercaya.' },
   ];
 
   // Acak urutan testimoni (shuffle)
