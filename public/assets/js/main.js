@@ -75,6 +75,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const amountDisplay = document.getElementById('calcAmountDisplay');
   const monthlyPaymentEl = document.getElementById('calcMonthly');
   const totalPaymentEl = document.getElementById('calcTotal');
+  const calcMinLabel = document.getElementById('calcMinLabel');
+  const calcMaxLabel = document.getElementById('calcMaxLabel');
+  const heroLoanBalance = document.getElementById('heroLoanBalance');
+  const heroMonthlyPayment = document.getElementById('heroMonthlyPayment');
+
+  function updateHeroMockup() {
+    if (heroLoanBalance) heroLoanBalance.textContent = Currency.format(50000000);
+    if (heroMonthlyPayment) heroMonthlyPayment.textContent = Currency.format(4615690);
+  }
+
+  function updateCalcRangeLabels() {
+    if (calcMinLabel) calcMinLabel.textContent = Currency.format(LOAN_LIMITS.min);
+    if (calcMaxLabel) calcMaxLabel.textContent = Currency.format(LOAN_LIMITS.max);
+  }
 
   function calculateLoan(principal, tenorMonths, annualRate = 5) {
     const monthlyRate = annualRate / 100 / 12;
@@ -131,10 +145,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (loanAmount) {
     updateCalculatorRange();
+    updateCalcRangeLabels();
     loanAmount.addEventListener('input', updateCalculator);
     loanTenor?.addEventListener('input', updateCalculator);
     updateCalculator();
   }
+
+  updateHeroMockup();
 
   // ============================================
   // CTA BUTTONS
@@ -364,6 +381,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Language change - re-render dynamic content
   document.addEventListener('languageChanged', () => {
     if (typeof updateCalculator === 'function') updateCalculator();
+    if (typeof updateCalcRangeLabels === 'function') updateCalcRangeLabels();
+    if (typeof updateHeroMockup === 'function') updateHeroMockup();
     renderFaq();
   });
 });

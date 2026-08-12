@@ -87,7 +87,7 @@ const I18N = {
       'timeline.step4.title': 'Persetujuan',
       'timeline.step4.desc': 'Dapatkan keputusan pinjaman dalam waktu singkat.',
       'timeline.step5.title': 'Dana Diproses',
-      'timeline.step5.desc': 'Dana langsung dicairkan ke rekening Anda.',
+      'timeline.step5.desc': 'Dana langsung dicairkan ke akaun Anda.',
 
       // ===== TRUST =====
       'trust.label': 'KEPERCAYAAN',
@@ -105,9 +105,9 @@ const I18N = {
       // ===== CALCULATOR =====
       'calc.label': 'SIMULASI PINJAMAN',
       'calc.title': 'Kira Ansuran Anda',
-      'calc.desc': 'Tetapkan jumlah pinjaman dan jangka waktu untuk melihat anggaran ansuran',
+      'calc.desc': 'Tetapkan jumlah pinjaman dan tempoh untuk melihat anggaran ansuran',
       'calc.amount': 'Jumlah Pinjaman',
-      'calc.tenor': 'Jangka Waktu (Bulan)',
+      'calc.tenor': 'Tempoh (Bulan)',
       'calc.btn': 'Mohon Sekarang',
       'calc.monthly': 'Ansuran Sebulan',
       'calc.totalInterest': 'Jumlah Faedah',
@@ -162,15 +162,15 @@ const I18N = {
 
       // ===== LOGIN =====
       'login.title': 'Log Masuk',
-      'login.subtitle': 'Log masuk ke akun SMART FUND anda',
+      'login.subtitle': 'Log masuk ke akaun SMART FUND anda',
       'login.welcome': 'Selamat Kembali 👋',
-      'login.welcomeDesc': 'Log masuk ke akun anda untuk mengurus pinjaman, melihat baki, dan memohon pinjaman baru.',
+      'login.welcomeDesc': 'Log masuk ke akaun anda untuk mengurus pinjaman, melihat baki, dan memohon pinjaman baru.',
       'login.identifier': 'Emel / Nombor HP',
       'login.password': 'Kata Laluan',
       'login.remember': 'Ingat Saya',
       'login.forgot': 'Lupa Kata Laluan?',
       'login.btn': 'Log Masuk',
-      'login.noAccount': 'Belum ada akun?',
+      'login.noAccount': 'Belum ada akaun?',
       'login.or': '— atau —',
       'login.register': 'Daftar Sekarang',
       'login.back': 'Kembali ke Laman Utama',
@@ -180,7 +180,7 @@ const I18N = {
 
       // ===== REGISTER =====
       'register.title': 'Daftar Akaun',
-      'register.subtitle': 'Buat akun SMART FUND baru',
+      'register.subtitle': 'Buat akaun SMART FUND baru',
       'register.welcome': 'Sertai SMART FUND 🚀',
       'register.welcomeDesc': 'Daftar sekarang dan nikmati kemudahan pinjaman dalam talian dengan bunga kompetitif bermula 5% setahun.',
       'register.fullName': 'Nama Penuh',
@@ -194,7 +194,7 @@ const I18N = {
       'register.and': 'serta',
       'register.privacy': 'Dasar Privasi',
       'register.btn': 'Daftar Sekarang',
-      'register.haveAccount': 'Sudah ada akun?',
+      'register.haveAccount': 'Sudah ada akaun?',
       'register.login': 'Log Masuk',
       'register.back': 'Kembali ke Laman Utama',
       'register.f1': 'Proses pendaftaran cepat',
@@ -205,7 +205,7 @@ const I18N = {
 
       // ===== FORGOT PASSWORD =====
       'forgot.title': 'Lupa Kata Laluan',
-      'forgot.subtitle': 'Reset kata laluan akun anda',
+      'forgot.subtitle': 'Reset kata laluan akaun anda',
       'forgot.desc': 'Masukkan emel atau nombor HP berdaftar anda untuk menerima kod OTP',
       'forgot.email': 'Emel',
       'forgot.or': '— atau —',
@@ -219,7 +219,7 @@ const I18N = {
       'forgot.remember': 'Ingat kata laluan?',
       'forgot.login': 'Log Masuk',
       'forgot.otpHint': 'Masukkan kod OTP yang dikirim ke emel/SMS anda',
-      'forgot.newPasswordHint': 'Buat kata laluan baru untuk akun anda',
+      'forgot.newPasswordHint': 'Buat kata laluan baru untuk akaun anda',
 
       // ===== DASHBOARD =====
       'dash.dashboard': 'Dashboard',
@@ -487,8 +487,13 @@ const I18N = {
       'val.purposeRequired': 'Tujuan pinjaman wajib dipilih',
       'val.otpRequired': 'OTP harus 6 digit',
       'val.minWithdraw': 'Jumlah pengeluaran minimum RM100,000',
-      'val.withdrawRequired': 'Semua data akun diperlukan',
+      'val.withdrawRequired': 'Semua data akaun diperlukan',
       'val.csCodeRequired': 'Kod CS diperlukan',
+      'val.term1': 'Data yang dimasukkan adalah benar dan dapat dipertanggungjawabkan.',
+      'val.term2': 'Pinjaman akan diproses sesuai dasar dan ketentuan SMART FUND.',
+      'val.term3': 'Faedah dikenakan mula 5% setahun mengikut tenor.',
+      'val.term4': 'Platform berlesen dan diawasi OJK.',
+      'val.term5': 'Permohonan boleh diterima atau ditolak oleh admin.',
       'val.csCodeInvalid': 'Format kod CS tidak sah',
 
       // ===== NOTIFICATIONS =====
@@ -532,7 +537,7 @@ const I18N = {
       'notif.userSaved': 'Pengguna berjaya dikemas kini',
       'notif.userDeleted': 'Pengguna berjaya dipadamkan',
       'faq.q1': 'Bagaimana cara memohon pinjaman di SMART FUND?',
-      'faq.a1': 'Cukup daftar akun, log masuk ke dashboard, lalu pilih menu Mohon Pinjaman. Isi data diri dan data pinjaman, lalu hantar. Permohonan akan diproses oleh admin.',
+      'faq.a1': 'Cukup daftar akaun, log masuk ke dashboard, lalu pilih menu Mohon Pinjaman. Isi data diri dan data pinjaman, lalu hantar. Permohonan akan diproses oleh admin.',
       'faq.q2': 'Berapa bunga yang dikenakan?',
       'faq.a2': 'Faedah kompetitif bermula 5% setahun, supaya ansuran anda menjadi lebih ringan berbanding platform lain.',
       'faq.q3': 'Berapa jumlah pinjaman yang boleh dimohon?',
@@ -1031,6 +1036,11 @@ const I18N = {
       'val.minWithdraw': 'Minimum withdrawal amount $100,000',
       'val.withdrawRequired': 'All bank account data is required',
       'val.csCodeRequired': 'CS code is required',
+      'val.term1': 'Data entered is true and can be held accountable.',
+      'val.term2': 'Loans will be processed in accordance with SMART FUND policies and terms.',
+      'val.term3': 'Interest starts from 5% per year based on tenor.',
+      'val.term4': 'Platform is licensed and regulated by OJK.',
+      'val.term5': 'Applications may be accepted or rejected by admin.',
       'val.csCodeInvalid': 'Invalid CS code format',
 
       // ===== CS CODE =====
