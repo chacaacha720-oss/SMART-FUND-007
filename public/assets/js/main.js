@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Apply now button -> check login
-  const applyNowBtn = document.getElementById('applyNowBtn');
+  const applyNowBtn = document.getElementById('applyNowBtn') || document.getElementById('heroApplyBtn');
   if (applyNowBtn) {
     applyNowBtn.addEventListener('click', () => {
       const token = Token.get();

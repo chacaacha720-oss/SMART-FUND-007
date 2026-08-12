@@ -95,7 +95,19 @@
   },
   "faq": {
     "label": "FAQ",
-    "title": "Pertanyaan Umum"
+    "title": "Pertanyaan Umum",
+    "q1": "Berapa bunga pinjaman di SMART FUND?",
+    "a1": "Bunga pinjaman di SMART FUND mulai dari 5% per tahun. Besar bunga pasti ditentukan berdasarkan profil kelayakan dan tenor yang dipilih saat pengajuan.",
+    "q2": "Berapa lama proses persetujuan pinjaman?",
+    "a2": "Proses verifikasi dan persetujuan biasanya memakan waktu 1-24 jam kerja setelah dokumen lengkap diterima. Dana akan dicairkan maksimal 1x24 jam setelah disetujui.",
+    "q3": "Apa saja syarat mengajukan pinjaman?",
+    "a3": "Syarat utama: WNI berusia 21-55 tahun, memiliki KTP dan NPWP, memiliki rekening bank aktif, memiliki penghasilan tetap, dan nomor HP yang dapat dihubungi.",
+    "q4": "Bagaimana cara menghubungi customer service?",
+    "a4": "Anda dapat menghubungi CS kami melalui WhatsApp di 0896-7987-5858 atau Telegram @cs_smartfund. Layanan tersedia Senin-Sabtu pukul 08:00-17:00 WIB.",
+    "q5": "Apakah ada biaya tersembunyi atau biaya administrasi awal?",
+    "a5": "Tidak ada biaya tersembunyi. SMART FUND menerapkan transparansi penuh - semua biaya (bunga, administrasi, dll) akan dijelaskan sebelum Anda menandatangani perjanjian.",
+    "q6": "Bagaimana cara penarikan dana setelah pinjaman disetujui?",
+    "a6": "Setelah pinjaman disetujui dan dana cair, Anda dapat melakukan penarikan melalui dashboard dengan mengisi formulir penarikan. Dana akan dikirim ke rekening bank tujuan Anda."
   },
   "cta": {
     "title": "Siap Mengajukan Pinjaman?",

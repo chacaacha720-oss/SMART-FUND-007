@@ -95,7 +95,19 @@
   },
   "faq": {
     "label": "FAQ",
-    "title": "Soalan Lazim"
+    "title": "Soalan Lazim",
+    "q1": "Berapa kadar faedah pinjaman di SMART FUND?",
+    "a1": "Kadar faedah pinjaman di SMART FUND bermula dari 5% setahun. Kadar faedah pasti ditentukan berdasarkan profil kelayakan dan tempoh yang dipilih semasa permohonan.",
+    "q2": "Berapa lama proses kelulusan pinjaman?",
+    "a2": "Proses pengesahan dan kelulusan biasanya memakan masa 1-24 jam bekerja selepas dokumen lengkap diterima. Dana akan dicairkan maksimum 1x24 jam selepas diluluskan.",
+    "q3": "Apakah syarat memohon pinjaman?",
+    "a3": "Syarat utama: Warganegara Indonesia berusia 21-55 tahun, mempunyai KTP dan NPWP, akaun bank aktif, mempunyai pendapatan tetap, dan nombor HP yang boleh dihubungi.",
+    "q4": "Bagaimana cara menghubungi khidmat pelanggan?",
+    "a4": "Anda boleh menghubungi CS kami melalui WhatsApp di 0896-7987-5858 atau Telegram @cs_smartfund. Perkhidmatan tersedia Isnin-Sabtu pada 08:00-17:00 WIB.",
+    "q5": "Adakah ada yuran tersembunyi atau yuran pentadbiran awal?",
+    "a5": "Tiada yuran tersembunyi. SMART FUND mengamalkan ketelusan penuh - semua yuran (faedah, pentadbiran, dll) akan diterangkan sebelum anda menandatangani perjanjian.",
+    "q6": "Bagaimana cara penarikan dana selepas pinjaman diluluskan?",
+    "a6": "Selepas pinjaman diluluskan dan dana cair, anda boleh membuat penarikan melalui dashboard dengan mengisi borang penarikan. Dana akan dihantar ke akaun bank tujuan anda."
   },
   "cta": {
     "title": "Bersedia Memohon Pinjaman?",
