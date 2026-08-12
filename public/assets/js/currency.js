@@ -69,6 +69,20 @@ const Currency = {
   },
 
   /**
+   * Format as Malaysian Ringgit (RM) with exactly 2 decimal places,
+   * regardless of active language. Used by landing page calculator.
+   * Always produces: RM 10,000.00
+   */
+  formatRM(amount) {
+    const num = Number(amount || 0);
+    const formatted = num.toLocaleString('ms-MY', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+    return `RM ${formatted}`;
+  },
+
+  /**
    * Get the currency code for the active language
    */
   code() {

@@ -1,22 +1,40 @@
-/* ============================================
-   SMART FUND - Landing Page Logic
-   Calculator, FAQ, Dark mode, Language, Mobile menu
-   ============================================ */
+/*
+ * SMART FUND - Landing Page Logic
+ * Calculator, FAQ, Dark mode, Mobile menu
+ */
 
 document.addEventListener('DOMContentLoaded', () => {
-  hidePageLoader();
-  AOS.init({ duration: 800, once: true, offset: 80 });
 
   // ============================================
   // NAVBAR
   // ============================================
-  const navbar = document.querySelector('header');
-  window.addEventListener('scroll', () => {
+  const navbar = document.getElementById('navbar');
+  const navLinks = document.querySelectorAll('#navbarNav a, #mobileMenu a');
+
+  const handleScroll = () => {
     if (window.scrollY > 20) {
-      navbar.classList.add('shadow-md', 'bg-white/80', 'dark:bg-slate-900/80');
+      navbar.classList.add('navbar-shadow');
+      navbar.classList.remove('bg-white/90', 'dark:bg-slate-900/90');
+      navbar.classList.add('bg-white/95', 'dark:bg-slate-900/95');
     } else {
-      navbar.classList.remove('shadow-md', 'bg-white/80', 'dark:bg-slate-900/80');
+      navbar.classList.remove('navbar-shadow');
+      navbar.classList.remove('bg-white/95', 'dark:bg-slate-900/95');
+      navbar.classList.add('bg-white/90', 'dark:bg-slate-900/90');
     }
+  };
+  window.addEventListener('scroll', handleScroll);
+  handleScroll();
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        const offset = target.offsetTop - 80;
+        window.scrollTo({ top: offset, behavior: 'smooth' });
+      }
+    });
   });
 
   // Mobile menu
@@ -36,125 +54,192 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     closeMobileMenu?.addEventListener('click', closeMenu);
     mobileMenu.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeMenu));
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
-  }
-
-  // ============================================
-  // DARK MODE
-  // ============================================
-  const darkToggle = document.getElementById('darkToggle');
-  if (darkToggle) {
-    const applySavedTheme = () => {
-      const savedTheme = localStorage.getItem('theme');
-      if (savedTheme === 'dark') {
-        document.documentElement.classList.add('dark');
-      }
-    };
-    applySavedTheme();
-
-    const updateIcon = () => {
-      if (document.documentElement.classList.contains('dark')) {
-        darkToggle.innerHTML = '<i class="fas fa-sun text-amber-500"></i>';
-      } else {
-        darkToggle.innerHTML = '<i class="fas fa-moon text-slate-600"></i>';
-      }
-    };
-    updateIcon();
-    darkToggle.addEventListener('click', () => {
-      document.documentElement.classList.toggle('dark');
-      localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-      updateIcon();
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeMenu();
     });
   }
 
   // ============================================
-  // LOAN CALCULATOR
+  // LOAN CALCULATOR — Flat Annual Interest
   // ============================================
-  const loanAmount = document.getElementById('calcAmount');
-  const loanTenor = document.getElementById('loanTenor');
-  const amountDisplay = document.getElementById('calcAmountDisplay');
-  const monthlyPaymentEl = document.getElementById('calcMonthly');
-  const totalPaymentEl = document.getElementById('calcTotal');
-  const calcMinLabel = document.getElementById('calcMinLabel');
-  const calcMaxLabel = document.getElementById('calcMaxLabel');
+
+  const LOAN_LIMITS = { min: 1000, max: 500000, step: 1, defaultVal: 10000 };
+
+  /**
+   * Format a number as Malaysian Ringgit with 2 decimal places.
+   * Always produces: RM 10,000.00
+   */
+  function formatRM(num) {
+    const n = Number(num);
+    if (isNaN(n) || !isFinite(n)) return 'RM 0.00';
+    return Currency && Currency.formatRM ? Currency.formatRM(n) : `RM ${n.toLocaleString('ms-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  }
+
+  /**
+   * Strip non-numeric characters from input and return a finite number.
+   */
+  function parseNumeric(raw) {
+    if (raw === null || raw === undefined || raw === '') return NaN;
+    const cleaned = String(raw).replace(/[^0-9.]/g, '');
+    const num = parseFloat(cleaned);
+    return isFinite(num) ? num : NaN;
+  }
+
+  /**
+   * Flat annual interest calculation.
+   * interest  = principal * (rate/100) * (tenorMonths/12)
+   * total     = principal + interest
+   * monthly   = total / tenorMonths
+   */
+  function calculateLoan(principal, tenorMonths, annualRate) {
+    const p = Number(principal) || 0;
+    const t = Number(tenorMonths) || 0;
+    const r = Number(annualRate) || 0;
+    const years = t / 12;
+    const interest = p * (r / 100) * years;
+    const total = p + interest;
+    const monthly = total / t;
+    return { interest, total, monthly, years };
+  }
+
+  // ===== Element references =====
+  const loanAmountInput = document.getElementById('loanAmount');
+  const loanTenorInput = document.getElementById('loanTenor');
+  const interestRateInput = document.getElementById('interestRate');
+
+  const loanAmountFormatted = document.getElementById('loanAmountFormatted');
+  const resultMonthly = document.getElementById('resultMonthly');
+  const resultInterest = document.getElementById('resultInterest');
+  const resultTotal = document.getElementById('resultTotal');
+  const resultTenor = document.getElementById('resultTenor');
+
+  const calcError = document.getElementById('calcError');
+  const resetCalcBtn = document.getElementById('resetCalcBtn');
+  const calcSolveBtn = document.getElementById('calcSolveBtn');
+
   const heroLoanBalance = document.getElementById('heroLoanBalance');
   const heroMonthlyPayment = document.getElementById('heroMonthlyPayment');
 
+  // ===== Hero mockup =====
   function updateHeroMockup() {
-    if (heroLoanBalance) heroLoanBalance.textContent = Currency.format(50000000);
-    if (heroMonthlyPayment) heroMonthlyPayment.textContent = Currency.format(4615690);
-  }
-
-  function updateCalcRangeLabels() {
-    if (calcMinLabel) calcMinLabel.textContent = Currency.format(LOAN_LIMITS.min);
-    if (calcMaxLabel) calcMaxLabel.textContent = Currency.format(LOAN_LIMITS.max);
-  }
-
-  function calculateLoan(principal, tenorMonths, annualRate = 5) {
-    const monthlyRate = annualRate / 100 / 12;
-    const monthly = principal * (monthlyRate * Math.pow(1 + monthlyRate, tenorMonths)) / (Math.pow(1 + monthlyRate, tenorMonths) - 1);
-    const total = monthly * tenorMonths;
-    const interest = total - principal;
-    return { monthly, total, interest };
-  }
-
-  const LOAN_LIMITS = {
-    min: 1000000,
-    max: 500000000,
-    step: 1000000,
-    defaultVal: 50000000,
-  };
-
-  function updateCalculatorRange() {
-    if (!loanAmount) return;
-    loanAmount.min = LOAN_LIMITS.min;
-    loanAmount.max = LOAN_LIMITS.max;
-    loanAmount.step = LOAN_LIMITS.step;
-    const currentVal = parseInt(loanAmount.value, 10);
-    if (!currentVal || currentVal < LOAN_LIMITS.min || currentVal > LOAN_LIMITS.max) {
-      loanAmount.value = LOAN_LIMITS.defaultVal;
+    if (heroLoanBalance) heroLoanBalance.textContent = formatRM(500000);
+    if (heroMonthlyPayment) {
+      const demo = calculateLoan(500000, 12, 5);
+      heroMonthlyPayment.textContent = formatRM(demo.monthly);
     }
   }
 
-  function formatNumber(num) {
-    const cfg = (typeof Currency !== 'undefined' && Currency.config) ? Currency.config() : { locale: 'ms-MY' };
-    return new Intl.NumberFormat(cfg.locale).format(Math.round(num));
-  }
-
-  function updateCalculator() {
-    if (!loanAmount) return;
-    const amount = parseInt(loanAmount.value, 10);
-    const tenor = parseInt(loanTenor.value, 10);
-
-    if (isNaN(amount) || amount < LOAN_LIMITS.min) {
-      loanAmount.value = LOAN_LIMITS.min;
-      return updateCalculator();
+  // ===== Input formatting =====
+  function updateLoanAmountDisplay() {
+    const val = parseNumeric(loanAmountInput ? loanAmountInput.value : '');
+    if (isNaN(val)) {
+      if (loanAmountFormatted) loanAmountFormatted.textContent = formatRM(0);
+      return;
     }
-    if (amount > LOAN_LIMITS.max) {
-      loanAmount.value = LOAN_LIMITS.max;
-      return updateCalculator();
+    if (loanAmountFormatted) {
+      loanAmountFormatted.textContent = formatRM(Math.max(val, 0));
+    }
+  }
+
+  function clampLoanAmount(val) {
+    if (val < LOAN_LIMITS.min) return LOAN_LIMITS.min;
+    if (val > LOAN_LIMITS.max) return LOAN_LIMITS.max;
+    return val;
+  }
+
+  // ===== Calculator engine =====
+  function showError(msg) {
+    if (calcError) {
+      calcError.textContent = msg;
+      calcError.style.display = msg ? 'block' : 'none';
+    }
+  }
+
+  function runCalculator() {
+    if (!loanAmountInput || !resultMonthly) return;
+
+    const rawAmount = loanAmountInput.value.trim();
+    const rawTenor = loanTenorInput ? loanTenorInput.value.trim() : '';
+    const rawRate = interestRateInput ? interestRateInput.value.trim() : '';
+
+    const amount = parseNumeric(rawAmount);
+    const tenor = parseNumeric(rawTenor);
+    const rate = parseNumeric(rawRate);
+
+    // Validation
+    if (isNaN(amount) || amount <= 0) {
+      showError('Sila masukkan jumlah pinjaman yang sah.');
+      return;
+    }
+    if (isNaN(tenor) || tenor < 1 || tenor > 60) {
+      showError('Sila masukkan tempoh pinjaman yang sah (1–60 bulan).');
+      return;
+    }
+    if (isNaN(rate) || rate <= 0) {
+      showError('Sila masukkan kadar faedah yang sah.');
+      return;
     }
 
-    amountDisplay.textContent = Currency.format(amount);
-    document.getElementById('calcTenorDisplay').textContent = tenor;
+    showError('');
 
-    const calc = calculateLoan(amount, tenor, 5);
-    monthlyPaymentEl.textContent = Currency.format(calc.monthly);
-    totalPaymentEl.textContent = Currency.format(calc.total);
+    // Clamp amount to limits
+    const clampedAmount = clampLoanAmount(amount);
+
+    const calc = calculateLoan(clampedAmount, tenor, rate);
+    const years = tenor / 12;
+
+    // Update displays
+    if (resultMonthly) resultMonthly.textContent = formatRM(calc.monthly);
+    if (resultInterest) resultInterest.textContent = formatRM(calc.interest);
+    if (resultTotal) resultTotal.textContent = formatRM(calc.total);
+    if (resultTenor) {
+      resultTenor.textContent = `${tenor} bulan (${years === Math.floor(years) ? years : (tenor / 12).toFixed(1)} tahun)`;
+    }
+    if (loanAmountFormatted) loanAmountFormatted.textContent = formatRM(clampedAmount);
   }
 
-  if (loanAmount) {
-    updateCalculatorRange();
-    updateCalcRangeLabels();
-    loanAmount.addEventListener('input', updateCalculator);
-    loanTenor?.addEventListener('input', updateCalculator);
-    updateCalculator();
+  function resetCalculator() {
+    if (loanAmountInput) loanAmountInput.value = LOAN_LIMITS.defaultVal;
+    if (loanTenorInput) loanTenorInput.value = 12;
+    if (interestRateInput) interestRateInput.value = 5;
+    updateLoanAmountDisplay();
+    runCalculator();
+    showError('');
   }
 
+  // ===== Event listeners =====
+  if (loanAmountInput) {
+    loanAmountInput.addEventListener('input', () => {
+      updateLoanAmountDisplay();
+      runCalculator();
+    });
+  }
+  if (loanTenorInput) {
+    loanTenorInput.addEventListener('input', () => {
+      if (loanTenorInput.value === '' || parseNumeric(loanTenorInput.value) < 1) {
+        loanTenorInput.value = 1;
+      }
+      runCalculator();
+    });
+  }
+  if (interestRateInput) {
+    interestRateInput.addEventListener('input', () => {
+      if (interestRateInput.value === '' || parseNumeric(interestRateInput.value) <= 0) {
+        interestRateInput.value = 5;
+      }
+      runCalculator();
+    });
+  }
+
+  if (resetCalcBtn) resetCalcBtn.addEventListener('click', resetCalculator);
+  if (calcSolveBtn) calcSolveBtn.addEventListener('click', runCalculator);
+
+  // Initialise
+  resetCalculator();
   updateHeroMockup();
 
   // ============================================
-  // CTA BUTTONS
+  // CTA BUTTONS — uses existing loan flow
   // ============================================
   const heroApplyBtn = document.getElementById('heroApplyBtn');
   const calcApplyBtn = document.getElementById('calcApplyBtn');
@@ -171,17 +256,17 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const handleApplyClick = () => {
-    const token = Token.get();
+    const token = (typeof Token !== 'undefined' && Token.get) ? Token.get() : null;
     if (!token) {
       Swal.fire({
         icon: 'info',
-        title: I18N.t('notif.loginRequired'),
-        text: I18N.t('notif.loginRequiredDesc'),
+        title: 'Log Masuk Diperlukan',
+        text: 'Anda harus log masuk untuk menghantar permohonan pinjaman.',
         showCancelButton: true,
-        confirmButtonColor: '#2563eb',
-        cancelButtonColor: '#64748b',
-        confirmButtonText: I18N.t('notif.loginNow'),
-        cancelButtonText: I18N.t('notif.register'),
+        confirmButtonColor: '#1264E8',
+        cancelButtonColor: '#667085',
+        confirmButtonText: 'Log Masuk Sekarang',
+        cancelButtonText: 'Daftar',
       }).then((result) => {
         if (result.isConfirmed) window.location.href = '/login.html';
         else if (result.dismiss === Swal.DismissReason.cancel) window.location.href = '/register.html';
@@ -196,80 +281,38 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   heroLearnMore?.addEventListener('click', () => scrollToSection('features'));
-  howItWorksApplyBtn?.addEventListener('click', () => scrollToSection('calculator'));
 
   // ============================================
-  // LANGUAGE SELECTOR
+  // TESTIMONIAL CAROUSEL
   // ============================================
-  const langToggle = document.getElementById('langToggle');
-  const langMenu = document.getElementById('langMenu');
-  const langLabel = document.getElementById('langLabel');
-  let currentLang = I18N.getLang();
-  langLabel.textContent = currentLang.toUpperCase();
+  const testimonialTrack = document.getElementById('testimonialTrack');
+  const testimonialDots = document.getElementById('testimonialDots');
 
-  document.addEventListener('click', (e) => {
-    if (!langToggle?.contains(e.target) && !langMenu?.contains(e.target)) {
-      langMenu?.classList.add('hidden');
-    }
-  });
-
-  langToggle?.addEventListener('click', (e) => {
-    e.stopPropagation();
-    langMenu?.classList.toggle('hidden');
-  });
-
-  document.querySelectorAll('.lang-option').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const lang = btn.getAttribute('data-lang');
-      I18N.setLang(lang);
-      I18N.apply();
-      langLabel.textContent = lang.toUpperCase();
-      langMenu?.classList.add('hidden');
-      window.location.reload();
-    });
-  });
-
-  // ============================================
-  // TESTIMONI CAROUSEL
-  // ============================================
-  const testimoniTrack = document.getElementById('testimoniTrack');
-  const testimoniDots = document.getElementById('testimoniDots');
-
-  const allTestimoni = (typeof I18N !== 'undefined' && I18N.getTestimonials) ? I18N.getTestimonials() : [
-    { name: '', role: '', rating: 5, text: '' },
+  const testimonials = [
+    { name: 'Ahmad', role: 'Pengguna SMART FUND', rating: 5, text: 'Proses permohonan sangat mudah dan maklumat simulasi sangat membantu saya memahami jumlah ansuran yang perlu dibayar.', initials: 'A' },
+    { name: 'Siti', role: 'Pengguna SMART FUND', rating: 5, text: 'Faedah yang ringan dan maklumat yang telus. Sangat membantu untuk keperluan peribadi saya.' },
+    { name: 'Rahman', role: 'Pengguna SMART FUND', rating: 5, text: 'Platform yang cekap dan proses pengesahan yang pantas. Dana pun cair dengan lancar.' },
+    { name: 'Farah', role: 'Pengguna SMART FUND', rating: 5, text: 'Saya appreciate dengan simulasi yang jelas sebelum membuat keputusan. Prosesnya sangat profesional.' },
+    { name: 'Karim', role: 'Pengguna SMART FUND', rating: 5, text: 'Membantu saya mendapatkan dana untuk modal perniagaan. Proses mudah dan tiada peraturan yang tersembunyi.' },
+    { name: 'Nora', role: 'Pengguna SMART FUND', rating: 5, text: 'Pengalaman yang positif dari permulaan hingga penyelesaian. Sangat syaran untuk pengguna lain.' },
   ];
 
-  function shuffleArray(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
+  function getInitials(name) {
+    return name.split(' ').map((w) => w.charAt(0)).join('').substring(0, 2).toUpperCase();
   }
 
-  function chunkArray(arr, size) {
-    const chunks = [];
-    for (let i = 0; i < arr.length; i += size) {
-      chunks.push(arr.slice(i, i + size));
-    }
-    return chunks;
-  }
-
-  let testimonialGroups = [];
-  let currentTestimonialGroup = 0;
-
-  function renderTestimonialGroup(group) {
-    if (!testimoniTrack) return;
+  function renderTestimonialGroup(group, startIndex) {
+    if (!testimonialTrack) return;
     const cards = group.map((t, idx) => {
-      const stars = Array(t.rating).fill('<i class="fas fa-star text-amber-400"></i>').join('');
+      const stars = Array(t.rating).fill('<i class="fas fa-star"></i>').join('');
+      const initials = getInitials(t.name);
+      const delay = (startIndex + idx) * 100;
       return `
-        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 sm:p-8 shadow-soft border border-slate-100 dark:border-slate-700 card-hover testimonial-card" data-aos="fade-up" data-aos-delay="${idx * 100}">
+        <div class="testimonial-card p-6 sm:p-8">
           <div class="flex text-amber-400 mb-4">${stars}</div>
-          <p class="text-slate-600 dark:text-slate-300 mb-6 italic">"${t.text}"</p>
+          <p class="text-slate-600 dark:text-slate-300 mb-6 italic leading-relaxed">"${t.text}"</p>
           <div class="flex items-center gap-3">
-            <div class="w-14 h-14 rounded-full gradient-bg flex items-center justify-center text-white font-bold text-lg shadow-sm">
-              ${t.name.charAt(0)}
-            </div>
+            <div class="testimonial-avatar flex items-center justify-center font-bold">${initials}</div>
             <div>
               <p class="font-bold text-slate-900 dark:text-white">${t.name}</p>
               <p class="text-sm text-slate-500 dark:text-slate-400">${t.role}</p>
@@ -278,18 +321,19 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       `;
     }).join('');
-    testimoniTrack.innerHTML = `<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">${cards}</div>`;
+    testimonialTrack.innerHTML = `<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">${cards}</div>`;
     if (typeof AOS !== 'undefined') {
       setTimeout(() => AOS.refresh(), 50);
     }
   }
 
   function renderDots() {
-    if (!testimoniDots) return;
-    testimoniDots.innerHTML = testimonialGroups.map((_, i) => `
-      <button class="testimonial-dot w-3 h-3 rounded-full transition ${i === currentTestimonialGroup ? 'bg-blue-600 w-8' : 'bg-slate-300 hover:bg-slate-400'}" data-index="${i}" aria-label="Slide ${i + 1}"></button>
+    if (!testimonialDots) return;
+    const totalGroups = Math.ceil(testimonials.length / 3);
+    testimonialDots.innerHTML = Array.from({ length: totalGroups }, (_, i) => `
+      <button class="testimonial-dot w-3 h-3 rounded-full transition ${i === 0 ? 'bg-primary w-8' : 'bg-slate-300 hover:bg-slate-400'}" data-index="${i}"></button>
     `).join('');
-    testimoniDots.querySelectorAll('.testimonial-dot').forEach((btn) => {
+    testimonialDots.querySelectorAll('.testimonial-dot').forEach((btn) => {
       btn.addEventListener('click', () => {
         currentTestimonialGroup = parseInt(btn.dataset.index, 10);
         updateTestimonial();
@@ -297,92 +341,116 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  let testimonialGroups = [];
+  let currentTestimonialGroup = 0;
+
   function updateTestimonial() {
-    if (!testimoniTrack) return;
-    testimoniTrack.style.opacity = '0';
+    if (!testimonialTrack || testimonialGroups.length === 0) return;
+    testimonialTrack.style.opacity = '0';
     setTimeout(() => {
-      renderTestimonialGroup(testimonialGroups[currentTestimonialGroup]);
+      const group = testimonialGroups[currentTestimonialGroup];
+      const startIndex = currentTestimonialGroup * 3;
+      renderTestimonialGroup(group, startIndex);
       renderDots();
-      testimoniTrack.style.opacity = '1';
+      testimonialTrack.style.opacity = '1';
     }, 250);
   }
 
-  if (testimoniTrack) {
-    const shuffled = shuffleArray([...allTestimoni]);
-    testimonialGroups = chunkArray(shuffled, 3);
-    renderTestimonialGroup(testimonialGroups[currentTestimonialGroup]);
+  if (testimonialTrack) {
+    // Chunk testimonials into groups of 3
+    testimonialGroups = [];
+    for (let i = 0; i < testimonials.length; i += 3) {
+      testimonialGroups.push(testimonials.slice(i, i + 3));
+    }
+    renderTestimonialGroup(testimonialGroups[0], 0);
     renderDots();
-    testimoniTrack.style.opacity = '1';
+    testimonialTrack.style.opacity = '1';
 
-    let autoRotateInterval = setInterval(() => {
+    let autoRotate = setInterval(() => {
       currentTestimonialGroup = (currentTestimonialGroup + 1) % testimonialGroups.length;
       updateTestimonial();
-    }, 30000);
+    }, 8000);
 
     const testimonialSection = document.getElementById('testimonial');
     if (testimonialSection) {
-      testimonialSection.addEventListener('mouseenter', () => clearInterval(autoRotateInterval));
+      testimonialSection.addEventListener('mouseenter', () => clearInterval(autoRotate));
       testimonialSection.addEventListener('mouseleave', () => {
-        clearInterval(autoRotateInterval);
-        autoRotateInterval = setInterval(() => {
+        autoRotate = setInterval(() => {
           currentTestimonialGroup = (currentTestimonialGroup + 1) % testimonialGroups.length;
           updateTestimonial();
-        }, 30000);
+        }, 8000);
       });
     }
   }
 
   // ============================================
-  // FAQ
+  // FAQ ACCORDION
   // ============================================
   const faqContainer = document.getElementById('faqContainer');
 
+  const faqs = [
+    { q: 'Bagaimana cara mengajukan pinjaman di SMART FUND?', a: 'Daftar dahulu, kemudian mulai log masuk ke akaun anda. Pilih menu permohonan pinjaman, isi maklumat pinjaman, dan hantar. Permohonan anda akan diproses oleh sistem kami.' },
+    { q: 'Berapa kadar faedah yang dikenakan?', a: 'Kadar faedah kami bermula dari 5% setahun, supaya ansuran anda terasa ringan. Kadar tepat ditentukan berdasarkan profil kelayakan dan tempoh pinjaman.' },
+    { q: 'Berapa jumlah pinjaman yang boleh dimohon?', a: 'Anda boleh memohon pinjaman dari RM 1,000.00 hingga RM 500,000.00 dengan tempoh 1 hingga 60 bulan.' },
+    { q: 'Adakah SMART FUND selamat dan dipercayai?', a: 'Ya, SMART FUND mengutamakan keselamatan dan keyakinan pengguna. Kami menggunakan teknologi enkripsi tinggi dan prinsip keelamanan yang ketat.' },
+    { q: 'Berapa lama proses kelulusan?', a: 'Proses kelulusan kami cepat. Selepas permohonan dihantar, pasukan kami akan menyemak dan memberikan keputusan dalam masa singkat.' },
+    { q: 'Dokumen apa yang diperlukan?', a: 'Kami memerlukan dokumen minimal seperti ID dan maklumat peribadi. Proses pengesahan praktikal dan tidak rumit.' },
+  ];
+
   function renderFaq() {
     if (!faqContainer) return;
-    const faqs = [
-      { q: I18N.t('faq.q1'), a: I18N.t('faq.a1') },
-      { q: I18N.t('faq.q2'), a: I18N.t('faq.a2') },
-      { q: I18N.t('faq.q3'), a: I18N.t('faq.a3') },
-      { q: I18N.t('faq.q4'), a: I18N.t('faq.a4') },
-      { q: I18N.t('faq.q5'), a: I18N.t('faq.a5') },
-      { q: I18N.t('faq.q6'), a: I18N.t('faq.a6') },
-    ];
     faqContainer.innerHTML = '';
-    faqs.forEach((faq) => {
+    faqs.forEach((faq, i) => {
       const item = document.createElement('div');
-      item.className = 'bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm overflow-hidden';
+      item.className = 'faq-item';
       item.innerHTML = `
-        <button class="faq-btn w-full flex items-center justify-between p-5 text-left font-semibold text-slate-800 dark:text-slate-200 hover:bg-blue-50 dark:hover:bg-slate-700/50 transition">
+        <button class="faq-question">
           <span>${faq.q}</span>
-          <i class="fas fa-chevron-down text-blue-600 transition-transform duration-300"></i>
+          <i class="fas fa-chevron-down text-primary transition-transform duration-300"></i>
         </button>
-        <div class="faq-answer hidden max-h-0 overflow-hidden transition-all duration-300">
-          <div class="p-5 pt-0 text-slate-600 dark:text-slate-300 text-sm leading-relaxed">${faq.a}</div>
+        <div class="faq-answer">
+          <p>${faq.a}</p>
         </div>
       `;
       faqContainer.appendChild(item);
-      const btn = item.querySelector('.faq-btn');
+
+      const btn = item.querySelector('.faq-question');
       const answer = item.querySelector('.faq-answer');
       const icon = btn.querySelector('i');
+
       btn.addEventListener('click', () => {
-        answer.classList.toggle('hidden');
-        if (answer.classList.contains('hidden')) {
-          answer.style.maxHeight = '0px';
+        const isOpen = answer.classList.contains('open');
+        if (isOpen) {
+          answer.classList.remove('open');
+          icon.classList.remove('rotate-180');
         } else {
-          answer.style.maxHeight = answer.scrollHeight + 'px';
+          answer.classList.add('open');
+          icon.classList.add('rotate-180');
         }
-        icon.classList.toggle('rotate-180');
       });
     });
   }
 
   renderFaq();
 
-  // Language change - re-render dynamic content
-  document.addEventListener('languageChanged', () => {
-    if (typeof updateCalculator === 'function') updateCalculator();
-    if (typeof updateCalcRangeLabels === 'function') updateCalcRangeLabels();
-    if (typeof updateHeroMockup === 'function') updateHeroMockup();
-    renderFaq();
-  });
+  // ============================================
+  // NAVBAR ACTIVE LINK ON SCROLL
+  // ============================================
+  const sections = document.querySelectorAll('section[id]');
+  const observerOptions = {
+    root: null,
+    rootMargin: '-30% 0px -30% 0px',
+    threshold: 0,
+  };
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      const id = entry.target.getAttribute('id');
+      const link = document.querySelector(`a[href="#${id}"]`);
+      if (entry.isIntersecting && link) {
+        navLinks.forEach((l) => l.classList.remove('text-primary', 'font-semibold'));
+        link.classList.add('text-primary', 'font-semibold');
+      }
+    });
+  }, observerOptions);
+  sections.forEach((s) => sectionObserver.observe(s));
 });

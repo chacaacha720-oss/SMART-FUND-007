@@ -13,7 +13,7 @@
     "testimonial": "Testimonials"
   },
   "hero": {
-    "badge": "Licensed & Supervised by OJK",
+    "badge": "Digital Loan Platform",
     "title1": "Online Loans",
     "title2": "Fast & Safe",
     "title3": "for Your Needs",
@@ -29,11 +29,11 @@
     },
     "card": {
       "title": "Loans Up To",
-      "amount": "$500 Million",
+      "amount": "RM 500,000",
       "f1": "Interest from 5% per year",
       "f2": "Fast approval process",
       "f3": "Easy & simple requirements",
-      "f4": "Safe & trusted (OJK)",
+      "f4": "Safe & trusted",
       "btn": "Start Application"
     },
     "headline": "Fast Money Solutions for Your Needs",
@@ -131,11 +131,11 @@
     "btn": "Register Now"
   },
   "footer": {
-    "desc": "Trusted online loan platform licensed by OJK. Financial solutions for your future.",
+    "desc": "Trusted online loan platform for your financial solutions.",
     "company": "Company",
     "services": "Services",
     "contact": "Contact",
-    "rights": "All rights reserved. Licensed & supervised by OJK.",
+    "rights": "All rights reserved.",
     "terms": "Terms & Conditions",
     "privacy": "Privacy Policy",
     "products": "Products",
@@ -370,11 +370,11 @@
     "passwordMix": "Password must contain letters & numbers",
     "passwordMatch": "Password confirmation does not match",
     "agreeTerms": "You must agree to the Terms & Conditions",
-    "amountRange": "Loan amount $1,000,000 - $500,000,000",
-    "tenorRange": "Tenor 6 - 60 months",
+"amountRange": "Loan amount RM 1,000 - RM 500,000",
+      "tenorRange": "Tenor 1 - 60 months",
     "purposeRequired": "Loan purpose is required",
     "otpRequired": "OTP must be 6 digits",
-    "minWithdraw": "Minimum withdrawal amount $100,000",
+    "minWithdraw": "Minimum withdrawal amount RM 100.00",
     "withdrawRequired": "All bank account data is required",
     "csCodeRequired": "CS code is required",
     "csCodeInvalid": "Invalid CS code format"

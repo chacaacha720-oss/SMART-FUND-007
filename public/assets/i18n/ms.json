@@ -13,7 +13,7 @@
     "testimonial": "Testimoni"
   },
   "hero": {
-    "badge": "Berlesen & Diawasi OJK",
+    "badge": "Platform Pinjaman Digital",
     "title1": "Pinjaman Dalam Talian",
     "title2": "Cepat & Selamat",
     "title3": "untuk Keperlukan Anda",
@@ -33,7 +33,7 @@
       "f1": "Faedah bermula 5% setahun",
       "f2": "Proses kelulusan pantas",
       "f3": "Syarat mudah & ringkas",
-      "f4": "Selamat & dipercayai (OJK)",
+      "f4": "Selamat & Dipercayi",
       "btn": "Mula Permohonan"
     },
     "headline": "Penyelesaian Dana Pantas untuk Keperlukan Anda",
@@ -119,11 +119,11 @@
     "btn": "Daftar Sekarang"
   },
   "footer": {
-    "desc": "Platform pinjaman dalam talian yang dipercayai dan berlesen OJK. Penyelesaian kewangan untuk masa depan anda.",
+    "desc": "Platform pinjaman dalam talian yang dipercayai untuk penyelesaian kewangan anda.",
     "company": "Syarikat",
     "services": "Perkhidmatan",
     "contact": "Hubungi",
-    "rights": "Hak cipta terpelihara. Berlesen & diawasi OJK.",
+    "rights": "Hak cipta terpelihara.",
     "terms": "Syarat & Ketentuan",
     "privacy": "Dasar Privasi",
     "products": "Produk",
@@ -358,11 +358,11 @@
     "passwordMix": "Kata laluan harus mengandungi huruf & nombor",
     "passwordMatch": "Sahkan kata laluan tidak sepadan",
     "agreeTerms": "Anda harus bersetuju dengan Syarat & Ketentuan",
-    "amountRange": "Jumlah pinjaman RM1,000,000 - RM500,000,000",
-    "tenorRange": "Tempoh 6 - 60 bulan",
+"amountRange": "Jumlah pinjaman RM 1,000 - RM 500,000",
+      "tenorRange": "Tempoh 1 - 60 bulan",
     "purposeRequired": "Tujuan pinjaman wajib dipilih",
     "otpRequired": "OTP mesti 6 digit",
-    "minWithdraw": "Jumlah pengeluaran minimum RM100,000",
+    "minWithdraw": "Jumlah pengeluaran minimum RM 100.00",
     "withdrawRequired": "Semua data akaun diperlukan",
     "csCodeRequired": "Kod CS diperlukan",
     "csCodeInvalid": "Format kod CS tidak sah"

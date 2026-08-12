@@ -4,27 +4,30 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>SMART FUND</title>
-  <meta name="description" content="SMART FUND - Platform pinjaman online yang andal." />
+  <meta name="description" content="SMART FUND - Platform pinjaman digital yang selamat dan cekap." />
   <meta name="keywords" content="pinjaman online, fintech, simulasi pinjaman, kalkulator pinjaman, pinjaman cepat" />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
     tailwind.config = {
       darkMode: 'class',
       theme: {
         extend: {
           colors: {
-            primary: '#2563eb',
+            primary: '#1264E8',
+            deep: '#0B3FA5',
             secondary: '#0ea5e9',
-            navy: '#0f172a',
-            'navy-light': '#1e293b',
+            'light-blue': '#EAF3FF',
+            'dark-text': '#101828',
+            'secondary-text': '#667085',
+            'border-color': '#E4EAF2',
           },
           fontFamily: { jakarta: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'] },
           animation: {
             'fade-up': 'fade-up 0.6s ease-out',
             'fade-in': 'fade-in 0.4s ease-out',
             'slide-up': 'slide-up 0.5s ease-out',
-            'pulse-slow': 'pulse 3s ease-in-out infinite',
             'float': 'float 3s ease-in-out infinite',
           },
           keyframes: {
@@ -33,81 +36,34 @@
             'slide-up': { '0%': { opacity: '0', transform: 'translateY(16px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
             'float': { '0%, 100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-8px)' } },
           },
-          borderRadius: { 'xl': '1rem', '2xl': '1.5rem', '3xl': '2rem', '4xl': '2.5rem' },
-          boxShadow: {
-            'soft': '0 4px 20px 0 rgba(0, 0, 0, 0.06)',
-            'soft-lg': '0 10px 40px 0 rgba(0, 0, 0, 0.08)',
-            'premium': '0 8px 32px 0 rgba(37, 99, 235, 0.12)',
-          },
+          borderRadius: { 'xl': '1rem', '2xl': '1.5rem', '3xl': '2rem' },
         }
       }
     };
   </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
   <link rel="stylesheet" href="/assets/css/style.css" />
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <style>
-    :where(html, body) { height: 100%; }
-    body {
-      background: radial-gradient(circle at 20% 50%, #f0f9ff 0%, transparent 50%),
-                  radial-gradient(circle at 80% 30%, #eff6ff 0%, transparent 50%);
-    }
-    .dark body {
-      background: radial-gradient(circle at 20% 50%, #0f172a 0%, transparent 50%),
-                  radial-gradient(circle at 80% 30%, #1e293b 0%, transparent 50%);
-    }
-    .gradient-text {
-      background: linear-gradient(135deg, #2563eb 0%, #0ea5e9 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-fill-color: transparent;
-    }
-    .hero-gradient {
-      background: linear-gradient(135deg, #2563eb 0%, #1e40af 50%, #0f172a 100%);
-    }
-    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px 0 rgba(0,0,0,0.08); }
-    .nav-link {
-      @apply text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-all duration-200 text-sm;
-    }
-  </style>
 </head>
-<body class="font-jakarta text-slate-700 antialiased bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">
-  <!-- Navbar -->
-  <header class="fixed w-full top-0 z-50 transition-all duration-300">
-    <div class="container mx-auto flex items-center justify-between px-4 sm:px-6 py-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-b border-slate-100 dark:border-slate-800">
-      <a href="/" class="flex items-center gap-2.5 group" aria-label="Beranda SMART FUND">
-        <img src="/assets/img/logo.png" alt="SMART FUND" loading="lazy" width="36" height="36" class="object-contain transition-transform duration-300" />
-        <span class="text-xl lg:text-2xl font-extrabold gradient-text">SMART FUND</span>
+<body class="font-jakarta bg-white text-slate-900 antialiased overflow-x-hidden">
+
+  <!-- ==================== NAVBAR ==================== -->
+  <header id="navbar" class="fixed w-full top-0 z-50 transition-all duration-300">
+    <div class="container mx-auto flex items-center justify-between px-4 sm:px-6 py-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-b border-slate-100 dark:border-slate-800 navbar-shadow">
+      <a href="/" class="flex items-center gap-2.5 group" aria-label="SMART FUND">
+        <img src="/assets/img/logo.svg" alt="SMART FUND" loading="lazy" width="40" height="40" class="object-contain transition-transform duration-300" />
+        <span class="text-2xl lg:text-3xl font-extrabold text-primary">SMART FUND</span>
       </a>
-      <nav class="hidden lg:flex items-center gap-8">
-        <a href="#features" class="nav-link" data-i18n="nav.features">Keunggulan</a>
-        <a href="#products" class="nav-link" data-i18n="nav.products">Produk</a>
-        <a href="#howitworks" class="nav-link" data-i18n="nav.timeline">Cara Kerja</a>
-        <a href="#calculator" class="nav-link" data-i18n="nav.calculator">Simulasi</a>
-        <a href="#testimonial" class="nav-link" data-i18n="nav.testimonial">Testimoni</a>
-        <a href="#faq" class="nav-link" data-i18n="nav.faq">FAQ</a>
+      <nav id="navbarNav" class="hidden lg:flex items-center gap-8">
+        <a href="#hero" class="nav-link text-slate-700 hover:text-primary font-medium transition-all duration-200 text-sm">Laman Utama</a>
+        <a href="#features" class="nav-link text-slate-700 hover:text-primary font-medium transition-all duration-200 text-sm">Ciri-ciri</a>
+        <a href="#howitworks" class="nav-link text-slate-700 hover:text-primary font-medium transition-all duration-200 text-sm">Cara Kerja</a>
+        <a href="#calculator" class="nav-link text-slate-700 hover:text-primary font-medium transition-all duration-200 text-sm">Simulasi</a>
+        <a href="#faq" class="nav-link text-slate-700 hover:text-primary font-medium transition-all duration-200 text-sm">Soalan Lazim</a>
       </nav>
       <div class="flex items-center gap-3">
-        <!-- Language Selector -->
-        <div class="relative" id="langDropdown">
-          <button id="langToggle" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition">
-            <i class="fas fa-globe text-xs"></i>
-            <span id="langLabel">MS</span>
-          </button>
-          <div id="langMenu" class="hidden absolute right-0 mt-2 w-40 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 py-1">
-            <button data-lang="ms" class="lang-option w-full px-4 py-2 text-left text-sm hover:bg-slate-100 dark:hover:bg-slate-700">🇲🇾 Bahasa Malaysia</button>
-            <button data-lang="en" class="lang-option w-full px-4 py-2 text-left text-sm hover:bg-slate-100 dark:hover:bg-slate-700">🇬🇧 English</button>
-          </div>
-        </div>
-        <button id="darkToggle" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition" aria-label="Toggle dark mode">
-          <i class="fas fa-moon"></i>
-        </button>
-        <a href="/login.html" class="hidden sm:inline-block px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition" data-i18n="nav.login">Masuk</a>
-        <a href="/register.html" class="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm transition shadow-md hover:shadow-lg" data-i18n="nav.register">Daftar</a>
+        <a href="/login.html" id="navLoginBtn" class="hidden sm:inline-block px-4 py-2 text-sm font-medium text-slate-700 hover:text-primary transition border border-slate-200 dark:border-slate-700 dark:text-slate-300 dark:hover:text-white rounded-xl">Log Masuk</a>
+        <a href="/register.html" id="navRegisterBtn" class="px-5 py-2 rounded-xl bg-primary hover:bg-primary/90 text-white font-semibold text-sm transition shadow-md hover:shadow-lg">Daftar</a>
         <button id="mobileMenuBtn" class="lg:hidden p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition" aria-label="Buka menu" aria-expanded="false">
           <i class="fas fa-bars text-xl"></i>
         </button>
@@ -118,15 +74,14 @@
   <!-- Mobile Menu -->
   <div id="mobileMenu" class="hidden lg:hidden fixed top-0 left-0 w-full h-screen bg-white dark:bg-slate-900 z-[60] overflow-y-auto pt-20 pb-8 px-6">
     <nav class="flex flex-col gap-4 text-center">
-      <a href="#features" class="text-xl py-3 text-slate-700 dark:text-slate-300 hover:text-blue-600 transition" data-i18n="nav.features">Keunggulan</a>
-      <a href="#products" class="text-xl py-3 text-slate-700 dark:text-slate-300 hover:text-blue-600 transition" data-i18n="nav.products">Produk</a>
-      <a href="#howitworks" class="text-xl py-3 text-slate-700 dark:text-slate-300 hover:text-blue-600 transition" data-i18n="nav.timeline">Cara Kerja</a>
-      <a href="#calculator" class="text-xl py-3 text-slate-700 dark:text-slate-300 hover:text-blue-600 transition" data-i18n="nav.calculator">Simulasi</a>
-      <a href="#testimonial" class="text-xl py-3 text-slate-700 dark:text-slate-300 hover:text-blue-600 transition" data-i18n="nav.testimonial">Testimoni</a>
-      <a href="#faq" class="text-xl py-3 text-slate-700 dark:text-slate-300 hover:text-blue-600 transition" data-i18n="nav.faq">FAQ</a>
+      <a href="#hero" class="text-xl py-3 text-slate-700 dark:text-slate-300 hover:text-primary transition">Laman Utama</a>
+      <a href="#features" class="text-xl py-3 text-slate-700 dark:text-slate-300 hover:text-primary transition">Ciri-ciri</a>
+      <a href="#howitworks" class="text-xl py-3 text-slate-700 dark:text-slate-300 hover:text-primary transition">Cara Kerja</a>
+      <a href="#calculator" class="text-xl py-3 text-slate-700 dark:text-slate-300 hover:text-primary transition">Simulasi</a>
+      <a href="#faq" class="text-xl py-3 text-slate-700 dark:text-slate-300 hover:text-primary transition">Soalan Lazim</a>
       <div class="flex flex-col gap-3 mt-6">
-        <a href="/login.html" class="px-5 py-2.5 text-center rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium transition" data-i18n="nav.login">Masuk</a>
-        <a href="/register.html" class="px-5 py-2.5 text-center rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition shadow-md" data-i18n="nav.register">Daftar</a>
+        <a href="/login.html" class="px-5 py-2.5 text-center rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium transition">Log Masuk</a>
+        <a href="/register.html" class="px-5 py-2.5 text-center rounded-xl bg-primary hover:bg-primary/90 text-white font-semibold transition shadow-md">Daftar</a>
       </div>
     </nav>
     <button id="closeMobileMenu" class="absolute top-5 right-5 p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition" aria-label="Tutup menu">
@@ -134,34 +89,38 @@
     </button>
   </div>
 
-  <!-- Hero Section -->
-  <section class="hero-section pt-20 pb-12 min-h-screen flex items-center relative overflow-hidden">
-    <div class="absolute inset-0 hero-gradient"></div>
-    <div class="absolute inset-0 bg-[url('/assets/img/hero-pattern.svg')] opacity-5 dark:opacity-10 pointer-events-none"></div>
+  <!-- ==================== HERO ==================== -->
+  <section id="hero" class="pt-20 pb-12 min-h-screen flex items-center relative overflow-hidden">
+    <div class="absolute inset-0 bg-white dark:bg-slate-900"></div>
+    <div class="absolute inset-0 hero-pattern opacity-60 dark:opacity-30 pointer-events-none"></div>
+    <div class="absolute top-10 right-10 w-64 h-64 bg-light-blue rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-float"></div>
+    <div class="absolute bottom-10 left-10 w-56 h-56 bg-light-blue rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float" style="animation-delay: 1s;"></div>
     <div class="container mx-auto px-4 sm:px-6 relative z-10">
       <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center pt-8">
-        <!-- Text Content -->
-        <div class="space-y-6 text-white" data-aos="fade-right">
-          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
-            <span class="block" data-i18n="hero.headline">Solusi Dana Cepat untuk Kebutuhan Anda</span>
+        <div class="space-y-6">
+          <div class="hero-badge">
+            <span class="w-2 h-2 bg-primary rounded-full"></span>
+            PLATFORM PINJAMAN DIGITAL
+          </div>
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight text-dark-text">
+            Penyelesaian Dana yang Mudah untuk Keperluan Anda
           </h1>
-          <p class="text-lg text-slate-200 max-w-lg" data-i18n="hero.subheadline">Ajukan pinjaman dengan proses mudah, transparan, dan praktis dalam satu platform.</p>
+          <p class="text-lg text-secondary-text max-w-lg">
+            Uruskan keperluan kewangan anda dengan proses permohonan yang mudah, maklumat yang jelas, dan simulasi ansuran yang telus.
+          </p>
           <div class="flex flex-col sm:flex-row gap-4 pt-4">
-            <button id="heroApplyBtn" class="btn-primary px-8 py-3.5 rounded-xl bg-white text-blue-600 font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-blue-50">
-              <i class="fas fa-rocket mr-2"></i> <span data-i18n="hero.primaryBtn">Ajukan Pinjaman</span>
+            <button id="heroApplyBtn" class="px-8 py-3.5 rounded-xl bg-primary hover:bg-primary/90 text-white font-semibold text-lg transition shadow-md hover:shadow-lg flex items-center justify-center">
+              <i class="fas fa-rocket mr-2"></i> Mohon Sekarang
             </button>
-            <button id="heroLearnMore" class="px-8 py-3.5 rounded-xl border border-white/30 text-white font-medium hover:bg-white/10 transition-all duration-300">
-              <i class="fas fa-play mr-2"></i> <span data-i18n="hero.secondaryBtn">Pelajari Selengkapnya</span>
+            <button id="heroLearnMore" class="px-8 py-3.5 rounded-xl border border-slate-200 text-slate-700 font-medium hover:bg-primary/5 transition flex items-center justify-center">
+              <i class="fas fa-calculator mr-2"></i> Lihat Simulasi
             </button>
           </div>
         </div>
-
-        <!-- App Mockup -->
-        <div class="relative" data-aos="fade-left">
-          <div class="relative mx-auto w-full max-w-sm">
-            <div class="relative bg-white dark:bg-slate-800 rounded-[28px] shadow-2xl border border-slate-100 dark:border-slate-700 overflow-hidden">
-              <!-- Phone mockup -->
-              <div class="bg-slate-900 rounded-t-3xl pt-6 pb-8">
+        <div class="relative">
+          <div class="relative mx-auto w-full max-w-md">
+            <div class="glass-card p-6">
+              <div class="bg-slate-900 rounded-2xl pt-6 pb-8">
                 <div class="w-full h-6 bg-slate-700 rounded-full mx-auto mb-4"></div>
                 <div class="px-6 space-y-4">
                   <div class="flex items-center justify-between">
@@ -169,18 +128,18 @@
                     <div class="text-green-400 text-xs font-medium">Aktif</div>
                   </div>
                   <div class="bg-slate-800/50 rounded-xl p-4">
-                    <div class="text-slate-400 text-xs mb-1">Saldo Pinjaman</div>
-                    <div id="heroLoanBalance" class="text-white font-bold text-2xl">RM50,000,000</div>
-                   </div>
-                   <div class="bg-slate-800/50 rounded-xl p-4">
-                     <div class="text-slate-400 text-xs mb-1">Cicilan/Bulan</div>
-                     <div id="heroMonthlyPayment" class="text-white font-bold text-2xl">RM4,615,690</div>
-                    <div class="text-green-400 text-xs mt-1">5% per tahun</div>
+                    <div class="text-slate-400 text-xs mb-1">Baki Pinjaman</div>
+                    <div id="heroLoanBalance" class="text-white font-bold text-2xl">RM 500,000.00</div>
+                  </div>
+                  <div class="bg-slate-800/50 rounded-xl p-4">
+                    <div class="text-slate-400 text-xs mb-1">Ansuran / Bulan</div>
+                    <div id="heroMonthlyPayment" class="text-white font-bold text-2xl">RM 43,750.00</div>
+                    <div class="text-green-400 text-xs mt-1">5% setahun</div>
                   </div>
                   <div class="grid grid-cols-2 gap-3 pt-2">
                     <div class="bg-blue-500/20 rounded-xl p-3 text-center">
                       <i class="fas fa-chart-line text-blue-400 text-xs mb-1"></i>
-                      <div class="text-white text-xs font-medium">Ajukan</div>
+                      <div class="text-white text-xs font-medium">Mulai</div>
                     </div>
                     <div class="bg-blue-500/20 rounded-xl p-3 text-center">
                       <i class="fas fa-wallet text-blue-400 text-xs mb-1"></i>
@@ -189,11 +148,8 @@
                   </div>
                 </div>
               </div>
-              <!-- Screen bottom curve -->
-              <div class="h-4 bg-white dark:bg-slate-800"></div>
             </div>
-            <!-- Decorative elements -->
-            <div class="absolute -top-6 -right-6 w-28 h-28 bg-blue-500/20 rounded-full blur-2xl animate-pulse-slow"></div>
+            <div class="absolute -top-6 -right-6 w-28 h-28 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full blur-2xl animate-pulse-slow"></div>
             <div class="absolute -bottom-6 -left-6 w-28 h-28 bg-amber-500/20 rounded-full blur-2xl animate-pulse-slow delay-700"></div>
           </div>
         </div>
@@ -201,358 +157,271 @@
     </div>
   </section>
 
-  <!-- Features Section -->
+  <!-- ==================== FEATURES ==================== -->
   <section id="features" class="section-padding py-20 bg-white dark:bg-slate-900">
     <div class="container mx-auto px-4 sm:px-6">
-      <div class="text-center mb-16" data-aos="fade-up">
-        <span class="inline-block px-4 py-1.5 bg-blue-100 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300 text-xs font-semibold rounded-full mb-4" data-i18n="features.label">KEUNGGULAN</span>
-        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white mb-4" data-i18n="features.title">Mengapa Memilih SMART FUND?</h2>
-        <p class="text-slate-600 dark:text-slate-300 max-w-2xl mx-auto" data-i18n="features.desc">Kami menyajikan solusi pinjaman terbaik dengan berbagai keunggulan yang menguntungkan bagi Anda</p>
+      <div class="text-center mb-16">
+        <span class="inline-block px-4 py-1.5 bg-primary/10 text-primary text-xs font-semibold rounded-full mb-4">CIRI-CIRI</span>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-dark-text dark:text-white mb-4">Kenapa Memilih SMART FUND?</h2>
+        <p class="text-secondary-text dark:text-slate-300 max-w-2xl mx-auto">Kami menyajikan solusi pinjaman terbaik dengan pelbagai kelebihan yang menguntungkan bagi anda.</p>
       </div>
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft border border-slate-100 dark:border-slate-700 p-7 card-hover transition-all duration-300" data-aos="fade-up" data-aos-delay="100">
-          <div class="w-14 h-14 bg-blue-100 dark:bg-blue-950/30 rounded-2xl flex items-center justify-center mb-5">
-            <i class="fas fa-percentage text-2xl text-blue-600"></i>
+        <div class="feature-card p-7">
+          <div class="feature-icon mb-5">
+            <i class="fas fa-percentage text-2xl text-primary-800"></i>
           </div>
-          <h3 class="font-bold text-lg text-slate-900 dark:text-white mb-2" data-i18n="features.f1.title">Bunga Mulai 5%</h3>
-          <p class="text-sm text-slate-600 dark:text-slate-300" data-i18n="features.f1.desc">Nikmati bunga kompetitif mulai 5% per tahun agar cicilan terasa ringan.</p>
+          <h3 class="font-bold text-lg text-dark-text dark:text-white mb-2">Faedah Mulai 5%</h3>
+          <p class="text-sm text-secondary-text dark:text-slate-300">Nikmati faedah kompetitif mulai 5% setahun agar ansuran terasa ringan.</p>
         </div>
-        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft border border-slate-100 dark:border-slate-700 p-7 card-hover transition-all duration-300" data-aos="fade-up" data-aos-delay="200">
-          <div class="w-14 h-14 bg-blue-100 dark:bg-blue-950/30 rounded-2xl flex items-center justify-center mb-5">
-            <i class="fas fa-bolt text-2xl text-blue-600"></i>
+        <div class="feature-card p-7">
+          <div class="feature-icon mb-5">
+            <i class="fas fa-bolt text-2xl text-primary-800"></i>
           </div>
-          <h3 class="font-bold text-lg text-slate-900 dark:text-white mb-2" data-i18n="features.f2.title">Proses Cepat</h3>
-          <p class="text-sm text-slate-600 dark:text-slate-300" data-i18n="features.f2.desc">Ajukan pinjaman online kapan saja tanpa proses yang rumit.</p>
+          <h3 class="font-bold text-lg text-dark-text dark:text-white mb-2">Proses Cepat</h3>
+          <p class="text-sm text-secondary-text dark:text-slate-300">Permohonan pinjaman secara dalam talian kapan saja tanpa proses yang rumit.</p>
         </div>
-        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft border border-slate-100 dark:border-slate-700 p-7 card-hover transition-all duration-300" data-aos="fade-up" data-aos-delay="300">
-          <div class="w-14 h-14 bg-blue-100 dark:bg-blue-950/30 rounded-2xl flex items-center justify-center mb-5">
-            <i class="fas fa-file-check text-2xl text-blue-600"></i>
+        <div class="feature-card p-7">
+          <div class="feature-icon mb-5">
+            <i class="fas fa-file-check text-2xl text-primary-800"></i>
           </div>
-          <h3 class="font-bold text-lg text-slate-900 dark:text-white mb-2" data-i18n="features.f3.title">Syarat Mudah</h3>
-          <p class="text-sm text-slate-600 dark:text-slate-300" data-i18n="features.f3.desc">Dokumen singkat dengan proses verifikasi yang praktis dan cepat.</p>
+          <h3 class="font-bold text-lg text-dark-text dark:text-white mb-2">Syarat Mudah</h3>
+          <p class="text-sm text-secondary-text dark:text-slate-300">Dokumen ringkas dengan proses pengesahan yang praktikal dan cepat.</p>
         </div>
-        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft border border-slate-100 dark:border-slate-700 p-7 card-hover transition-all duration-300" data-aos="fade-up" data-aos-delay="400">
-          <div class="w-14 h-14 bg-blue-100 dark:bg-blue-950/30 rounded-2xl flex items-center justify-center mb-5">
-            <i class="fas fa-shield-alt text-2xl text-blue-600"></i>
+        <div class="feature-card p-7">
+          <div class="feature-icon mb-5">
+            <i class="fas fa-shield-alt text-2xl text-primary-800"></i>
           </div>
-          <h3 class="font-bold text-lg text-slate-900 dark:text-white mb-2" data-i18n="features.f4.title">Aman & Terpercaya</h3>
-          <p class="text-sm text-slate-600 dark:text-slate-300" data-i18n="features.f4.desc">Layanan berlisensi dan diawasi Otoritas Jasa Keuangan (OJK) untuk keamanan setiap nasabah.</p>
+          <h3 class="font-bold text-lg text-dark-text dark:text-white mb-2">Maklumat Telus</h3>
+          <p class="text-sm text-secondary-text dark:text-slate-300">Tiada yuran tersembunyi. Semua maklumat diterangkan sebelum anda melanggan.</p>
         </div>
-        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft border border-slate-100 dark:border-slate-700 p-7 card-hover transition-all duration-300" data-aos="fade-up" data-aos-delay="500">
-          <div class="w-14 h-14 bg-blue-100 dark:bg-blue-950/30 rounded-2xl flex items-center justify-center mb-5">
-            <i class="fas fa-eye text-2xl text-blue-600"></i>
+        <div class="feature-card p-7">
+          <div class="feature-icon mb-5">
+            <i class="fas fa-wallet text-2xl text-primary-800"></i>
           </div>
-          <h3 class="font-bold text-lg text-slate-900 dark:text-white mb-2" data-i18n="features.f5.title">Informasi Transparan</h3>
-          <p class="text-sm text-slate-600 dark:text-slate-300" data-i18n="features.f5.desc">Semua biaya dan syarat kami jelaskan secara lengkap.</p>
+          <h3 class="font-bold text-lg text-dark-text dark:text-white mb-2">Pilihan Tempoh</h3>
+          <p class="text-sm text-secondary-text dark:text-slate-300">Sesuaikan tempoh pinjaman dari 1 hingga 60 bulan dengan keperluan anda.</p>
         </div>
-        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft border border-slate-100 dark:border-slate-700 p-7 card-hover transition-all duration-300" data-aos="fade-up" data-aos-delay="600">
-          <div class="w-14 h-14 bg-blue-100 dark:bg-blue-950/30 rounded-2xl flex items-center justify-center mb-5">
-            <i class="fas fa-mobile-screen text-2xl text-blue-600"></i>
+        <div class="feature-card p-7">
+          <div class="feature-icon mb-5">
+            <i class="fas fa-mobile-screen text-2xl text-primary-800"></i>
           </div>
-          <h3 class="font-bold text-lg text-slate-900 dark:text-white mb-2" data-i18n="features.f6.title">Pengelolaan Terintegrasi</h3>
-          <p class="text-sm text-slate-600 dark:text-slate-300" data-i18n="features.f6.desc">Kelola pinjaman, cicilan, dan penarikan dana dengan nyaman melalui satu dashboard.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Products Section -->
-  <section id="products" class="section-padding py-20">
-    <div class="container mx-auto px-4 sm:px-6">
-      <div class="text-center mb-16" data-aos="fade-up">
-        <span class="inline-block px-4 py-1.5 bg-blue-100 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300 text-xs font-semibold rounded-full mb-4" data-i18n="products.label">PRODUK</span>
-        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white mb-4" data-i18n="products.title">Pilihan Pembiayaan</h2>
-        <p class="text-slate-600 dark:text-slate-300 max-w-xl mx-auto" data-i18n="products.desc">Kami menyediakan berbagai opsi pinjaman yang disesuaikan dengan kebutuhan Anda</p>
-      </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft border border-slate-100 dark:border-slate-700 p-6 text-center card-hover transition-all duration-300" data-aos="fade-up" data-aos-delay="100">
-          <div class="w-16 h-16 mx-auto bg-blue-100 dark:bg-blue-950/30 rounded-2xl flex items-center justify-center mb-4">
-            <i class="fas fa-wallet text-2xl text-blue-600"></i>
-          </div>
-          <h3 class="font-bold text-lg text-slate-900 dark:text-white mb-2" data-i18n="products.multiline.title">Pinjaman Multiguna</h3>
-          <p class="text-sm text-slate-600 dark:text-slate-300 mb-4" data-i18n="products.multiline.desc">Untuk keperluan mendesak hingga modal usaha lancar.</p>
-          <a href="#" class="text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition" data-i18n="products.btn">Ajukan Sekarang</a>
-        </div>
-        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft border border-slate-100 dark:border-slate-700 p-6 text-center card-hover transition-all duration-300" data-aos="fade-up" data-aos-delay="200">
-          <div class="w-16 h-16 mx-auto bg-blue-100 dark:bg-blue-950/30 rounded-2xl flex items-center justify-center mb-4">
-            <i class="fas fa-briefcase text-2xl text-blue-600"></i>
-          </div>
-          <h3 class="font-bold text-lg text-slate-900 dark:text-white mb-2" data-i18n="products.business.title">Modal Usaha</h3>
-          <p class="text-sm text-slate-600 dark:text-slate-300 mb-4" data-i18n="products.business.desc">Didanai untuk mengembangkan usaha Anda.</p>
-          <a href="#" class="text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition" data-i18n="products.btn">Ajukan Sekarang</a>
-        </div>
-        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft border border-slate-100 dark:border-slate-700 p-6 text-center card-hover transition-all duration-300" data-aos="fade-up" data-aos-delay="300">
-          <div class="w-16 h-16 mx-auto bg-blue-100 dark:bg-blue-950/30 rounded-2xl flex items-center justify-center mb-4">
-            <i class="fas fa-landmark text-2xl text-blue-600"></i>
-          </div>
-          <h3 class="font-bold text-lg text-slate-900 dark:text-white mb-2" data-i18n="products.education.title">Pendidikan</h3>
-          <p class="text-sm text-slate-600 dark:text-slate-300 mb-4" data-i18n="products.education.desc">Biayai masa depan dengan biaya pendidikan.</p>
-          <a href="#" class="text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition" data-i18n="products.btn">Ajukan Sekarang</a>
-        </div>
-        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft border border-slate-100 dark:border-slate-700 p-6 text-center card-hover transition-all duration-300" data-aos="fade-up" data-aos-delay="400">
-          <div class="w-16 h-16 mx-auto bg-blue-100 dark:bg-blue-950/30 rounded-2xl flex items-center justify-center mb-4">
-            <i class="fas fa-home text-2xl text-blue-600"></i>
-          </div>
-          <h3 class="font-bold text-lg text-slate-900 dark:text-white mb-2" data-i18n="products.renovation.title">Renovasi Rumah</h3>
-          <p class="text-sm text-slate-600 dark:text-slate-300 mb-4" data-i18n="products.renovation.desc">Wujudkan rumah impian Anda.</p>
-          <a href="#" class="text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition" data-i18n="products.btn">Ajukan Sekarang</a>
-        </div>
-        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft border border-slate-100 dark:border-slate-700 p-6 text-center card-hover transition-all duration-300" data-aos="fade-up" data-aos-delay="500">
-          <div class="w-16 h-16 mx-auto bg-blue-100 dark:bg-blue-950/30 rounded-2xl flex items-center justify-center mb-4">
-            <i class="fas fa-user text-2xl text-blue-600"></i>
-          </div>
-          <h3 class="font-bold text-lg text-slate-900 dark:text-white mb-2" data-i18n="products.personal.title">Kebutuhan Pribadi</h3>
-          <p class="text-sm text-slate-600 dark:text-slate-300 mb-4" data-i18n="products.personal.desc">Untuk keperluan pribadi lainnya.</p>
-          <a href="#" class="text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition" data-i18n="products.btn">Ajukan Sekarang</a>
+          <h3 class="font-bold text-lg text-dark-text dark:text-white mb-2">Pengalaman Digital</h3>
+          <p class="text-sm text-secondary-text dark:text-slate-300">Pengurusan pinjaman, ansuran, dan penarikan dana melalui satu platform digital.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- How It Works Section -->
+  <!-- ==================== HOW IT WORKS ==================== -->
   <section id="howitworks" class="section-padding py-20 bg-slate-50 dark:bg-slate-800/30">
     <div class="container mx-auto px-4 sm:px-6">
-      <div class="text-center mb-16" data-aos="fade-up">
-        <span class="inline-block px-4 py-1.5 bg-blue-100 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300 text-xs font-semibold rounded-full mb-4" data-i18n="howitworks.label">CARA KERJA</span>
-        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white mb-4" data-i18n="howitworks.title">Proses Pengajuan yang Mudah</h2>
-        <p class="text-slate-600 dark:text-slate-300 max-w-xl mx-auto" data-i18n="howitworks.desc">Ikuti 5 langkah sederhana untuk mendapatkan dana yang Anda butuhkan</p>
-      </div>
-      <div class="max-w-4xl mx-auto" data-aos="fade-up" data-aos-delay="100">
-        <div class="relative">
-          <!-- Timeline line -->
-          <div class="absolute left-8 md:left-1/2 top-0 bottom-0 w-0.5 bg-slate-200 dark:bg-slate-700 -translate-x-1/2 hidden md:block"></div>
-          <div class="space-y-8">
-            <!-- Step 1 -->
-            <div class="relative flex md:even:flex-row-reverse items-start md:items-center md:group">
-              <div class="absolute left-0 md:left-1/2 w-6 h-6 rounded-full bg-blue-600 border-4 border-blue-600 flex-shrink-0 md:-translate-x-1/2 z-10"></div>
-              <div class="ml-12 md:ml-0 md:w-1/2 md:pl-8 md:pr-12">
-                <div class="flex items-center gap-3 mb-2">
-                  <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-950/30 flex items-center justify-center flex-shrink-0">
-                    <span class="text-blue-600 font-bold text-sm">01</span>
-                  </div>
-                  <h3 class="font-bold text-lg text-slate-900 dark:text-white" data-i18n="timeline.step1.title">Daftar Akun</h3>
-                </div>
-                <p class="text-sm text-slate-600 dark:text-slate-300" data-i18n="timeline.step1.desc">Buat akun SMART FUND gratis dalam hitungan menit.</p>
-              </div>
-            </div>
-            <!-- Step 2 -->
-            <div class="relative flex md:even:flex-row-reverse items-start md:items-center md:group">
-              <div class="absolute left-0 md:left-1/2 w-6 h-6 rounded-full bg-blue-600 border-4 border-blue-600 flex-shrink-0 md:-translate-x-1/2 z-10"></div>
-              <div class="ml-12 md:ml-0 md:w-1/2 md:pl-8 md:pr-12">
-                <div class="flex items-center gap-3 mb-2">
-                  <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-950/30 flex items-center justify-center flex-shrink-0">
-                    <span class="text-blue-600 font-bold text-sm">02</span>
-                  </div>
-                  <h3 class="font-bold text-lg text-slate-900 dark:text-white" data-i18n="timeline.step2.title">Ajukan Pinjaman</h3>
-                </div>
-                <p class="text-sm text-slate-600 dark:text-slate-300" data-i18n="timeline.step2.desc">Isi formulir pinjaman dengan data yang diminta.</p>
-              </div>
-            </div>
-            <!-- Step 3 -->
-            <div class="relative flex md:even:flex-row-reverse items-start md:items-center md:group">
-              <div class="absolute left-0 md:left-1/2 w-6 h-6 rounded-full bg-blue-600 border-4 border-blue-600 flex-shrink-0 md:-translate-x-1/2 z-10"></div>
-              <div class="ml-12 md:ml-0 md:w-1/2 md:pl-8 md:pr-12">
-                <div class="flex items-center gap-3 mb-2">
-                  <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-950/30 flex items-center justify-center flex-shrink-0">
-                    <span class="text-blue-600 font-bold text-sm">03</span>
-                  </div>
-                  <h3 class="font-bold text-lg text-slate-900 dark:text-white" data-i18n="timeline.step3.title">Verifikasi Data</h3>
-                </div>
-                <p class="text-sm text-slate-600 dark:text-slate-300" data-i18n="timeline.step3.desc">Tim kami memverifikasi data dan dokumen Anda.</p>
-              </div>
-            </div>
-            <!-- Step 4 -->
-            <div class="relative flex md:even:flex-row-reverse items-start md:items-center md:group">
-              <div class="absolute left-0 md:left-1/2 w-6 h-6 rounded-full bg-blue-600 border-4 border-blue-600 flex-shrink-0 md:-translate-x-1/2 z-10"></div>
-              <div class="ml-12 md:ml-0 md:w-1/2 md:pl-8 md:pr-12">
-                <div class="flex items-center gap-3 mb-2">
-                  <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-950/30 flex items-center justify-center flex-shrink-0">
-                    <span class="text-blue-600 font-bold text-sm">04</span>
-                  </div>
-                  <h3 class="font-bold text-lg text-slate-900 dark:text-white" data-i18n="timeline.step4.title">Persetujuan</h3>
-                </div>
-                <p class="text-sm text-slate-600 dark:text-slate-300" data-i18n="timeline.step4.desc">Dapatkan keputusan pinjaman dalam waktu singkat.</p>
-              </div>
-            </div>
-            <!-- Step 5 -->
-            <div class="relative flex md:even:flex-row-reverse items-start md:items-center md:group">
-              <div class="absolute left-0 md:left-1/2 w-6 h-6 rounded-full bg-blue-600 border-4 border-blue-600 flex-shrink-0 md:-translate-x-1/2 z-10"></div>
-              <div class="ml-12 md:ml-0 md:w-1/2 md:pl-8 md:pr-12">
-                <div class="flex items-center gap-3 mb-2">
-                  <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-950/30 flex items-center justify-center flex-shrink-0">
-                    <span class="text-blue-600 font-bold text-sm">05</span>
-                  </div>
-                  <h3 class="font-bold text-lg text-slate-900 dark:text-white" data-i18n="timeline.step5.title">Dana Diproses</h3>
-                </div>
-                <p class="text-sm text-slate-600 dark:text-slate-300" data-i18n="timeline.step5.desc">Dana langsung dicairkan ke rekening Anda.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="text-center mt-12" data-aos="fade-up" data-aos-delay="600">
-          <button id="howItWorksApplyBtn" class="px-8 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition shadow-md hover:shadow-lg">
-            <i class="fas fa-rocket mr-2"></i> <span data-i18n="finalCta.btn">Mulai Pengajuan</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Calculator Section -->
-  <section id="calculator" class="section-padding py-20">
-    <div class="container mx-auto px-4 sm:px-6">
-      <div class="text-center mb-16" data-aos="fade-up">
-        <span class="inline-block px-4 py-1.5 bg-blue-100 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300 text-xs font-semibold rounded-full mb-4" data-i18n="calc.label">SIMULASI PINJAMAN</span>
-        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white mb-4" data-i18n="calc.title">Hitung Cicilan Anda</h2>
-        <p class="text-slate-600 dark:text-slate-300 max-w-xl mx-auto" data-i18n="calc.desc">Tentukan jumlah pinjaman dan jangka waktu untuk melihat estimasi cicilan</p>
-      </div>
-      <div class="max-w-4xl mx-auto" data-aos="fade-up" data-aos-delay="100">
-        <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-premium border border-slate-100 dark:border-slate-700 p-8">
-          <div class="space-y-8">
-            <!-- Loan Amount Slider -->
-            <div class="space-y-3">
-              <div class="flex justify-between items-center">
-                <span class="form-label" data-i18n="calc.amount">Jumlah Pinjaman</span>
-                <span class="text-xl font-bold gradient-text" id="calcAmountDisplay">50,000,000</span>
-              </div>
-              <input type="range" id="calcAmount" min="1000000" max="500000000" value="50000000" step="1000000" class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-full appearance-none" />
-              <div class="flex justify-between text-xs text-slate-500 dark:text-slate-400">
-                <span id="calcMinLabel">RM1,000,000</span>
-                <span id="calcMaxLabel">RM500,000,000</span>
-              </div>
-            </div>
-            <!-- Tenor Slider -->
-            <div class="space-y-3">
-              <div class="flex justify-between items-center">
-                <span class="form-label" data-i18n="calc.tenor">Jangka Waktu (bulan)</span>
-                <span class="text-xl font-bold gradient-text" id="calcTenorDisplay">12</span>
-              </div>
-              <input type="range" id="loanTenor" min="6" max="60" value="12" step="1" class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-full appearance-none" />
-              <div class="flex justify-between text-xs text-slate-500 dark:text-slate-400">
-                <span data-i18n="calc.month">6 bulan</span>
-                <span data-i18n="calc.month">60 bulan</span>
-              </div>
-            </div>
-            <!-- Results -->
-            <div class="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-6 mt-8">
-              <div class="grid grid-cols-3 gap-4 text-center">
-                <div>
-                  <span class="text-xs text-slate-500 dark:text-slate-400 block mb-1" data-i18n="calc.rate">Suku Bunga</span>
-                  <div class="text-2xl font-bold gradient-text" id="calcRate">5%</div>
-                </div>
-                <div>
-                  <span class="text-xs text-slate-500 dark:text-slate-400 block mb-1" data-i18n="calc.monthly">Cicilan/Bulan</span>
-                  <div class="text-2xl font-bold text-slate-900 dark:text-white" id="calcMonthly">—</div>
-                </div>
-                <div>
-                  <span class="text-xs text-slate-500 dark:text-slate-400 block mb-1" data-i18n="calc.totalPayment">Total Bayar</span>
-                  <div class="text-2xl font-bold text-slate-900 dark:text-white" id="calcTotal">—</div>
-                </div>
-              </div>
-            </div>
-            <button id="calcApplyBtn" class="btn-primary w-full py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg transition shadow-md hover:shadow-lg">
-              <i class="fas fa-rocket mr-2"></i> <span data-i18n="calc.btn">Ajukan Sekarang</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Trust Section -->
-  <section id="trust" class="section-padding py-20 bg-white dark:bg-slate-900">
-    <div class="container mx-auto px-4 sm:px-6">
-      <div class="text-center mb-16" data-aos="fade-up">
-        <span class="inline-block px-4 py-1.5 bg-blue-100 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300 text-xs font-semibold rounded-full mb-4" data-i18n="trust.label">KEPERCAYAAN</span>
-        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white mb-4" data-i18n="trust.title">Kepercayaan dan Keamanan Anda Prioritas Kami</h2>
-        <p class="text-slate-600 dark:text-slate-300 max-w-xl mx-auto" data-i18n="trust.desc">SMART FUND menggabungkan teknologi mutakhir dengan prinsip kepercayaan untuk melindungi setiap transaksi Anda.</p>
-      </div>
-      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8" data-aos="fade-up" data-aos-delay="100">
-        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft border border-slate-100 dark:border-slate-700 p-6 text-center card-hover transition-all duration-300">
-          <div class="w-12 h-12 mx-auto bg-blue-100 dark:bg-blue-950/30 rounded-xl flex items-center justify-center mb-4">
-            <i class="fas fa-eye text-xl text-blue-600"></i>
-          </div>
-          <h3 class="font-bold text-slate-900 dark:text-white mb-2" data-i18n="trust.transparency.title">Transparansi Penuh</h3>
-          <p class="text-sm text-slate-600 dark:text-slate-300" data-i18n="trust.transparency.desc">Semua biaya dan syarat kami jelaskan secara lengkap.</p>
-        </div>
-        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft border border-slate-100 dark:border-slate-700 p-6 text-center card-hover transition-all duration-300">
-          <div class="w-12 h-12 mx-auto bg-blue-100 dark:bg-blue-950/30 rounded-xl flex items-center justify-center mb-4">
-            <i class="fas fa-lock text-xl text-blue-600"></i>
-          </div>
-          <h3 class="font-bold text-slate-900 dark:text-white mb-2" data-i18n="trust.security.title">Keamanan Data</h3>
-          <p class="text-sm text-slate-600 dark:text-slate-300" data-i18n="trust.security.desc">Data pribadi dilindungi dengan enkripsi end-to-end.</p>
-        </div>
-        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft border border-slate-100 dark:border-slate-700 p-6 text-center card-hover transition-all duration-300">
-          <div class="w-12 h-12 mx-auto bg-blue-100 dark:bg-blue-950/30 rounded-xl flex items-center justify-center mb-4">
-            <i class="fas fa-tags text-xl text-blue-600"></i>
-          </div>
-          <h3 class="font-bold text-slate-900 dark:text-white mb-2" data-i18n="trust.noHidden.title">Tidak Ada Biaya Tersembunyi</h3>
-          <p class="text-sm text-slate-600 dark:text-slate-300" data-i18n="trust.noHidden.desc">Apa yang Anda lihat adalah apa yang Anda bayar.</p>
-        </div>
-        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft border border-slate-100 dark:border-slate-700 p-6 text-center card-hover transition-all duration-300">
-          <div class="w-12 h-12 mx-auto bg-blue-100 dark:bg-blue-950/30 rounded-xl flex items-center justify-center mb-4">
-            <i class="fas fa-headset text-xl text-blue-600"></i>
-          </div>
-          <h3 class="font-bold text-slate-900 dark:text-white mb-2" data-i18n="trust.support.title">Dukungan 24/7</h3>
-          <p class="text-sm text-slate-600 dark:text-slate-300" data-i18n="trust.support.desc">Tim dukungan kami siap membantu kapan saja.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Testimonial Section -->
-  <section id="testimonial" class="section-padding py-20 bg-slate-50 dark:bg-slate-800/30">
-    <div class="container mx-auto px-4 sm:px-6">
       <div class="text-center mb-16">
-        <span class="inline-block px-4 py-1.5 bg-blue-100 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300 text-xs font-semibold rounded-full mb-4" data-i18n="testimoni.label">TESTIMONI</span>
-        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white mb-4" data-i18n="testimoni.title">Apa Kata Nasabah Kami</h2>
+        <span class="inline-block px-4 py-1.5 bg-primary/10 text-primary text-xs font-semibold rounded-full mb-4">CARA KERJA</span>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-dark-text dark:text-white mb-4">Cara Kerja SMART FUND</h2>
+        <p class="text-secondary-text dark:text-slate-300 max-w-xl mx-auto">Ikuti 4 langkah mudah untuk mendapatkan dana yang anda perlukan.</p>
       </div>
       <div class="max-w-4xl mx-auto">
-        <div id="testimoniTrack" class="space-y-8">
+        <div class="space-y-8">
+          <div class="step-item">
+            <div class="step-number">01</div>
+            <div class="step-content">
+              <h3>Daftar</h3>
+              <p class="text-secondary-text dark:text-slate-300">Buat akaun anda dengan maklumat yang diperlukan dalam hitungan minit.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-number">02</div>
+            <div class="step-content">
+              <h3>Mohon Pinjaman</h3>
+              <p class="text-secondary-text dark:text-slate-300">Masukkan jumlah pinjaman dan tempoh yang dibutuhkan.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-number">03</div>
+            <div class="step-content">
+              <h3>Verifikasi</h3>
+              <p class="text-secondary-text dark:text-slate-300">Permohonan anda diproses mengikut prosedur yang berlaku.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-number">04</div>
+            <div class="step-content">
+              <h3>Dana</h3>
+              <p class="text-secondary-text dark:text-slate-300">Jika permohonan diluluskan, dana akan dicairkan mengikut sistem yang tersedia.</p>
+            </div>
+          </div>
         </div>
-        <div id="testimoniDots" class="flex justify-center gap-2 mt-8"></div>
       </div>
     </div>
   </section>
 
-  <!-- FAQ Section -->
-  <section id="faq" class="section-padding py-20 bg-white dark:bg-slate-900">
+  <!-- ==================== CALCULATOR ==================== -->
+  <section id="calculator" class="section-padding py-20">
     <div class="container mx-auto px-4 sm:px-6">
       <div class="text-center mb-16">
-        <span class="inline-block px-4 py-1.5 bg-blue-100 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300 text-xs font-semibold rounded-full mb-4" data-i18n="faq.label">FAQ</span>
-        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white mb-4" data-i18n="faq.title">Pertanyaan Umum</h2>
-        <p class="text-slate-600 dark:text-slate-300 max-w-xl mx-auto" data-i18n="faq.subtitle">Pertanyaan yang sering ditanyakan tentang SMART FUND</p>
+        <span class="inline-block px-4 py-1.5 bg-primary/10 text-primary text-xs font-semibold rounded-full mb-4">SIMULASI PINJAMAN</span>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-dark-text dark:text-white mb-4">Kira Ansuran Anda</h2>
+        <p class="text-secondary-text dark:text-slate-300 max-w-xl mx-auto">Aturkan jumlah pinjaman dan tempoh untuk melihat anggaran ansuran anda.</p>
       </div>
-      <div class="max-w-3xl mx-auto" data-aos="fade-up">
+      <div class="max-w-6xl mx-auto">
+        <div class="premium-card p-8">
+          <div class="grid lg:grid-cols-2 gap-8 lg:gap-12">
+            <!-- Column Kiri: Inputs -->
+            <div class="space-y-6">
+              <h3 class="text-lg font-bold text-dark-text dark:text-white mb-4">Maklumat Pinjaman</h3>
+
+              <!-- Jumlah Pinjaman -->
+              <div class="space-y-2">
+                <label class="block text-sm font-semibold text-dark-text dark:text-white" for="loanAmount">Jumlah Pinjaman</label>
+                <div class="calc-input-wrapper">
+                  <span class="currency-prefix">RM</span>
+                  <input type="text" id="loanAmount" inputmode="numeric" maxlength="12" placeholder="10,000.00" class="calc-input w-full" />
+                </div>
+                <div class="calc-value-display" id="loanAmountFormatted">RM 10,000.00</div>
+                <div class="text-xs text-secondary-text dark:text-slate-400">Had Pinjaman: RM 1,000.00 – RM 500,000.00</div>
+              </div>
+
+              <!-- Tempoh -->
+              <div class="space-y-2">
+                <label class="block text-sm font-semibold text-dark-text dark:text-white" for="loanTenor">Tempoh Pinjaman</label>
+                <div class="calc-input-wrapper">
+                  <input type="number" id="loanTenor" min="1" max="60" value="12" class="calc-input w-full" />
+                  <span class="input-suffix">bulan</span>
+                </div>
+                <div class="text-xs text-secondary-text dark:text-slate-400">1 – 60 bulan</div>
+              </div>
+
+              <!-- Kadar Faedah -->
+              <div class="space-y-2">
+                <label class="block text-sm font-semibold text-dark-text dark:text-white" for="interestRate">Kadar Faedah</label>
+                <div class="calc-input-wrapper">
+                  <input type="number" id="interestRate" min="5" max="20" step="0.1" value="5" class="calc-input w-full" />
+                  <span class="input-suffix">% setahun</span>
+                </div>
+                <div class="text-xs text-secondary-text dark:text-slate-400">Kadar faedah bermula 5% setahun</div>
+              </div>
+
+              <!-- Buttons -->
+              <div class="flex flex-col sm:flex-row gap-3 pt-4">
+                <button id="resetCalcBtn" type="button" class="btn-secondary flex-1 py-2.5 rounded-xl text-sm font-semibold">
+                  Tetapkan Semula
+                </button>
+                <button id="calcSolveBtn" type="button" class="flex-1 py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-white font-semibold text-sm transition shadow-md hover:shadow-lg">
+                  Kira Simulasi
+                </button>
+              </div>
+
+              <!-- Error message -->
+              <div id="calcError" class="calc-error"></div>
+
+              <!-- Apply button -->
+              <button id="calcApplyBtn" type="button" class="w-full py-3.5 rounded-xl bg-primary hover:bg-primary/90 text-white font-bold text-lg transition shadow-md hover:shadow-lg flex items-center justify-center mt-4">
+                <i class="fas fa-rocket mr-2"></i> Mohon Sekarang
+              </button>
+            </div>
+
+            <!-- Column Kanan: Results -->
+            <div class="space-y-6">
+              <h3 class="text-lg font-bold text-dark-text dark:text-white mb-4">Anggaran Ansuran</h3>
+
+              <!-- Main result -->
+              <div class="main-result premium-card p-6 text-center">
+                <div class="text-xs text-secondary-text dark:text-slate-400 uppercase tracking-wider mb-2">Ansuran Bulanan</div>
+                <div class="text-4xl font-extrabold text-primary-800 mb-1" id="resultMonthly">
+                  RM 875.00
+                </div>
+                <div class="text-xs text-secondary-text dark:text-slate-400">
+                  <i class="fas fa-calculator mr-1"></i> Berdasarkan flat interest
+                </div>
+              </div>
+
+              <!-- Secondary results -->
+              <div class="grid grid-cols-2 gap-3">
+                <div class="result-card">
+                  <div class="result-label">Jumlah Faedah</div>
+                  <div class="result-value" id="resultInterest">RM 500.00</div>
+                </div>
+                <div class="result-card">
+                  <div class="result-label">Jumlah Bayaran Balik</div>
+                  <div class="result-value" id="resultTotal">RM 10,500.00</div>
+                </div>
+              </div>
+
+              <!-- Tenor display -->
+              <div class="result-card">
+                <div class="result-label">Tempoh Pinjaman</div>
+                <div class="result-value" id="resultTenor">12 bulan (1 tahun)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Disclaimer -->
+        <p class="text-xs text-secondary-text dark:text-slate-400 text-center mt-6">
+          Anggaran bayaran adalah berdasarkan jumlah pinjaman, kadar faedah, dan tempoh yang dimasukkan, dan tertakluk kepada syarat yang berkenaan.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== TESTIMONIAL ==================== -->
+  <section id="testimonial" class="section-padding py-20 bg-white dark:bg-slate-900">
+    <div class="container mx-auto px-4 sm:px-6">
+      <div class="text-center mb-16">
+        <span class="inline-block px-4 py-1.5 bg-primary/10 text-primary text-xs font-semibold rounded-full mb-4">TESTIMONI</span>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-dark-text dark:text-white mb-4">Apa Kata Pengguna Kami?</h2>
+        <p class="text-secondary-text dark:text-slate-300 max-w-xl mx-auto">Pengalaman pengguna menjadi sebahagian penting dalam membangunkan perkhidmatan yang lebih baik.</p>
+      </div>
+      <div class="max-w-6xl mx-auto">
+        <div id="testimonialTrack" class="testi-grid">
+        </div>
+        <div id="testimonialDots" class="dot-nav hidden sm:flex"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FAQ ==================== -->
+  <section id="faq" class="section-padding py-20 bg-slate-50 dark:bg-slate-800/30">
+    <div class="container mx-auto px-4 sm:px-6">
+      <div class="text-center mb-16">
+        <span class="inline-block px-4 py-1.5 bg-primary/10 text-primary text-xs font-semibold rounded-full mb-4">SOALAN LAZIM</span>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-dark-text dark:text-white mb-4">Soalan Lazim</h2>
+        <p class="text-secondary-text dark:text-slate-300 max-w-xl mx-auto">Pertanyaan yang sering ditanyakan tentang SMART FUND.</p>
+      </div>
+      <div class="max-w-3xl mx-auto">
         <div id="faqContainer" class="space-y-3">
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Final CTA Section -->
+  <!-- ==================== FINAL CTA ==================== -->
   <section class="section-padding py-20">
     <div class="container mx-auto px-4 sm:px-6">
-      <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl shadow-premium text-center py-12 sm:py-16 px-6 sm:px-8 text-white" data-aos="zoom-in">
-        <h2 class="text-3xl sm:text-4xl font-extrabold mb-4" data-i18n="finalCta.title">Siap Mengelola Kebutuhan Dana Anda?</h2>
-        <p class="text-lg opacity-90 mb-8 max-w-2xl mx-auto" data-i18n="finalCta.desc">Daftar sekarang dan dapatkan pinjaman online dengan proses cepat dan transparan</p>
-        <button id="finalCtaBtn" class="px-8 py-3.5 rounded-xl bg-white text-blue-600 font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-blue-50">
-          <i class="fas fa-rocket mr-2"></i> <span data-i18n="finalCta.btn">Mulai Pengajuan</span>
+      <div class="bg-gradient-to-r from-primary to-deep rounded-3xl shadow-premium text-center py-12 sm:py-16 px-6 sm:px-8 text-white">
+        <h2 class="text-3xl sm:text-4xl font-extrabold mb-4">
+          Butuh Dana untuk Keperluan Anda?
+        </h2>
+        <p class="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
+          Gunakan simulasi kami untuk mengetahui anggaran ansuran sebelum mengajukan.
+        </p>
+        <button id="finalCtaBtn" class="px-8 py-3.5 rounded-xl bg-white text-primary font-semibold text-lg shadow-lg hover:shadow-xl transition flex items-center justify-center">
+          <i class="fas fa-rocket mr-2"></i> Mohon Sekarang
         </button>
       </div>
     </div>
   </section>
 
-  <!-- Footer -->
+  <!-- ==================== FOOTER ==================== -->
   <footer class="bg-slate-900 text-slate-300 pt-12 sm:pt-16">
     <div class="container mx-auto px-4 sm:px-6 pb-8">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
         <div class="space-y-5">
           <a href="/" class="flex items-center gap-2.5">
-            <img src="/assets/img/logo.png" alt="SMART FUND" loading="lazy" width="36" height="36" class="object-contain" />
-            <span class="text-xl font-extrabold text-white">SMART FUND</span>
+            <img src="/assets/img/logo.svg" alt="SMART FUND" loading="lazy" width="40" height="40" class="object-contain" />
+            <span class="text-2xl font-extrabold text-white">SMART FUND</span>
           </a>
-          <p class="text-sm text-slate-400" data-i18n="footer.desc">Platform pinjaman online yang andal untuk solusi keuangan Anda.</p>
+          <p class="text-sm text-slate-400">Platform pinjaman digital yang cekap untuk penyelesaian kewangan anda.</p>
           <div class="flex gap-3">
             <a href="https://wa.me/6289679875858" target="_blank" class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center text-green-500 hover:bg-slate-700 transition" aria-label="WhatsApp">
               <i class="fab fa-whatsapp text-lg"></i>
@@ -566,34 +435,32 @@
           </div>
         </div>
         <div class="space-y-4">
-          <h3 class="text-white font-bold mb-4" data-i18n="footer.company">Perusahaan</h3>
+          <h3 class="text-white font-bold mb-4 text-sm uppercase tracking-wider">Syarikat</h3>
           <ul class="space-y-2 text-sm">
             <li><a href="#" class="hover:text-white transition">Tentang Kami</a></li>
-            <li><a href="#" class="hover:text-white transition">Karir</a></li>
             <li><a href="#" class="hover:text-white transition">Blog</a></li>
-            <li><a href="#" class="hover:text-white transition">Hubungi</a></li>
+            <li><a href="#" class="hover:text-white transition">Hubungi Kami</a></li>
           </ul>
         </div>
         <div class="space-y-4">
-          <h3 class="text-white font-bold mb-4" data-i18n="footer.products">Produk</h3>
+          <h3 class="text-white font-bold mb-4 text-sm uppercase tracking-wider">Ciri-ciri</h3>
           <ul class="space-y-2 text-sm">
-            <li><a href="#" class="hover:text-white transition" data-i18n="products.multiline.title">Pinjaman Multiguna</a></li>
-            <li><a href="#" class="hover:text-white transition" data-i18n="products.business.title">Modal Usaha</a></li>
-            <li><a href="#" class="hover:text-white transition" data-i18n="products.education.title">Pendidikan</a></li>
-            <li><a href="#" class="hover:text-white transition" data-i18n="products.renovation.title">Renovasi Rumah</a></li>
+            <li><a href="#features" class="hover:text-white transition">Faedah Mulai 5%</a></li>
+            <li><a href="#features" class="hover:text-white transition">Proses Cepat</a></li>
+            <li><a href="#features" class="hover:text-white transition">Maklumat Telus</a></li>
+            <li><a href="#features" class="hover:text-white transition">Pengalaman Digital</a></li>
           </ul>
         </div>
         <div class="space-y-4">
-          <h3 class="text-white font-bold mb-4" data-i18n="footer.help">Bantuan</h3>
+          <h3 class="text-white font-bold mb-4 text-sm uppercase tracking-wider">Soalan Lazim</h3>
           <ul class="space-y-2 text-sm">
-            <li><a href="#" class="hover:text-white transition">Pusat Bantuan</a></li>
-            <li><a href="#faq" class="hover:text-white transition" data-i18n="nav.faq">FAQ</a></li>
-            <li><a href="#" class="hover:text-white transition" data-i18n="footer.terms">Syarat & Ketentuan</a></li>
-            <li><a href="#" class="hover:text-white transition" data-i18n="footer.privacy">Kebijakan Privasi</a></li>
+            <li><a href="#faq" class="hover:text-white transition">FAQ</a></li>
+            <li><a href="#" class="hover:text-white transition">Terma dan Syarat</a></li>
+            <li><a href="#" class="hover:text-white transition">Dasar Privasi</a></li>
           </ul>
         </div>
         <div class="space-y-4">
-          <h3 class="text-white font-bold mb-4" data-i18n="footer.contact">Kontak</h3>
+          <h3 class="text-white font-bold mb-4 text-sm uppercase tracking-wider">Hubungi</h3>
           <ul class="space-y-2 text-sm">
             <li class="flex items-start gap-3">
               <i class="fas fa-envelope mt-0.5"></i>
@@ -611,19 +478,17 @@
         </div>
       </div>
       <div class="border-t border-slate-800 pt-6 text-center text-sm text-slate-500">
-        <p>&copy; 2026 SMART FUND. Hak cipta dilindungi. Berlesen &amp; diawasi OJK.</p>
+        <p>&copy; 2026 SMART FUND. Hak cipta dilindungi.</p>
       </div>
     </div>
   </footer>
 
-  <script src="/assets/js/i18n.js"></script>
-  <script src="/assets/js/locale.js"></script>
-  <script src="/assets/js/currency.js"></script>
   <script src="/assets/js/api.js"></script>
+  <script src="/assets/js/currency.js"></script>
+  <script src="/assets/js/i18n.js"></script>
   <script src="/assets/js/main.js"></script>
   <script>
     I18N.init();
-    AOS.init({ once: true, duration: 800, easing: 'ease-out-cubic' });
   </script>
 </body>
 </html>

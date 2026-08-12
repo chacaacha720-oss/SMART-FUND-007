@@ -6,7 +6,7 @@
 const LocaleConfig = {
   locales: {
     ms: { locale: 'ms-MY', currency: 'MYR', symbol: 'RM', label: 'Bahasa Malaysia' },
-    en: { locale: 'en-US', currency: 'USD', symbol: '$', label: 'English' },
+    en: { locale: 'en-MY', currency: 'MYR', symbol: 'RM', label: 'English' },
   },
 
   get(lang) {
