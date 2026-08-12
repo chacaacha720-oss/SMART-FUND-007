@@ -1,17 +1,16 @@
 /* ============================================
    SMART FUND - Locale Manager
-   Manages locale codes: id-ID, en-US, ms-MY
+    Manages locale codes: ms-MY, en-US
    ============================================ */
 
 const LocaleConfig = {
   locales: {
-    id: { locale: 'id-ID', currency: 'IDR', symbol: 'Rp', label: 'Bahasa Indonesia' },
     ms: { locale: 'ms-MY', currency: 'MYR', symbol: 'RM', label: 'Bahasa Malaysia' },
     en: { locale: 'en-US', currency: 'USD', symbol: '$', label: 'English' },
   },
 
   get(lang) {
-    return this.locales[lang] || this.locales.id;
+    return this.locales[lang] || this.locales.ms;
   },
 
   getLocale(lang) {
@@ -31,7 +30,7 @@ const LocaleConfig = {
   },
 
   current() {
-    const lang = (typeof I18N !== 'undefined' && I18N.getLang) ? I18N.getLang() : 'id';
+    const lang = (typeof I18N !== 'undefined' && I18N.getLang) ? I18N.getLang() : 'ms';
     return this.get(lang);
   },
 };

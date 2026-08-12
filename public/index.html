@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="id">
+<html lang="ms">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -96,10 +96,9 @@
         <div class="relative" id="langDropdown">
           <button id="langToggle" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition">
             <i class="fas fa-globe text-xs"></i>
-            <span id="langLabel">ID</span>
+            <span id="langLabel">MS</span>
           </button>
           <div id="langMenu" class="hidden absolute right-0 mt-2 w-40 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 py-1">
-            <button data-lang="id" class="lang-option w-full px-4 py-2 text-left text-sm hover:bg-slate-100 dark:hover:bg-slate-700">🇮🇩 Indonesia</button>
             <button data-lang="ms" class="lang-option w-full px-4 py-2 text-left text-sm hover:bg-slate-100 dark:hover:bg-slate-700">🇲🇾 Bahasa Malaysia</button>
             <button data-lang="en" class="lang-option w-full px-4 py-2 text-left text-sm hover:bg-slate-100 dark:hover:bg-slate-700">🇬🇧 English</button>
           </div>
@@ -414,12 +413,12 @@
             <div class="space-y-3">
               <div class="flex justify-between items-center">
                 <span class="form-label" data-i18n="calc.amount">Jumlah Pinjaman</span>
-                <span class="text-xl font-bold gradient-text">Rp<span id="calcAmountDisplay">50,000,000</span></span>
+                <span class="text-xl font-bold gradient-text" id="calcAmountDisplay">50,000,000</span>
               </div>
               <input type="range" id="calcAmount" min="1000000" max="500000000" value="50000000" step="1000000" class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-full appearance-none" />
               <div class="flex justify-between text-xs text-slate-500 dark:text-slate-400">
-                <span>Rp1.000.000</span>
-                <span>Rp500.000.000</span>
+                <span id="calcMinLabel">Rp1.000.000</span>
+                <span id="calcMaxLabel">Rp500.000.000</span>
               </div>
             </div>
             <!-- Tenor Slider -->
@@ -624,8 +623,6 @@
   <script src="/assets/js/main.js"></script>
   <script>
     I18N.init();
-    I18N.setLang('id');
-    I18N.apply();
     AOS.init({ once: true, duration: 800, easing: 'ease-out-cubic' });
   </script>
 </body>

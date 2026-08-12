@@ -1,12 +1,12 @@
 {
   "nav": {
-    "home": "Beranda",
-    "features": "Keunggulan",
-    "calculator": "Simulasi",
+    "home": "Home",
+    "features": "Features",
+    "calculator": "Calculator",
     "testimoni": "Testimonials",
     "faq": "FAQ",
-    "login": "Masuk",
-    "register": "Daftar",
+    "login": "Login",
+    "register": "Register",
     "products": "Products",
     "timeline": "How It Works",
     "trust": "Trust",
@@ -42,32 +42,32 @@
     "secondaryBtn": "Learn More"
   },
   "features": {
-    "label": "KEUNGGULAN",
-    "title": "Mengapa SMART FUND?",
-    "desc": "Kami menyajikan solusi pinjaman terbaik dengan berbagai keunggulan yang menguntungkan bagi Anda",
+    "label": "FEATURES",
+    "title": "Why Choose SMART FUND?",
+    "desc": "We provide the best loan solutions with various advantages that benefit you",
     "f1": {
-      "title": "Proses Pengajuan Mudah",
-      "desc": "Isi formulir online dalam hitungan menit dengan panduan langkah demi langkah."
+      "title": "Easy Application Process",
+      "desc": "Fill in the online form in minutes with step-by-step guidance."
     },
     "f2": {
-      "title": "Proses Cepat",
-      "desc": "Pengajuan Anda diproses dengan cepat, dan keputusan bisa diketahui segerala untuk keperluan mendesak."
+      "title": "Fast Process",
+      "desc": "Your application is processed quickly, and the decision can be known promptly for urgent needs."
     },
     "f3": {
-      "title": "Persyaratan Sederhana",
-      "desc": "Dokumen yang dibutuhkan minimal, mudah dipahami, dan dapat diupload secara digital."
+      "title": "Simple Requirements",
+      "desc": "Minimal required documents, easy to understand, and can be uploaded digitally."
     },
     "f4": {
-      "title": "Informasi Transparan",
-      "desc": "Tidak ada biaya tersembunyi. Semua informasi biaya kami menjelaskan sebelum Anda menandatangani."
+      "title": "Transparent Information",
+      "desc": "No hidden fees. All fee information is explained before you sign."
     },
     "f5": {
-      "title": "Sistem Aman",
-      "desc": "Kami menggunakan teknologi enkripsi tingkat tinggi untuk melindungi data dan transaksi Anda."
+      "title": "Secure System",
+      "desc": "We use high-level encryption technology to protect your data and transactions."
     },
     "f6": {
-      "title": "Pengelolaan Terintegrasi",
-      "desc": "Kelola pinjaman, cicilan, dan penarikan dana dengan nyaman melalui satu dashboard."
+      "title": "Integrated Management",
+      "desc": "Manage loans, installments, and withdrawals conveniently through one dashboard."
     }
   },
   "calc": {
@@ -116,7 +116,7 @@
     "q2": "How long does the loan approval process take?",
     "a2": "Verification and approval typically take 1-24 business hours after complete documents are received. Funds are disbursed within 1x24 hours after approval.",
     "q3": "What are the requirements to apply for a loan?",
-    "a3": "Main requirements: Indonesian citizen aged 21-55, valid KTP and NPWP, active bank account, steady income, and reachable phone number.",
+    "a3": "Main requirements: citizen aged 21-55, valid ID and NPWP, active bank account, steady income, and reachable phone number.",
     "q4": "How can I contact customer service?",
     "a4": "You can contact our CS via WhatsApp at +62896-7987-5858 or Telegram @cs_smartfund. Available Monday-Saturday 08:00-17:00 WIB.",
     "q5": "Are there any hidden fees or upfront administrative fees?",
@@ -152,6 +152,7 @@
     "forgot": "Forgot Password?",
     "btn": "Login",
     "noAccount": "Don't have an account?",
+    "or": "— or —",
     "register": "Register Now",
     "back": "Back to Home",
     "f1": "Interest from 5% per year",
@@ -180,6 +181,7 @@
     "f1": "Fast registration process",
     "f2": "Auto login after registration",
     "f3": "Full dashboard access",
+    "adminCode": "Admin Code",
     "csCode": "CS Code",
     "csCodeHint": "Enter your CS registration code"
   },
@@ -249,8 +251,24 @@
     "noApplications": "No applications yet",
     "noUsers": "No users",
     "noTransactions": "No transactions yet",
+    "choosePurpose": "Choose purpose",
+    "monthShort": "mo",
+    "name": "Name",
+    "email": "Email",
+    "amountShort": "Amount",
+    "installment": "Installment",
+    "date": "Date",
+    "availableBalance": "The currently available balance will be used as the withdrawal amount.",
+    "transactionType": "Type",
+    "user": "User",
+    "details": "Details",
+    "borrowerData": "Borrower Data",
+    "loanDetails": "Loan Details",
+    "rejected": "Rejected",
+    "defaultNote": "Note for this application...",
     "syncedAt": "Last synced:",
-    "dataUpdated": "Data has been updated"
+    "dataUpdated": "Data has been updated",
+    "summary": "Account summary and loan activity"
   },
   "admin": {
     "login": "Admin Login",
@@ -294,7 +312,38 @@
     "csName": "CS Name",
     "noCsCode": "You do not have a CS code",
     "csCodeLabel": "CS Code",
-    "csCodeHint": "Enter your CS registration code"
+    "csCodeHint": "Enter your CS registration code",
+    "noApplications": "No applications yet",
+    "noTransactions": "No transactions yet",
+    "noUsers": "No users",
+    "noDataChanged": "No data to update",
+    "telegramTestFailed": "Failed to send test telegram. Check bot configuration.",
+    "csManagement": "Manage CS Codes",
+    "csList": "CS Code List",
+    "csCreated": "CS code created successfully",
+    "csUpdated": "CS code updated successfully",
+    "csDeleted": "CS code deleted successfully",
+    "csNotFound": "CS code not found",
+    "csStatus": "CS Status",
+    "csActive": "Active",
+    "csInactive": "Inactive",
+    "csCreate": "Create CS Code",
+    "superAdminOnly": "Only Super Admin can do this",
+    "adminCode": "Admin Code",
+    "adminName": "Admin Name",
+    "adminCodeLabel": "Admin Code",
+    "withdrawalManagement": "Withdrawal Management",
+    "withdrawSearch": "Search ID, name, email...",
+    "withdrawFilter": "All Status",
+    "withdrawId": "Withdrawal ID",
+    "withdrawName": "Name",
+    "withdrawEmail": "Email",
+    "withdrawBank": "Bank",
+    "withdrawAmount": "Amount",
+    "withdrawStatus": "Status",
+    "withdrawDate": "Date",
+    "withdrawActions": "Actions",
+    "withdrawEmpty": "No withdrawals yet"
   },
   "status": {
     "pending": "Pending",
@@ -305,6 +354,13 @@
     "active": "Active",
     "frozen": "Frozen"
   },
+  "cs": {
+    "title": "CS Code",
+    "myCode": "Your CS Code",
+    "placeholder": "Enter CS code",
+    "copySuccess": "CS code copied successfully",
+    "noCsCode": "You do not have a CS code"
+  },
   "val": {
     "required": "is required",
     "nameMin": "Name must be at least 3 characters",
@@ -314,11 +370,11 @@
     "passwordMix": "Password must contain letters & numbers",
     "passwordMatch": "Password confirmation does not match",
     "agreeTerms": "You must agree to the Terms & Conditions",
-    "amountRange": "Loan amount $1,000 - $500,000",
+    "amountRange": "Loan amount $1,000,000 - $500,000,000",
     "tenorRange": "Tenor 6 - 60 months",
     "purposeRequired": "Loan purpose is required",
     "otpRequired": "OTP must be 6 digits",
-    "minWithdraw": "Minimum withdrawal amount $100",
+    "minWithdraw": "Minimum withdrawal amount $100,000",
     "withdrawRequired": "All bank account data is required",
     "csCodeRequired": "CS code is required",
     "csCodeInvalid": "Invalid CS code format"
@@ -347,13 +403,25 @@
     "verifyWithdrawTitle": "Verify Withdrawal Immediately",
     "verifyWithdrawDesc": "Your withdrawal has been sent. Please contact admin to get the withdrawal code.",
     "chatTelegram": "💬 Chat Admin via Telegram",
-    "chatWhatsapp": "WhatsApp Admin",
+    "chatWhatsapp": "📱 Chat Admin via WhatsApp",
     "chatMessage": "Hello Admin, I just submitted a withdrawal. Please help verify to continue my withdrawal.",
-    "whatsappMessage": "Verification / KYC is not active, please verify\n\nTo continue withdrawal"
+    "whatsappMessage": "Verification / KYC is not active, please verify\n\nTo continue withdrawal",
+    "loanSuccess": "Application Successful",
+    "loanSuccessText": "Your loan application has been successfully submitted.",
+    "loanCurrentStatus": "Current status:",
+    "loanStatusWaiting": "Waiting for Admin Approval.",
+    "loanSpeedUp": "To speed up the verification process, please contact Admin through any of the following channels.",
+    "loanContactAdmin": "Contact Admin",
+    "loanTelegramBtn": "Chat Admin via Telegram",
+    "loanWhatsappBtn": "Chat Admin via WhatsApp",
+    "loanChatMessage": "Hello Admin, I just submitted a loan application. Please help verify so my loan application can be processed immediately.",
+    "loanWhatsappMsg": "Verification / KYC is not active, please verify\n\nTo continue loan application",
+    "loanSubmitted": "Application has been submitted. Admin will receive notification soon.",
+    "userSaved": "User updated successfully",
+    "userDeleted": "User deleted successfully"
   },
   "lang": {
     "label": "Language",
-    "id": "Indonesia",
     "ms": "Bahasa Malaysia",
     "en": "English"
   },
@@ -388,24 +456,24 @@
   },
   "timeline": {
     "step1": {
-      "title": "Daftar Akun",
-      "desc": "Buat akun SMART FUND gratis dalam hitungan menit."
+      "title": "Create Account",
+      "desc": "Create a SMART FUND account for free in seconds."
     },
     "step2": {
-      "title": "Ajukan Pinjaman",
-      "desc": "Isi formulir pinjaman dengan data yang diminta."
+      "title": "Apply for Loan",
+      "desc": "Fill in the loan form with the required data."
     },
     "step3": {
-      "title": "Verifikasi Data",
-      "desc": "Tim kami memverifikasi data dan dokumen Anda."
+      "title": "Data Verification",
+      "desc": "Our team verifies your data and documents."
     },
     "step4": {
-      "title": "Persetujuan",
-      "desc": "Dapatkan keputusan pinjaman dalam waktu singkat."
+      "title": "Approval",
+      "desc": "Get your loan decision quickly."
     },
     "step5": {
-      "title": "Dana Diproses",
-      "desc": "Dana langsung dicairkan ke rekening Anda."
+      "title": "Funds Processed",
+      "desc": "Funds are disbursed directly to your account."
     }
   },
   "trust": {
@@ -435,8 +503,7 @@
     "btn": "Start Application"
   },
   "langSelector": {
-    "label": "Bahasa",
-    "id": "Indonesia",
+    "label": "Language",
     "ms": "Bahasa Malaysia",
     "en": "English"
   },

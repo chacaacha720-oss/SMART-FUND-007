@@ -103,7 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function formatNumber(num) {
-    return new Intl.NumberFormat('id-ID').format(Math.round(num));
+    const cfg = (typeof Currency !== 'undefined' && Currency.config) ? Currency.config() : { locale: 'ms-MY' };
+    return new Intl.NumberFormat(cfg.locale).format(Math.round(num));
   }
 
   function updateCalculator() {
@@ -120,12 +121,12 @@ document.addEventListener('DOMContentLoaded', () => {
       return updateCalculator();
     }
 
-    amountDisplay.textContent = formatNumber(amount);
+    amountDisplay.textContent = Currency.format(amount);
     document.getElementById('calcTenorDisplay').textContent = tenor;
 
     const calc = calculateLoan(amount, tenor, 5);
-    monthlyPaymentEl.textContent = 'Rp' + formatNumber(calc.monthly);
-    totalPaymentEl.textContent = 'Rp' + formatNumber(calc.total);
+    monthlyPaymentEl.textContent = Currency.format(calc.monthly);
+    totalPaymentEl.textContent = Currency.format(calc.total);
   }
 
   if (loanAmount) {
@@ -217,19 +218,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const testimoniTrack = document.getElementById('testimoniTrack');
   const testimoniDots = document.getElementById('testimoniDots');
 
-  const allTestimoni = [
-    { name: 'Budi Santoso', role: 'Pengusaha, Jakarta', rating: 5, text: 'Prosesnya cepat dan mudah. Saya berhasil mendapatkan modal usaha dalam waktu singkat. Terima kasih SMART FUND!' },
-    { name: 'Siti Rahayu', role: 'Ibu Rumah Tangga, Bandung', rating: 5, text: 'Bunganya ringan dan transparan. Tidak ada biaya tersembunyi. Sangat membantu untuk renovasi rumah saya.' },
-    { name: 'Ahmad Fauzi', role: 'Karyawan, Surabaya', rating: 5, text: 'Platform pinjaman online yang dapat dipercaya. Berlisensi OJK jadi lebih nyaman. Proses verifikasi cepat dan praktis.' },
-    { name: 'Dewi Lestari', role: 'Mahasiswi, Universitas Indonesia', rating: 5, text: 'Dana pendidikan saya diterima tepat waktu. Prosesnya sangat membantu untuk kelancaran kuliah saya.' },
-    { name: 'Rizky Pratama', role: 'Freelancer, Bali', rating: 5, text: 'Saya butuh modal mendadak untuk proyek klien. SMART FUND diterima dalam 1 hari kerja. Hebat!' },
-    { name: 'Linda Kusuma', role: 'Dokter, Medan', rating: 5, text: 'Pelayanan customer service-nya ramah dan responsif. Cicilan terasa ringan sesuai kemampuan saya.' },
-    { name: 'Hendra Wijaya', role: 'Petani, Yogyakarta', rating: 5, text: 'Modal usaha pertanian saya menjadi lancar. Bunganya sangat kompetitif dibandingkan tempat lain.' },
-    { name: 'Maya Anggraini', role: 'Ibu Rumah Tangga, Semarang', rating: 5, text: 'Untuk kebutuhan biaya melahirkan, SMART FUND benar-benar membantu. Prosesnya cepat dan aman.' },
-    { name: 'Andi Setiawan', role: 'Pegawai Negeri, Aceh', rating: 5, text: 'Renovasi rumah saya berjalan lancar dengan bantuan pinjaman dari SMART FUND. Sangat recommended!' },
-    { name: 'Fitri Handayani', role: 'Wiraswasta, Makassar', rating: 5, text: 'Tidak ada biaya tersembunyi, semua transparan. Admin verifikasi sangat cepat dan profesional.' },
-    { name: 'Joko Susilo', role: 'Mekanik, Malang', rating: 5, text: 'Buka usaha bengkel jadi lebih mudah. Pinjaman diterima tanpa ribet dan syarat yang mudah.' },
-    { name: 'Ratna Sari', role: 'Guru, Palembang', rating: 5, text: 'Saya sangat terbantu untuk biaya pendidikan anak. SMART FUND dapat diandalkan dan dapat dipercaya.' },
+  const allTestimoni = (typeof I18N !== 'undefined' && I18N.getTestimonials) ? I18N.getTestimonials() : [
+    { name: '', role: '', rating: 5, text: '' },
   ];
 
   function shuffleArray(arr) {

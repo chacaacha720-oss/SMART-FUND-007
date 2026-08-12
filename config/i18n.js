@@ -1,11 +1,11 @@
 ﻿/**
  * SMART FUND - Backend Internationalization (i18n)
- * Supports: Indonesia (id), Malaysia (ms), English (en)
+ * Supports: Malaysia (ms), English (en)
  *
  * Each language has its own:
- * - Locale code (id-ID, ms-MY, en-US)
- * - Currency code (IDR, MYR, USD)
- * - Currency symbol (Rp, RM, $)
+ * - Locale code (ms-MY, en-US)
+ * - Currency code (MYR, USD)
+ * - Currency symbol (RM, $)
  * - Number format (1.000 vs 1,000)
  * - Date format (31 Desember 2026 vs December 31, 2026)
  * - Financial terminology
@@ -18,12 +18,6 @@
 // LOCALE CONFIGURATION
 // ============================================
 const LOCALE_CONFIG = {
-  id: {
-    locale: 'id-ID',
-    currency: 'IDR',
-    symbol: 'Rp',
-    label: 'Bahasa Indonesia',
-  },
   ms: {
     locale: 'ms-MY',
     currency: 'MYR',
@@ -42,230 +36,6 @@ const LOCALE_CONFIG = {
 // TRANSLATIONS
 // ============================================
 const MESSAGES = {
-  id: {
-    // ===== AUTH =====
-    'auth.tokenNotFound': 'Token tidak ditemukan. Silakan login.',
-    'auth.notUser': 'Akses ditolak. Bukan akun user.',
-    'auth.userNotFound': 'User tidak ditemukan.',
-    'auth.accountFrozen': 'Akun Anda dibekukan. Hubungi admin.',
-    'auth.tokenInvalid': 'Token tidak valid atau kadaluarsa.',
-    'auth.adminTokenNotFound': 'Token admin tidak ditemukan.',
-    'auth.notAdmin': 'Akses ditolak. Bukan admin.',
-    'auth.adminNotFound': 'Admin tidak ditemukan.',
-    'auth.adminInactive': 'Akun admin nonaktif.',
-    'auth.adminTokenInvalid': 'Token admin tidak valid atau kadaluarsa.',
-
-    // ===== Auth Controller =====
-    'auth.emailExists': 'Email sudah terdaftar',
-    'auth.registerSuccess': 'Registrasi berhasil. Anda otomatis login.',
-    'auth.welcomeNotif': 'Selamat Datang di SMART FUND!',
-    'auth.welcomeMsg': (name) => `Halo ${name}, akun Anda berhasil dibuat. Nikmati berbagai kemudahan pinjaman online bersama kami.`,
-    'auth.loginSuccess': 'Login berhasil',
-    'auth.loginFailed': 'Email/Nomor HP atau password salah',
-    'auth.accountFrozenLogin': 'Akun Anda dibekukan. Hubungi admin.',
-    'auth.identifierRequired': 'Email atau nomor HP wajib diisi',
-    'auth.accountNotFound': 'Akun tidak ditemukan',
-    'auth.otpSent': 'OTP telah dikirim ke email & SMS Anda',
-    'auth.emailOtpRequired': 'Email dan OTP wajib diisi',
-    'auth.otpInvalid': 'OTP tidak valid atau kadaluarsa',
-    'auth.otpValid': 'OTP valid',
-    'auth.tokenPasswordRequired': 'Token dan password baru wajib diisi',
-    'auth.passwordMin': 'Password minimal 6 karakter',
-    'auth.resetTokenInvalid': 'Token tidak valid atau kadaluarsa',
-    'auth.passwordChanged': 'Password berhasil diubah. Silakan login.',
-    'auth.userNotFound404': 'User tidak ditemukan',
-    'auth.adminCodeInvalid': 'Kode admin tidak valid',
-    'auth.adminCodeNotFound': 'Kode admin tidak ditemukan',
-    'auth.adminInactive': 'Akun admin nonaktif.',
-    'auth.csCodeInvalid': 'Kode CS tidak valid. Format: CS01',
-    'auth.csCodeNotFound': 'Kode CS tidak ditemukan',
-    'auth.csInactive': 'Akun CS tidak aktif',
-
-    // ===== Admin Auth =====
-    'admin.userPassRequired': 'Username dan password wajib diisi',
-    'admin.loginFailed': 'Username atau password salah',
-    'admin.inactive': 'Akun admin nonaktif',
-    'admin.loginSuccess': 'Login admin berhasil',
-
-    // ===== Loan Controller =====
-    'loan.amountRange': 'Jumlah pinjaman harus Rp1.000.000 - Rp500.000.000',
-    'loan.tenorRange': 'Tenor harus 6 - 60 bulan',
-    'loan.purposeRequired': 'Tujuan pinjaman wajib diisi',
-    'loan.userNotFound': 'User tidak ditemukan',
-    'loan.accountFrozen': 'Akun dibekukan. Tidak dapat mengajukan pinjaman.',
-    'loan.exceedLimit': (limit) => `Jumlah melebihi limit pinjaman Anda (Rp${Number(limit).toLocaleString('id-ID')})`,
-    'loan.hasActiveLoan': 'Anda masih memiliki pinjaman aktif. Selesaikan terlebih dahulu.',
-    'loan.applySuccess': 'Pengajuan berhasil dikirim. Status: Menunggu Persetujuan.',
-    'loan.notFound': 'Pinjaman tidak ditemukan',
-    'loan.notifTitle': 'Pengajuan Pinjaman Diterima',
-    'loan.notifMsg': (id, amount) => `Pengajuan pinjaman #${id} sebesar Rp${Number(amount).toLocaleString('id-ID')} telah diterima dan sedang menunggu persetujuan admin.`,
-
-    // ===== User Controller =====
-    'user.notFound': 'User tidak ditemukan',
-    'user.minWithdraw': 'Nominal penarikan minimal Rp 100.000',
-    'user.withdrawDataRequired': 'Semua data rekening tujuan wajib diisi',
-    'user.notActiveWithdraw': 'Akun Anda belum aktif untuk melakukan penarikan',
-    'user.exceedBalance': 'Nominal penarikan melebihi saldo yang tersedia',
-    'user.withdrawSuccess': 'Permintaan penarikan berhasil dikirim. Silakan lakukan verifikasi KYC melalui admin.',
-    'user.withdrawNotifTitle': 'Permintaan Penarikan Diterima',
-    'user.withdrawNotifMsg': (amount) => `Permintaan penarikan sebesar Rp${Number(amount).toLocaleString('id-ID')} sedang menunggu verifikasi admin.`,
-    'user.withdrawDesc': (bank) => `Permintaan penarikan ke ${bank}`,
-    'user.notifRead': 'Notifikasi dibaca',
-    'user.noDataChanged': 'Tidak ada data yang diubah',
-    'user.profileUpdated': 'Profil berhasil diperbarui',
-    'user.passwordRequired': 'Password lama dan baru wajib diisi',
-    'user.newPasswordMin': 'Password baru minimal 6 karakter',
-    'user.oldPasswordWrong': 'Password lama salah',
-    'user.passwordChanged': 'Password berhasil diubah',
-    'user.fileNotFound': 'File tidak ditemukan',
-    'user.docUploaded': 'Dokumen berhasil diupload',
-
-    // ===== Withdrawal Controller =====
-    'withdraw.allFieldsRequired': 'Semua field wajib diisi',
-    'withdraw.invalidAmount': 'Jumlah penarikan harus berupa angka positif',
-    'withdraw.minAmount': (amount) => `Jumlah penarikan minimum adalah Rp${Number(amount).toLocaleString('id-ID')}`,
-    'withdraw.invalidAccount': 'Nomor rekening hanya boleh mengandung angka',
-    'withdraw.insufficientBalance': 'Saldo tidak mencukupi untuk penarikan',
-    'withdraw.notFound': 'Penarikan tidak ditemukan',
-    'withdraw.invalidStatus': 'Status tidak valid',
-    'withdraw.success': 'Penarikan berhasil diajukan',
-    'withdraw.statusUpdated': 'Status penarikan berhasil diperbarui',
-    'withdraw.processed': 'Diproses',
-    'withdraw.processedMsg': (id) => `Penarikan ${id} sedang diproses`,
-    'withdraw.successMsg': (id) => `Penarikan ${id} berhasil diproses`,
-    'withdraw.rejected': 'Ditolak',
-    'withdraw.rejectedMsg': (id, note) => `Penarikan ${id} ditolak. ${note || ''}`,
-    'withdraw.pending': 'Menunggu Verifikasi',
-    'withdraw.pendingMsg': (id) => `Penarikan ${id} menunggu verifikasi`,
-    'withdraw.notifTitle': 'Penarikan Diajukan',
-    'withdraw.notifMsg': (id) => `Penarikan ${id} sedang menunggu verifikasi`,
-
-    // ===== Admin Controller =====
-    'admin.statusInvalid': 'Status tidak valid',
-    'admin.noDataChanged': 'Tidak ada data diubah',
-    'admin.userUpdated': 'User berhasil diperbarui',
-    'admin.balanceNotifTitle': 'Saldo Diperbarui',
-    'admin.balanceNotifMsg': (balance) => `Saldo Anda telah diperbarui oleh admin menjadi Rp${Number(balance).toLocaleString('id-ID')}`,
-    'admin.userStatusNotifTitle': 'Status Akun',
-    'admin.userStatusNotifMsg': (label) => `Akun Anda telah ${label} oleh admin.`,
-    'admin.frozen': 'dibekukan',
-    'admin.activated': 'diaktifkan',
-    'admin.changed': 'diubah',
-    'admin.userStatusSuccess': (label) => `User berhasil ${label}`,
-    'admin.userDeleted': 'User berhasil dihapus',
-    'admin.appNotFound': 'Pengajuan tidak ditemukan',
-    'admin.appUpdated': 'Pengajuan berhasil diperbarui',
-    'admin.appStatusSuccess': (status) => `Status pengajuan: ${status}`,
-    'admin.approvedNotifTitle': 'Pinjaman Disetujui',
-    'admin.approvedNotifMsg': (id) => `Pengajuan pinjaman #${id} Anda telah disetujui. Dana akan segera dicairkan.`,
-    'admin.rejectedNotifTitle': 'Pinjaman Ditolak',
-    'admin.rejectedNotifMsg': (id, reason) => `Pengajuan pinjaman #${id} ditolak. Alasan: ${reason}`,
-    'admin.defaultRejectReason': 'Tidak memenuhi kriteria',
-    'admin.disbursedNotifTitle': 'Dana Cair',
-    'admin.disbursedNotifMsg': (id, amount) => `Pinjaman #${id} sebesar Rp${Number(amount).toLocaleString('id-ID')} telah dicairkan ke saldo Anda.`,
-    'admin.disbursementDesc': 'Pencairan pinjaman',
-    'admin.completedNotifTitle': 'Pinjaman Lunas',
-    'admin.completedNotifMsg': (id) => `Pinjaman #${id} telah lunas. Terima kasih.`,
-    'admin.txNotFound': 'Transaksi tidak ditemukan',
-    'admin.txStatusSuccess': (status) => `Status transaksi: ${status}`,
-    'admin.txStatusNotifTitle': 'Status Transaksi',
-    'admin.txStatusNotifMsg': (id, type, status) => `Transaksi #${id} (${type}) status: ${status}.`,
-    'admin.settingsSaved': 'Pengaturan berhasil disimpan',
-    'admin.telegramTestSuccess': 'Test telegram berhasil dikirim',
-    'admin.telegramTestFailed': 'Gagal mengirim test telegram. Periksa konfigurasi bot.',
-
-    // ===== Validation =====
-    'val.nameRequired': 'Nama lengkap wajib diisi',
-    'val.nameMin': 'Nama lengkap minimal 3 karakter',
-    'val.emailInvalid': 'Email tidak valid',
-    'val.phoneInvalid': 'Nomor HP tidak valid',
-    'val.passwordWeak': 'Password minimal 6 karakter, mengandung huruf & angka',
-    'val.passwordMatch': 'Konfirmasi password tidak cocok',
-    'val.identifierRequired': 'Email/Nomor HP wajib diisi',
-    'val.passwordRequired': 'Password wajib diisi',
-    'val.amountRange': 'Jumlah pinjaman harus Rp1.000.000 - Rp500.000.000',
-    'val.tenorRange': 'Tenor harus 6 - 60 bulan',
-    'val.purposeRequired': 'Tujuan pinjaman wajib diisi',
-    'val.adminCodeRequired': 'Kode admin wajib diisi',
-    'val.adminCodeInvalid': 'Format kode admin tidak valid',
-    'val.csCodeInvalid': 'Format kode CS tidak valid',
-
-    // ===== Admin Code =====
-    'admin.noAdminCode': 'Anda belum terdaftar dengan kode admin. Hubungi admin untuk mendapatkan kode pendaftaran.',
-    'admin.codeNotFound': 'Kode admin tidak ditemukan',
-
-    // ===== Error Handler =====
-    'error.notFound': 'Endpoint tidak ditemukan',
-    'error.fileSize': 'Ukuran file maksimal 5MB',
-    'error.fileImage': 'Hanya file gambar (JPG/PNG) yang diperbolehkan',
-    'error.server': 'Terjadi kesalahan server',
-    'error.tooManyRequests': 'Terlalu banyak request. Coba lagi nanti.',
-    'error.invalidJson': 'Format JSON tidak valid',
-
-    // ===== Health =====
-    'health.running': 'SMART FUND API berjalan',
-
-    // ===== Telegram =====
-    'telegram.newLoanTitle': 'PENGAJUAN PINJAMAN BARU',
-    'telegram.borrowerData': 'Data Peminjam',
-    'telegram.name': 'Nama',
-    'telegram.phone': 'No. HP',
-    'telegram.email': 'Email',
-    'telegram.adminData': 'Data Admin',
-    'telegram.adminCode': 'Kode Admin',
-    'telegram.adminName': 'Nama Admin',
-    'telegram.loanDetail': 'Detail Pinjaman',
-    'telegram.amount': 'Jumlah',
-    'telegram.tenor': 'Tenor',
-    'telegram.month': 'bulan',
-    'telegram.purpose': 'Tujuan',
-    'telegram.calculation': 'Perhitungan',
-    'telegram.monthly': 'Cicilan/Bulan',
-    'telegram.totalInterest': 'Total Bunga',
-    'telegram.totalPayment': 'Total Bayar',
-    'telegram.time': 'Waktu',
-    'telegram.verifyPrompt': 'Segera verifikasi dan proses pengajuan ini melalui dashboard admin.',
-    'telegram.viewDashboard': '📊 Lihat Dashboard Admin',
-    'telegram.chatUser': '💬 Chat User',
-    'telegram.welcomeChat': (name) => `Halo ${name}, terima kasih telah mengajukan pinjaman di SMART FUND. Ada yang bisa kami bantu?`,
-    'telegram.testMessage': '✅ <b>Test Notifikasi SMART FUND</b>\n\nNotifikasi Telegram berfungsi dengan baik.',
-    'telegram.newWithdrawalTitle': 'PENARIKAN BARU',
-
-    // ===== CS Code =====
-    'cs.title': 'Kode CS',
-    'cs.myCode': 'Kode CS Anda',
-    'cs.placeholder': 'Masukkan kode CS',
-    'cs.copySuccess': 'Berhasil menyalin kode CS',
-    'cs.noCsCode': 'Anda belum memiliki kode CS',
-    'telegram.csData': 'Data CS',
-    'telegram.csCode': 'Kode CS',
-    'telegram.csName': 'Nama CS',
-
-    // ===== Admin CS =====
-    'admin.csManagement': 'Kelola Kode CS',
-    'admin.csList': 'Daftar Kode CS',
-    'admin.csCode': 'Kode CS',
-    'admin.csName': 'Nama CS',
-    'admin.csStatus': 'Status CS',
-    'admin.csCreate': 'Buat Kode CS',
-    'admin.csCreated': 'Kode CS berhasil dibuat',
-    'admin.csUpdated': 'Kode CS berhasil diperbarui',
-    'admin.csDeleted': 'Kode CS berhasil dihapus',
-    'admin.csNotFound': 'Kode CS tidak ditemukan',
-    'admin.csActive': 'Aktif',
-    'admin.csInactive': 'Tidak Aktif',
-    'admin.superAdminOnly': 'Hanya Super Admin yang dapat melakukan ini',
-
-    // ===== Status Labels =====
-    'status.pending': 'Menunggu',
-    'status.approved': 'Disetujui',
-    'status.disbursed': 'Dana Cair',
-    'status.rejected': 'Ditolak',
-    'status.completed': 'Lunas',
-    'status.active': 'Aktif',
-    'status.frozen': 'Dibekukan',
-  },
-
   ms: {
     // ===== Auth =====
     'auth.tokenNotFound': 'Token tidak dijumpai. Sila log masuk.',
@@ -312,27 +82,27 @@ const MESSAGES = {
     'admin.loginSuccess': 'Log masuk admin berjaya',
 
     // ===== Loan Controller =====
-    'loan.amountRange': 'Jumlah pinjaman harus Rp1.000.000 - Rp500.000.000',
+    'loan.amountRange': 'Jumlah pinjaman harus RM1,000,000 - RM500,000,000',
     'loan.tenorRange': 'Jangka waktu harus 6 - 60 bulan',
     'loan.purposeRequired': 'Tujuan pinjaman diperlukan',
     'loan.userNotFound': 'Pengguna tidak dijumpai',
     'loan.accountFrozen': 'Akun dibekukan. Tidak boleh memohon pinjaman.',
-    'loan.exceedLimit': (limit) => `Jumlah melebihi had pinjaman anda (Rp${Number(limit).toLocaleString('id-ID')})`,
+    'loan.exceedLimit': (limit) => `Jumlah melebihi had pinjaman anda (RM${Number(limit).toLocaleString('ms-MY')})`,
     'loan.hasActiveLoan': 'Anda masih mempunyai pinjaman aktif. Selesaikan dahulu.',
     'loan.applySuccess': 'Permohonan berjaya dikirim. Status: Menunggu Kelulusan.',
     'loan.notFound': 'Pinjaman tidak dijumpai',
     'loan.notifTitle': 'Permohonan Pinjaman Diterima',
-    'loan.notifMsg': (id, amount) => `Permohonan pinjaman #${id} sebanyak Rp${Number(amount).toLocaleString('id-ID')} telah diterima dan sedang menunggu kelulusan admin.`,
+    'loan.notifMsg': (id, amount) => `Permohonan pinjaman #${id} sebanyak RM${Number(amount).toLocaleString('ms-MY')} telah diterima dan sedang menunggu kelulusan admin.`,
 
     // ===== User Controller =====
     'user.notFound': 'Pengguna tidak dijumpai',
-    'user.minWithdraw': 'Jumlah pengeluaran minimum adalah Rp100.000',
+    'user.minWithdraw': 'Jumlah pengeluaran minimum adalah RM100,000',
     'user.withdrawDataRequired': 'Semua data akun bank wajib diisi',
     'user.notActiveWithdraw': 'Akun Anda belum aktif untuk melakukan pengeluaran',
     'user.exceedBalance': 'Jumlah pengeluaran melebihi saldo tersedia',
     'user.withdrawSuccess': 'Permintaan pengeluaran berhasil dikirim. Silakan melakukan verifikasi KYC melalui admin.',
     'user.withdrawNotifTitle': 'Permintaan Pengeluaran Diterima',
-    'user.withdrawNotifMsg': (amount) => `Permintaan pengeluaran sebanyak Rp${Number(amount).toLocaleString('id-ID')} sedang menunggu verifikasi admin.`,
+    'user.withdrawNotifMsg': (amount) => `Permintaan pengeluaran sebanyak RM${Number(amount).toLocaleString('ms-MY')} sedang menunggu verifikasi admin.`,
     'user.withdrawDesc': (bank) => `Permintaan pengeluaran ke ${bank}`,
     'user.notifRead': 'Notifikasi dibaca',
     'user.noDataChanged': 'Tiada data diubah',
@@ -347,7 +117,7 @@ const MESSAGES = {
     // ===== Withdrawal Controller =====
     'withdraw.allFieldsRequired': 'Semua medan wajib diisi',
     'withdraw.invalidAmount': 'Jumlah pengeluaran harus nombor positif',
-    'withdraw.minAmount': (amount) => `Jumlah pengeluaran minimum ialah Rp${Number(amount).toLocaleString('id-ID')}`,
+    'withdraw.minAmount': (amount) => `Jumlah pengeluaran minimum ialah RM${Number(amount).toLocaleString('ms-MY')}`,
     'withdraw.invalidAccount': 'Nombor akun hanya boleh mengandungi angka',
     'withdraw.insufficientBalance': 'Baki tidak mencukupi untuk pengeluaran',
     'withdraw.notFound': 'Pengeluaran tidak dijumpai',
@@ -369,7 +139,7 @@ const MESSAGES = {
     'admin.noDataChanged': 'Tiada data diubah',
     'admin.userUpdated': 'Pengguna berjaya diperbarui',
     'admin.balanceNotifTitle': 'Baki Diperbarui',
-    'admin.balanceNotifMsg': (balance) => `Baki anda telah diperbarui oleh admin kepada Rp${Number(balance).toLocaleString('id-ID')}`,
+    'admin.balanceNotifMsg': (balance) => `Baki anda telah diperbarui oleh admin kepada RM${Number(balance).toLocaleString('ms-MY')}`,
     'admin.userStatusNotifTitle': 'Status Akun',
     'admin.userStatusNotifMsg': (label) => `Akun anda telah ${label} oleh admin.`,
     'admin.frozen': 'dibekukan',
@@ -386,7 +156,7 @@ const MESSAGES = {
     'admin.rejectedNotifMsg': (id, reason) => `Permohonan pinjaman #${id} ditolak. Sebab: ${reason}`,
     'admin.defaultRejectReason': 'Tidak memenuhi kriteria',
     'admin.disbursedNotifTitle': 'Dana Dicairkan',
-    'admin.disbursedNotifMsg': (id, amount) => `Pinjaman #${id} sebanyak Rp${Number(amount).toLocaleString('id-ID')} telah dicairkan ke baki anda.`,
+    'admin.disbursedNotifMsg': (id, amount) => `Pinjaman #${id} sebanyak RM${Number(amount).toLocaleString('ms-MY')} telah dicairkan ke baki anda.`,
     'admin.disbursementDesc': 'Pencairan pinjaman',
     'admin.completedNotifTitle': 'Pinjaman Lunas',
     'admin.completedNotifMsg': (id) => `Pinjaman #${id} telah lunas. Terima kasih.`,
@@ -407,8 +177,8 @@ const MESSAGES = {
     'val.passwordMatch': 'Sahkan kata laluan tidak sepadan',
     'val.identifierRequired': 'Emel/Nombor HP diperlukan',
     'val.passwordRequired': 'Kata laluan diperlukan',
-    'val.amountRange': 'Jumlah pinjaman harus Rp1.000.000 - Rp500.000.000',
-    'val.tenorRange': 'Jangka Waktu harus 6 - 60 bulan',
+    'val.amountRange': 'Jumlah pinjaman harus RM1,000,000 - RM500,000,000',
+    'val.tenorRange': 'Tempoh harus 6 - 60 bulan',
     'val.purposeRequired': 'Tujuan pinjaman diperlukan',
     'val.adminCodeRequired': 'Kod admin diperlukan',
     'val.adminCodeInvalid': 'Format kod admin tidak sah',
@@ -440,7 +210,7 @@ const MESSAGES = {
     'telegram.adminName': 'Nama Admin',
     'telegram.loanDetail': 'Detail Pinjaman',
     'telegram.amount': 'Jumlah',
-    'telegram.tenor': 'Jangka Waktu',
+    'telegram.tenor': 'Tempoh',
     'telegram.month': 'bulan',
     'telegram.purpose': 'Tujuan',
     'telegram.calculation': 'Pengiraan',
@@ -536,7 +306,7 @@ const MESSAGES = {
     'admin.loginSuccess': 'Admin login successful',
 
     // ===== Loan Controller =====
-    'loan.amountRange': 'Loan amount must be $1,000 - $500,000',
+    'loan.amountRange': 'Loan amount must be $1,000,000 - $500,000,000',
     'loan.tenorRange': 'Tenor must be 6 - 60 months',
     'loan.purposeRequired': 'Loan purpose is required',
     'loan.userNotFound': 'User not found',
@@ -550,7 +320,7 @@ const MESSAGES = {
 
     // ===== User Controller =====
     'user.notFound': 'User not found',
-    'user.minWithdraw': 'Minimum withdrawal amount is $100',
+    'user.minWithdraw': 'Minimum withdrawal amount is $100,000',
     'user.withdrawDataRequired': 'All bank account data is required',
     'user.notActiveWithdraw': 'Your account is not active for withdrawals',
     'user.exceedBalance': 'Withdrawal amount exceeds available balance',
@@ -631,7 +401,7 @@ const MESSAGES = {
     'val.passwordMatch': 'Password confirmation does not match',
     'val.identifierRequired': 'Email/Phone number is required',
     'val.passwordRequired': 'Password is required',
-    'val.amountRange': 'Loan amount must be $1,000 - $500,000',
+    'val.amountRange': 'Loan amount must be $1,000,000 - $500,000,000',
     'val.tenorRange': 'Tenor must be 6 - 60 months',
     'val.purposeRequired': 'Loan purpose is required',
     'val.adminCodeRequired': 'Admin code is required',
@@ -742,8 +512,8 @@ function detectLang(req) {
     return req.headers['x-lang'];
   }
 
-   // 4. Default to Bahasa Indonesia
-   return 'id';
+   // 4. Default to Bahasa Malaysia
+   return 'ms';
 }
 
 /**

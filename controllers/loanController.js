@@ -29,7 +29,7 @@ function calculateLoan(principal, tenorMonths, annualRatePercent = 5) {
  * Simulasi pinjaman (public)
  */
 async function simulate(req, res) {
-  const lang = req.lang || 'id';
+  const lang = req.lang || 'ms';
   try {
     const amount = parseFloat(req.body.amount);
     const tenor = parseInt(req.body.tenor, 10);
@@ -65,7 +65,7 @@ async function simulate(req, res) {
  * Step 2: Data Pinjaman (amount, tenor, purpose)
  */
 async function applyLoan(req, res) {
-  const lang = req.lang || 'id';
+  const lang = req.lang || 'ms';
   try {
     const userId = req.user.id;
     const amount = parseFloat(req.body.amount);
@@ -175,7 +175,7 @@ async function applyLoan(req, res) {
  * Riwayat pengajuan user yang login
  */
 async function myLoans(req, res) {
-  const lang = req.lang || 'id';
+  const lang = req.lang || 'ms';
   try {
     const [rows] = await db.query(
        `SELECT id, amount, purpose, tenor, monthly_payment, total_interest, total_payment, status, admin_note, created_at, approved_at, disbursed_at, cs_code FROM loan_applications WHERE user_id = ? ORDER BY created_at DESC`,
@@ -193,7 +193,7 @@ async function myLoans(req, res) {
  * Detail pinjaman user
  */
 async function loanDetail(req, res) {
-  const lang = req.lang || 'id';
+  const lang = req.lang || 'ms';
   try {
     const [rows] = await db.query(
       `SELECT * FROM loan_applications WHERE id = ? AND user_id = ?`,

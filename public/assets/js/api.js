@@ -83,12 +83,12 @@ async function api(endpoint, options = {}) {
           window.location.href = `${BASE_PATH}/admin.html`;
         }
       }
-      return { success: false, message: data.message || 'Berlaku ralat', errors: data.errors, data: data.data };
+      return { success: false, message: data.message || 'An error occurred', errors: data.errors, data: data.data };
     }
     return data;
   } catch (err) {
     console.error('API Error:', err);
-    return { success: false, message: 'Tidak dapat menyambung ke pelayan. Semak sambungan anda.' };
+    return { success: false, message: 'Unable to connect to server. Please check your connection.' };
   }
 }
 
@@ -149,7 +149,11 @@ async function alertSuccess(title, text) {
 async function alertError(title, text) {
   return Swal.fire({ icon: 'error', title, text, confirmButtonColor: '#2563eb' });
 }
-async function alertConfirm(title, text, confirmText = 'Ya', cancelText = 'Batal') {
+async function alertConfirm(title, text, confirmText, cancelText) {
+  const lang = (typeof I18N !== 'undefined' && I18N.getLang) ? I18N.getLang() : 'ms';
+  const defaults = lang === 'en'
+    ? { confirm: 'Yes', cancel: 'Cancel' }
+    : { confirm: 'Ya', cancel: 'Batal' };
   const result = await Swal.fire({
     icon: 'warning',
     title,
@@ -157,10 +161,23 @@ async function alertConfirm(title, text, confirmText = 'Ya', cancelText = 'Batal
     showCancelButton: true,
     confirmButtonColor: '#2563eb',
     cancelButtonColor: '#64748b',
-    confirmButtonText: confirmText,
-    cancelButtonText: cancelText,
+    confirmButtonText: confirmText || defaults.confirm,
+    cancelButtonText: cancelText || defaults.cancel,
   });
   return result.isConfirmed;
+}
+async function promptAsync(label, defaultValue = '') {
+  const result = await Swal.fire({
+    input: 'text',
+    inputLabel: label,
+    inputValue: defaultValue,
+    showCancelButton: true,
+    confirmButtonColor: '#2563eb',
+    cancelButtonColor: '#64748b',
+    confirmButtonText: I18N.t('admin.ok'),
+    cancelButtonText: I18N.t('admin.cancel'),
+  });
+  return result.isConfirmed ? result.value : null;
 }
 
 // ============================================

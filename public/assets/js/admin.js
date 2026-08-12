@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     e.preventDefault();
     const username = document.getElementById('adminUsername').value.trim();
     const password = adminPwdInput.value;
-    if (!username || !password) return showToast('Nama pengguna dan kata laluan wajib diisi', 'error');
+    if (!username || !password) return showToast(I18N.t('admin.toast.requiredFields'), 'error');
 
     const btn = document.getElementById('adminLoginBtn');
     setBtnLoading(btn, true);
@@ -46,10 +46,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (res.success) {
       AdminToken.set(res.token, true);
-      showToast('Log masuk admin berjaya!', 'success');
+      showToast(I18N.t('admin.toast.loginSuccess'), 'success');
       setTimeout(() => showAdminApp(res.data), 500);
     } else {
-      showToast(res.message || 'Log masuk gagal', 'error');
+      showToast(res.message || I18N.t('admin.toast.loginFailed'), 'error');
     }
   });
 });
@@ -62,7 +62,7 @@ async function showAdminApp(admin) {
   document.getElementById('loginScreen').classList.add('hidden');
   document.getElementById('adminApp').classList.remove('hidden');
   document.getElementById('adminName').textContent = admin.full_name || admin.username;
-  document.getElementById('adminRole').textContent = admin.role === 'super_admin' ? 'Super Admin' : 'Admin';
+  document.getElementById('adminRole').textContent = admin.role === 'super_admin' ? I18N.t('admin.role.super') : I18N.t('admin.role.admin');
 
   // Mobile sidebar
   const sidebar = document.getElementById('adminSidebar');
@@ -81,7 +81,7 @@ async function showAdminApp(admin) {
     users: I18N.t('admin.users'),
     applications: I18N.t('admin.applications'),
     transactions: I18N.t('admin.transactions'),
-    'cs-codes': 'Kode CS',
+      'cs-codes': I18N.t('admin.csCode'),
     telegram: I18N.t('admin.telegram'),
     settings: I18N.t('admin.settings'),
   };
@@ -109,7 +109,7 @@ async function showAdminApp(admin) {
 
   // Logout
   document.getElementById('adminLogoutBtn').addEventListener('click', async () => {
-    const ok = await alertConfirm(I18N.t('dash.logout'), I18N.t('notif.loginRequiredDesc'));
+    const ok = await alertConfirm(I18N.t('admin.confirmLogout'), I18N.t('admin.confirmLogoutText'));
     if (ok) { AdminToken.clear(); window.location.href = `${BASE_PATH}/admin.html`; }
   });
 
@@ -285,10 +285,10 @@ async function saveUser() {
   const res = await api(`/admin/users/${currentUserId}`, { method: 'PUT', body });
   setBtnLoading(btn, false);
   if (res.success) {
-    showToast('Pengguna berjaya dikemas kini', 'success');
+    showToast(I18N.t('admin.toast.userUpdated'), 'success');
     closeUserModal();
     await loadUsers();
-    // Beri tahu tab lain (dashboard pengguna) bahwa data berubah.
+    // Notify other tab (user dashboard) that data has changed.
     AdminSync.notifyDataChanged();
   }
   else showToast(res.message || I18N.t('admin.noDataChanged'), 'error');
@@ -298,7 +298,7 @@ async function deleteUser(id) {
   const ok = await alertConfirm(I18N.t('admin.confirmDelete'), I18N.t('admin.confirmDeleteText'), I18N.t('admin.deleteUser'), I18N.t('admin.cancel'));
   if (!ok) return;
   const res = await api(`/admin/users/${id}`, { method: 'DELETE' });
-   if (res.success) {     showToast('Pengguna berjaya dipadamkan', 'success'); await loadUsers(); }
+    if (res.success) {     showToast(I18N.t('admin.toast.userDeleted'), 'success'); await loadUsers(); }
   else showToast(res.message || I18N.t('admin.noDataChanged'), 'error');
 }
 
@@ -337,7 +337,7 @@ async function loadApplications() {
       <td class="px-4 py-3 text-slate-700">${a.full_name}<div class="text-xs text-slate-400">${a.phone}</div></td>
        <td class="px-4 py-3 text-slate-700 font-mono text-sm">${a.cs_code || a.la_cs_code || '-'}</td>
       <td class="px-4 py-3 text-slate-700">${formatRupiah(a.amount)}</td>
-      <td class="px-4 py-3 text-slate-700">${a.tenor} bulan</td>
+      <td class="px-4 py-3 text-slate-700">${a.tenor} ${I18N.t('admin.month')}</td>
       <td class="px-4 py-3 text-slate-500 text-sm">${a.purpose}</td>
       <td class="px-4 py-3">${statusBadge(a.status)}</td>
       <td class="px-4 py-3">
@@ -355,32 +355,32 @@ async function viewApp(id) {
   body.innerHTML = `
     <div class="grid md:grid-cols-2 gap-4">
       <div class="bg-slate-50 rounded-xl p-4">
-        <h4 class="font-bold text-slate-800 mb-3"><i class="fas fa-user text-blue-600 mr-2"></i> Data Peminjam</h4>
+        <h4 class="font-bold text-slate-800 mb-3"><i class="fas fa-user text-blue-600 mr-2"></i> ${I18N.t('admin.detail.borrower')}</h4>
         <div class="space-y-2 text-sm">
-          <div class="flex justify-between"><span class="text-slate-500">Nama</span><span class="font-semibold">${a.full_name}</span></div>
-          <div class="flex justify-between"><span class="text-slate-500">Emel</span><span class="font-semibold">${a.email}</span></div>
-          <div class="flex justify-between"><span class="text-slate-500">No. HP</span><span class="font-semibold">${a.phone}</span></div>
-          <div class="flex justify-between"><span class="text-slate-500">NIK</span><span class="font-semibold">${a.nik || '-'}</span></div>
-          <div class="flex justify-between"><span class="text-slate-500">Alamat</span><span class="font-semibold text-right">${a.address || '-'}</span></div>
-          <div class="flex justify-between"><span class="text-slate-500">Pekerjaan</span><span class="font-semibold">${a.job || '-'}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">${I18N.t('admin.detail.name')}</span><span class="font-semibold">${a.full_name}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">${I18N.t('admin.detail.email')}</span><span class="font-semibold">${a.email}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">${I18N.t('admin.detail.phone')}</span><span class="font-semibold">${a.phone}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">${I18N.t('admin.detail.nik')}</span><span class="font-semibold">${a.nik || '-'}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">${I18N.t('admin.detail.address')}</span><span class="font-semibold text-right">${a.address || '-'}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">${I18N.t('admin.detail.job')}</span><span class="font-semibold">${a.job || '-'}</span></div>
         </div>
       </div>
       <div class="bg-blue-50 rounded-xl p-4">
-        <h4 class="font-bold text-slate-800 mb-3"><i class="fas fa-money-bill-wave text-blue-600 mr-2"></i> Butiran Pinjaman</h4>
+        <h4 class="font-bold text-slate-800 mb-3"><i class="fas fa-money-bill-wave text-blue-600 mr-2"></i> ${I18N.t('admin.detail.loan')}</h4>
         <div class="space-y-2 text-sm">
-          <div class="flex justify-between"><span class="text-slate-500">Jumlah</span><span class="font-bold">${formatRupiah(a.amount)}</span></div>
-          <div class="flex justify-between"><span class="text-slate-500">Tempoh</span><span class="font-semibold">${a.tenor} bulan</span></div>
-          <div class="flex justify-between"><span class="text-slate-500">Tujuan</span><span class="font-semibold">${a.purpose}</span></div>
-          <div class="flex justify-between"><span class="text-slate-500">Ansuran/Bulan</span><span class="font-semibold">${formatRupiah(a.monthly_payment)}</span></div>
-          <div class="flex justify-between"><span class="text-slate-500">Jumlah Faedah</span><span class="font-semibold">${formatRupiah(a.total_interest)}</span></div>
-          <div class="flex justify-between"><span class="text-slate-500">Jumlah Bayar</span><span class="font-bold">${formatRupiah(a.total_payment)}</span></div>
-          <div class="flex justify-between"><span class="text-slate-500">Status</span>${statusBadge(a.status)}</div>
-          <div class="flex justify-between"><span class="text-slate-500">Tarikh</span><span class="font-semibold">${formatDateTime(a.created_at)}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">${I18N.t('admin.detail.amount')}</span><span class="font-bold">${formatRupiah(a.amount)}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">${I18N.t('admin.detail.tenor')}</span><span class="font-semibold">${a.tenor} ${I18N.t('admin.month')}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">${I18N.t('admin.detail.purpose')}</span><span class="font-semibold">${a.purpose}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">${I18N.t('admin.detail.monthly')}</span><span class="font-semibold">${formatRupiah(a.monthly_payment)}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">${I18N.t('admin.detail.totalInterest')}</span><span class="font-semibold">${formatRupiah(a.total_interest)}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">${I18N.t('admin.detail.totalPayment')}</span><span class="font-bold">${formatRupiah(a.total_payment)}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">${I18N.t('admin.detail.status')}</span>${statusBadge(a.status)}</div>
+          <div class="flex justify-between"><span class="text-slate-500">${I18N.t('admin.detail.date')}</span><span class="font-semibold">${formatDateTime(a.created_at)}</span></div>
         </div>
       </div>
     </div>
-    ${a.cs_code ? `<div class="bg-amber-50 rounded-xl p-4 text-sm"><b>Kode CS:</b> ${a.cs_code} | <b>Nama CS:</b> ${a.cs_name || '-'}</div>` : ''}
-    ${a.admin_note ? `<div class="bg-amber-50 rounded-xl p-4 text-sm"><b>Catatan Admin:</b> ${a.admin_note}</div>` : ''}
+    ${a.cs_code ? `<div class="bg-amber-50 rounded-xl p-4 text-sm"><b>${I18N.t('admin.csCode')}:</b> ${a.cs_code} | <b>${I18N.t('admin.csName')}:</b> ${a.cs_name || '-'}</div>` : ''}
+    ${a.admin_note ? `<div class="bg-amber-50 rounded-xl p-4 text-sm"><b>${I18N.t('admin.detail.adminNote')}:</b> ${a.admin_note}</div>` : ''}
     <div>
       <label class="block text-sm font-semibold text-slate-700 mb-2">${I18N.t('admin.addNote')}</label>
       <textarea id="appNote" rows="2" class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 outline-none" placeholder="${I18N.t('admin.notePlaceholder')}">${a.admin_note || ''}</textarea>
@@ -399,7 +399,7 @@ async function updateAppStatus(status) {
   if (!currentAppId) return;
   const note = document.getElementById('appNote')?.value || '';
   const labels = { approved: I18N.t('admin.approve'), rejected: I18N.t('admin.reject'), disbursed: I18N.t('admin.disburse') };
-  const ok = await alertConfirm(`Adakah anda ingin mengubah status #${currentAppId}?`, status === 'disbursed' ? I18N.t('admin.disburse') + ': Baki pengguna akan bertambah secara automatik.' : '');
+  const ok = await alertConfirm(I18N.t('admin.confirmAppStatus').replace('{id}', currentAppId), status === 'disbursed' ? I18N.t('admin.disburse') + ': ' + I18N.t('admin.confirmDisburseText') : '');
   if (!ok) return;
   const res = await api(`/admin/applications/${currentAppId}/status`, { method: 'PUT', body: { status, adminNote: note } });
   if (res.success) {
@@ -408,8 +408,8 @@ async function updateAppStatus(status) {
     closeAppModal();
     await loadApplications();
     await loadAdminDashboard();
-     // Beri tahu tab pengguna bahwa status permohonan berubah
-    AdminSync.notifyDataChanged();
+     // Notify user tab that application status has changed
+     AdminSync.notifyDataChanged();
   } else {
     showToast(res.message || I18N.t('admin.noDataChanged'), 'error');
   }
@@ -441,15 +441,15 @@ async function loadTransactions() {
 }
 
 async function updateTxStatus(id, status) {
-  const ok = await alertConfirm(`${I18N.t(status === 'approved' ? 'admin.approve' : 'admin.reject')} transaksi #${id}?`, '');
+   const ok = await alertConfirm(`${I18N.t(status === 'approved' ? 'admin.approve' : 'admin.reject')} ${I18N.t('admin.txConfirm')} #${id}?`, '');
   if (!ok) return;
   const res = await api(`/admin/transactions/${id}/status`, { method: 'PUT', body: { status } });
   if (res.success) {
-    const statusText = { pending: 'Menunggu', approved: 'Disetujui', rejected: 'Ditolak', completed: 'Selesai' };
-   showToast(`Transaksi ${statusText[status] || status}`, 'success');
+    const statusText = { pending: I18N.t('admin.txStatus.pending'), approved: I18N.t('admin.txStatus.approved'), rejected: I18N.t('admin.txStatus.rejected'), completed: I18N.t('admin.txStatus.completed') };
+   showToast(`${I18N.t('admin.transactions')} ${statusText[status] || status}`, 'success');
     await loadTransactions();
-    // Beri tahu tab pengguna bahwa status transaksi berubah
-    AdminSync.notifyDataChanged();
+     // Notify user tab that transaction status has changed
+     AdminSync.notifyDataChanged();
   }
   else showToast(res.message || I18N.t('admin.noDataChanged'), 'error');
 }
@@ -469,10 +469,10 @@ async function loadWithdrawals(search = '', filter = '') {
     return;
   }
   const statusMap = {
-    menunggu_verifikasi: { text: 'Menunggu Pengesahan', cls: 'badge-pending' },
-    diproses: { text: 'Diproses', cls: 'badge-active' },
-    berhasil: { text: 'Berjaya', cls: 'badge-approved' },
-    ditolak: { text: 'Ditolak', cls: 'badge-rejected' },
+    menunggu_verifikasi: { text: I18N.t('admin.withStatus.waiting'), cls: 'badge-pending' },
+    diproses: { text: I18N.t('admin.withStatus.processing'), cls: 'badge-active' },
+    berhasil: { text: I18N.t('admin.withStatus.success'), cls: 'badge-approved' },
+    ditolak: { text: I18N.t('admin.withStatus.rejected'), cls: 'badge-rejected' },
   };
   tbody.innerHTML = res.data.map((w) => `
     <tr class="table-row hover:bg-slate-50 dark:hover:bg-slate-800/30">
@@ -484,11 +484,11 @@ async function loadWithdrawals(search = '', filter = '') {
       <td class="px-4 py-3"><span class="badge ${statusMap[w.status]?.cls || 'badge-pending'}">${statusMap[w.status]?.text || w.status}</span></td>
       <td class="px-4 py-3 text-slate-500 text-sm">${formatDate(w.created_at)}</td>
       <td class="px-4 py-3 space-x-1">
-        <button onclick="viewWithdrawal('${w.withdrawal_id}')" class="text-blue-600 hover:bg-blue-50 p-1 rounded" title="Lihat"><i class="fas fa-eye"></i></button>
-        ${w.status === 'menunggu_verifikasi' ? `
-          <button onclick="updateWithdrawStatus('${w.withdrawal_id}', 'diproses')" class="text-amber-600 hover:bg-amber-50 p-1 rounded" title="Proses"><i class="fas fa-cog"></i></button>
-          <button onclick="updateWithdrawStatus('${w.withdrawal_id}', 'berhasil')" class="text-green-600 hover:bg-green-50 p-1 rounded" title="Approve"><i class="fas fa-check"></i></button>
-          <button onclick="updateWithdrawStatus('${w.withdrawal_id}', 'ditolak')" class="text-red-600 hover:bg-red-50 p-1 rounded" title="Tolak"><i class="fas fa-times"></i></button>
+         <button onclick="viewWithdrawal('${w.withdrawal_id}')" class="text-blue-600 hover:bg-blue-50 p-1 rounded" title="${I18N.t('admin.viewApp')}"><i class="fas fa-eye"></i></button>
+         ${w.status === 'menunggu_verifikasi' ? `
+           <button onclick="updateWithdrawStatus('${w.withdrawal_id}', 'diproses')" class="text-amber-600 hover:bg-amber-50 p-1 rounded" title="${I18N.t('admin.process', 'Process')}"><i class="fas fa-cog"></i></button>
+           <button onclick="updateWithdrawStatus('${w.withdrawal_id}', 'berhasil')" class="text-green-600 hover:bg-green-50 p-1 rounded" title="${I18N.t('admin.approve')}"><i class="fas fa-check"></i></button>
+           <button onclick="updateWithdrawStatus('${w.withdrawal_id}', 'ditolak')" class="text-red-600 hover:bg-red-50 p-1 rounded" title="${I18N.t('admin.reject')}"><i class="fas fa-times"></i></button>
         ` : ''}
       </td>
     </tr>`).join('');
@@ -512,45 +512,45 @@ if (wdFilter) {
 
 async function viewWithdrawal(id) {
   const res = await api(`/admin/withdrawals/${id}`);
-    if (!res.success) { showToast(res.message || 'Gagal memuatkan butiran', 'error'); return; }
+    if (!res.success) { showToast(res.message || I18N.t('admin.toast.withdrawLoadError'), 'error'); return; }
   const w = res.data;
   const statusLabels = {
-    menunggu_verifikasi: 'Menunggu Pengesahan',
-    diproses: 'Diproses',
-    berhasil: 'Berjaya',
-    ditolak: 'Ditolak',
+    menunggu_verifikasi: I18N.t('admin.withStatus.waiting'),
+    diproses: I18N.t('admin.withStatus.processing'),
+    berhasil: I18N.t('admin.withStatus.success'),
+    ditolak: I18N.t('admin.withStatus.rejected'),
   };
   Swal.fire({
-     title: `Butiran Pengeluaran ${w.withdrawal_id}`,
+     title: `${I18N.t('admin.withdrawDetail', 'Butiran Pengeluaran')} #${w.withdrawal_id}`,
     html: `
       <div class="text-left space-y-2 text-sm">
-        <p><b>Nama:</b> ${w.nama}</p>
-         <p><b>Emel:</b> ${w.email}</p>
-         <p><b>No HP:</b> ${w.no_hp}</p>
-         <p><b>Bank:</b> ${w.bank}</p>
-         <p><b>Nombor Akaun:</b> ${w.no_rekening}</p>
-         <p><b>Nama Akaun:</b> ${w.nama_rekening}</p>
-         <p><b>Jumlah:</b> ${formatRupiah(w.jumlah)}</p>
-         <p><b>Status:</b> ${statusLabels[w.status] || w.status}</p>
-         <p><b>Dibuat:</b> ${formatDateTime(w.created_at)}</p>
-        ${w.catatan ? `<p><b>Catatan:</b> ${w.catatan}</p>` : ''}
+        <p><b>${I18N.t('admin.detail.name')}:</b> ${w.nama}</p>
+        <p><b>${I18N.t('admin.detail.email')}:</b> ${w.email}</p>
+        <p><b>${I18N.t('admin.detail.phone')}:</b> ${w.no_hp}</p>
+        <p><b>${I18N.t('admin.detail.bank')}:</b> ${w.bank}</p>
+        <p><b>${I18N.t('admin.detail.accountNumber')}:</b> ${w.no_rekening}</p>
+        <p><b>${I18N.t('admin.detail.accountName')}:</b> ${w.nama_rekening}</p>
+        <p><b>${I18N.t('admin.detail.amount')}:</b> ${formatRupiah(w.jumlah)}</p>
+        <p><b>${I18N.t('admin.detail.status')}:</b> ${statusLabels[w.status] || w.status}</p>
+        <p><b>${I18N.t('admin.detail.date')}:</b> ${formatDateTime(w.created_at)}</p>
+        ${w.catatan ? `<p><b>${I18N.t('admin.detail.adminNote')}:</b> ${w.catatan}</p>` : ''}
       </div>`,
-    confirmButtonText: 'OK',
+    confirmButtonText: I18N.t('admin.ok'),
   });
 }
 
 async function updateWithdrawStatus(id, status) {
-   const statusLabel = { diproses: 'Diproses', berhasil: 'Disetujui', ditolak: 'Ditolak' };
-   const ok = await alertConfirm(`Adakah anda ingin ${statusLabel[status]} pengeluaran ${id}?`, '');
+   const statusLabel = { diproses: I18N.t('admin.withStatus.processing'), berhasil: I18N.t('admin.withStatus.success'), ditolak: I18N.t('admin.withStatus.rejected') };
+   const ok = await alertConfirm(I18N.t('admin.confirmWithdrawStatus').replace('{status}', statusLabel[status]).replace('{id}', id), '');
   if (!ok) return;
 
   let note = '';
   if (status === 'ditolak') {
     const noteRes = await Swal.fire({
       input: 'textarea',
-       inputLabel: 'Sebab penolakan (pilihan)',
+       inputLabel: I18N.t('admin.form.reason'),
       showCancelButton: true,
-      cancelButtonText: 'Batal',
+      cancelButtonText: I18N.t('admin.cancel'),
     });
     if (!noteRes.isConfirmed) return;
     note = noteRes.value || '';
@@ -558,7 +558,7 @@ async function updateWithdrawStatus(id, status) {
 
   const res = await api(`/admin/withdrawals/${id}/status`, { method: 'PUT', body: { status, catatan: note } });
   if (res.success) {
-     showToast(`Status pengeluaran ${id} dikemas kini`, 'success');
+     showToast(I18N.t('admin.toast.withdrawStatusUpdated').replace('{id}', id), 'success');
     await loadWithdrawals();
     AdminSync.notifyDataChanged();
   }
@@ -585,7 +585,7 @@ async function saveTelegramSettings() {
   };
 
   if (!settings.telegram_bot_token || !settings.telegram_admin_chat_id) {
-    showToast('Token Bot dan ID Chat wajib diisi', 'error');
+    showToast(I18N.t('admin.tg.tokenRequired'), 'error');
     return;
   }
 
@@ -595,7 +595,7 @@ async function saveTelegramSettings() {
   setBtnLoading(btn, false);
 
   if (res.success) {
-    showToast('Tetapan Telegram berjaya disimpan', 'success');
+    showToast(I18N.t('admin.tg.saved'), 'success');
     await loadTelegramLogs();
   } else {
     showToast(res.message || I18N.t('admin.noDataChanged'), 'error');
@@ -606,11 +606,11 @@ async function loadTelegramLogs() {
   const res = await api('/admin/telegram/logs');
   if (!res.success) return;
   const el = document.getElementById('tgLogs');
-  if (!res.data.length) { el.innerHTML = `<p class="text-center text-slate-400 py-4">${I18N.t('admin.noTransactions')}</p>`; return; }
+  if (!res.data.length) { el.innerHTML = `<p class="text-center text-slate-400 py-4">${I18N.t('admin.tg.emptyLogs')}</p>`; return; }
   el.innerHTML = res.data.slice(0, 20).map((l) => `
     <div class="p-3 ${l.status === 'sent' ? 'bg-green-50' : 'bg-red-50'} rounded-xl text-sm">
       <div class="flex justify-between mb-1">
-        <span class="font-semibold ${l.status === 'sent' ? 'text-green-700' : 'text-red-700'}">${l.status === 'sent' ? '✓ Dihantar' : '✗ Gagal'}</span>
+        <span class="font-semibold ${l.status === 'sent' ? 'text-green-700' : 'text-red-700'}">${l.status === 'sent' ? I18N.t('admin.tg.sent') : I18N.t('admin.tg.failed')}</span>
         <span class="text-xs text-slate-400">${formatDateTime(l.created_at)}</span>
       </div>
       <p class="text-slate-600 text-xs truncate">${l.message.substring(0, 80)}...</p>
@@ -619,7 +619,7 @@ async function loadTelegramLogs() {
 
 async function testTelegram() {
   const res = await api('/admin/telegram/test', { method: 'POST' });
-  if (res.success) { showToast('Ujian telegram berjaya dihantar!', 'success'); await loadTelegramLogs(); }
+  if (res.success) { showToast(I18N.t('admin.tg.testSent'), 'success'); await loadTelegramLogs(); }
   else showToast(res.message || I18N.t('admin.telegramTestFailed'), 'error');
 }
 
@@ -660,15 +660,15 @@ async function saveSettings(e) {
   setBtnLoading(btn, true);
   const res = await api('/admin/settings', { method: 'PUT', body: { settings } });
   setBtnLoading(btn, false);
-  if (res.success) showToast('Tetapan berjaya disimpan', 'success');
+  if (res.success) showToast(I18N.t('admin.set.saved'), 'success');
   else showToast(res.message || I18N.t('admin.noDataChanged'), 'error');
 }
 
 // ============================================
 // REAL-TIME SYNC - Admin <-> User Dashboard
-// Menggunakan BroadcastChannel agar perubahan yang
-// dilakukan admin langsung tampil di dashboard user
-// tanpa perlu refresh manual.
+// Using BroadcastChannel so changes made by
+// admin appear immediately on the user dashboard
+// without manual refresh.
 // ============================================
 const AdminSync = (() => {
   let channel = null;
@@ -682,8 +682,8 @@ const AdminSync = (() => {
   }
 
   /**
-   * Beri tahu tab lain (dashboard user) bahwa data berubah.
-   * Dipanggil setelah admin mengubah saldo, status, pengajuan, transaksi.
+   * Notify other tab (user dashboard) that data has changed.
+   * Called after admin changes balance, status, applications, transactions.
    */
   function notifyDataChanged() {
     if (channel && !channelError) {
@@ -691,7 +691,7 @@ const AdminSync = (() => {
     }
   }
 
-  // Terima pesan dari tab user (misal user mengajukan pinjaman/pengeluaran)
+  // Receive messages from user tab (e.g. user submits loan/withdrawal)
   if (channel && !channelError) {
     channel.onmessage = (event) => {
       const msg = event.data;
@@ -714,19 +714,19 @@ const AdminSync = (() => {
 async function loadCsCodes() {
   const tbody = document.getElementById('csTable');
   if (!tbody) return;
-  tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-400">Memuat...</td></tr>`;
+  tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-400">${I18N.t('admin.loading')}</td></tr>`;
   const res = await api('/admin/cs-codes');
-  if (!res.success || !res.data) { tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-400">Gagal memuat</td></tr>`; return; }
+  if (!res.success || !res.data) { tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-400">${I18N.t('admin.loadError')}</td></tr>`; return; }
   tbody.innerHTML = res.data.map((a) => `
     <tr class="table-row hover:bg-slate-50">
       <td class="px-4 py-3 font-mono text-sm text-slate-700">${a.cs_code || '-'}</td>
       <td class="px-4 py-3 text-slate-700">${a.full_name || '-'}</td>
       <td class="px-4 py-3 text-slate-500 text-sm">${a.email || '-'}</td>
-      <td class="px-4 py-3">${a.role === 'super_admin' ? 'Super Admin' : 'Admin'}</td>
-      <td class="px-4 py-3">${a.status === 'active' ? '<span class="badge badge-active">Aktif</span>' : '<span class="badge badge-inactive">Nonaktif</span>'}</td>
+      <td class="px-4 py-3">${a.role === 'super_admin' ? I18N.t('admin.role.super') : I18N.t('admin.role.admin')}</td>
+      <td class="px-4 py-3">${a.status === 'active' ? '<span class="badge badge-active">' + I18N.t('status.active') + '</span>' : '<span class="badge badge-inactive">' + I18N.t('admin.csInactive') + '</span>'}</td>
       <td class="px-4 py-3">
-        <button onclick="editCsCode(${a.id})" class="text-blue-600 hover:bg-blue-50 p-1 rounded" title="Edit"><i class="fas fa-pen"></i></button>
-        <button onclick="deleteCsCode(${a.id})" class="text-red-600 hover:bg-red-50 p-1 rounded" title="Hapus"><i class="fas fa-trash"></i></button>
+        <button onclick="editCsCode(${a.id})" class="text-blue-600 hover:bg-blue-50 p-1 rounded" title="${I18N.t('admin.editUser')}"><i class="fas fa-pen"></i></button>
+        <button onclick="deleteCsCode(${a.id})" class="text-red-600 hover:bg-red-50 p-1 rounded" title="${I18N.t('admin.deleteUser')}"><i class="fas fa-trash"></i></button>
       </td>
     </tr>
   `).join('');
@@ -734,34 +734,34 @@ async function loadCsCodes() {
 
 async function editCsCode(id) {
   const res = await api(`/admin/cs-codes/${id}`);
-  if (!res.success) return showToast(res.message || 'Gagal memuat', 'error');
+  if (!res.success) return showToast(res.message || I18N.t('admin.loadError'), 'error');
   const a = res.data;
-  const name = await promptAsync('Nama Lengkap', a.full_name || '');
+  const name = await promptAsync(I18N.t('admin.cs.createName'), a.full_name || '');
   if (name === null) return;
-  const status = confirm('Status nonaktif? OK=nonaktif, Cancel=aktif') ? 'inactive' : 'active';
+  const status = confirm(I18N.t('admin.cs.statusPrompt')) ? 'inactive' : 'active';
   const r = await api(`/admin/cs-codes/${id}`, { method: 'PUT', body: { fullName: name, status } });
   if (r.success) { showToast(I18N.t('admin.csUpdated'), 'success'); await loadCsCodes(); }
-  else showToast(r.message || 'Gagal memperbarui', 'error');
+  else showToast(r.message || I18N.t('admin.cs.updateError'), 'error');
 }
 
 async function deleteCsCode(id) {
-  const ok = await alertConfirm('Konfirmasi', 'Hapus kode CS ini? (hanya untuk pengguna non-super-admin)');
+  const ok = await alertConfirm(I18N.t('admin.cs.deleteConfirm'), I18N.t('admin.cs.deleteConfirmText'));
   if (!ok) return;
   const res = await api(`/admin/cs-codes/${id}`, { method: 'DELETE' });
   if (res.success) { showToast(I18N.t('admin.csDeleted'), 'success'); await loadCsCodes(); }
-  else showToast(res.message || 'Gagal menghapus', 'error');
+  else showToast(res.message || I18N.t('admin.cs.deleteError'), 'error');
 }
 
 document.getElementById('btnCreateCs')?.addEventListener('click', async () => {
-  const username = await promptAsync('Username', 'cs01');
+  const username = await promptAsync(I18N.t('admin.cs.createUsername'), I18N.t('admin.cs.defaultUsername'));
   if (!username) return;
-  const email = await promptAsync('Email', 'cs01@smartfund.id');
+  const email = await promptAsync(I18N.t('admin.cs.createEmail'), I18N.t('admin.cs.defaultEmail'));
   if (!email) return;
-  const password = await promptAsync('Password', 'Password123');
+  const password = await promptAsync(I18N.t('admin.cs.createPassword'), I18N.t('admin.cs.defaultPassword'));
   if (!password) return;
-  const fullName = await promptAsync('Nama Lengkap', 'CS 01');
+  const fullName = await promptAsync(I18N.t('admin.cs.createName'), I18N.t('admin.cs.defaultFullName'));
   if (!fullName) return;
   const res = await api('/admin/cs-codes', { method: 'POST', body: { username, email, password, fullName } });
   if (res.success) { showToast(I18N.t('admin.csCreated') + ` (CS: ${res.data.cs_code})`, 'success'); await loadCsCodes(); }
-  else showToast(res.message || 'Gagal membuat', 'error');
+  else showToast(res.message || I18N.t('admin.cs.createError'), 'error');
 });

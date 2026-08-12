@@ -42,7 +42,7 @@ function isStrongPassword(password) {
  * Validasi registrasi user
  */
 function validateRegister(req, res, next) {
-  const lang = req.lang || 'id';
+  const lang = req.lang || 'ms';
     const { fullName, email, phone, password, confirmPassword, csCode } = req.body;
   const errors = [];
 
@@ -68,7 +68,7 @@ function validateRegister(req, res, next) {
  * Validasi login
  */
 function validateLogin(req, res, next) {
-  const lang = req.lang || 'id';
+  const lang = req.lang || 'ms';
   const { identifier, password } = req.body;
   const errors = [];
   if (!identifier || validator.isEmpty(identifier.trim())) errors.push(t(lang, 'val.identifierRequired'));
@@ -81,7 +81,7 @@ function validateLogin(req, res, next) {
  * Validasi pengajuan pinjaman
  */
 function validateLoanApplication(req, res, next) {
-  const lang = req.lang || 'id';
+  const lang = req.lang || 'ms';
   const { amount, tenor, purpose } = req.body;
   const errors = [];
 

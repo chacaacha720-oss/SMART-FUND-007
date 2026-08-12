@@ -1,11 +1,11 @@
 {
   "nav": {
-    "home": "Beranda",
-    "features": "Keunggulan",
+    "home": "Laman Utama",
+    "features": "Kelebihan",
     "calculator": "Simulasi",
     "testimoni": "Testimoni",
     "faq": "FAQ",
-    "login": "Masuk",
+    "login": "Log Masuk",
     "register": "Daftar",
     "products": "Produk",
     "timeline": "Cara Kerja",
@@ -16,7 +16,7 @@
     "badge": "Berlesen & Diawasi OJK",
     "title1": "Pinjaman Dalam Talian",
     "title2": "Cepat & Selamat",
-    "title3": "untuk Keperluan Anda",
+    "title3": "untuk Keperlukan Anda",
     "desc": "SMART FUND membantu masyarakat memenuhi keperluan mendesak, modal perniagaan, pengubahsuaian rumah, pendidikan, hingga keperluan peribadi dengan proses praktikal, telus, dan selamat.",
     "btn": {
       "calculator": "Simulasi Pinjaman",
@@ -36,38 +36,38 @@
       "f4": "Selamat & dipercayai (OJK)",
       "btn": "Mula Permohonan"
     },
-    "headline": "Penyelesaian Dana Pantas untuk Keperluan Anda",
-    "subheadline": "Mohan pinjaman dengan proses mudah, telus, dan praktikal dalam satu platform.",
+    "headline": "Penyelesaian Dana Pantas untuk Keperlukan Anda",
+    "subheadline": "Mohon pinjaman dengan proses mudah, telus, dan praktikal dalam satu platform.",
     "primaryBtn": "Mohon Pinjaman",
     "secondaryBtn": "Ketahui Lebih Lanjut"
   },
   "features": {
-    "label": "KEUNGGULAN",
-    "title": "Mengapa SMART FUND?",
-    "desc": "Kami menyajikan solusi pinjaman terbaik dengan berbagai keunggulan yang menguntungkan bagi Anda",
+    "label": "KELEBIHAN",
+    "title": "Mengapa Memilih SMART FUND?",
+    "desc": "Kami memberikan penyelesaian pinjaman terbaik dengan pelbagai kelebihan yang menguntungkan anda",
     "f1": {
-      "title": "Proses Pengajuan Mudah",
-      "desc": "Isi formulir online dalam hitungan menit dengan panduan langkah demi langkah."
+      "title": "Proses Permohonan Mudah",
+      "desc": "Isi borang dalam talian dalam minit dengan panduan langkah demi langkah."
     },
     "f2": {
       "title": "Proses Cepat",
-      "desc": "Pengajuan Anda diproses dengan cepat, dan keputusan bisa diketahui segerala untuk keperluan mendesak."
+      "desc": "Permohonan anda diproses dengan cepat, dan keputusan boleh diketahui dengan cepat untuk keperlukan mendesak."
     },
     "f3": {
-      "title": "Persyaratan Sederhana",
-      "desc": "Dokumen yang dibutuhkan minimal, mudah dipahami, dan dapat diupload secara digital."
+      "title": "Syarat Mudah",
+      "desc": "Dokumen yang diperlukan minimal, mudah difahami, dan boleh dimuat naik secara digital."
     },
     "f4": {
-      "title": "Informasi Transparan",
-      "desc": "Tidak ada biaya tersembunyi. Semua informasi biaya kami menjelaskan sebelum Anda menandatangani."
+      "title": "Maklumat Telus",
+      "desc": "Tiada yuran tersembunyi. Semua maklumat yuran diterangkan sebelum anda menandatangani."
     },
     "f5": {
-      "title": "Sistem Aman",
-      "desc": "Kami menggunakan teknologi enkripsi tingkat tinggi untuk melindungi data dan transaksi Anda."
+      "title": "Sistem Selamat",
+      "desc": "Kami menggunakan teknologi enkripsi tahap tinggi untuk melindungi data dan transaksi anda."
     },
     "f6": {
-      "title": "Pengelolaan Terintegrasi",
-      "desc": "Kelola pinjaman, cicilan, dan penarikan dana dengan nyaman melalui satu dashboard."
+      "title": "Pengurusan Terintegrasi",
+      "desc": "Kelola pinjaman, ansuran, dan penarikan dana dengan selesa melalui satu dashboard."
     }
   },
   "calc": {
@@ -111,19 +111,7 @@
   "faq": {
     "label": "FAQ",
     "title": "Soalan Lazim",
-    "q1": "Berapa kadar faedah pinjaman di SMART FUND?",
-    "a1": "Kadar faedah pinjaman di SMART FUND bermula dari 5% setahun. Kadar faedah pasti ditentukan berdasarkan profil kelayakan dan tempoh yang dipilih semasa permohonan.",
-    "q2": "Berapa lama proses kelulusan pinjaman?",
-    "a2": "Proses pengesahan dan kelulusan biasanya memakan masa 1-24 jam bekerja selepas dokumen lengkap diterima. Dana akan dicairkan maksimum 1x24 jam selepas diluluskan.",
-    "q3": "Apakah syarat memohon pinjaman?",
-    "a3": "Syarat utama: Warganegara Indonesia berusia 21-55 tahun, mempunyai KTP dan NPWP, akaun bank aktif, mempunyai pendapatan tetap, dan nombor HP yang boleh dihubungi.",
-    "q4": "Bagaimana cara menghubungi khidmat pelanggan?",
-    "a4": "Anda boleh menghubungi CS kami melalui WhatsApp di 0896-7987-5858 atau Telegram @cs_smartfund. Perkhidmatan tersedia Isnin-Sabtu pada 08:00-17:00 WIB.",
-    "q5": "Adakah ada yuran tersembunyi atau yuran pentadbiran awal?",
-    "a5": "Tiada yuran tersembunyi. SMART FUND mengamalkan ketelusan penuh - semua yuran (faedah, pentadbiran, dll) akan diterangkan sebelum anda menandatangani perjanjian.",
-    "q6": "Bagaimana cara penarikan dana selepas pinjaman diluluskan?",
-    "a6": "Selepas pinjaman diluluskan dan dana cair, anda boleh membuat penarikan melalui dashboard dengan mengisi borang penarikan. Dana akan dihantar ke akaun bank tujuan anda.",
-    "subtitle": "Pertanyaan yang sering ditanyakan tentang SMART FUND"
+    "subtitle": "Soalan yang sering ditanyakan tentang SMART FUND"
   },
   "cta": {
     "title": "Bersedia Memohon Pinjaman?",
@@ -134,7 +122,7 @@
     "desc": "Platform pinjaman dalam talian yang dipercayai dan berlesen OJK. Penyelesaian kewangan untuk masa depan anda.",
     "company": "Syarikat",
     "services": "Perkhidmatan",
-    "contact": "Kontak",
+    "contact": "Hubungi",
     "rights": "Hak cipta terpelihara. Berlesen & diawasi OJK.",
     "terms": "Syarat & Ketentuan",
     "privacy": "Dasar Privasi",
@@ -152,6 +140,7 @@
     "forgot": "Lupa Kata Laluan?",
     "btn": "Log Masuk",
     "noAccount": "Belum ada akaun?",
+    "or": "— atau —",
     "register": "Daftar Sekarang",
     "back": "Kembali ke Laman Utama",
     "f1": "Faedah bermula 5% setahun",
@@ -180,6 +169,7 @@
     "f1": "Proses pendaftaran pantas",
     "f2": "Auto log masuk selepas daftar",
     "f3": "Akses dashboard lengkap",
+    "adminCode": "Kod Admin",
     "csCode": "Kod CS",
     "csCodeHint": "Masukkan kod CS pendaftaran anda"
   },
@@ -247,10 +237,26 @@
     "withdrawSubmit": "Hantar Pengeluaran",
     "withdrawNote": "Baki yang tersedia sekarang akan digunakan sebagai jumlah pengeluaran.",
     "noApplications": "Belum ada permohonan",
-    "noUsers": "Tidak ada pengguna",
+    "noUsers": "Tiada pengguna",
     "noTransactions": "Belum ada transaksi",
+    "choosePurpose": "Pilih tujuan",
+    "monthShort": "bln",
+    "name": "Nama",
+    "email": "Emel",
+    "amountShort": "Jumlah",
+    "installment": "Ansuran",
+    "date": "Tarikh",
+    "availableBalance": "Baki yang tersedia sekarang akan digunakan sebagai jumlah pengeluaran.",
+    "transactionType": "Jenis",
+    "user": "Pengguna",
+    "details": "Maklumat",
+    "borrowerData": "Data Peminjam",
+    "loanDetails": "Detail Pinjaman",
+    "rejected": "Ditolak",
+    "defaultNote": "Nota untuk permohonan ini...",
     "syncedAt": "Sinkron terakhir:",
-    "dataUpdated": "Data telah dikemas kini"
+    "dataUpdated": "Data telah dikemas kini",
+    "summary": "Ringkasan akaun dan aktiviti pinjaman anda"
   },
   "admin": {
     "login": "Log Masuk Admin",
@@ -281,12 +287,12 @@
     "reject": "Tolak",
     "disburse": "Cairkan Dana",
     "editUser": "Edit Pengguna",
-    "deleteUser": "Hapus Pengguna",
+    "deleteUser": "Padamkan Pengguna",
     "viewApp": "Lihat Detail",
-    "addNote": "Tambah Catatan Admin",
-    "notePlaceholder": "Catatan untuk permohonan ini...",
-    "confirmDelete": "Hapus Pengguna?",
-    "confirmDeleteText": "Pengguna dan semua data berkaitan akan dihapus secara kekal.",
+    "addNote": "Tambah Nota Admin",
+    "notePlaceholder": "Nota untuk permohonan ini...",
+    "confirmDelete": "Padamkan Pengguna?",
+    "confirmDeleteText": "Pengguna dan semua data berkaitan akan dipadam secara kekal.",
     "save": "Simpan",
     "cancel": "Batal",
     "close": "Tutup",
@@ -294,7 +300,38 @@
     "csName": "Nama CS",
     "noCsCode": "Anda belum mempunyai kod CS",
     "csCodeLabel": "Kod CS",
-    "csCodeHint": "Masukkan kod CS pendaftaran anda"
+    "csCodeHint": "Masukkan kod CS pendaftaran anda",
+    "noApplications": "Belum ada permohonan",
+    "noTransactions": "Belum ada transaksi",
+    "noUsers": "Tiada pengguna",
+    "noDataChanged": "Tiada data diubah",
+    "telegramTestFailed": "Gagal menghantar test telegram. Semak konfigurasi bot.",
+    "csManagement": "Kelola Kod CS",
+    "csList": "Senarai Kod CS",
+    "csCreated": "Kod CS berjaya dibuat",
+    "csUpdated": "Kod CS berjaya diperbarui",
+    "csDeleted": "Kod CS berjaya dihapus",
+    "csNotFound": "Kod CS tidak dijumpai",
+    "csStatus": "Status CS",
+    "csActive": "Aktif",
+    "csInactive": "Tidak Aktif",
+    "csCreate": "Buat Kod CS",
+    "superAdminOnly": "Hanya Super Admin yang boleh melakukan ini",
+    "adminCode": "Kod Admin",
+    "adminName": "Nama Admin",
+    "adminCodeLabel": "Kod Admin",
+    "withdrawalManagement": "Pengurusan Pengeluaran",
+    "withdrawSearch": "Cari ID, nama, emel...",
+    "withdrawFilter": "Semua Status",
+    "withdrawId": "ID Penarikan",
+    "withdrawName": "Nama",
+    "withdrawEmail": "Emel",
+    "withdrawBank": "Bank",
+    "withdrawAmount": "Jumlah",
+    "withdrawStatus": "Status",
+    "withdrawDate": "Tarikh",
+    "withdrawActions": "Tindakan",
+    "withdrawEmpty": "Belum ada penarikan"
   },
   "status": {
     "pending": "Menunggu",
@@ -305,20 +342,27 @@
     "active": "Aktif",
     "frozen": "Dibekukan"
   },
+  "cs": {
+    "title": "Kod CS",
+    "myCode": "Kod CS Anda",
+    "placeholder": "Masukkan kod CS",
+    "copySuccess": "Berjaya menyalin kod CS",
+    "noCsCode": "Anda belum mempunyai kod CS"
+  },
   "val": {
     "required": "wajib diisi",
     "nameMin": "Nama minimum 3 aksara",
     "phoneInvalid": "Nombor HP tidak sah",
     "emailInvalid": "Emel tidak sah",
     "passwordMin": "Kata laluan minimum 6 aksara",
-    "passwordMix": "Kata laluan mesti mengandungi huruf & nombor",
+    "passwordMix": "Kata laluan harus mengandungi huruf & nombor",
     "passwordMatch": "Sahkan kata laluan tidak sepadan",
-    "agreeTerms": "Anda mesti bersetuju dengan Syarat & Ketentuan",
-    "amountRange": "Jumlah pinjaman RM1,000 - RM500,000",
+    "agreeTerms": "Anda harus bersetuju dengan Syarat & Ketentuan",
+    "amountRange": "Jumlah pinjaman RM1,000,000 - RM500,000,000",
     "tenorRange": "Tempoh 6 - 60 bulan",
     "purposeRequired": "Tujuan pinjaman wajib dipilih",
     "otpRequired": "OTP mesti 6 digit",
-    "minWithdraw": "Jumlah pengeluaran minimum RM 100",
+    "minWithdraw": "Jumlah pengeluaran minimum RM100,000",
     "withdrawRequired": "Semua data akaun diperlukan",
     "csCodeRequired": "Kod CS diperlukan",
     "csCodeInvalid": "Format kod CS tidak sah"
@@ -345,20 +389,32 @@
     "withdrawFailed": "Gagal menghantar pengeluaran",
     "withdrawSent": "Permintaan pengeluaran telah dihantar",
     "verifyWithdrawTitle": "Segera Sahkan Pengeluaran",
-    "verifyWithdrawDesc": "pengajuan pengeluaran anda telah di hantar. Silahkan hubungi admin untuk mendapatkan code pencairan",
+    "verifyWithdrawDesc": "permohonan pengeluaran anda telah dihantar. Sila hubungi admin untuk mendapatkan kod pengcairan",
     "chatTelegram": "💬 Chat Admin melalui Telegram",
-    "chatWhatsapp": "WhatsApp Admin",
+    "chatWhatsapp": "📱 Chat Admin via WhatsApp",
     "chatMessage": "Hai Admin, saya baru sahaja menghantar pengeluaran. Sila bantu pengesahan untuk meneruskan pengeluaran saya.",
-    "whatsappMessage": "Pengesahan / KYC belum aktif lakukan pengesahan\n\nUntuk meneruskan pengeluaran"
+    "whatsappMessage": "Pengesahan / KYC belum aktif, sila lakukan pengesahan\n\nUntuk meneruskan pengeluaran",
+    "loanSuccess": "Permohonan Berjaya",
+    "loanSuccessText": "Permohonan pinjaman anda telah berjaya dihantar.",
+    "loanCurrentStatus": "Status semasa:",
+    "loanStatusWaiting": "Menunggu Kelulusan Admin.",
+    "loanSpeedUp": "Untuk mempercepatkan proses pengesahan, sila hubungi Admin melalui salah satu media berikut.",
+    "loanContactAdmin": "Hubungi Admin",
+    "loanTelegramBtn": "Chat Admin melalui Telegram",
+    "loanWhatsappBtn": "Chat Admin melalui WhatsApp",
+    "loanChatMessage": "Hai Admin, saya baru sahaja mengajukan pinjaman. Sila bantu pengesahan agar permohonan pinjaman saya dapat segera diproses.",
+    "loanWhatsappMsg": "Pengesahan / KYC belum aktif, sila lakukan pengesahan\n\nUntuk meneruskan permohonan pinjaman",
+    "loanSubmitted": "Permohonan berjaya dihantar. Admin akan segeri menerima notifikasi.",
+    "userSaved": "Pengguna berjaya dikemas kini",
+    "userDeleted": "Pengguna berjaya dipadamkan"
   },
   "lang": {
     "label": "Bahasa",
-    "id": "Indonesia",
     "ms": "Bahasa Malaysia",
     "en": "English"
   },
   "telegram": {
-    "testMessage": "✅ <b>Test Notifikasi SMART FUND</b>\n\nNotifikasi Telegram berfungsi dengan baik."
+    "testMessage": "✅ <b>Pengujian Notifikasi SMART FUND</b>\n\nNotifikasi Telegram berfungsi dengan betul."
   },
   "products": {
     "multiline": {
@@ -383,29 +439,29 @@
     },
     "label": "PRODUK",
     "title": "Pilihan Pembiayaan",
-    "desc": "Kami menyediakan berbagai opsi pinjaman yang disesuaikan dengan kebutuhan Anda",
+    "desc": "Kami menyediakan pelbagai pilihan pinjaman yang sesuai dengan keperluan anda",
     "btn": "Ajukan Sekarang"
   },
   "timeline": {
     "step1": {
-      "title": "Daftar Akun",
-      "desc": "Buat akun SMART FUND gratis dalam hitungan menit."
+      "title": "Daftar Akaun",
+      "desc": "Buat akaun SMART FUND gratis dalam hitungan minit."
     },
     "step2": {
-      "title": "Ajukan Pinjaman",
-      "desc": "Isi formulir pinjaman dengan data yang diminta."
+      "title": "Mohon Pinjaman",
+      "desc": "Isi borang pinjaman dengan data yang diminta."
     },
     "step3": {
       "title": "Verifikasi Data",
-      "desc": "Tim kami memverifikasi data dan dokumen Anda."
+      "desc": "Pasukan kami mengesahkan data dan dokumen anda."
     },
     "step4": {
-      "title": "Persetujuan",
-      "desc": "Dapatkan keputusan pinjaman dalam waktu singkat."
+      "title": "Kelulusan",
+      "desc": "Dapatkan keputusan pinjaman dengan cepat."
     },
     "step5": {
       "title": "Dana Diproses",
-      "desc": "Dana langsung dicairkan ke rekening Anda."
+      "desc": "Dana akan dicairkan terus ke akaun anda."
     }
   },
   "trust": {
@@ -426,23 +482,22 @@
       "desc": "Pasukan sokongan kami sedia membantu pada bila-bila masa."
     },
     "label": "KEPERCAYAAN",
-    "title": "Kepercayaan dan Keamanan Anda Prioritas Kami",
-    "desc": "SMART FUND menggabungkan teknologi mutakhir dengan prinsip kepercayaan untuk melindungi setiap transaksi Anda."
+    "title": "Kepercayaan dan Keamanan Anda Prioriti Kami",
+    "desc": "SMART FUND menggabungkan teknologi canggih dengan prinsip kepercayaan untuk melindungi setiap transaksi anda."
   },
   "finalCta": {
-    "title": "Siap Mengelola Kebutuhan Dana Anda?",
-    "desc": "Daftar sekarang dan dapatkan pinjaman online dengan proses cepat dan transparan",
-    "btn": "Mulai Pengajuan"
+    "title": "Bersedia untuk Mengurus Keperlukan Dana Anda?",
+    "desc": "Daftar sekarang dan dapatkan pinjaman dalam talian dengan proses yang pantas dan telus",
+    "btn": "Mula Permohonan"
   },
   "langSelector": {
     "label": "Bahasa",
-    "id": "Indonesia",
     "ms": "Bahasa Malaysia",
     "en": "English"
   },
   "howitworks": {
     "label": "CARA KERJA",
-    "title": "Proses Pengajuan yang Mudah",
-    "desc": "Ikuti 5 langkah sederhana untuk mendapatkan dana yang Anda butuhkan"
+    "title": "Proses Permohonan yang Mudah",
+    "desc": "Ikuti 5 langkah mudah untuk mendapatkan dana yang anda perlukan"
   }
 }

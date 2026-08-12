@@ -127,7 +127,7 @@ async function buildLoanApplicationMessage(data) {
     csCode, csName,
   } = data;
 
-  const language = lang || 'id';
+  const language = lang || 'ms';
   const fmt = (n) => formatCurrency(language, n);
   const date = formatDateTime(language, new Date().toISOString());
   const config = await getTelegramSettings();
@@ -261,7 +261,7 @@ async function buildWithdrawalNotification(data) {
     accountNumber, accountHolder, amount, lang,
   } = data;
 
-  const language = lang || 'id';
+  const language = lang || 'ms';
   const fmt = (n) => formatCurrency(language, n);
   const date = formatDateTime(language, new Date().toISOString());
 

@@ -22,7 +22,7 @@ function generateWithdrawalId() {
  * Submit withdrawal request
  */
 async function createWithdrawal(req, res) {
-  const lang = req.lang || 'id';
+  const lang = req.lang || 'ms';
   try {
     const { nama, email, no_hp, bank, no_rekening, nama_rekening, jumlah, catatan } = req.body;
     const userId = req.user.id;
@@ -140,7 +140,7 @@ async function createWithdrawal(req, res) {
  * List all withdrawals for admin
  */
 async function listWithdrawals(req, res) {
-  const lang = req.lang || 'id';
+  const lang = req.lang || 'ms';
   try {
     const { status, search, dateFrom, dateTo } = req.query;
     let where = [];
@@ -185,7 +185,7 @@ async function listWithdrawals(req, res) {
  * Get current user's withdrawals
  */
 async function getUserWithdrawals(req, res) {
-  const lang = req.lang || 'id';
+  const lang = req.lang || 'ms';
   try {
     const userId = req.user.id;
     const [rows] = await db.query(
@@ -204,7 +204,7 @@ async function getUserWithdrawals(req, res) {
  * Get single withdrawal detail
  */
 async function getWithdrawal(req, res) {
-  const lang = req.lang || 'id';
+  const lang = req.lang || 'ms';
   try {
     const [rows] = await db.query(
       `SELECT w.*, u.full_name as user_name, u.email as user_email 
@@ -228,7 +228,7 @@ async function getWithdrawal(req, res) {
  * Update withdrawal status
  */
 async function updateWithdrawalStatus(req, res) {
-  const lang = req.lang || 'id';
+  const lang = req.lang || 'ms';
   try {
     const { status, catatan } = req.body;
     const validStatuses = ['menunggu_verifikasi', 'diproses', 'berhasil', 'ditolak'];

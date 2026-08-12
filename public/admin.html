@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="ms">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <script src="/assets/js/i18n.js"></script>
+  <script src="/assets/js/locale.js"></script>
   <link rel="stylesheet" href="/assets/css/style.css" />
 </head>
   <body class="font-jakarta bg-slate-50">
@@ -26,29 +27,29 @@
         <span class="text-2xl font-extrabold gradient-text">SMART FUND</span>
       </div>
       <div class="bg-white rounded-3xl shadow-xl p-6 sm:p-8 border border-slate-100 hover-lift animate-zoom-in">
-        <h2 class="text-2xl font-extrabold text-slate-900 mb-2">Admin Login</h2>
-        <p class="text-slate-500 text-sm mb-6">Masuk ke dashboard admin SMART FUND</p>
-        <form id="adminLoginForm" class="space-y-4">
-          <div>
-            <label class="form-label" for="adminUsername">Username</label>
-            <div class="relative">
-              <i class="fas fa-user absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-              <input type="text" id="adminUsername" placeholder="admin" class="form-input pl-11" />
-            </div>
-          </div>
-          <div>
-            <label class="form-label" for="adminPassword">Password</label>
-            <div class="relative">
-              <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-              <input type="password" id="adminPassword" placeholder="••••••••" class="form-input pl-11 pr-12" />
-              <button type="button" id="toggleAdminPwd" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400" aria-label="Toggle password visibility"><i class="fas fa-eye"></i></button>
-            </div>
-          </div>
-          <button type="submit" id="adminLoginBtn" class="btn btn-primary w-full">
-            <span class="btn-text"><i class="fas fa-right-to-bracket mr-2"></i> Login Admin</span>
-          </button>
-        </form>
-        <p class="text-center text-slate-400 text-sm mt-6"><a href="/" class="hover:text-blue-600"><i class="fas fa-arrow-left mr-1"></i> Kembali ke Beranda</a></p>
+         <h2 class="text-2xl font-extrabold text-slate-900 mb-2" data-i18n="admin.login">Admin Login</h2>
+         <p class="text-slate-500 text-sm mb-6" data-i18n="admin.loginDesc">Masuk ke dashboard admin SMART FUND</p>
+         <form id="adminLoginForm" class="space-y-4">
+           <div>
+             <label class="form-label" for="adminUsername" data-i18n="admin.username">Username</label>
+             <div class="relative">
+               <i class="fas fa-user absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+               <input type="text" id="adminUsername" placeholder="admin" class="form-input pl-11" />
+             </div>
+           </div>
+           <div>
+             <label class="form-label" for="adminPassword" data-i18n="admin.password">Password</label>
+             <div class="relative">
+               <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+               <input type="password" id="adminPassword" placeholder="••••••••" class="form-input pl-11 pr-12" />
+               <button type="button" id="toggleAdminPwd" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400" aria-label="Toggle password visibility"><i class="fas fa-eye"></i></button>
+             </div>
+           </div>
+           <button type="submit" id="adminLoginBtn" class="btn btn-primary w-full">
+             <span class="btn-text"><i class="fas fa-right-to-bracket mr-2"></i> <span data-i18n="admin.loginBtn">Login Admin</span></span>
+           </button>
+         </form>
+         <p class="text-center text-slate-400 text-sm mt-6"><a href="/" class="hover:text-blue-600"><i class="fas fa-arrow-left mr-1"></i> <span data-i18n="admin.back">Kembali ke Beranda</span></a></p>
       </div>
     </div>
   </div>
@@ -66,17 +67,17 @@
           </div>
         </div>
         <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
-          <a class="admin-link active" data-page="dashboard"><i class="fas fa-gauge-high w-5"></i> Dashboard</a>
-          <a class="admin-link" data-page="users"><i class="fas fa-users w-5"></i> Data User</a>
-          <a class="admin-link" data-page="applications"><i class="fas fa-file-circle-check w-5"></i> Pengajuan</a>
-          <a class="admin-link" data-page="transactions"><i class="fas fa-receipt w-5"></i> Transaksi</a>
-           <a class="admin-link" data-page="withdrawals"><i class="fas fa-money-bill-wave w-5"></i> Penarikan Dana</a>
-           <a class="admin-link super-admin-only" data-page="cs-codes"><i class="fas fa-key w-5"></i> Kelola Kode CS</a>
-           <a class="admin-link" data-page="telegram"><i class="fab fa-telegram w-5"></i> Pengaturan Telegram</a>
-          <a class="admin-link" data-page="settings"><i class="fas fa-gear w-5"></i> Setting Website</a>
+          <a class="admin-link active" data-page="dashboard"><i class="fas fa-gauge-high w-5"></i> <span data-i18n="admin.dashboard">Dashboard</span></a>
+          <a class="admin-link" data-page="users"><i class="fas fa-users w-5"></i> <span data-i18n="admin.users">Data User</span></a>
+          <a class="admin-link" data-page="applications"><i class="fas fa-file-circle-check w-5"></i> <span data-i18n="admin.applications">Pengajuan</span></a>
+          <a class="admin-link" data-page="transactions"><i class="fas fa-receipt w-5"></i> <span data-i18n="admin.transactions">Transaksi</span></a>
+           <a class="admin-link" data-page="withdrawals"><i class="fas fa-money-bill-wave w-5"></i> <span data-i18n="admin.withdrawals">Penarikan Dana</span></a>
+           <a class="admin-link super-admin-only" data-page="cs-codes"><i class="fas fa-key w-5"></i> <span data-i18n="admin.csManagement">Kelola Kode CS</span></a>
+           <a class="admin-link" data-page="telegram"><i class="fab fa-telegram w-5"></i> <span data-i18n="admin.telegram">Pengaturan Telegram</span></a>
+           <a class="admin-link" data-page="settings"><i class="fas fa-gear w-5"></i> <span data-i18n="admin.settings">Setting Website</span></a>
         </nav>
         <div class="p-4 border-t border-slate-700">
-          <a id="adminLogoutBtn" class="text-red-400 hover:bg-red-500/10 rounded-xl flex items-center gap-3 px-4 py-3 cursor-pointer"><i class="fas fa-right-from-bracket w-5"></i> Logout</a>
+          <a id="adminLogoutBtn" class="text-red-400 hover:bg-red-500/10 rounded-xl flex items-center gap-3 px-4 py-3 cursor-pointer"><i class="fas fa-right-from-bracket w-5"></i> <span data-i18n="admin.logout">Logout</span></a>
         </div>
       </aside>
 
@@ -88,12 +89,21 @@
               <button id="adminMenuToggle" class="md:hidden icon-btn" aria-label="Buka menu navigasi">
                 <i class="fas fa-bars text-slate-600"></i>
               </button>
-              <h1 id="adminPageTitle" class="text-lg font-bold text-slate-900">Dashboard</h1>
+               <h1 id="adminPageTitle" class="text-lg font-bold text-slate-900" data-i18n="admin.dashboard">Dashboard</h1>
             </div>
             <div class="flex items-center gap-3">
               <button id="darkToggle" class="icon-btn" aria-label="Toggle dark mode">
                 <i class="fas fa-moon text-slate-600"></i>
               </button>
+              <div class="relative" id="langDropdownAdmin">
+                <button id="langToggleAdmin" class="icon-btn" aria-label="Toggle language">
+                  <i class="fas fa-globe text-slate-600"></i>
+                </button>
+                <div id="langMenuAdmin" class="hidden absolute right-0 mt-2 w-40 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 py-1">
+                  <button data-lang="ms" class="lang-option w-full px-4 py-2 text-left text-sm hover:bg-slate-100 dark:hover:bg-slate-700">🇲🇾 Bahasa Malaysia</button>
+                  <button data-lang="en" class="lang-option w-full px-4 py-2 text-left text-sm hover:bg-slate-100 dark:hover:bg-slate-700">🇬🇧 English</button>
+                </div>
+              </div>
               <div class="flex items-center gap-2">
                 <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white font-bold" id="adminAvatar" aria-label="Admin avatar">A</div>
                 <div class="hidden sm:block">
@@ -108,40 +118,40 @@
         <main class="flex-1 p-4 md:p-6 overflow-y-auto">
           <!-- DASHBOARD -->
           <section id="apage-dashboard" class="admin-content">
-            <h2 class="text-2xl font-extrabold text-slate-900 mb-6">Dashboard Overview</h2>
+            <h2 class="text-2xl font-extrabold text-slate-900 mb-6" data-i18n="admin.overview">Dashboard Overview</h2>
             <div class="stats-grid mb-6">
               <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm stat-card stagger-1">
-                <div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center feature-icon"><i class="fas fa-users text-blue-600"></i></div><p class="text-sm text-slate-500">Total User</p></div>
+                <div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center feature-icon"><i class="fas fa-users text-blue-600"></i></div><p class="text-sm text-slate-500" data-i18n="admin.totalUser">Total User</p></div>
                 <p id="aTotalUser" class="text-2xl font-extrabold text-slate-900">0</p>
               </div>
               <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm stat-card stagger-2">
-                <div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center feature-icon"><i class="fas fa-file-circle-check text-purple-600"></i></div><p class="text-sm text-slate-500">Total Pengajuan</p></div>
+                <div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center feature-icon"><i class="fas fa-file-circle-check text-purple-600"></i></div><p class="text-sm text-slate-500" data-i18n="admin.totalApp">Total Pengajuan</p></div>
                 <p id="aTotalPengajuan" class="text-2xl font-extrabold text-slate-900">0</p>
               </div>
               <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm stat-card stagger-3">
-                <div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center feature-icon"><i class="fas fa-clock text-amber-600"></i></div><p class="text-sm text-slate-500">Pinjaman Aktif</p></div>
+                <div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center feature-icon"><i class="fas fa-clock text-amber-600"></i></div><p class="text-sm text-slate-500" data-i18n="admin.activeLoan">Pinjaman Aktif</p></div>
                 <p id="aPinjamanAktif" class="text-2xl font-extrabold text-slate-900">0</p>
               </div>
               <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm stat-card stagger-4">
-                <div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center feature-icon"><i class="fas fa-money-bill-wave text-green-600"></i></div><p class="text-sm text-slate-500">Dana Cair</p></div>
-                <p id="aDanaCair" class="text-2xl font-extrabold text-slate-900">Rp 0</p>
+                <div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center feature-icon"><i class="fas fa-money-bill-wave text-green-600"></i></div><p class="text-sm text-slate-500" data-i18n="admin.disbursed">Dana Cair</p></div>
+                <p id="aDanaCair" class="text-2xl font-extrabold text-slate-900">0</p>
               </div>
               <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm stat-card stagger-5">
-                <div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center feature-icon"><i class="fas fa-check-circle text-indigo-600"></i></div><p class="text-sm text-slate-500">Pinjaman Lunas</p></div>
+                <div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center feature-icon"><i class="fas fa-check-circle text-indigo-600"></i></div><p class="text-sm text-slate-500" data-i18n="admin.paid">Pinjaman Lunas</p></div>
                 <p id="aPinjamanLunas" class="text-2xl font-extrabold text-slate-900">0</p>
               </div>
               <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm stat-card stagger-6">
-                <div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-cyan-100 rounded-xl flex items-center justify-center feature-icon"><i class="fas fa-user-check text-cyan-600"></i></div><p class="text-sm text-slate-500">User Aktif</p></div>
+                <div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-cyan-100 rounded-xl flex items-center justify-center feature-icon"><i class="fas fa-user-check text-cyan-600"></i></div><p class="text-sm text-slate-500" data-i18n="admin.activeUser">User Aktif</p></div>
                 <p id="aUserAktif" class="text-2xl font-extrabold text-slate-900">0</p>
               </div>
             </div>
             <div class="grid lg:grid-cols-3 gap-6">
               <div class="lg:col-span-2 bg-white rounded-2xl p-6 border border-slate-100 shadow-sm stat-card">
-                <h3 class="font-bold text-slate-900 mb-4">Grafik Statistik</h3>
+                <h3 class="font-bold text-slate-900 mb-4" data-i18n="admin.chart">Grafik Statistik</h3>
                 <canvas id="statsChart" height="100" aria-label="Grafik statistik dashboard"></canvas>
               </div>
               <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm stat-card">
-                <h3 class="font-bold text-slate-900 mb-4">Pengajuan Terbaru</h3>
+                <h3 class="font-bold text-slate-900 mb-4" data-i18n="admin.recentApps">Pengajuan Terbaru</h3>
                 <div id="recentApps" class="space-y-3"></div>
               </div>
             </div>
@@ -150,21 +160,21 @@
           <!-- USERS -->
           <section id="apage-users" class="admin-content hidden">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-              <h2 class="text-2xl font-extrabold text-slate-900">Data User</h2>
-              <input type="text" id="userSearch" placeholder="Cari user..." class="form-input max-w-xs w-full sm:w-auto" />
+              <h2 class="text-2xl font-extrabold text-slate-900" data-i18n="admin.users">Data User</h2>
+              <input type="text" id="userSearch" placeholder="Cari user..." class="form-input max-w-xs w-full sm:w-auto" data-i18n-placeholder="admin.userSearch" placeholder="Cari user..." />
             </div>
             <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
               <div class="table-responsive">
                 <table class="table">
                   <thead>
                     <tr>
-                      <th>ID</th>
-                      <th>Nama</th>
-                      <th>Email</th>
-                      <th>Saldo</th>
-                      <th>Limit</th>
-                      <th>Status</th>
-                      <th>Aksi</th>
+                      <th data-i18n="admin.th.id">ID</th>
+                      <th data-i18n="admin.th.name">Nama</th>
+                      <th data-i18n="admin.th.email">Email</th>
+                      <th data-i18n="admin.th.balance">Saldo</th>
+                      <th data-i18n="admin.th.limit">Limit</th>
+                      <th data-i18n="admin.th.status">Status</th>
+                      <th data-i18n="admin.th.actions">Aksi</th>
                     </tr>
                   </thead>
                   <tbody id="usersTable"></tbody>
@@ -175,38 +185,38 @@
 
           <!-- APPLICATIONS -->
           <section id="apage-applications" class="admin-content hidden">
-            <h2 class="text-2xl font-extrabold text-slate-900 mb-6">Manajemen Pengajuan</h2>
+            <h2 class="text-2xl font-extrabold text-slate-900 mb-6" data-i18n="admin.applications">Manajemen Pengajuan</h2>
             <!-- Super Admin Filters -->
             <div id="appFilters" class="hidden bg-white rounded-2xl p-4 border border-slate-100 shadow-sm mb-4">
               <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
-                <input type="text" id="filterCsCode" class="form-input text-sm" placeholder="Kode CS (CS01)" />
+                <input type="text" id="filterCsCode" class="form-input text-sm" placeholder="Kode CS (CS01)" data-i18n-placeholder="admin.csCodeHint" />
                 <select id="filterStatus" class="form-select text-sm">
-                  <option value="">Semua Status</option>
-                  <option value="pending">Menunggu</option>
-                  <option value="approved">Disetujui</option>
-                  <option value="disbursed">Dana Cair</option>
-                  <option value="rejected">Ditolak</option>
-                  <option value="completed">Lunas</option>
+                  <option value="" data-i18n="admin.toast.allStatus">Semua Status</option>
+                  <option value="pending" data-i18n="status.pending">Menunggu</option>
+                  <option value="approved" data-i18n="status.approved">Disetujui</option>
+                  <option value="disbursed" data-i18n="status.disbursed">Dana Cair</option>
+                  <option value="rejected" data-i18n="status.rejected">Ditolak</option>
+                  <option value="completed" data-i18n="status.completed">Lunas</option>
                 </select>
                 <input type="number" id="filterUserId" class="form-input text-sm" placeholder="User ID" />
                 <input type="date" id="filterStart" class="form-input text-sm" />
                 <input type="date" id="filterEnd" class="form-input text-sm" />
               </div>
-              <button id="clearAppFilters" class="mt-3 btn btn-secondary text-sm">Clear Filter</button>
+              <button id="clearAppFilters" class="mt-3 btn btn-secondary text-sm" data-i18n="admin.cancel">Clear Filter</button>
             </div>
             <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
               <div class="table-responsive">
                 <table class="table">
                   <thead>
                     <tr>
-                      <th>ID</th>
-                      <th>Nama</th>
-                      <th>Kode CS</th>
-                      <th>Jumlah</th>
-                      <th>Tenor</th>
-                      <th>Tujuan</th>
-                      <th>Status</th>
-                      <th>Aksi</th>
+                      <th data-i18n="admin.th.id">ID</th>
+                      <th data-i18n="admin.th.name">Nama</th>
+                      <th data-i18n="admin.th.csCode">Kode CS</th>
+                      <th data-i18n="admin.th.amount">Jumlah</th>
+                      <th data-i18n="admin.th.tenor">Tenor</th>
+                      <th data-i18n="admin.th.purpose">Tujuan</th>
+                      <th data-i18n="admin.th.status">Status</th>
+                      <th data-i18n="admin.th.actions">Aksi</th>
                     </tr>
                   </thead>
                   <tbody id="appsTable"></tbody>
@@ -217,19 +227,19 @@
 
           <!-- TRANSACTIONS -->
           <section id="apage-transactions" class="admin-content hidden">
-            <h2 class="text-2xl font-extrabold text-slate-900 mb-6">Manajemen Transaksi & Withdraw</h2>
+            <h2 class="text-2xl font-extrabold text-slate-900 mb-6" data-i18n="admin.transactions">Manajemen Transaksi & Penarikan</h2>
             <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
               <div class="table-responsive">
                 <table class="table">
                   <thead>
                     <tr>
-                      <th>ID</th>
-                      <th>User</th>
-                      <th>Tipe</th>
-                      <th>Jumlah</th>
-                      <th>Status</th>
-                      <th>Tanggal</th>
-                      <th>Aksi</th>
+                      <th data-i18n="admin.th.id">ID</th>
+                      <th data-i18n="admin.th.name">User</th>
+                      <th data-i18n="admin.th.type">Tipe</th>
+                      <th data-i18n="admin.th.amount">Jumlah</th>
+                      <th data-i18n="admin.th.status">Status</th>
+                      <th data-i18n="admin.th.date">Tanggal</th>
+                      <th data-i18n="admin.th.actions">Aksi</th>
                     </tr>
                   </thead>
                   <tbody id="txTable"></tbody>
@@ -241,15 +251,15 @@
           <!-- WITHDRAWALS -->
           <section id="apage-withdrawals" class="admin-content hidden">
             <div class="flex justify-between items-center mb-6">
-              <h2 class="text-2xl font-extrabold text-slate-900">Manajemen Penarikan Dana</h2>
+              <h2 class="text-2xl font-extrabold text-slate-900" data-i18n="admin.withdrawals">Manajemen Penarikan Dana</h2>
               <div class="flex gap-3">
-                <input type="text" id="withdrawSearch" placeholder="Cari ID, nama, email..." class="px-4 py-2 rounded-xl border border-slate-200 focus:outline-none" />
+                <input type="text" id="withdrawSearch" placeholder="Cari ID, nama, email..." class="px-4 py-2 rounded-xl border border-slate-200 focus:outline-none" data-i18n-placeholder="admin.toast.searchPlaceholder" />
                 <select id="withdrawFilter" class="px-4 py-2 rounded-xl border border-slate-200 bg-white">
-                  <option value="">Semua Status</option>
-                  <option value="menunggu_verifikasi">Menunggu Verifikasi</option>
-                  <option value="diproses">Diproses</option>
-                  <option value="berhasil">Berhasil</option>
-                  <option value="ditolak">Ditolak</option>
+                  <option value="" data-i18n="admin.toast.allStatus">Semua Status</option>
+                  <option value="menunggu_verifikasi" data-i18n="admin.withStatus.waiting">Menunggu Verifikasi</option>
+                  <option value="diproses" data-i18n="admin.withStatus.processing">Diproses</option>
+                  <option value="berhasil" data-i18n="admin.withStatus.success">Berhasil</option>
+                  <option value="ditolak" data-i18n="admin.withStatus.rejected">Ditolak</option>
                 </select>
               </div>
             </div>
@@ -258,18 +268,18 @@
                 <table class="table">
                   <thead>
                     <tr>
-                      <th>ID Penarikan</th>
-                      <th>Nama</th>
-                      <th>Email</th>
-                      <th>Bank</th>
-                      <th>Jumlah</th>
-                      <th>Status</th>
-                      <th>Tanggal</th>
-                      <th>Aksi</th>
+                      <th data-i18n="admin.th.withdrawId">ID Penarikan</th>
+                      <th data-i18n="admin.th.name">Nama</th>
+                      <th data-i18n="admin.th.email">Email</th>
+                      <th data-i18n="admin.th.bank">Bank</th>
+                      <th data-i18n="admin.th.amount">Jumlah</th>
+                      <th data-i18n="admin.th.status">Status</th>
+                      <th data-i18n="admin.th.date">Tanggal</th>
+                      <th data-i18n="admin.th.actions">Aksi</th>
                     </tr>
                   </thead>
                   <tbody id="withdrawTable">
-                    <tr><td colspan="8" class="text-center py-8 text-slate-400">Memuat...</td></tr>
+                    <tr><td colspan="8" class="text-center py-8 text-slate-400" data-i18n="admin.loading">Memuat...</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -278,10 +288,10 @@
 
           <!-- CS CODES -->
           <section id="apage-cs-codes" class="admin-content hidden">
-            <h2 class="text-2xl font-extrabold text-slate-900 mb-6">Kelola Kode CS</h2>
+            <h2 class="text-2xl font-extrabold text-slate-900 mb-6" data-i18n="admin.csManagement">Kelola Kode CS</h2>
             <div class="flex gap-3 mb-4">
               <button id="btnCreateCs" class="btn btn-primary text-sm">
-                <i class="fas fa-plus mr-2"></i>Buat Kode CS
+                <i class="fas fa-plus mr-2"></i> <span data-i18n="admin.csCreate">Buat Kode CS</span>
               </button>
             </div>
             <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
@@ -289,16 +299,16 @@
                 <table class="table">
                   <thead>
                     <tr>
-                      <th>Kode CS</th>
-                      <th>Nama</th>
-                      <th>Email</th>
-                      <th>Role</th>
-                      <th>Status</th>
-                      <th>Aksi</th>
+                      <th data-i18n="admin.csCode">Kode CS</th>
+                      <th data-i18n="admin.th.name">Nama</th>
+                      <th data-i18n="admin.th.email">Email</th>
+                      <th data-i18n="admin.th.role">Role</th>
+                      <th data-i18n="admin.th.status">Status</th>
+                      <th data-i18n="admin.th.actions">Aksi</th>
                     </tr>
                   </thead>
                   <tbody id="csTable">
-                    <tr><td colspan="6" class="text-center py-8 text-slate-400">Memuat...</td></tr>
+                    <tr><td colspan="6" class="text-center py-8 text-slate-400" data-i18n="admin.loading">Memuat...</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -307,32 +317,32 @@
 
           <!-- TELEGRAM -->
           <section id="apage-telegram" class="admin-content hidden">
-            <h2 class="text-2xl font-extrabold text-slate-900 mb-6">Pengaturan Telegram</h2>
+            <h2 class="text-2xl font-extrabold text-slate-900 mb-6" data-i18n="admin.telegram">Pengaturan Telegram</h2>
             <div class="grid lg:grid-cols-2 gap-6">
               <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
-                <h3 class="font-bold text-slate-900 mb-4"><i class="fab fa-telegram text-blue-500 mr-2"></i> Konfigurasi Bot</h3>
+                <h3 class="font-bold text-slate-900 mb-4"><i class="fab fa-telegram text-blue-500 mr-2"></i> <span data-i18n="admin.tg.config">Konfigurasi Bot</span></h3>
                 <div class="space-y-4 text-sm">
                   <div>
-                    <label class="form-label" for="tgToken">Bot Token</label>
+                    <label class="form-label" for="tgToken" data-i18n="admin.tg.botToken">Bot Token</label>
                     <input type="password" id="tgToken" class="form-input" placeholder="123456:ABCDEF..." />
                   </div>
                   <div>
-                    <label class="form-label" for="tgChatId">Chat ID</label>
+                    <label class="form-label" for="tgChatId" data-i18n="admin.tg.chatId">Chat ID</label>
                     <input type="text" id="tgChatId" class="form-input" placeholder="123456789" />
                   </div>
                   <div>
-                    <label class="form-label" for="tgBotUser">Bot Username</label>
+                    <label class="form-label" for="tgBotUser" data-i18n="admin.tg.botUser">Bot Username</label>
                     <input type="text" id="tgBotUser" class="form-input" placeholder="smartfundonline_bot" />
                   </div>
                 </div>
                 <div class="flex flex-col sm:flex-row gap-3 mt-4">
-                  <button id="tgSaveBtn" class="flex-1 btn btn-primary"><i class="fas fa-save mr-2"></i> Simpan Pengaturan</button>
-                  <button id="tgTestBtn" class="flex-1 btn btn-secondary"><i class="fas fa-paper-plane mr-2"></i> Test Notifikasi</button>
+                  <button id="tgSaveBtn" class="flex-1 btn btn-primary"><i class="fas fa-save mr-2"></i> <span data-i18n="admin.tg.save">Simpan Pengaturan</span></button>
+                  <button id="tgTestBtn" class="flex-1 btn btn-secondary"><i class="fas fa-paper-plane mr-2"></i> <span data-i18n="admin.tg.test">Test Notifikasi</span></button>
                 </div>
-                <p class="text-xs text-slate-400 mt-3">Pengaturan ini akan disimpan ke database settings dan dipakai saat bot mengirim notifikasi.</p>
+                <p class="text-xs text-slate-400 mt-3" data-i18n="admin.tg.desc">Pengaturan ini akan disimpan ke database settings dan dipakai saat bot mengirim notifikasi.</p>
               </div>
               <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
-                <h3 class="font-bold text-slate-900 mb-4"><i class="fas fa-history text-blue-600 mr-2"></i> Log Telegram</h3>
+                <h3 class="font-bold text-slate-900 mb-4"><i class="fas fa-history text-blue-600 mr-2"></i> <span data-i18n="admin.tg.logs">Log Telegram</span></h3>
                 <div id="tgLogs" class="space-y-2 max-h-96 overflow-y-auto"></div>
               </div>
             </div>
@@ -340,22 +350,24 @@
 
           <!-- SETTINGS -->
           <section id="apage-settings" class="admin-content hidden">
-            <h2 class="text-2xl font-extrabold text-slate-900 mb-6">Setting Website</h2>
+            <h2 class="text-2xl font-extrabold text-slate-900 mb-6" data-i18n="admin.settings">Setting Website</h2>
             <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-100 shadow-sm max-w-3xl">
               <form id="settingsForm" class="space-y-4">
                 <div class="grid md:grid-cols-2 gap-4">
-                  <div><label class="form-label" for="setSiteName">Nama Website</label><input type="text" id="setSiteName" class="form-input" /></div>
-                  <div><label class="form-label" for="setTagline">Tagline</label><input type="text" id="setTagline" class="form-input" /></div>
-                  <div><label class="form-label" for="setMinLoan">Pinjaman Min</label><input type="number" id="setMinLoan" class="form-input" /></div>
-                  <div><label class="form-label" for="setMaxLoan">Pinjaman Max</label><input type="number" id="setMaxLoan" class="form-input" /></div>
-                  <div><label class="form-label" for="setMinTenor">Tenor Min (bulan)</label><input type="number" id="setMinTenor" class="form-input" /></div>
-                  <div><label class="form-label" for="setMaxTenor">Tenor Max (bulan)</label><input type="number" id="setMaxTenor" class="form-input" /></div>
-                  <div><label class="form-label" for="setInterest">Bunga (% / tahun)</label><input type="number" step="0.1" id="setInterest" class="form-input" /></div>
-                  <div><label class="form-label" for="setDefaultLimit">Limit Default User</label><input type="number" id="setDefaultLimit" class="form-input" /></div>
-                  <div><label class="form-label" for="setContactEmail">Email Kontak</label><input type="email" id="setContactEmail" class="form-input" /></div>
-                  <div><label class="form-label" for="setContactPhone">Telepon Kontak</label><input type="text" id="setContactPhone" class="form-input" /></div>
+                  <div><label class="form-label" for="setSiteName" data-i18n="admin.set.siteName">Nama Website</label><input type="text" id="setSiteName" class="form-input" /></div>
+                  <div><label class="form-label" for="setTagline" data-i18n="admin.set.tagline">Tagline</label><input type="text" id="setTagline" class="form-input" /></div>
+                  <div><label class="form-label" for="setMinLoan" data-i18n="admin.set.minLoan">Pinjaman Min</label><input type="number" id="setMinLoan" class="form-input" /></div>
+                  <div><label class="form-label" for="setMaxLoan" data-i18n="admin.set.maxLoan">Pinjaman Max</label><input type="number" id="setMaxLoan" class="form-input" /></div>
+                  <div><label class="form-label" for="setMinTenor" data-i18n="admin.set.minTenor">Tenor Min (bulan)</label><input type="number" id="setMinTenor" class="form-input" /></div>
+                  <div><label class="form-label" for="setMaxTenor" data-i18n="admin.set.maxTenor">Tenor Max (bulan)</label><input type="number" id="setMaxTenor" class="form-input" /></div>
+                  <div><label class="form-label" for="setInterest" data-i18n="admin.set.interest">Bunga (% / tahun)</label><input type="number" step="0.1" id="setInterest" class="form-input" /></div>
+                  <div><label class="form-label" for="setDefaultLimit" data-i18n="admin.set.defaultLimit">Limit Default User</label><input type="number" id="setDefaultLimit" class="form-input" /></div>
+                  <div><label class="form-label" for="setContactEmail" data-i18n="admin.set.contactEmail">Email Kontak</label><input type="email" id="setContactEmail" class="form-input" /></div>
+                  <div><label class="form-label" for="setContactPhone" data-i18n="admin.set.contactPhone">Telepon Kontak</label><input type="text" id="setContactPhone" class="form-input" /></div>
                 </div>
-                <button type="submit" id="settingsSaveBtn" class="btn btn-primary"><span class="btn-text"><i class="fas fa-save mr-2"></i> Simpan Pengaturan</span></button>
+                <button type="submit" id="settingsSaveBtn" class="btn btn-primary">
+                  <span class="btn-text"><i class="fas fa-save mr-2"></i> <span data-i18n="admin.set.save">Simpan Pengaturan</span></span>
+                </button>
               </form>
             </div>
           </section>
@@ -368,22 +380,22 @@
   <div id="userModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/50 p-4">
     <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col">
       <div class="p-5 border-b border-slate-100 flex justify-between items-center">
-        <h3 class="font-bold text-slate-900"><i class="fas fa-user text-blue-600 mr-2"></i> Detail & Edit User</h3>
-        <button onclick="closeUserModal()" class="text-slate-400 hover:text-slate-600" aria-label="Tutup modal">Tutup</button>
+        <h3 class="font-bold text-slate-900"><i class="fas fa-user text-blue-600 mr-2"></i> <span data-i18n="admin.editUser">Detail & Edit User</span></h3>
+        <button onclick="closeUserModal()" class="text-slate-400 hover:text-slate-600" aria-label="Tutup modal" data-i18n="admin.detail.closeModal">Tutup</button>
       </div>
       <div class="flex-1 overflow-y-auto p-6 space-y-4">
         <div class="grid md:grid-cols-2 gap-4">
-          <div><label class="form-label" for="editUserName">Nama</label><input type="text" id="editUserName" class="form-input" /></div>
-          <div><label class="form-label" for="editUserEmail">Email</label><input type="email" id="editUserEmail" readonly class="form-input bg-slate-50" /></div>
-          <div><label class="form-label" for="editUserPhone">Phone</label><input type="tel" id="editUserPhone" class="form-input" /></div>
-          <div><label class="form-label" for="editUserStatus">Status</label><select id="editUserStatus" class="form-select"><option value="active">Aktif</option><option value="frozen">Dibekikan</option><option value="pending">Pending</option><option value="inactive">Nonaktif</option></select></div>
-          <div><label class="form-label" for="editUserBalance">Saldo</label><input type="number" id="editUserBalance" class="form-input" /></div>
-          <div><label class="form-label" for="editUserLimit">Limit Pinjaman</label><input type="number" id="editUserLimit" class="form-input" /></div>
+          <div><label class="form-label" for="editUserName" data-i18n="admin.detail.name">Nama</label><input type="text" id="editUserName" class="form-input" /></div>
+          <div><label class="form-label" for="editUserEmail" data-i18n="admin.detail.email">Email</label><input type="email" id="editUserEmail" readonly class="form-input bg-slate-50" /></div>
+          <div><label class="form-label" for="editUserPhone" data-i18n="admin.detail.phone">Phone</label><input type="tel" id="editUserPhone" class="form-input" /></div>
+          <div><label class="form-label" for="editUserStatus" data-i18n="admin.detail.status">Status</label><select id="editUserStatus" class="form-select"><option value="active" data-i18n="status.active">Aktif</option><option value="frozen" data-i18n="status.frozen">Bekukan</option><option value="pending" data-i18n="status.pending">Pending</option><option value="inactive" data-i18n="admin.status.inactive">Nonaktif</option></select></div>
+          <div><label class="form-label" for="editUserBalance" data-i18n="admin.detail.balance">Saldo</label><input type="number" id="editUserBalance" class="form-input" /></div>
+          <div><label class="form-label" for="editUserLimit" data-i18n="admin.detail.loanLimit">Limit Pinjaman</label><input type="number" id="editUserLimit" class="form-input" /></div>
         </div>
       </div>
       <div class="p-5 border-t border-slate-100 flex flex-col sm:flex-row gap-3">
-        <button onclick="closeUserModal()" class="btn btn-secondary">Batal</button>
-        <button id="saveUserBtn" class="flex-1 btn btn-primary"><span class="btn-text"><i class="fas fa-save mr-2"></i> Simpan</span></button>
+        <button onclick="closeUserModal()" class="btn btn-secondary" data-i18n="admin.cancel">Batal</button>
+        <button id="saveUserBtn" class="flex-1 btn btn-primary"><span class="btn-text"><i class="fas fa-save mr-2"></i> <span data-i18n="admin.save">Simpan</span></span></button>
       </div>
     </div>
   </div>
@@ -392,15 +404,15 @@
   <div id="appModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/50 p-4">
     <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col">
       <div class="p-5 border-b border-slate-100 flex justify-between items-center">
-        <h3 class="font-bold text-slate-900"><i class="fas fa-file-circle-check text-blue-600 mr-2"></i> Detail Pengajuan</h3>
-        <button onclick="closeAppModal()" class="text-slate-400 hover:text-slate-600" aria-label="Tutup modal">Tutup</button>
+        <h3 class="font-bold text-slate-900"><i class="fas fa-file-circle-check text-blue-600 mr-2"></i> <span data-i18n="admin.viewApp">Detail Pengajuan</span></h3>
+        <button onclick="closeAppModal()" class="text-slate-400 hover:text-slate-600" aria-label="Tutup modal" data-i18n="admin.detail.closeModal">Tutup</button>
       </div>
       <div id="appModalBody" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
       <div class="p-5 border-t border-slate-100 flex flex-wrap gap-3">
-        <button onclick="closeAppModal()" class="btn btn-secondary">Tutup</button>
-        <button id="appRejectBtn" class="btn bg-red-500 text-white hover:bg-red-600 transition"><i class="fas fa-times mr-1"></i> Reject</button>
-        <button id="appApproveBtn" class="btn bg-green-500 text-white hover:bg-green-600 transition"><i class="fas fa-check mr-1"></i> Approve</button>
-        <button id="appDisburseBtn" class="flex-1 btn btn-primary"><i class="fas fa-money-bill-wave mr-1"></i> Cairkan Dana</button>
+        <button onclick="closeAppModal()" class="btn btn-secondary" data-i18n="admin.cancel">Tutup</button>
+        <button id="appRejectBtn" class="btn bg-red-500 text-white hover:bg-red-600 transition"><i class="fas fa-times mr-1"></i> <span data-i18n="admin.reject">Reject</span></button>
+        <button id="appApproveBtn" class="btn bg-green-500 text-white hover:bg-green-600 transition"><i class="fas fa-check mr-1"></i> <span data-i18n="admin.approve">Approve</span></button>
+        <button id="appDisburseBtn" class="flex-1 btn btn-primary"><i class="fas fa-money-bill-wave mr-1"></i> <span data-i18n="admin.disburse">Cairkan Dana</span></button>
       </div>
     </div>
   </div>
@@ -409,5 +421,19 @@
   <script src="/assets/js/currency.js"></script>
   <script src="/assets/js/api.js"></script>
   <script src="/assets/js/admin.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      I18N.init();
+      hidePageLoader();
+
+      document.querySelectorAll('.lang-option').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const lang = btn.getAttribute('data-lang');
+          I18N.setLang(lang);
+          window.location.reload();
+        });
+      });
+    });
+  </script>
 </body>
 </html>

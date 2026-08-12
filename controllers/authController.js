@@ -21,7 +21,7 @@ function signToken(payload) {
  * Registrasi user baru -> auto login
  */
 async function register(req, res) {
-  const lang = req.lang || 'id';
+  const lang = req.lang || 'ms';
   try {
     const fullName = sanitize(req.body.fullName);
     const email = (req.body.email || '').toLowerCase().trim();
@@ -95,7 +95,7 @@ async function register(req, res) {
  * Login dengan email atau nomor HP
  */
 async function login(req, res) {
-  const lang = req.lang || 'id';
+  const lang = req.lang || 'ms';
   try {
     const identifier = (req.body.identifier || '').trim();
     const password = req.body.password;
@@ -159,7 +159,7 @@ async function login(req, res) {
  * Kirim OTP (dummy) ke email/HP
  */
 async function forgotPassword(req, res) {
-  const lang = req.lang || 'id';
+  const lang = req.lang || 'ms';
   try {
     const email = (req.body.email || '').toLowerCase().trim();
     const phone = (req.body.phone || '').trim();
@@ -206,7 +206,7 @@ async function forgotPassword(req, res) {
  * Verifikasi OTP
  */
 async function verifyOtp(req, res) {
-  const lang = req.lang || 'id';
+  const lang = req.lang || 'ms';
   try {
     const { email, otp } = req.body;
     if (!email || !otp) return res.status(400).json({ success: false, message: t(lang, 'auth.emailOtpRequired') });
@@ -231,7 +231,7 @@ async function verifyOtp(req, res) {
  * Buat password baru setelah verifikasi OTP
  */
 async function resetPassword(req, res) {
-  const lang = req.lang || 'id';
+  const lang = req.lang || 'ms';
   try {
     const { token, newPassword } = req.body;
     if (!token || !newPassword) return res.status(400).json({ success: false, message: t(lang, 'auth.tokenPasswordRequired') });
@@ -263,7 +263,7 @@ async function resetPassword(req, res) {
  * Data user yang sedang login
  */
 async function me(req, res) {
-  const lang = req.lang || 'id';
+  const lang = req.lang || 'ms';
   try {
     const [rows] = await db.query(
       `SELECT u.id, u.full_name, u.email, u.phone, u.nik, u.address, u.job, u.income_range,

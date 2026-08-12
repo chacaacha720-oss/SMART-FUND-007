@@ -7,13 +7,13 @@
  * 2. Cookie (lang=ms)
  * 3. Custom X-Lang header (sent by frontend from localStorage)
  * 4. Accept-Language header
- * 5. Default: 'id' (Bahasa Indonesia)
+ * 5. Default: 'ms' (Bahasa Malaysia)
  *
  * Attaches to request:
- *  - req.lang       -> language code (id | ms | en)
+ *  - req.lang       -> language code (ms | en)
  *  - req.language   -> same as req.lang (alias)
- *  - req.locale     -> locale string (id-ID | ms-MY | en-US)
- *  - req.currency   -> currency code (IDR | MYR | USD)
+ *  - req.locale     -> locale string (ms-MY | en-US)
+ *  - req.currency   -> currency code (MYR | USD)
  *  - req.t          -> bound translation function
  *  - req.fmtCurrency -> formatted currency string
  *  - req.fmtNumber   -> formatted number string

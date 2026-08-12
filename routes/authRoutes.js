@@ -14,7 +14,7 @@ const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 20,
   message: (req) => {
-    const lang = req.lang || 'id';
+    const lang = req.lang || 'ms';
     return { success: false, message: t(lang, 'error.tooManyRequests') };
   },
 });

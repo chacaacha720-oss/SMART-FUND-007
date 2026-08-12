@@ -13,7 +13,7 @@ const Currency = {
    * Get the active language code
    */
   getLang() {
-    return (typeof I18N !== 'undefined' && I18N.getLang) ? I18N.getLang() : 'id';
+    return (typeof I18N !== 'undefined' && I18N.getLang) ? I18N.getLang() : 'ms';
   },
 
   /**
@@ -24,7 +24,7 @@ const Currency = {
     if (typeof LocaleConfig !== 'undefined' && LocaleConfig.get) {
       return LocaleConfig.get(lang);
     }
-    return { locale: 'id-ID', currency: 'IDR', symbol: 'Rp' };
+    return { locale: 'ms-MY', currency: 'MYR', symbol: 'RM' };
   },
 
   /**
