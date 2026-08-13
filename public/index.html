@@ -47,26 +47,38 @@
 </head>
 <body class="font-jakarta bg-white text-slate-900 antialiased overflow-x-hidden">
 
-  <!-- ==================== NAVBAR ==================== -->
-  <header id="navbar" class="fixed w-full top-0 z-50 transition-all duration-300">
-    <div class="container mx-auto flex items-center justify-between px-4 sm:px-6 py-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-b border-slate-100 dark:border-slate-800 navbar-shadow">
-      <a href="/" class="flex items-center gap-2.5 group" aria-label="SMART FUND">
-        <img src="/assets/img/logo.svg" alt="SMART FUND" loading="lazy" width="40" height="40" class="object-contain transition-transform duration-300" />
-        <span class="text-2xl lg:text-3xl font-extrabold text-primary">SMART FUND</span>
-      </a>
-      <nav id="navbarNav" class="hidden lg:flex items-center gap-8">
-        <a href="#hero" class="nav-link text-slate-700 hover:text-primary font-medium transition-all duration-200 text-sm">Laman Utama</a>
-        <a href="#features" class="nav-link text-slate-700 hover:text-primary font-medium transition-all duration-200 text-sm">Ciri-ciri</a>
-        <a href="#howitworks" class="nav-link text-slate-700 hover:text-primary font-medium transition-all duration-200 text-sm">Cara Kerja</a>
-        <a href="#calculator" class="nav-link text-slate-700 hover:text-primary font-medium transition-all duration-200 text-sm">Simulasi</a>
-        <a href="#faq" class="nav-link text-slate-700 hover:text-primary font-medium transition-all duration-200 text-sm">Soalan Lazim</a>
-      </nav>
-      <div class="flex items-center gap-3">
-        <a href="/login.html" id="navLoginBtn" class="hidden sm:inline-block px-4 py-2 text-sm font-medium text-slate-700 hover:text-primary transition border border-slate-200 dark:border-slate-700 dark:text-slate-300 dark:hover:text-white rounded-xl">Log Masuk</a>
-        <a href="/register.html" id="navRegisterBtn" class="px-5 py-2 rounded-xl bg-primary hover:bg-primary/90 text-white font-semibold text-sm transition shadow-md hover:shadow-lg">Daftar</a>
-        <button id="mobileMenuBtn" class="lg:hidden p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition" aria-label="Buka menu" aria-expanded="false">
-          <i class="fas fa-bars text-xl"></i>
-        </button>
+  <!-- ==================== TOP APP BAR ==================== -->
+  <header id="topAppBar" class="fixed w-full top-0 z-50 transition-all duration-300">
+    <div class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm">
+      <div class="container mx-auto flex items-center justify-between px-4 sm:px-6 py-3">
+        <!-- LOGO -->
+        <a href="/" class="flex items-center gap-2.5 group" aria-label="SMART FUND">
+          <img src="/assets/img/topbar-logo.jpg" alt="SMART FUND" loading="lazy" width="40" height="40" class="object-contain w-10 h-10 rounded-lg" />
+          <span class="text-xl lg:text-2xl font-extrabold text-primary hidden sm:inline">SMART FUND</span>
+        </a>
+
+        <!-- NAVIGATION ITEMS -->
+        <nav id="topAppBarNav" class="hidden lg:flex items-center gap-1 overflow-x-auto scrollbar-hide">
+          <a href="#tech" class="nav-link px-4 py-2 text-slate-700 dark:text-slate-300 hover:text-primary font-medium transition-all duration-200 text-sm whitespace-nowrap">Tech</a>
+          <a href="#angular" class="nav-link px-4 py-2 text-slate-700 dark:text-slate-300 hover:text-primary font-medium transition-all duration-200 text-sm whitespace-nowrap">Angular</a>
+          <a href="#react" class="nav-link px-4 py-2 text-slate-700 dark:text-slate-300 hover:text-primary font-medium transition-all duration-200 text-sm whitespace-nowrap">React</a>
+          <a href="#css" class="nav-link px-4 py-2 text-slate-700 dark:text-slate-300 hover:text-primary font-medium transition-all duration-200 text-sm whitespace-nowrap">CSS</a>
+          <a href="#mobile" class="nav-link px-4 py-2 text-slate-700 dark:text-slate-300 hover:text-primary font-medium transition-all duration-200 text-sm whitespace-nowrap">Mobile</a>
+          <a href="#features" class="nav-link px-4 py-2 text-slate-700 dark:text-slate-300 hover:text-primary font-medium transition-all duration-200 text-sm whitespace-nowrap">Features</a>
+          <a href="#code-examples" class="nav-link px-4 py-2 text-slate-700 dark:text-slate-300 hover:text-primary font-medium transition-all duration-200 text-sm whitespace-nowrap">Code examples</a>
+          <a href="#usage-guidelines" class="nav-link px-4 py-2 text-slate-700 dark:text-slate-300 hover:text-primary font-medium transition-all duration-200 text-sm whitespace-nowrap">Usage guidelines</a>
+          <a href="#accessibility" class="nav-link px-4 py-2 text-slate-700 dark:text-slate-300 hover:text-primary font-medium transition-all duration-200 text-sm whitespace-nowrap">Accessibility</a>
+          <a href="#open-source" class="nav-link px-4 py-2 text-slate-700 dark:text-slate-300 hover:text-primary font-medium transition-all duration-200 text-sm whitespace-nowrap">Open source</a>
+        </nav>
+
+        <!-- ACTIONS -->
+        <div class="flex items-center gap-3">
+          <a href="/login.html" id="navLoginBtn" class="hidden sm:inline-block px-4 py-2 text-sm font-medium text-slate-700 hover:text-primary transition border border-slate-200 dark:border-slate-700 dark:text-slate-300 dark:hover:text-white rounded-xl">Log Masuk</a>
+          <a href="/register.html" id="navRegisterBtn" class="px-5 py-2 rounded-xl bg-primary hover:bg-primary/90 text-white font-semibold text-sm transition shadow-md hover:shadow-lg">Daftar</a>
+          <button id="topAppBarMenuBtn" class="lg:hidden p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition" aria-label="Buka menu" aria-expanded="false">
+            <i class="fas fa-ellipsis-vertical text-xl"></i>
+          </button>
+        </div>
       </div>
     </div>
   </header>
@@ -74,11 +86,16 @@
   <!-- Mobile Menu -->
   <div id="mobileMenu" class="hidden lg:hidden fixed top-0 left-0 w-full h-screen bg-white dark:bg-slate-900 z-[60] overflow-y-auto pt-20 pb-8 px-6">
     <nav class="flex flex-col gap-4 text-center">
-      <a href="#hero" class="text-xl py-3 text-slate-700 dark:text-slate-300 hover:text-primary transition">Laman Utama</a>
-      <a href="#features" class="text-xl py-3 text-slate-700 dark:text-slate-300 hover:text-primary transition">Ciri-ciri</a>
-      <a href="#howitworks" class="text-xl py-3 text-slate-700 dark:text-slate-300 hover:text-primary transition">Cara Kerja</a>
-      <a href="#calculator" class="text-xl py-3 text-slate-700 dark:text-slate-300 hover:text-primary transition">Simulasi</a>
-      <a href="#faq" class="text-xl py-3 text-slate-700 dark:text-slate-300 hover:text-primary transition">Soalan Lazim</a>
+      <a href="#tech" class="text-xl py-3 text-slate-700 dark:text-slate-300 hover:text-primary transition">Tech</a>
+      <a href="#angular" class="text-xl py-3 text-slate-700 dark:text-slate-300 hover:text-primary transition">Angular</a>
+      <a href="#react" class="text-xl py-3 text-slate-700 dark:text-slate-300 hover:text-primary transition">React</a>
+      <a href="#css" class="text-xl py-3 text-slate-700 dark:text-slate-300 hover:text-primary transition">CSS</a>
+      <a href="#mobile" class="text-xl py-3 text-slate-700 dark:text-slate-300 hover:text-primary transition">Mobile</a>
+      <a href="#features" class="text-xl py-3 text-slate-700 dark:text-slate-300 hover:text-primary transition">Features</a>
+      <a href="#code-examples" class="text-xl py-3 text-slate-700 dark:text-slate-300 hover:text-primary transition">Code examples</a>
+      <a href="#usage-guidelines" class="text-xl py-3 text-slate-700 dark:text-slate-300 hover:text-primary transition">Usage guidelines</a>
+      <a href="#accessibility" class="text-xl py-3 text-slate-700 dark:text-slate-300 hover:text-primary transition">Accessibility</a>
+      <a href="#open-source" class="text-xl py-3 text-slate-700 dark:text-slate-300 hover:text-primary transition">Open source</a>
       <div class="flex flex-col gap-3 mt-6">
         <a href="/login.html" class="px-5 py-2.5 text-center rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium transition">Log Masuk</a>
         <a href="/register.html" class="px-5 py-2.5 text-center rounded-xl bg-primary hover:bg-primary/90 text-white font-semibold transition shadow-md">Daftar</a>
@@ -278,7 +295,7 @@
                   <input type="text" id="loanAmount" inputmode="numeric" maxlength="12" placeholder="10,000.00" class="calc-input w-full" />
                 </div>
                 <div class="calc-value-display" id="loanAmountFormatted">RM 10,000.00</div>
-                <div class="text-xs text-secondary-text dark:text-slate-400">Had Pinjaman: RM 1,000.00 – RM 500,000.00</div>
+                <div class="text-xs text-secondary-text dark:text-slate-400">Had Pinjaman: RM 500.00 – RM 300,000.00</div>
               </div>
 
               <!-- Tempoh -->

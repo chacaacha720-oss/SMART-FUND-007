@@ -8,8 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // ============================================
   // NAVBAR
   // ============================================
-  const navbar = document.getElementById('navbar');
-  const navLinks = document.querySelectorAll('#navbarNav a, #mobileMenu a');
+  const navbar = document.getElementById('topAppBar');
+  const navLinks = document.querySelectorAll('#topAppBarNav a, #mobileMenu a');
 
   const handleScroll = () => {
     if (window.scrollY > 20) {
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Mobile menu
-  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  const mobileMenuBtn = document.getElementById('topAppBarMenuBtn');
   const mobileMenu = document.getElementById('mobileMenu');
   const closeMobileMenu = document.getElementById('closeMobileMenu');
   if (mobileMenuBtn && mobileMenu) {
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // LOAN CALCULATOR — Flat Annual Interest
   // ============================================
 
-  const LOAN_LIMITS = { min: 1000, max: 500000, step: 1, defaultVal: 10000 };
+  const LOAN_LIMITS = { min: 500, max: 300000, step: 500, defaultVal: 10000 };
 
   /**
    * Format a number as Malaysian Ringgit with 2 decimal places.
@@ -391,7 +391,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const faqs = [
     { q: 'Bagaimana cara mengajukan pinjaman di SMART FUND?', a: 'Daftar dahulu, kemudian mulai log masuk ke akaun anda. Pilih menu permohonan pinjaman, isi maklumat pinjaman, dan hantar. Permohonan anda akan diproses oleh sistem kami.' },
     { q: 'Berapa kadar faedah yang dikenakan?', a: 'Kadar faedah kami bermula dari 5% setahun, supaya ansuran anda terasa ringan. Kadar tepat ditentukan berdasarkan profil kelayakan dan tempoh pinjaman.' },
-    { q: 'Berapa jumlah pinjaman yang boleh dimohon?', a: 'Anda boleh memohon pinjaman dari RM 1,000.00 hingga RM 500,000.00 dengan tempoh 1 hingga 60 bulan.' },
+    { q: 'Berapa jumlah pinjaman yang boleh dimohon?', a: 'Anda boleh memohon pinjaman dari RM 500.00 hingga RM 300,000.00 dengan tempoh 1 hingga 60 bulan.' },
     { q: 'Adakah SMART FUND selamat dan dipercayai?', a: 'Ya, SMART FUND mengutamakan keselamatan dan keyakinan pengguna. Kami menggunakan teknologi enkripsi tinggi dan prinsip keelamanan yang ketat.' },
     { q: 'Berapa lama proses kelulusan?', a: 'Proses kelulusan kami cepat. Selepas permohonan dihantar, pasukan kami akan menyemak dan memberikan keputusan dalam masa singkat.' },
     { q: 'Dokumen apa yang diperlukan?', a: 'Kami memerlukan dokumen minimal seperti ID dan maklumat peribadi. Proses pengesahan praktikal dan tidak rumit.' },
