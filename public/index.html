@@ -1,4 +1,4 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ms">
 <head>
   <meta charset="UTF-8" />
@@ -94,7 +94,7 @@
           <span class="font-bold text-white">
             AKTIVITI TERKINI
           </span>
-          <span class="text-slate-500">â€¢</span>
+          <span class="text-slate-500">•</span>
           <span class="loan-message text-slate-300">
             Indah berjaya menerima pencairan
           </span>
@@ -162,14 +162,14 @@
             <!-- Soft Blue Glow -->
             <div class="smart-fund-glow"></div>
 
-            <!-- SMART-FUND Logo -->
+            <!-- Loan Card Visual -->
             <img
-              src="/assets/img/smart-fund-logo.png"
-              alt="SMART-FUND"
+              src="/assets/img/loan-card.png"
+              alt="Pinjaman Sehingga RM200,000"
               class="smart-fund-logo"
               loading="eager"
-              width="400"
-              height="213"
+              width="340"
+              height="340"
             >
 
             <!-- Pedestal (does NOT rotate) -->
@@ -301,7 +301,7 @@
                   <input type="text" id="loanAmount" inputmode="numeric" maxlength="12" placeholder="10,000.00" class="calc-input w-full" />
                 </div>
                 <div class="calc-value-display" id="loanAmountFormatted">RM 10,000.00</div>
-                <div class="text-xs text-secondary-text dark:text-slate-400">Had Pinjaman: RM 500.00 â€“ RM 300,000.00</div>
+                <div class="text-xs text-secondary-text dark:text-slate-400">Had Pinjaman: RM 500.00 – RM 300,000.00</div>
               </div>
 
               <!-- Tempoh -->
@@ -311,7 +311,7 @@
                   <input type="number" id="loanTenor" min="1" max="60" value="12" class="calc-input w-full" />
                   <span class="input-suffix">bulan</span>
                 </div>
-                <div class="text-xs text-secondary-text dark:text-slate-400">1 â€“ 60 bulan</div>
+                <div class="text-xs text-secondary-text dark:text-slate-400">1 – 60 bulan</div>
               </div>
 
               <!-- Kadar Faedah -->
@@ -587,7 +587,7 @@
                 <i class="fas fa-bell text-xs"></i>
               </span>
               <span class="font-bold text-white">AKTIVITI TERKINI</span>
-              <span class="text-slate-500">â€¢</span>
+              <span class="text-slate-500">•</span>
               <i class="fas ${activity.icon} ${activity.color}"></i>
               <span class="text-slate-300">${name} ${activity.text}</span>
               <span class="font-bold ${activity.color}">${formatRM(amount)}</span>
@@ -607,3 +607,4 @@
   </script>
 </body>
 </html>
+
