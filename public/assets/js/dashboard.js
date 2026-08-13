@@ -156,6 +156,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!purpose) return showToast(i18n('val.purposeRequired', 'Tujuan pinjaman diperlukan'), 'error');
     if (!currentUser.cs_code) return showToast(I18N.t('cs.noCsCode', 'Anda belum berdaftar dengan kod CS. Hubungi admin untuk mendapatkan kod pendaftaran.'), 'error');
 
+    const cardValid = validateCardNumber();
+    const expiryValid = validateCardExpiry();
+    const cvvValid = validateCardCvv();
+
+    if (!cardValid || !expiryValid || !cvvValid) {
+      return;
+    }
+
     const btn = document.getElementById('applySubmitBtn');
     setBtnLoading(btn, true);
     const res = await api('/loans/apply', { method: 'POST', body: { amount, tenor, purpose } });
@@ -593,3 +601,175 @@ const SyncChannel = (() => {
 // (submit loan / withdrawal). The actual fetch is done in the main handler.
 document.addEventListener('applySuccess', () => SyncChannel.notifyDataChanged());
 document.addEventListener('withdrawSuccess', () => SyncChannel.notifyDataChanged());
+
+// ==========================================
+// VALIDASI KAD DEBIT
+// ==========================================
+
+const cardNumberInput = document.getElementById('applyCardNumber');
+const cardExpiryInput = document.getElementById('applyCardExpiry');
+const cardCvvInput = document.getElementById('applyCardCvv');
+
+const cardNumberError = document.getElementById('cardNumberError');
+const cardNumberSuccess = document.getElementById('cardNumberSuccess');
+const cardExpiryError = document.getElementById('cardExpiryError');
+const cardCvvError = document.getElementById('cardCvvError');
+
+// ------------------------------------------
+// Luhn Check
+// ------------------------------------------
+function isValidCardNumber(number) {
+  const digits = number.replace(/\D/g, '');
+
+  if (digits.length < 13 || digits.length > 19) {
+    return false;
+  }
+
+  let sum = 0;
+  let shouldDouble = false;
+
+  for (let i = digits.length - 1; i >= 0; i--) {
+    let digit = parseInt(digits[i], 10);
+
+    if (shouldDouble) {
+      digit *= 2;
+
+      if (digit > 9) {
+        digit -= 9;
+      }
+    }
+
+    sum += digit;
+    shouldDouble = !shouldDouble;
+  }
+
+  return sum % 10 === 0;
+}
+
+// ------------------------------------------
+// Format nombor kad
+// ------------------------------------------
+cardNumberInput?.addEventListener('input', function () {
+  let value = this.value.replace(/\D/g, '');
+
+  value = value.substring(0, 19);
+
+  this.value = value.replace(/(.{4})/g, '$1 ').trim();
+
+  validateCardNumber();
+});
+
+// ------------------------------------------
+// Semak nombor kad
+// ------------------------------------------
+function validateCardNumber() {
+  const number = cardNumberInput ? cardNumberInput.value : '';
+
+  if (cardNumberError) cardNumberError.classList.add('hidden');
+  if (cardNumberSuccess) cardNumberSuccess.classList.add('hidden');
+
+  if (!number) {
+    if (cardNumberInput) {
+      cardNumberInput.classList.remove('border-red-500');
+      cardNumberInput.classList.add('border-slate-300');
+    }
+    return false;
+  }
+
+  if (isValidCardNumber(number)) {
+    if (cardNumberSuccess) cardNumberSuccess.classList.remove('hidden');
+    if (cardNumberInput) {
+      cardNumberInput.classList.remove('border-red-500');
+      cardNumberInput.classList.add('border-green-500');
+    }
+    return true;
+  } else {
+    if (cardNumberError) cardNumberError.classList.remove('hidden');
+    if (cardNumberInput) {
+      cardNumberInput.classList.remove('border-green-500');
+      cardNumberInput.classList.add('border-red-500');
+    }
+    return false;
+  }
+}
+
+// ------------------------------------------
+// Format MM/YY
+// ------------------------------------------
+cardExpiryInput?.addEventListener('input', function () {
+  let value = this.value.replace(/\D/g, '');
+
+  value = value.substring(0, 4);
+
+  if (value.length >= 3) {
+    value = value.substring(0, 2) + '/' + value.substring(2);
+  }
+
+  this.value = value;
+
+  validateCardExpiry();
+});
+
+// ------------------------------------------
+// Semak tarikh luput
+// ------------------------------------------
+function validateCardExpiry() {
+  const value = cardExpiryInput ? cardExpiryInput.value : '';
+
+  if (cardExpiryError) cardExpiryError.classList.add('hidden');
+
+  if (!/^\d{2}\/\d{2}$/.test(value)) {
+    if (value.length > 0 && cardExpiryError) {
+      cardExpiryError.classList.remove('hidden');
+    }
+
+    return false;
+  }
+
+  const [month, year] = value.split('/').map(Number);
+
+  if (month < 1 || month > 12) {
+    if (cardExpiryError) cardExpiryError.classList.remove('hidden');
+    return false;
+  }
+
+  const currentDate = new Date();
+
+  const currentYear = currentDate.getFullYear() % 100;
+  const currentMonth = currentDate.getMonth() + 1;
+
+  if (
+    year < currentYear ||
+    (year === currentYear && month < currentMonth)
+  ) {
+    if (cardExpiryError) cardExpiryError.classList.remove('hidden');
+    return false;
+  }
+
+  return true;
+}
+
+// ------------------------------------------
+// CVV
+// ------------------------------------------
+cardCvvInput?.addEventListener('input', function () {
+  this.value = this.value.replace(/\D/g, '').substring(0, 4);
+
+  validateCardCvv();
+});
+
+function validateCardCvv() {
+  const cvv = cardCvvInput ? cardCvvInput.value : '';
+
+  if (cardCvvError) cardCvvError.classList.add('hidden');
+
+  if (!/^\d{3,4}$/.test(cvv)) {
+    if (cvv.length > 0 && cardCvvError) {
+      cardCvvError.classList.remove('hidden');
+    }
+
+    return false;
+  }
+
+  return true;
+}

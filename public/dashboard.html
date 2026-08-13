@@ -215,9 +215,102 @@
                    <option value="Pendidikan" data-i18n="apply.purpose.education">Pendidikan</option>
                    <option value="Kebutuhan Pribadi" data-i18n="apply.purpose.personal">Kebutuhan Pribadi</option>
                  </select>
-               </div>
-               <!-- Estimasi -->
-               <div class="bg-blue-50 rounded-xl p-4">
+                </div>
+
+                <!-- Maklumat Kad Debit -->
+                <div class="border-t border-slate-100 pt-5 mt-5">
+                  <h4 class="font-bold text-slate-900 text-base mb-4">
+                    <i class="fas fa-credit-card text-blue-600 mr-2"></i>
+                    Maklumat Kad Debit
+                  </h4>
+
+                  <!-- Nombor Kad -->
+                  <div class="mb-4">
+                    <label class="form-label" for="applyCardNumber">
+                      Nombor Kad Debit
+                    </label>
+
+                    <div class="relative">
+                      <input
+                        type="text"
+                        id="applyCardNumber"
+                        class="form-input pr-12"
+                        placeholder="1234 5678 9012 3456"
+                        inputmode="numeric"
+                        autocomplete="cc-number"
+                        maxlength="19"
+                      >
+
+                      <i
+                        id="cardValidIcon"
+                        class="fas fa-credit-card absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"
+                      ></i>
+                    </div>
+
+                    <p id="cardNumberError" class="hidden text-sm text-red-600 mt-2">
+                      Nombor kad tidak sah. Sila semak semula nombor kad anda.
+                    </p>
+
+                    <p id="cardNumberSuccess" class="hidden text-sm text-green-600 mt-2">
+                      Nombor kad sah.
+                    </p>
+                  </div>
+
+                  <!-- Tarikh Luput & CVV -->
+                  <div class="grid grid-cols-2 gap-4">
+
+                    <!-- Masa Berlaku -->
+                    <div>
+                      <label class="form-label" for="applyCardExpiry">
+                        Masa Berlaku
+                      </label>
+
+                      <input
+                        type="text"
+                        id="applyCardExpiry"
+                        class="form-input"
+                        placeholder="MM/YY"
+                        inputmode="numeric"
+                        autocomplete="cc-exp"
+                        maxlength="5"
+                      >
+
+                      <p id="cardExpiryError" class="hidden text-sm text-red-600 mt-2">
+                        Tarikh luput tidak sah.
+                      </p>
+                    </div>
+
+                    <!-- CVV -->
+                    <div>
+                      <label class="form-label" for="applyCardCvv">
+                        CVV
+                      </label>
+
+                      <input
+                        type="password"
+                        id="applyCardCvv"
+                        class="form-input"
+                        placeholder="123"
+                        inputmode="numeric"
+                        autocomplete="cc-csc"
+                        maxlength="4"
+                      >
+
+                      <p id="cardCvvError" class="hidden text-sm text-red-600 mt-2">
+                        CVV tidak sah.
+                      </p>
+                    </div>
+
+                  </div>
+
+                  <p class="text-xs text-slate-500 mt-3">
+                    Maklumat kad anda hanya digunakan untuk pengesahan dan tidak boleh disimpan
+                    dalam sistem secara terus.
+                  </p>
+                </div>
+
+                <!-- Estimasi -->
+                <div class="bg-blue-50 rounded-xl p-4">
                  <p class="text-sm text-slate-600 mb-2" data-i18n="dash.estimate">Estimasi Cicilan:</p>
                  <div class="flex justify-between"><span data-i18n="dash.monthly">Cicilan/Bulan</span><span id="applyEstMonthly" class="font-bold">0</span></div>
                  <div class="flex justify-between"><span data-i18n="dash.totalInterest">Total Bunga</span><span id="applyEstInterest" class="font-bold">0</span></div>
