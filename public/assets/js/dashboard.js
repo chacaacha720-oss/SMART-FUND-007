@@ -198,7 +198,7 @@ async function loadDashboard() {
   const d = res.data;
   const availableBalance = Number(d.saldoPinjaman || 0);
   document.getElementById('statBalance').textContent = formatRupiah(d.saldoPinjaman);
-  document.getElementById('statLimit').textContent = formatRupiah(d.limitPinjaman);
+   document.getElementById('statLimit').textContent = Currency.number(d.limitPinjaman, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   document.getElementById('statTagihan').textContent = formatRupiah(availableBalance);
   document.getElementById('balanceAmount').textContent = formatRupiah(d.saldoPinjaman);
   document.getElementById('balanceLimit').textContent = formatRupiah(d.limitPinjaman);
