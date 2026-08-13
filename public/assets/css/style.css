@@ -2403,7 +2403,10 @@ img:not([loading]) {
     43. Loan Activity Ticker
     ============================================ */
 #loanTicker {
-  position: relative;
+  position: fixed;
+  top: 69px;
+  left: 0;
+  z-index: 40;
   width: 100%;
   overflow: hidden;
 }
