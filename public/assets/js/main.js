@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // NAVBAR
   // ============================================
   const navbar = document.getElementById('topAppBar');
-  const navLinks = document.querySelectorAll('#topAppBarNav a, #mobileMenu a');
+  const navLinks = document.querySelectorAll('#topAppBarNav a, #Soalan LazimMenu a');
 
   const handleScroll = () => {
     if (window.scrollY > 20) {
@@ -39,8 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Mobile menu
   const mobileMenuBtn = document.getElementById('topAppBarMenuBtn');
-  const mobileMenu = document.getElementById('mobileMenu');
-  const closeMobileMenu = document.getElementById('closeMobileMenu');
+  const mobileMenu = document.getElementById('Soalan LazimMenu');
+  const closeMobileMenu = document.getElementById('closeSoalan LazimMenu');
   if (mobileMenuBtn && mobileMenu) {
     mobileMenuBtn.addEventListener('click', () => {
       mobileMenu.classList.remove('hidden');
