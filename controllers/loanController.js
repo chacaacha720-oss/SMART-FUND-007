@@ -43,7 +43,7 @@ async function simulate(req, res) {
       // DB not available, use default rate
     }
 
-     if (!amount || amount < 1000000 || amount > 500000000) {
+     if (!amount || amount < 500 || amount > 300000) {
        return res.status(400).json({ success: false, message: t(lang, 'loan.amountRange') });
      }
     if (!tenor || tenor < 6 || tenor > 60) {
@@ -72,7 +72,7 @@ async function applyLoan(req, res) {
     const tenor = parseInt(req.body.tenor, 10);
     const purpose = sanitize(req.body.purpose);
 
-    if (!amount || amount < 1000000 || amount > 500000000) {
+    if (!amount || amount < 500 || amount > 300000) {
       return res.status(400).json({ success: false, message: t(lang, 'loan.amountRange') });
     }
     if (!tenor || tenor < 6 || tenor > 60) {

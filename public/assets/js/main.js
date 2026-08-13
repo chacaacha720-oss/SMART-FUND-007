@@ -283,105 +283,311 @@ document.addEventListener('DOMContentLoaded', () => {
   heroLearnMore?.addEventListener('click', () => scrollToSection('features'));
 
   // ============================================
-  // TESTIMONIAL CAROUSEL
+  // TESTIMONIAL CAROUSEL — responsive flex slider
   // ============================================
   const testimonialTrack = document.getElementById('testimonialTrack');
   const testimonialDots = document.getElementById('testimonialDots');
+  const testimonialSlider = testimonialTrack ? testimonialTrack.parentElement : null;
+  const testimonialPrev = document.getElementById('testimonialPrev');
+  const testimonialNext = document.getElementById('testimonialNext');
+  const testimonialSection = document.getElementById('testimonial');
 
   const testimonials = [
-    { name: 'Ahmad', role: 'Pengguna SMART FUND', rating: 5, text: 'Proses permohonan sangat mudah dan maklumat simulasi sangat membantu saya memahami jumlah ansuran yang perlu dibayar.', initials: 'A' },
-    { name: 'Siti', role: 'Pengguna SMART FUND', rating: 5, text: 'Faedah yang ringan dan maklumat yang telus. Sangat membantu untuk keperluan peribadi saya.' },
-    { name: 'Rahman', role: 'Pengguna SMART FUND', rating: 5, text: 'Platform yang cekap dan proses pengesahan yang pantas. Dana pun cair dengan lancar.' },
-    { name: 'Farah', role: 'Pengguna SMART FUND', rating: 5, text: 'Saya appreciate dengan simulasi yang jelas sebelum membuat keputusan. Prosesnya sangat profesional.' },
-    { name: 'Karim', role: 'Pengguna SMART FUND', rating: 5, text: 'Membantu saya mendapatkan dana untuk modal perniagaan. Proses mudah dan tiada peraturan yang tersembunyi.' },
-    { name: 'Nora', role: 'Pengguna SMART FUND', rating: 5, text: 'Pengalaman yang positif dari permulaan hingga penyelesaian. Sangat syaran untuk pengguna lain.' },
+    { name: 'Aiman Hakim', role: 'Pelanggan', image: 'https://i.ibb.co.com/JwLDP5gm/Ilustrasi-anak-Malaysia.webp', rating: 5, text: 'Proses permohonan sangat mudah dan penerangannya jelas. Saya sangat berpuas hati dengan pengalaman menggunakan perkhidmatan ini.' },
+    { name: 'Nur Aisyah', role: 'Pelanggan', image: 'https://i.ibb.co.com/B2PjDgKH/Screenshot-1.png', rating: 5, text: 'Antara perkara yang saya suka ialah prosesnya mudah difahami dan maklumat yang diberikan sangat jelas.' },
+    { name: 'Muhammad Danish', role: 'Pelanggan', image: 'https://i.ibb.co.com/9H34KVcB/Screenshot-2.png', rating: 5, text: 'Paparan laman web sangat kemas dan mudah digunakan melalui telefon bimbit.' },
+    { name: 'Siti Hajar', role: 'Pelanggan', image: 'https://i.ibb.co.com/Q7T9mTK1/Screenshot-3.png', rating: 5, text: 'Pengalaman yang baik. Semua maklumat yang saya perlukan mudah untuk dicari.' },
+    { name: 'Amirul Hakim', role: 'Pelanggan', image: 'https://i.ibb.co.com/gZsJMxqG/Screenshot-4.png', rating: 5, text: 'Prosesnya ringkas dan penerangan yang diberikan mudah difahami.' },
+    { name: 'Nur Syafiqah', role: 'Pelanggan', image: 'https://i.ibb.co.com/xKNvWZCx/Screenshot-5.png', rating: 5, text: 'Saya suka reka bentuknya yang moden serta mudah digunakan pada telefon.' },
+    { name: 'Farhan Iskandar', role: 'Pelanggan', image: 'https://i.ibb.co.com/67HYGpVy/Screenshot-6.png', rating: 5, text: 'Maklumat dipaparkan dengan jelas dan proses penggunaan laman web sangat mudah.' },
+    { name: 'Nadia Izzati', role: 'Pelanggan', image: 'https://i.ibb.co.com/h1Zn4fwK/images.jpg', rating: 5, text: 'Antara pengalaman laman web yang paling mudah saya gunakan. Susun aturnya juga sangat kemas.' },
   ];
+
+  const MOBILE_BREAKPOINT = 768;
+  const AUTO_PLAY_DELAY = 6000;
+  const SWIPE_THRESHOLD = 30;
+
+  const t = {
+    cardCount: 0,
+    step: 0,
+    cardWidth: 0,
+    gap: 20,
+    sliderWidth: 0,
+    visibleCount: 0,
+    maxIndex: 0,
+    pageIndex: 0,
+    maxPage: 0,
+    currentX: 0,
+    reducedMotion: false,
+    autoplayId: null,
+    pointerDown: false,
+    pointerStartX: 0,
+    pointerStartXform: 0,
+  };
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
 
   function getInitials(name) {
     return name.split(' ').map((w) => w.charAt(0)).join('').substring(0, 2).toUpperCase();
   }
 
-  function renderTestimonialGroup(group, startIndex) {
+  function clampNum(v, min, max) {
+    return Math.max(min, Math.min(max, v));
+  }
+
+  function renderCards() {
     if (!testimonialTrack) return;
-    const cards = group.map((t, idx) => {
-      const stars = Array(t.rating).fill('<i class="fas fa-star"></i>').join('');
-      const initials = getInitials(t.name);
-      const delay = (startIndex + idx) * 100;
+    testimonialTrack.innerHTML = testimonials.map((item, i) => {
+      const stars = Array.from({ length: item.rating }, () => '<i class="fas fa-star"></i>').join('');
+      const initials = getInitials(item.name);
       return `
-        <div class="testimonial-card p-6 sm:p-8">
-          <div class="flex text-amber-400 mb-4">${stars}</div>
-          <p class="text-slate-600 dark:text-slate-300 mb-6 italic leading-relaxed">"${t.text}"</p>
-          <div class="flex items-center gap-3">
-            <div class="testimonial-avatar flex items-center justify-center font-bold">${initials}</div>
-            <div>
-              <p class="font-bold text-slate-900 dark:text-white">${t.name}</p>
-              <p class="text-sm text-slate-500 dark:text-slate-400">${t.role}</p>
+        <div class="testimonial-card" data-index="${i}">
+          <div class="testimonial-rating" role="img" aria-label="${item.rating} daripada 5 bintang">${stars}</div>
+          <p class="testimonial-text">${escapeHtml(item.text)}</p>
+          <div class="testimonial-author">
+            <img class="testimonial-avatar" src="${item.image}" alt="Foto profil ${escapeHtml(item.name)}" loading="${i === 0 ? 'eager' : 'lazy'}" width="56" height="56" decoding="async" onerror="testimonialHandleImgError(this)">
+            <div class="testimonial-author-info">
+              <p class="testimonial-name" title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</p>
+              <p class="testimonial-role">${escapeHtml(item.role)}</p>
             </div>
           </div>
-        </div>
-      `;
+        </div>`;
     }).join('');
-    testimonialTrack.innerHTML = `<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">${cards}</div>`;
-    if (typeof AOS !== 'undefined') {
-      setTimeout(() => AOS.refresh(), 50);
+  }
+
+  function testimonialHandleImgError(img) {
+    if (img.classList.contains('testimonial-avatar-broken')) return;
+    img.classList.add('testimonial-avatar-broken');
+    img.style.display = 'none';
+    const initials = getInitials(img.getAttribute('alt')?.replace('Foto profil ', '') || 'P');
+    const fallback = document.createElement('div');
+    fallback.className = 'testimonial-avatar-fallback';
+    fallback.textContent = initials;
+    fallback.setAttribute('aria-label', 'Avatar default');
+    img.parentNode.insertBefore(fallback, img.nextSibling);
+  }
+
+  function measure() {
+    if (!testimonialTrack || !testimonialSlider) return false;
+    const cards = testimonialTrack.querySelectorAll('.testimonial-card');
+    if (!cards.length) return false;
+    const first = cards[0];
+    t.gap = parseFloat(getComputedStyle(testimonialTrack).gap) || 0;
+    t.cardWidth = first.offsetWidth;
+    t.step = cards.length > 1 ? (cards[1].offsetLeft - cards[0].offsetLeft) : (t.cardWidth + t.gap);
+    t.sliderWidth = testimonialSlider.clientWidth;
+    t.cardCount = cards.length;
+    t.visibleCount = Math.max(1, Math.floor(t.sliderWidth / t.step));
+    t.maxIndex = Math.max(0, t.cardCount - t.visibleCount);
+    t.maxPage = Math.max(0, Math.ceil(t.cardCount / t.visibleCount) - 1);
+    t.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    return true;
+  }
+
+  function applyCardWidths() {
+    const cards = testimonialTrack ? testimonialTrack.querySelectorAll('.testimonial-card') : [];
+    if (!testimonialSlider || !cards.length) return;
+    if (window.innerWidth < MOBILE_BREAKPOINT) {
+      const contentWidth = testimonialSlider.clientWidth;
+      cards.forEach((c) => {
+        c.style.width = contentWidth + 'px';
+        c.style.flexBasis = contentWidth + 'px';
+      });
+    } else {
+      cards.forEach((c) => {
+        c.style.width = '';
+        c.style.flexBasis = '';
+      });
     }
+  }
+
+  function cardIndexOf(page) {
+    return Math.min(page * t.visibleCount, t.maxIndex);
+  }
+
+  function setPosition(animate) {
+    if (!testimonialTrack) return;
+    const cardIndex = cardIndexOf(t.pageIndex);
+    const x = -cardIndex * t.step;
+    t.currentX = x;
+    if (!animate || t.reducedMotion) {
+      testimonialTrack.style.transition = 'none';
+    } else {
+      testimonialTrack.style.transition = '';
+    }
+    testimonialTrack.style.transform = `translateX(${x}px)`;
+  }
+
+  function goToPage(page, animate) {
+    if (!testimonialTrack || t.cardCount === 0) return;
+    t.pageIndex = clampNum(page, 0, t.maxPage);
+    setPosition(animate);
+    renderDots();
+    updateControls();
+  }
+
+  function nextSlide() {
+    const total = t.maxPage + 1;
+    goToPage(total > 0 ? (t.pageIndex + 1) % total : 0, true);
+  }
+  function prevSlide() {
+    const total = t.maxPage + 1;
+    goToPage(total > 0 ? (t.pageIndex - 1 + total) % total : 0, true);
   }
 
   function renderDots() {
     if (!testimonialDots) return;
-    const totalGroups = Math.ceil(testimonials.length / 3);
-    testimonialDots.innerHTML = Array.from({ length: totalGroups }, (_, i) => `
-      <button class="testimonial-dot w-3 h-3 rounded-full transition ${i === 0 ? 'bg-primary w-8' : 'bg-slate-300 hover:bg-slate-400'}" data-index="${i}"></button>
-    `).join('');
+    const total = t.maxPage + 1;
+    testimonialDots.innerHTML = Array.from({ length: total }, (_, i) => {
+      const active = i === t.pageIndex ? 'active' : '';
+      return `<button type="button" class="testimonial-dot ${active}" data-page="${i}" aria-label="Halaman ${i + 1}" aria-current="${i === t.pageIndex ? 'true' : 'false'}"></button>`;
+    }).join('');
     testimonialDots.querySelectorAll('.testimonial-dot').forEach((btn) => {
       btn.addEventListener('click', () => {
-        currentTestimonialGroup = parseInt(btn.dataset.index, 10);
-        updateTestimonial();
+        goToPage(parseInt(btn.dataset.page, 10), true);
+        pauseAutoplay();
       });
     });
   }
 
-  let testimonialGroups = [];
-  let currentTestimonialGroup = 0;
-
-  function updateTestimonial() {
-    if (!testimonialTrack || testimonialGroups.length === 0) return;
-    testimonialTrack.style.opacity = '0';
-    setTimeout(() => {
-      const group = testimonialGroups[currentTestimonialGroup];
-      const startIndex = currentTestimonialGroup * 3;
-      renderTestimonialGroup(group, startIndex);
-      renderDots();
-      testimonialTrack.style.opacity = '1';
-    }, 250);
+  function updateControls() {
+    const canSlide = t.maxPage > 0;
+    if (testimonialPrev) testimonialPrev.disabled = !canSlide;
+    if (testimonialNext) testimonialNext.disabled = !canSlide;
   }
 
-  if (testimonialTrack) {
-    // Chunk testimonials into groups of 3
-    testimonialGroups = [];
-    for (let i = 0; i < testimonials.length; i += 3) {
-      testimonialGroups.push(testimonials.slice(i, i + 3));
+  function refresh() {
+    if (!testimonialTrack) return;
+    applyCardWidths();
+    if (measure()) {
+      t.pageIndex = clampNum(t.pageIndex, 0, t.maxPage);
+      setPosition(false);
+      renderDots();
+      updateControls();
     }
-    renderTestimonialGroup(testimonialGroups[0], 0);
+  }
+
+  function startAutoplay() {
+    if (t.reducedMotion) return;
+    stopAutoplay();
+    t.autoplayId = setInterval(() => {
+      nextSlide();
+    }, AUTO_PLAY_DELAY);
+  }
+
+  function stopAutoplay() {
+    if (t.autoplayId) {
+      clearInterval(t.autoplayId);
+      t.autoplayId = null;
+    }
+  }
+
+  function pauseAutoplay() {
+    stopAutoplay();
+    startAutoplay();
+  }
+
+  function onPointerDown(e) {
+    if (e.button !== 0) return;
+    if (t.cardCount === 0) return;
+    t.pointerDown = true;
+    t.pointerStartX = e.clientX;
+    t.pointerStartXform = t.currentX;
+    stopAutoplay();
+    try { testimonialTrack.setPointerCapture(e.pointerId); } catch (err) { /* noop */ }
+  }
+
+  function onPointerMove(e) {
+    if (!t.pointerDown) return;
+    const delta = e.clientX - t.pointerStartX;
+    let x = t.pointerStartXform + delta;
+    const maxLeft = -t.maxIndex * t.step;
+    x = Math.min(0, Math.max(maxLeft, x));
+    t.currentX = x;
+    testimonialTrack.style.transition = 'none';
+    testimonialTrack.style.transform = `translateX(${x}px)`;
+  }
+
+  function onPointerUp() {
+    if (!t.pointerDown) return;
+    t.pointerDown = false;
+    const maxLeft = -t.maxIndex * t.step;
+    const current = Math.min(0, Math.max(maxLeft, t.currentX));
+    const cardIndex = clampNum(Math.round(-current / t.step), 0, t.maxIndex);
+    t.pageIndex = clampNum(Math.floor(cardIndex / t.visibleCount), 0, t.maxPage);
+    setPosition(true);
     renderDots();
-    testimonialTrack.style.opacity = '1';
+    updateControls();
+    startAutoplay();
+  }
 
-    let autoRotate = setInterval(() => {
-      currentTestimonialGroup = (currentTestimonialGroup + 1) % testimonialGroups.length;
-      updateTestimonial();
-    }, 8000);
+  function bindEvents() {
+    if (testimonialPrev) testimonialPrev.addEventListener('click', () => { prevSlide(); pauseAutoplay(); });
+    if (testimonialNext) testimonialNext.addEventListener('click', () => { nextSlide(); pauseAutoplay(); });
 
-    const testimonialSection = document.getElementById('testimonial');
     if (testimonialSection) {
-      testimonialSection.addEventListener('mouseenter', () => clearInterval(autoRotate));
-      testimonialSection.addEventListener('mouseleave', () => {
-        autoRotate = setInterval(() => {
-          currentTestimonialGroup = (currentTestimonialGroup + 1) % testimonialGroups.length;
-          updateTestimonial();
-        }, 8000);
+      testimonialSection.addEventListener('mouseenter', () => stopAutoplay());
+      testimonialSection.addEventListener('mouseleave', () => startAutoplay());
+      testimonialSection.addEventListener('focusin', () => stopAutoplay());
+      testimonialSection.addEventListener('focusout', (e) => {
+        if (!testimonialSection.contains(e.relatedTarget)) startAutoplay();
       });
     }
+
+    // Unified pointer drag (mouse, touch, pen) for smooth swipe
+    if (testimonialTrack) {
+      testimonialTrack.addEventListener('pointerdown', onPointerDown);
+      testimonialTrack.addEventListener('pointermove', onPointerMove);
+      testimonialTrack.addEventListener('pointerup', onPointerUp);
+      testimonialTrack.addEventListener('pointercancel', onPointerUp);
+      testimonialTrack.addEventListener('pointerleave', onPointerUp);
+    }
+
+    // Horizontal mouse wheel / touchpad scroll
+    if (testimonialSlider) {
+      testimonialSlider.addEventListener('wheel', (e) => {
+        if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+        e.preventDefault();
+        if (e.deltaX > 0) {
+          nextSlide();
+        } else {
+          prevSlide();
+        }
+        pauseAutoplay();
+      }, { passive: false });
+    }
+
+    // Keyboard navigation (arrows move between pages)
+    if (testimonialSection) {
+      testimonialSection.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') { e.preventDefault(); nextSlide(); pauseAutoplay(); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); pauseAutoplay(); }
+      });
+    }
+
+    // Responsive re-measure on resize
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(refresh, 150);
+    });
   }
+
+  function initTestimonial() {
+    if (!testimonialTrack) return;
+    window.testimonialHandleImgError = testimonialHandleImgError;
+    renderCards();
+    refresh();
+    startAutoplay();
+    bindEvents();
+  }
+
+  initTestimonial();
 
   // ============================================
   // FAQ ACCORDION
