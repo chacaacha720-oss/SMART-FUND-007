@@ -289,6 +289,19 @@ process.on('SIGINT', () => gracefulShutdown('SIGINT'));
     console.error('✘ Auto-migration failed:', err.message);
   }
 
+  // Fix default_loan_limit: 200000000 → 200000
+  try {
+    await db.query("UPDATE settings SET setting_value = '200000' WHERE setting_key = 'default_loan_limit' AND setting_value = '200000000'");
+    console.log('✔ default_loan_limit updated to 200000');
+
+    const [uRows] = await db.query("UPDATE users SET loan_limit = 200000 WHERE loan_limit = 200000000");
+    if (uRows.affectedRows > 0) {
+      console.log(`[OK] Updated loan_limit for ${uRows.affectedRows} existing users`);
+    }
+  } catch (fixErr) {
+    console.error('✘ Loan limit fix migration failed:', fixErr.message);
+  }
+
   // CS Code System: auto-migrate new columns for existing databases
   try {
     const migrations = [

@@ -196,7 +196,7 @@ INSERT INTO settings (setting_key, setting_value, description) VALUES
   ('min_tenor', '6', 'Tenor minimum (bulan)'),
   ('max_tenor', '60', 'Tenor maksimum (bulan)'),
   ('interest_rate', '5', 'Bunga per tahun (%)'),
-  ('default_loan_limit', '200000000', 'Limit pinjaman default user baru'),
+   ('default_loan_limit', '200000', 'Limit pinjaman default user baru'),
   ('min_withdrawal', '100000', 'Minimum penarikan dana (Rp)'),
   ('telegram_enabled', 'true', 'Aktifkan notifikasi Telegram'),
   ('maintenance_mode', 'false', 'Mode pemeliharaan'),
