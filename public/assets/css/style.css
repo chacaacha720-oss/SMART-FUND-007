@@ -2317,7 +2317,90 @@ img:not([loading]) {
   color: var(--sf-text);
 }
 
+/* ============================================
+    42. Hero Visual — SMART FUND Logo (Rotating)
+    ============================================ */
+.hero-visual {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+.smart-fund-glow {
+  position: absolute;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: rgba(37, 99, 235, 0.18);
+  filter: blur(70px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.smart-fund-logo {
+  position: relative;
+  width: min(420px, 80%);
+  height: auto;
+  object-fit: contain;
+  animation: smartFundRotate 15s linear infinite;
+  transform-origin: center center;
+  will-change: transform;
+  filter:
+    drop-shadow(0 20px 35px rgba(0, 0, 0, 0.35))
+    drop-shadow(0 0 25px rgba(59, 130, 246, 0.18));
+  z-index: 2;
+}
+
+.smart-fund-pedestal {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 240px;
+  height: 14px;
+  background: linear-gradient(135deg, rgba(18, 100, 232, 0.35), rgba(14, 165, 233, 0.25));
+  border-radius: 7px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  z-index: 1;
+  pointer-events: none;
+}
+
+@keyframes smartFundRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Tablet (769px — 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .smart-fund-logo {
+    width: min(360px, 80%);
+  }
+  .smart-fund-glow {
+    width: 250px;
+    height: 250px;
+  }
+}
+
+/* Mobile (up to 768px) */
+@media (max-width: 768px) {
+  .smart-fund-logo {
+    width: min(300px, 75vw);
+  }
+  .smart-fund-glow {
+    width: 220px;
+    height: 220px;
+  }
+  .smart-fund-pedestal {
+    width: 180px;
+    height: 12px;
+  }
+}
 
 
 
