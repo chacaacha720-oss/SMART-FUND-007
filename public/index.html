@@ -83,6 +83,29 @@
     </div>
   </header>
 
+  <!-- PREMIUM LOAN ACTIVITY TICKER -->
+  <div id="loanTicker" class="w-full overflow-hidden bg-slate-900 dark:bg-slate-950 border-t border-slate-800">
+    <div id="loanTickerTrack" class="flex items-center whitespace-nowrap min-w-max py-2.5">
+      <div class="loan-item flex items-center text-sm">
+        <span class="flex items-center gap-2 text-slate-300">
+          <span class="flex items-center justify-center w-6 h-6 rounded-full bg-primary/20 text-primary">
+            <i class="fas fa-bell text-xs"></i>
+          </span>
+          <span class="font-bold text-white">
+            AKTIVITI TERKINI
+          </span>
+          <span class="text-slate-500">•</span>
+          <span class="loan-message text-slate-300">
+            Indah berjaya menerima pencairan
+          </span>
+          <span class="font-bold text-emerald-400">
+            RM 10,000
+          </span>
+        </span>
+      </div>
+    </div>
+  </div>
+
   <!-- Mobile Menu -->
   <div id="mobileMenu" class="hidden lg:hidden fixed top-0 left-0 w-full h-screen bg-white dark:bg-slate-900 z-[60] overflow-y-auto pt-20 pb-8 px-6">
     <nav class="flex flex-col gap-4 text-center">
@@ -498,6 +521,89 @@
   <script src="/assets/js/main.js"></script>
   <script>
     I18N.init();
+  </script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+      const tickerTrack = document.getElementById("loanTickerTrack");
+
+      const borrowers = [
+        "Ahmad", "Aiman", "Aisyah", "Amir", "Azman", "Bayudar", "Danish", "Daniel",
+        "Farhan", "Faris", "Fatin", "Hakim", "Hafiz", "Haziq", "Ibrahim", "Irfan",
+        "Indah", "Iskandar", "Jamal", "Kamal", "Khairul", "Lina", "Mariam", "Nadia",
+        "Nabil", "Nadiah", "Naufal", "Nurul", "Puteri", "Rafiq", "Rahman", "Rania",
+        "Rashid", "Rizal", "Sabrina", "Safiq", "Sakinah", "Sarah", "Shahrul", "Siti",
+        "Syafiq", "Syahmi", "Taufiq", "Wafi", "Yasmin", "Zain", "Zainab", "Zulkifli"
+      ];
+
+      const amounts = [500, 750, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 7500, 10000, 15000, 20000, 25000, 30000];
+
+      const activities = [
+        { type: "approved", text: "permohonan pinjaman telah diluluskan", icon: "fa-circle-check", color: "text-emerald-400" },
+        { type: "applied", text: "baru sahaja membuat permohonan pinjaman", icon: "fa-file-invoice-dollar", color: "text-blue-400" },
+        { type: "disbursed", text: "berjaya menerima dana pinjaman", icon: "fa-wallet", color: "text-emerald-400" },
+        { type: "received", text: "telah menerima pencairan dana", icon: "fa-money-bill-wave", color: "text-emerald-400" }
+      ];
+
+      function shuffle(array) {
+        const result = [...array];
+        for (let i = result.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [result[i], result[j]] = [result[j], result[i]];
+        }
+        return result;
+      }
+
+      let shuffledBorrowers = shuffle(borrowers);
+      let borrowerIndex = 0;
+
+      function getUniqueBorrower() {
+        if (borrowerIndex >= shuffledBorrowers.length) {
+          shuffledBorrowers = shuffle(borrowers);
+          borrowerIndex = 0;
+        }
+        const name = shuffledBorrowers[borrowerIndex];
+        borrowerIndex++;
+        return name;
+      }
+
+      function randomItem(array) {
+        return array[Math.floor(Math.random() * array.length)];
+      }
+
+      function formatRM(amount) {
+        return "RM " + amount.toLocaleString("ms-MY");
+      }
+
+      function updateTicker() {
+        const name = getUniqueBorrower();
+        const amount = randomItem(amounts);
+        const activity = randomItem(activities);
+
+        tickerTrack.innerHTML = `
+          <div class="loan-item flex items-center text-sm">
+            <div class="flex items-center gap-2">
+              <span class="flex items-center justify-center w-6 h-6 rounded-full bg-primary/20 text-primary">
+                <i class="fas fa-bell text-xs"></i>
+              </span>
+              <span class="font-bold text-white">AKTIVITI TERKINI</span>
+              <span class="text-slate-500">•</span>
+              <i class="fas ${activity.icon} ${activity.color}"></i>
+              <span class="text-slate-300">${name} ${activity.text}</span>
+              <span class="font-bold ${activity.color}">${formatRM(amount)}</span>
+            </div>
+          </div>
+        `;
+
+        tickerTrack.style.animation = "none";
+        void tickerTrack.offsetWidth;
+        tickerTrack.style.animation = "loanTickerSlide 16s linear infinite";
+      }
+
+      updateTicker();
+      setInterval(updateTicker, 25000);
+
+    });
   </script>
 </body>
 </html>

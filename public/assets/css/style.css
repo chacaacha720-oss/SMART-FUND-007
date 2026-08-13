@@ -2399,6 +2399,41 @@ img:not([loading]) {
   }
 }
 
+/* ============================================
+    43. Loan Activity Ticker
+    ============================================ */
+#loanTicker {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+#loanTickerTrack {
+  display: inline-flex;
+  width: max-content;
+  min-width: 100%;
+  animation: loanTickerSlide 16s linear infinite;
+  will-change: transform;
+}
+
+.loan-item {
+  flex-shrink: 0;
+  padding-left: 100vw;
+  padding-right: 80px;
+}
+
+@keyframes loanTickerSlide {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #loanTickerTrack {
+    animation: none;
+    transform: translateX(0);
+  }
+}
+
 
 
 
