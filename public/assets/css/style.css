@@ -2344,7 +2344,7 @@ img:not([loading]) {
   width: min(420px, 80%);
   height: auto;
   object-fit: contain;
-  animation: smartFundRotate 15s linear infinite;
+  animation: smartFundRotate 20s ease-in-out infinite;
   transform-origin: center center;
   will-change: transform;
   filter:
@@ -2368,12 +2368,9 @@ img:not([loading]) {
 }
 
 @keyframes smartFundRotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  0%, 6% { transform: rotate(0deg); }
+  25% { transform: rotate(360deg); }
+  100% { transform: rotate(360deg); }
 }
 
 /* Tablet (769px — 1024px) */
