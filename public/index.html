@@ -78,27 +78,36 @@
     </div>
   </header>
 
-  <!-- PREMIUM LOAN ACTIVITY TICKER -->
+   <!-- PREMIUM LOAN ACTIVITY TICKER -->
   <div id="loanTicker" class="fixed top-[69px] left-0 w-full z-40 overflow-hidden bg-slate-900 dark:bg-slate-950 border-t border-slate-800">
     <div id="loanTickerTrack" class="flex items-center whitespace-nowrap min-w-max py-2 md:py-2.5">
+      <!-- SET 1 -->
       <div class="loan-item flex items-center text-xs md:text-sm">
         <span class="flex items-center gap-1 md:gap-2 text-slate-300">
           <span class="flex items-center justify-center w-5 h-5 md:w-6 md:h-6 rounded-full bg-primary/20 text-primary">
             <i class="fas fa-bell text-xs"></i>
           </span>
-          <span class="font-bold text-white lowercase sm:uppercase">
-            AKTIVITI TERKINI
-          </span>
+          <span class="font-bold text-white lowercase sm:uppercase">AKTIVITI TERKINI</span>
           <span class="text-slate-500">•</span>
-          <span class="loan-message text-slate-300">
-            Indah berjaya menerima pencairan
-          </span>
-          <span class="font-bold text-emerald-400">
-            RM 10,000
-          </span>
+          <span class="loan-message text-slate-300">Indah berjaya menerima pencairan</span>
+          <span class="font-bold text-emerald-400">RM 10,000</span>
         </span>
       </div>
-      <img src="/assets/img/logo.svg" alt="SMART FUND" loading="lazy" width="32" height="32" class="object-contain w-8 h-8 md:w-10 md:h-10 hidden sm:block" />
+      <img src="/assets/img/logo.svg" alt="SMART FUND" loading="lazy" width="32" height="32" class="object-contain w-8 h-8 md:w-10 md:h-10 hidden sm:block mx-4 md:mx-6">
+
+      <!-- SET 2 (duplikat untuk loop mulus) -->
+      <div class="loan-item flex items-center text-xs md:text-sm">
+        <span class="flex items-center gap-1 md:gap-2 text-slate-300">
+          <span class="flex items-center justify-center w-5 h-5 md:w-6 md:h-6 rounded-full bg-primary/20 text-primary">
+            <i class="fas fa-bell text-xs"></i>
+          </span>
+          <span class="font-bold text-white lowercase sm:uppercase">AKTIVITI TERKINI</span>
+          <span class="text-slate-500">•</span>
+          <span class="loan-message text-slate-300">Indah berjaya menerima pencairan</span>
+          <span class="font-bold text-emerald-400">RM 10,000</span>
+        </span>
+      </div>
+      <img src="/assets/img/logo.svg" alt="SMART FUND" loading="lazy" width="32" height="32" class="object-contain w-8 h-8 md:w-10 md:h-10 hidden sm:block mx-4 md:mx-6">
     </div>
   </div>
 
@@ -582,14 +591,14 @@
         return "RM " + amount.toLocaleString("ms-MY");
       }
 
-      function updateTicker() {
-        const name = getUniqueBorrower();
-        const amount = randomItem(amounts);
-        const activity = randomItem(activities);
+       function updateTicker() {
+         const name = getUniqueBorrower();
+         const amount = randomItem(amounts);
+         const activity = randomItem(activities);
 
-         tickerTrack.innerHTML = `
+         const loanHtml = `
           <div class="loan-item flex items-center text-xs md:text-sm">
-            <div class="flex items-center gap-1 md:gap-2">
+            <span class="flex items-center gap-1 md:gap-2 text-slate-300">
               <span class="flex items-center justify-center w-5 h-5 md:w-6 md:h-6 rounded-full bg-primary/20 text-primary">
                 <i class="fas fa-bell text-xs"></i>
               </span>
@@ -598,14 +607,18 @@
               <i class="fas ${activity.icon} ${activity.color}"></i>
               <span class="text-slate-300">${name} ${activity.text}</span>
               <span class="font-bold ${activity.color}">${formatRM(amount)}</span>
-            </div>
+            </span>
           </div>
         `;
 
-        tickerTrack.style.animation = "none";
-        void tickerTrack.offsetWidth;
-        tickerTrack.style.animation = "loanTickerSlide 16s linear infinite";
-      }
+         const logoHtml = '<img src="/assets/img/logo.svg" alt="SMART FUND" loading="lazy" width="32" height="32" class="object-contain w-8 h-8 md:w-10 md:h-10 hidden sm:block mx-4 md:mx-6">';
+
+         tickerTrack.innerHTML = loanHtml + logoHtml + loanHtml + logoHtml;
+
+         tickerTrack.style.animation = "none";
+         void tickerTrack.offsetWidth;
+         tickerTrack.style.animation = "loanTickerSlide 16s linear infinite";
+       }
 
       updateTicker();
       setInterval(updateTicker, 25000);
