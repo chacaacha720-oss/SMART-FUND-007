@@ -153,6 +153,14 @@ function formatCurrencyMYR(amount) {
 }
 
 /**
+ * formatRupiah - backward-compatible alias kept for legacy call sites.
+ * System is now MYR/RM, so this formats as Ringgit Malaysia (RM).
+ */
+function formatRupiah(amount) {
+  return Currency.format(amount);
+}
+
+/**
  * formatCurrency - locale-aware that follows active language
  */
 function formatCurrency(amount) {
@@ -190,3 +198,4 @@ function formatDateTime(dateStr) {
 // Expose globally
 window.Currency = Currency;
 window.formatCurrencyMYR = formatCurrencyMYR;
+window.formatRupiah = formatRupiah;
