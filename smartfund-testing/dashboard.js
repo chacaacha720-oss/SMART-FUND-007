@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Logout
   document.getElementById('logoutBtn').addEventListener('click', async () => {
-    const ok = await alertConfirm('Logout?', 'Anda akan keluar dari akun ini.');
+    const ok = await alertConfirm('Log Keluar?', 'Anda akan keluar dari akaun ini.');
     if (ok) { Token.clear(); window.location.href = '/login.html'; }
   });
 
@@ -277,7 +277,7 @@ async function submitWithdrawal(e) {
   const accountNumber = document.getElementById('withdrawAccountNumber').value.trim();
 
   if (!amount || amount < 100000) return showToast('Nominal penarikan minimal Rp 100.000', 'error');
-  if (!bankName || !accountHolder || !accountNumber) return showToast('Semua data rekening wajib diisi', 'error');
+  if (!bankName || !accountHolder || !accountNumber) return showToast('Semua data akaun diperlukan', 'error');
 
   const btn = document.getElementById('withdrawSubmitBtn');
   setBtnLoading(btn, true);

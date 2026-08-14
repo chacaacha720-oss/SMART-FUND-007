@@ -82,7 +82,7 @@ async function createWithdrawal(req, res) {
       return res.status(400).json({ success: false, message: 'Nominal penarikan minimal Rp 100.000' });
     }
     if (!bankName || !accountHolder || !accountNumber) {
-      return res.status(400).json({ success: false, message: 'Semua data rekening tujuan wajib diisi' });
+      return res.status(400).json({ success: false, message: 'Semua data akaun tujuan diperlukan' });
     }
 
     const [userRows] = await db.query('SELECT id, full_name, balance, status FROM users WHERE id = ?', [req.user.id]);
@@ -131,7 +131,7 @@ async function createWithdrawal(req, res) {
 Nominal Penarikan: ${Number(amount).toLocaleString('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 })}
 Nama Bank Tujuan: ${bankName}
 Atas Nama: ${accountHolder}
-Nomor Rekening: ${accountNumber}
+  Nombor Akaun: ${accountNumber}
 
 ⏰ Waktu: ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}
     `.trim();
@@ -219,7 +219,7 @@ async function updateProfile(req, res) {
     params.push(req.user.id);
     await db.query(`UPDATE users SET ${updates.join(', ')} WHERE id = ?`, params);
 
-    return res.json({ success: true, message: 'Profil berhasil diperbarui' });
+    return res.json({ success: true, message: 'Profil berjaya dikemas kini' });
   } catch (err) {
     console.error('Update profile error:', err);
     return res.status(500).json({ success: false, message: 'Terjadi kesalahan server' });
@@ -234,7 +234,7 @@ async function updateSettings(req, res) {
   try {
     const { currentPassword, newPassword } = req.body;
     if (!currentPassword || !newPassword) {
-      return res.status(400).json({ success: false, message: 'Password lama dan baru wajib diisi' });
+      return res.status(400).json({ success: false, message: 'Kata laluan lama dan baru diperlukan' });
     }
     if (newPassword.length < 6) {
       return res.status(400).json({ success: false, message: 'Password baru minimal 6 karakter' });

@@ -54,7 +54,7 @@ const I18N = {
       'features.f5.title': 'Maklumat Telus',
       'features.f5.desc': 'Semua yuran dan syarat kami terangkan sepenuhnya.',
       'features.f6.title': 'Pengurusan Terintegrasi',
-      'features.f6.desc': 'Kelola pinjaman, ansuran, dan penarikan dana dengan selasa melalui satu dashboard.',
+      'features.f6.desc': 'Urus pinjaman, ansuran, dan penarikan dana dengan selesa melalui satu papan pemuka.',
 
       // ===== PRODUCTS =====
       'products.label': 'PRODUK',
@@ -325,7 +325,7 @@ const I18N = {
       'admin.noUsers': 'Tiada pengguna',
       'admin.noDataChanged': 'Tiada data diubah',
       'admin.telegramTestFailed': 'Gagal menghantar test telegram. Semak konfigurasi bot.',
-      'admin.csManagement': 'Kelola Kod CS',
+      'admin.csManagement': 'Urusan Kod CS',
       'admin.csList': 'Senarai Kod CS',
       'admin.csCode': 'Kod CS',
       'admin.csCreated': 'Kod CS berjaya dibuat',

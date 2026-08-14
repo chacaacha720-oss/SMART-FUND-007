@@ -67,7 +67,7 @@
     },
     "f6": {
       "title": "Pengurusan Terintegrasi",
-      "desc": "Kelola pinjaman, ansuran, dan penarikan dana dengan selesa melalui satu dashboard."
+      "desc": "Urus pinjaman, ansuran, dan penarikan dana dengan selesa melalui satu dashboard."
     }
   },
   "calc": {
@@ -306,7 +306,7 @@
     "noUsers": "Tiada pengguna",
     "noDataChanged": "Tiada data diubah",
     "telegramTestFailed": "Gagal menghantar test telegram. Semak konfigurasi bot.",
-    "csManagement": "Kelola Kod CS",
+    "csManagement": "Urusan Kod CS",
     "csList": "Senarai Kod CS",
     "csCreated": "Kod CS berjaya dibuat",
     "csUpdated": "Kod CS berjaya dikemas kini",
