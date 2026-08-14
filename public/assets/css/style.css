@@ -2421,6 +2421,30 @@ img:not([loading]) {
   100% { transform: translateX(-100%); }
 }
 
+@media (max-width: 639px) {
+  #loanTicker {
+    top: 63px;
+  }
+  .loan-item {
+    padding-left: 110vw;
+    padding-right: 12px;
+  }
+  #loanTickerTrack {
+    animation-duration: 20s;
+    gap: 8px;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 767px) {
+  #loanTicker {
+    top: 65px;
+  }
+  .loan-item {
+    padding-left: 105vw;
+    padding-right: 40px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   #loanTickerTrack {
     animation: none;

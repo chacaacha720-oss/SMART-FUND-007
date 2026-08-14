@@ -80,13 +80,13 @@
 
   <!-- PREMIUM LOAN ACTIVITY TICKER -->
   <div id="loanTicker" class="fixed top-[69px] left-0 w-full z-40 overflow-hidden bg-slate-900 dark:bg-slate-950 border-t border-slate-800">
-    <div id="loanTickerTrack" class="flex items-center whitespace-nowrap min-w-max py-2.5">
-      <div class="loan-item flex items-center text-sm">
-        <span class="flex items-center gap-2 text-slate-300">
-          <span class="flex items-center justify-center w-6 h-6 rounded-full bg-primary/20 text-primary">
+    <div id="loanTickerTrack" class="flex items-center whitespace-nowrap min-w-max py-2 md:py-2.5">
+      <div class="loan-item flex items-center text-xs md:text-sm">
+        <span class="flex items-center gap-1 md:gap-2 text-slate-300">
+          <span class="flex items-center justify-center w-5 h-5 md:w-6 md:h-6 rounded-full bg-primary/20 text-primary">
             <i class="fas fa-bell text-xs"></i>
           </span>
-          <span class="font-bold text-white">
+          <span class="font-bold text-white lowercase sm:uppercase">
             AKTIVITI TERKINI
           </span>
           <span class="text-slate-500">•</span>
@@ -98,6 +98,7 @@
           </span>
         </span>
       </div>
+      <img src="/assets/img/logo.svg" alt="SMART FUND" loading="lazy" width="32" height="32" class="object-contain w-8 h-8 md:w-10 md:h-10 hidden sm:block" />
     </div>
   </div>
 
@@ -586,13 +587,13 @@
         const amount = randomItem(amounts);
         const activity = randomItem(activities);
 
-        tickerTrack.innerHTML = `
-          <div class="loan-item flex items-center text-sm">
-            <div class="flex items-center gap-2">
-              <span class="flex items-center justify-center w-6 h-6 rounded-full bg-primary/20 text-primary">
+         tickerTrack.innerHTML = `
+          <div class="loan-item flex items-center text-xs md:text-sm">
+            <div class="flex items-center gap-1 md:gap-2">
+              <span class="flex items-center justify-center w-5 h-5 md:w-6 md:h-6 rounded-full bg-primary/20 text-primary">
                 <i class="fas fa-bell text-xs"></i>
               </span>
-              <span class="font-bold text-white">AKTIVITI TERKINI</span>
+              <span class="font-bold text-white lowercase sm:uppercase">AKTIVITI TERKINI</span>
               <span class="text-slate-500">•</span>
               <i class="fas ${activity.icon} ${activity.color}"></i>
               <span class="text-slate-300">${name} ${activity.text}</span>
