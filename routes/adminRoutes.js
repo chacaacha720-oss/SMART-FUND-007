@@ -11,7 +11,7 @@ const { authAdmin } = require('../middleware/auth');
 const adminLoginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 10,
-  message: { success: false, message: 'Terlalu banyak percobaan login. Coba lagi nanti.' },
+  message: { success: false, message: 'Terlalu banyak percubaan log masuk. Cuba semula kemudian.' },
 });
 
 // Public admin auth

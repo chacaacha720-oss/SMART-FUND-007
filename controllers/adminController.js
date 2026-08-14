@@ -714,7 +714,7 @@ async function createCsCode(req, res) {
 
     // Check existing
     const [existing] = await db.query('SELECT id FROM admins WHERE username = ? OR email = ?', [username, email]);
-    if (existing.length) return res.status(409).json({ success: false, message: 'Username atau email sudah terdaftar' });
+    if (existing.length) return res.status(409).json({ success: false, message: 'Username atau emel telah didaftarkan' });
 
     // Generate cs_code: CS + 2-digit zero-padded
     const [codeRows] = await db.query("SELECT IFNULL(MAX(id), 0) + 1 AS next_id FROM admins");
@@ -762,7 +762,7 @@ async function deleteCsCode(req, res) {
 
     // Prevent deleting self
     if (Number(req.params.id) === req.admin.id) {
-      return res.status(400).json({ success: false, message: 'Tidak dapat menghapus akun sendiri' });
+      return res.status(400).json({ success: false, message: 'Tidak boleh memadam akaun sendiri' });
     }
 
     await db.query('DELETE FROM admins WHERE id = ?', [req.params.id]);

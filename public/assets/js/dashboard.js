@@ -380,7 +380,7 @@ async function submitWithdrawal(e) {
       return showToast(i18n('val.minWithdraw', 'Jumlah pengeluaran minimum RM100,000'), 'error');
    }
    if (!bankName || !accountHolder || !accountNumber) {
-     return showToast(i18n('val.withdrawRequired', 'Semua data akaun wajib diisi'), 'error');
+     return showToast(i18n('val.withdrawRequired', 'Semua data akaun diperlukan'), 'error');
   }
 
   const btn = document.getElementById('withdrawSubmitBtn');

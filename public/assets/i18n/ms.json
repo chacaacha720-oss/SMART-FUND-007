@@ -309,8 +309,8 @@
     "csManagement": "Kelola Kod CS",
     "csList": "Senarai Kod CS",
     "csCreated": "Kod CS berjaya dibuat",
-    "csUpdated": "Kod CS berjaya diperbarui",
-    "csDeleted": "Kod CS berjaya dihapus",
+    "csUpdated": "Kod CS berjaya dikemas kini",
+    "csDeleted": "Kod CS berjaya dipadam",
     "csNotFound": "Kod CS tidak dijumpai",
     "csStatus": "Status CS",
     "csActive": "Aktif",
@@ -350,7 +350,7 @@
     "noCsCode": "Anda belum mempunyai kod CS"
   },
   "val": {
-    "required": "wajib diisi",
+    "required": "diperlukan",
     "nameMin": "Nama minimum 3 aksara",
     "phoneInvalid": "Nombor HP tidak sah",
     "emailInvalid": "Emel tidak sah",
@@ -360,7 +360,7 @@
     "agreeTerms": "Anda harus bersetuju dengan Syarat & Ketentuan",
 "amountRange": "Jumlah pinjaman RM 500 - RM 300,000",
       "tenorRange": "Tempoh 1 - 60 bulan",
-    "purposeRequired": "Tujuan pinjaman wajib dipilih",
+    "purposeRequired": "Tujuan pinjaman perlu dipilih",
     "otpRequired": "OTP mesti 6 digit",
     "minWithdraw": "Jumlah pengeluaran minimum RM 100.00",
     "withdrawRequired": "Semua data akaun diperlukan",

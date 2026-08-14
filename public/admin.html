@@ -49,7 +49,7 @@
              <span class="btn-text"><i class="fas fa-right-to-bracket mr-2"></i> <span data-i18n="admin.loginBtn">Login Admin</span></span>
            </button>
          </form>
-         <p class="text-center text-slate-400 text-sm mt-6"><a href="/" class="hover:text-blue-600"><i class="fas fa-arrow-left mr-1"></i> <span data-i18n="admin.back">Kembali ke Beranda</span></a></p>
+         <p class="text-center text-slate-400 text-sm mt-6"><a href="/" class="hover:text-blue-600"><i class="fas fa-arrow-left mr-1"></i> <span data-i18n="admin.back">Kembali ke Laman Utama</span></a></p>
       </div>
     </div>
   </div>
@@ -63,7 +63,7 @@
         <div class="p-6 border-b border-slate-700">
           <div class="flex items-center gap-2.5">
             <img src="/assets/img/logo.png" alt="SMART FUND Logo" loading="lazy" width="40" height="40" class="object-contain animate-float" />
-            <div><span class="text-lg font-extrabold block">SMART FUND</span><span class="text-xs text-slate-400">Admin Panel</span></div>
+            <div><span class="text-lg font-extrabold block">SMART FUND</span><span class="text-xs text-slate-400">Panel Pentadbir</span></div>
           </div>
         </div>
         <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
@@ -72,7 +72,7 @@
           <a class="admin-link" data-page="applications"><i class="fas fa-file-circle-check w-5"></i> <span data-i18n="admin.applications">Pengajuan</span></a>
           <a class="admin-link" data-page="transactions"><i class="fas fa-receipt w-5"></i> <span data-i18n="admin.transactions">Transaksi</span></a>
            <a class="admin-link" data-page="withdrawals"><i class="fas fa-money-bill-wave w-5"></i> <span data-i18n="admin.withdrawals">Penarikan Dana</span></a>
-           <a class="admin-link super-admin-only" data-page="cs-codes"><i class="fas fa-key w-5"></i> <span data-i18n="admin.csManagement">Kelola Kode CS</span></a>
+           <a class="admin-link super-admin-only" data-page="cs-codes"><i class="fas fa-key w-5"></i> <span data-i18n="admin.csManagement">Urusan Kod CS</span></a>
            <a class="admin-link" data-page="telegram"><i class="fab fa-telegram w-5"></i> <span data-i18n="admin.telegram">Pengaturan Telegram</span></a>
            <a class="admin-link" data-page="settings"><i class="fas fa-gear w-5"></i> <span data-i18n="admin.settings">Setting Website</span></a>
         </nav>
@@ -189,7 +189,7 @@
             <!-- Super Admin Filters -->
             <div id="appFilters" class="hidden bg-white rounded-2xl p-4 border border-slate-100 shadow-sm mb-4">
               <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
-                <input type="text" id="filterCsCode" class="form-input text-sm" placeholder="Kode CS (CS01)" data-i18n-placeholder="admin.csCodeHint" />
+                <input type="text" id="filterCsCode" class="form-input text-sm" placeholder="Kod CS (CS01)" data-i18n-placeholder="admin.csCodeHint" />
                 <select id="filterStatus" class="form-select text-sm">
                   <option value="" data-i18n="admin.toast.allStatus">Semua Status</option>
                   <option value="pending" data-i18n="status.pending">Menunggu</option>
@@ -211,7 +211,7 @@
                     <tr>
                       <th data-i18n="admin.th.id">ID</th>
                       <th data-i18n="admin.th.name">Nama</th>
-                      <th data-i18n="admin.th.csCode">Kode CS</th>
+                      <th data-i18n="admin.th.csCode">Kod CS</th>
                       <th data-i18n="admin.th.amount">Jumlah</th>
                       <th data-i18n="admin.th.tenor">Tenor</th>
                       <th data-i18n="admin.th.purpose">Tujuan</th>
@@ -235,7 +235,7 @@
                     <tr>
                       <th data-i18n="admin.th.id">ID</th>
                       <th data-i18n="admin.th.name">User</th>
-                      <th data-i18n="admin.th.type">Tipe</th>
+                      <th data-i18n="admin.th.type">Jenis</th>
                       <th data-i18n="admin.th.amount">Jumlah</th>
                       <th data-i18n="admin.th.status">Status</th>
                       <th data-i18n="admin.th.date">Tanggal</th>
@@ -288,10 +288,10 @@
 
           <!-- CS CODES -->
           <section id="apage-cs-codes" class="admin-content hidden">
-            <h2 class="text-2xl font-extrabold text-slate-900 mb-6" data-i18n="admin.csManagement">Kelola Kode CS</h2>
+            <h2 class="text-2xl font-extrabold text-slate-900 mb-6" data-i18n="admin.csManagement">Urusan Kod CS</h2>
             <div class="flex gap-3 mb-4">
               <button id="btnCreateCs" class="btn btn-primary text-sm">
-                <i class="fas fa-plus mr-2"></i> <span data-i18n="admin.csCreate">Buat Kode CS</span>
+                <i class="fas fa-plus mr-2"></i> <span data-i18n="admin.csCreate">Buat Kod CS</span>
               </button>
             </div>
             <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
@@ -299,7 +299,7 @@
                 <table class="table">
                   <thead>
                     <tr>
-                      <th data-i18n="admin.csCode">Kode CS</th>
+                      <th data-i18n="admin.csCode">Kod CS</th>
                       <th data-i18n="admin.th.name">Nama</th>
                       <th data-i18n="admin.th.email">Email</th>
                       <th data-i18n="admin.th.role">Role</th>
@@ -339,7 +339,7 @@
                   <button id="tgSaveBtn" class="flex-1 btn btn-primary"><i class="fas fa-save mr-2"></i> <span data-i18n="admin.tg.save">Simpan Pengaturan</span></button>
                   <button id="tgTestBtn" class="flex-1 btn btn-secondary"><i class="fas fa-paper-plane mr-2"></i> <span data-i18n="admin.tg.test">Test Notifikasi</span></button>
                 </div>
-                <p class="text-xs text-slate-400 mt-3" data-i18n="admin.tg.desc">Pengaturan ini akan disimpan ke database settings dan dipakai saat bot mengirim notifikasi.</p>
+                <p class="text-xs text-slate-400 mt-3" data-i18n="admin.tg.desc">Tetapan ini akan disimpan ke pangkal data dan digunakan apabila bot menghantar notifikasi.</p>
               </div>
               <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
                 <h3 class="font-bold text-slate-900 mb-4"><i class="fas fa-history text-blue-600 mr-2"></i> <span data-i18n="admin.tg.logs">Log Telegram</span></h3>
