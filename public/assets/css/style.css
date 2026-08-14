@@ -2438,7 +2438,7 @@ img:not([loading]) {
 
 @media (prefers-reduced-motion: reduce) {
   #loanTickerTrack {
-    animation: none;
+    animation: loanTickerSlide 30s linear infinite !important;
     transform: translateX(0);
   }
 }
