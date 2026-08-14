@@ -362,7 +362,9 @@
       "tenorRange": "Tempoh 1 - 60 bulan",
     "purposeRequired": "Tujuan pinjaman perlu dipilih",
     "otpRequired": "OTP mesti 6 digit",
-    "minWithdraw": "Jumlah pengeluaran minimum RM 100.00",
+    "minWithdraw": "Jumlah pengeluaran minimum RM100",
+    "exceedBalance": "Jumlah pengeluaran tidak boleh melebihi baki tersedia",
+    "invalidAmount": "Jumlah pengeluaran tidak sah",
     "withdrawRequired": "Semua data akaun diperlukan",
     "csCodeRequired": "Kod CS diperlukan",
     "csCodeInvalid": "Format kod CS tidak sah"

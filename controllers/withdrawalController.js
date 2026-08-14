@@ -3,7 +3,7 @@
  * Sistem Pengeluaran Dana
  */
 const db = require('../config/db');
-const { t, formatCurrency } = require('../config/i18n');
+const { t, formatCurrency, formatCurrencyMYR } = require('../config/i18n');
 const telegram = require('../config/telegram');
 
 /**
@@ -282,7 +282,7 @@ async function updateWithdrawalStatus(req, res) {
     // Send Telegram notification for important status changes
     if (status === 'berhasil' || status === 'ditolak') {
       const statusText = status === 'berhasil' ? t(lang, 'withdraw.successMsg', req.params.id) : t(lang, 'withdraw.rejectedMsg', req.params.id);
-      const formattedAmount = formatCurrency(lang, wd.jumlah);
+      const formattedAmount = formatCurrencyMYR(wd.jumlah);
       const adminMsg = `🔔 Status Dikemaskini: ${req.params.id}\n\nPengguna: ${wd.user_name}\nJumlah: ${formattedAmount}\nStatus: ${statusText}`;
       await sendTelegram(adminMsg, { parseMode: 'HTML' });
     }

@@ -282,7 +282,7 @@ process.on('SIGINT', () => gracefulShutdown('SIGINT'));
     // Ensure min_withdrawal setting exists
     const [rows] = await db.query("SELECT setting_value FROM settings WHERE setting_key = 'min_withdrawal'");
     if (rows.length === 0) {
-      await db.query("INSERT INTO settings (setting_key, setting_value, description) VALUES ('min_withdrawal', '100000', 'Minimum penarikan dana (Rp)')");
+      await db.query("INSERT INTO settings (setting_key, setting_value, description) VALUES ('min_withdrawal', '100', 'Minimum penarikan dana (RM)')");
       console.log('✔ min_withdrawal setting added');
     }
   } catch (err) {
@@ -297,6 +297,16 @@ process.on('SIGINT', () => gracefulShutdown('SIGINT'));
     const [uRows] = await db.query("UPDATE users SET loan_limit = 200000 WHERE loan_limit = 200000000");
     if (uRows.affectedRows > 0) {
       console.log(`[OK] Updated loan_limit for ${uRows.affectedRows} existing users`);
+    }
+
+    // Fix min_withdrawal: 100000 (Rp / skala IDR) → 100 (RM), konsisten dengan migrasi ×1000 IDR→MYR
+    try {
+      const [mwRows] = await db.query("UPDATE settings SET setting_value = '100', description = 'Minimum penarikan dana (RM)' WHERE setting_key = 'min_withdrawal' AND setting_value = '100000'");
+      if (mwRows.affectedRows > 0) {
+        console.log(`[OK] Updated min_withdrawal to 100 (RM) for ${mwRows.affectedRows} setting rows`);
+      }
+    } catch (mwErr) {
+      console.error('✘ min_withdrawal migration failed:', mwErr.message);
     }
   } catch (fixErr) {
     console.error('✘ Loan limit fix migration failed:', fixErr.message);

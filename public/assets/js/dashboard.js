@@ -240,8 +240,13 @@ async function loadDashboard() {
   badge.textContent = statusText;
 
   const withdrawAmountInput = document.getElementById('withdrawAmount');
-  withdrawAmountInput.max = String(Math.max(availableBalance, 0));
-  withdrawAmountInput.value = Math.max(availableBalance, 0);
+  // Had minima pengeluaran dalam unit MYR (RM100). Pastikan min <= max
+  // untuk mengelakkan ralat validasi native "Nilai minimum harus lebih kecil dari nilai maksimum".
+  const MIN_WITHDRAWAL = 100;
+  const maxBalance = Math.max(availableBalance, 0);
+  withdrawAmountInput.min = String(Math.min(MIN_WITHDRAWAL, maxBalance));
+  withdrawAmountInput.max = String(maxBalance);
+  withdrawAmountInput.value = String(maxBalance);
 
   // Last application
   const lastAppEl = document.getElementById('lastApplication');
@@ -396,12 +401,19 @@ async function submitWithdrawal(e) {
 
   const i18n = (key, fallback) => I18N.t(key) || fallback;
 
-   if (!amount || amount < 100000) {
-      return showToast(i18n('val.minWithdraw', 'Jumlah pengeluaran minimum RM100,000'), 'error');
+   if (!amount || isNaN(amount) || amount <= 0) {
+      return showToast(i18n('val.invalidAmount', 'Jumlah pengeluaran tidak sah'), 'error');
+   }
+   if (amount < 100) {
+      return showToast(i18n('val.minWithdraw', 'Jumlah pengeluaran minimum RM100'), 'error');
+   }
+   const maxAllowed = parseFloat(amountEl.max) || 0;
+   if (amount > maxAllowed) {
+     return showToast(i18n('val.exceedBalance', 'Jumlah pengeluaran tidak boleh melebihi baki tersedia'), 'error');
    }
    if (!bankName || !accountHolder || !accountNumber) {
      return showToast(i18n('val.withdrawRequired', 'Semua data akaun diperlukan'), 'error');
-  }
+   }
 
   const btn = document.getElementById('withdrawSubmitBtn');
   try {

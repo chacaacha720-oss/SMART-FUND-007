@@ -96,7 +96,7 @@ const MESSAGES = {
 
     // ===== User Controller =====
     'user.notFound': 'Pengguna tidak dijumpai',
-    'user.minWithdraw': 'Jumlah pengeluaran minimum adalah RM100,000',
+    'user.minWithdraw': 'Jumlah pengeluaran minimum adalah RM100',
     'user.withdrawDataRequired': 'Semua data akaun bank diperlukan',
     'user.notActiveWithdraw': 'Akaun Anda belum aktif untuk melakukan pengeluaran',
     'user.exceedBalance': 'Jumlah pengeluaran melebihi saldo tersedia',
@@ -334,7 +334,7 @@ const MESSAGES = {
 
     // ===== User Controller =====
     'user.notFound': 'User not found',
-    'user.minWithdraw': 'Minimum withdrawal amount is $100,000',
+    'user.minWithdraw': 'Minimum withdrawal amount is RM100',
     'user.withdrawDataRequired': 'All bank account data is required',
     'user.notActiveWithdraw': 'Your account is not active for withdrawals',
     'user.exceedBalance': 'Withdrawal amount exceeds available balance',
@@ -580,6 +580,15 @@ function formatCurrency(lang, amount) {
 }
 
 /**
+ * Format currency as Malaysian Ringgit (MYR) regardless of active language.
+ * Always produces: RM2,000 / RM10,000 / RM200,000
+ * Single MYR formatter used across the system for withdrawal/balance display.
+ */
+function formatCurrencyMYR(amount) {
+  return formatCurrency('ms', amount);
+}
+
+/**
  * Format number for a language
  */
 function formatNumber(lang, num) {
@@ -631,6 +640,7 @@ module.exports = {
   t,
   getLocaleConfig,
   formatCurrency,
+  formatCurrencyMYR,
   formatNumber,
   formatDate,
   formatDateTime,

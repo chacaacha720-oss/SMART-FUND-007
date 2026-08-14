@@ -374,7 +374,9 @@
       "tenorRange": "Tenor 1 - 60 months",
     "purposeRequired": "Loan purpose is required",
     "otpRequired": "OTP must be 6 digits",
-    "minWithdraw": "Minimum withdrawal amount RM 100.00",
+    "minWithdraw": "Minimum withdrawal amount RM100",
+    "exceedBalance": "Withdrawal amount cannot exceed available balance",
+    "invalidAmount": "Withdrawal amount is invalid",
     "withdrawRequired": "All bank account data is required",
     "csCodeRequired": "CS code is required",
     "csCodeInvalid": "Invalid CS code format"

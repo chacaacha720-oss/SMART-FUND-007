@@ -78,8 +78,8 @@ async function createWithdrawal(req, res) {
     const accountHolder = sanitize((req.body.accountHolder || '').trim());
     const accountNumber = sanitize((req.body.accountNumber || '').trim());
 
-    if (!amount || amount < 100000) {
-      return res.status(400).json({ success: false, message: 'Nominal penarikan minimal Rp 100.000' });
+    if (!amount || amount < 100) {
+      return res.status(400).json({ success: false, message: 'Jumlah pengeluaran minimum RM100' });
     }
     if (!bankName || !accountHolder || !accountNumber) {
       return res.status(400).json({ success: false, message: 'Semua data akaun tujuan diperlukan' });

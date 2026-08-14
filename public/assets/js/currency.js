@@ -145,9 +145,10 @@ const Currency = {
 // ============================================
 
 /**
- * formatRupiah is now locale-aware via Currency.format
+ * formatCurrencyMYR - single MYR formatter for the whole system.
+ * Always produces: RM2,000 / RM10,000 / RM200,000
  */
-function formatRupiah(amount) {
+function formatCurrencyMYR(amount) {
   return Currency.format(amount);
 }
 
@@ -188,3 +189,4 @@ function formatDateTime(dateStr) {
 
 // Expose globally
 window.Currency = Currency;
+window.formatCurrencyMYR = formatCurrencyMYR;

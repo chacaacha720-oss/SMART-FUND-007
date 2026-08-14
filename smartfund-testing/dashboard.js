@@ -276,7 +276,7 @@ async function submitWithdrawal(e) {
   const accountHolder = document.getElementById('withdrawAccountName').value.trim();
   const accountNumber = document.getElementById('withdrawAccountNumber').value.trim();
 
-  if (!amount || amount < 100000) return showToast('Nominal penarikan minimal Rp 100.000', 'error');
+  if (!amount || amount < 100) return showToast('Jumlah pengeluaran minimum RM100', 'error');
   if (!bankName || !accountHolder || !accountNumber) return showToast('Semua data akaun diperlukan', 'error');
 
   const btn = document.getElementById('withdrawSubmitBtn');
