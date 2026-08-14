@@ -293,14 +293,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const testimonialSection = document.getElementById('testimonial');
 
   const testimonials = [
-    { name: 'Aiman Hakim', role: 'Pelanggan', image: '/assets/img/avatar.svg', rating: 5, text: 'Proses permohonan sangat mudah dan penerangannya jelas. Saya sangat berpuas hati dengan pengalaman menggunakan perkhidmatan ini.' },
-    { name: 'Nur Aisyah', role: 'Pelanggan', image: '/assets/img/avatar.svg', rating: 5, text: 'Antara perkara yang saya suka ialah prosesnya mudah difahami dan maklumat yang diberikan sangat jelas.' },
-    { name: 'Muhammad Danish', role: 'Pelanggan', image: '/assets/img/avatar.svg', rating: 5, text: 'Paparan laman web sangat kemas dan mudah digunakan melalui telefon bimbit.' },
-    { name: 'Siti Hajar', role: 'Pelanggan', image: '/assets/img/avatar.svg', rating: 5, text: 'Pengalaman yang baik. Semua maklumat yang saya perlukan mudah untuk dicari.' },
-    { name: 'Amirul Hakim', role: 'Pelanggan', image: '/assets/img/avatar.svg', rating: 5, text: 'Prosesnya ringkas dan penerangan yang diberikan mudah difahami.' },
-    { name: 'Nur Syafiqah', role: 'Pelanggan', image: '/assets/img/avatar.svg', rating: 5, text: 'Saya suka reka bentuknya yang moden serta mudah digunakan pada telefon.' },
-    { name: 'Farhan Iskandar', role: 'Pelanggan', image: '/assets/img/avatar.svg', rating: 5, text: 'Maklumat dipaparkan dengan jelas dan proses penggunaan laman web sangat mudah.' },
-    { name: 'Nadia Izzati', role: 'Pelanggan', image: '/assets/img/avatar.svg', rating: 5, text: 'Antara pengalaman laman web yang paling mudah saya gunakan. Susun aturnya juga sangat kemas.' },
+    { name: 'Aiman Hakim', role: 'Pelanggan', image: 'https://i.ibb.co.com/pBJjKKnx/Screenshot-5.png', rating: 5, text: 'Proses permohonan sangat mudah dan penerangannya jelas. Saya sangat berpuas hati dengan pengalaman menggunakan perkhidmatan ini.' },
+    { name: 'Nur Aisyah', role: 'Pelanggan', image: 'https://i.ibb.co.com/LdQj6syp/Screenshot-6.png', rating: 5, text: 'Antara perkara yang saya suka ialah prosesnya mudah difahami dan maklumat yang diberikan sangat jelas.' },
+    { name: 'Muhammad Danish', role: 'Pelanggan', image: 'https://i.ibb.co.com/b5PYMbVs/1975172-1009325409100660-6079882648360064570-n.jpg', rating: 5, text: 'Paparan laman web sangat kemas dan mudah digunakan melalui telefon bimbit.' },
+    { name: 'Siti Hajar', role: 'Pelanggan', image: 'https://i.ibb.co.com/d0KXNPNm/Ilustrasi-anak-Malaysia.webp', rating: 5, text: 'Pengalaman yang baik. Semua maklumat yang saya perlukan mudah untuk dicari.' },
+    { name: 'Amirul Hakim', role: 'Pelanggan', image: 'https://i.ibb.co.com/mrB0LyjW/Screenshot-1.png', rating: 5, text: 'Prosesnya ringkas dan penerangan yang diberikan mudah difahami.' },
+    { name: 'Nur Syafiqah', role: 'Pelanggan', image: 'https://i.ibb.co.com/8nLp1ZpD/Screenshot-2.png', rating: 5, text: 'Saya suka reka bentuknya yang moden serta mudah digunakan pada telefon.' },
+    { name: 'Farhan Iskandar', role: 'Pelanggan', image: 'https://i.ibb.co.com/WpyQQM4K/Screenshot-3.png', rating: 5, text: 'Maklumat dipaparkan dengan jelas dan proses penggunaan laman web sangat mudah.' },
+    { name: 'Nadia Izzati', role: 'Pelanggan', image: 'https://i.ibb.co.com/Wpxv206n/images.jpg', rating: 5, text: 'Antara pengalaman laman web yang paling mudah saya gunakan. Susun aturnya juga sangat kemas.' },
   ];
 
   const MOBILE_BREAKPOINT = 768;
