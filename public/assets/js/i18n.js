@@ -489,11 +489,11 @@ const I18N = {
       'val.minWithdraw': 'Jumlah pengeluaran minimum RM100,000',
       'val.withdrawRequired': 'Semua data akaun diperlukan',
       'val.csCodeRequired': 'Kod CS diperlukan',
-      'val.term1': 'Data yang dimasukkan adalah benar dan dapat dipertanggungjawabkan.',
-      'val.term2': 'Pinjaman akan diproses sesuai dasar dan ketentuan SMART FUND.',
-      'val.term3': 'Faedah dikenakan mula 5% setahun mengikut tenor.',
-      'val.term4': 'Platform berlesen dan diawasi OJK.',
-      'val.term5': 'Permohonan boleh diterima atau ditolak oleh admin.',
+      'val.term1': 'Data yang dimasukkan adalah benar dan boleh dipertanggungjawabkan.',
+      'val.term2': 'Pinjaman akan diproses mengikut dasar dan terma SMART FUND.',
+      'val.term3': 'Faedah dikenakan bermula 5% setahun mengikut tempoh pinjaman.',
+      'val.term4': 'Platform yang berlesen.',
+      'val.term5': 'Permohonan boleh diterima atau ditolak oleh pentadbir.',
       'val.csCodeInvalid': 'Format kod CS tidak sah',
 
       // ===== NOTIFICATIONS =====
