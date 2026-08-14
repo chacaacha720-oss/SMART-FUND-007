@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   function updateEstimasi() {
     const amount = parseFloat(document.getElementById('applyAmount').value) || 0;
     const tenor = parseInt(document.getElementById('applyTenor').value, 10);
-    if (amount >= 500 && amount <= 300000 && tenor > 0) {
+    if (amount >= 2000 && amount <= 300000 && tenor > 0) {
       const rate = 5 / 100 / 12;
       const monthly = amount * (rate * Math.pow(1 + rate, tenor)) / (Math.pow(1 + rate, tenor) - 1);
       const total = monthly * tenor;
@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const lang = I18N.getLang();
     const i18n = (key, fallback) => I18N.t(key) || fallback;
 
-    if (!amount || amount < 500 || amount > 300000) return showToast(i18n('val.amountRange', 'Jumlah pinjaman RM500 - RM300,000'), 'error');
+    if (!amount || amount < 2000 || amount > 300000) return showToast(i18n('val.amountRange', 'Jumlah pinjaman RM2000 - RM300,000'), 'error');
     if (amount > currentUser.loan_limit) return showToast(`${i18n('dash.limit', 'Had')}: ${Currency.format(currentUser.loan_limit)}`, 'error');
     if (!purpose) return showToast(i18n('val.purposeRequired', 'Tujuan pinjaman diperlukan'), 'error');
     if (!currentUser.cs_code) return showToast(I18N.t('cs.noCsCode', 'Anda belum berdaftar dengan kod CS. Hubungi admin untuk mendapatkan kod pendaftaran.'), 'error');

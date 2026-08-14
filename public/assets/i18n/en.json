@@ -370,7 +370,7 @@
     "passwordMix": "Password must contain letters & numbers",
     "passwordMatch": "Password confirmation does not match",
     "agreeTerms": "You must agree to the Terms & Conditions",
-"amountRange": "Loan amount RM 500 - RM 300,000",
+"amountRange": "Loan amount RM 2000 - RM 300,000",
       "tenorRange": "Tenor 1 - 60 months",
     "purposeRequired": "Loan purpose is required",
     "otpRequired": "OTP must be 6 digits",

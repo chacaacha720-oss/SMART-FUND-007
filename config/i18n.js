@@ -82,7 +82,7 @@ const MESSAGES = {
     'admin.loginSuccess': 'Log masuk admin berjaya',
 
     // ===== Loan Controller =====
-    'loan.amountRange': 'Jumlah pinjaman harus RM500 - RM300,000',
+    'loan.amountRange': 'Jumlah pinjaman harus RM2000 - RM300,000',
     'loan.tenorRange': 'Jangka waktu harus 6 - 60 bulan',
     'loan.purposeRequired': 'Tujuan pinjaman diperlukan',
     'loan.userNotFound': 'Pengguna tidak dijumpai',
@@ -177,7 +177,7 @@ const MESSAGES = {
     'val.passwordMatch': 'Sahkan kata laluan tidak sepadan',
     'val.identifierRequired': 'Emel/Nombor HP diperlukan',
     'val.passwordRequired': 'Kata laluan diperlukan',
-    'val.amountRange': 'Jumlah pinjaman harus RM500 - RM300,000',
+    'val.amountRange': 'Jumlah pinjaman harus RM2000 - RM300,000',
     'val.tenorRange': 'Tempoh harus 6 - 60 bulan',
     'val.purposeRequired': 'Tujuan pinjaman diperlukan',
     'val.adminCodeRequired': 'Kod admin diperlukan',
@@ -306,7 +306,7 @@ const MESSAGES = {
     'admin.loginSuccess': 'Admin login successful',
 
     // ===== Loan Controller =====
-    'loan.amountRange': 'Loan amount must be RM500 - RM300,000',
+    'loan.amountRange': 'Loan amount must be RM2000 - RM300,000',
     'loan.tenorRange': 'Tenor must be 6 - 60 months',
     'loan.purposeRequired': 'Loan purpose is required',
     'loan.userNotFound': 'User not found',
@@ -401,7 +401,7 @@ const MESSAGES = {
     'val.passwordMatch': 'Password confirmation does not match',
     'val.identifierRequired': 'Email/Phone number is required',
     'val.passwordRequired': 'Password is required',
-    'val.amountRange': 'Loan amount must be RM500 - RM300,000',
+    'val.amountRange': 'Loan amount must be RM2000 - RM300,000',
     'val.tenorRange': 'Tenor must be 6 - 60 months',
     'val.purposeRequired': 'Loan purpose is required',
     'val.adminCodeRequired': 'Admin code is required',
