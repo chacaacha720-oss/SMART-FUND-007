@@ -544,8 +544,6 @@ const SyncChannel = (() => {
       }
 
       lastData = signature;
-      const syncTime = document.getElementById('syncTime');
-      if (syncTime) syncTime.textContent = formatDateTime(new Date().toISOString());
     } catch (e) {
       // ignore - next polling cycle
     }
@@ -587,12 +585,6 @@ const SyncChannel = (() => {
       try { channel.postMessage({ type: 'data_changed', source: 'user' }); } catch (e) { /* ignore */ }
     }
   }
-
-  // Terapkan update waktu sinkron pada language change
-  document.addEventListener('languageChanged', () => {
-    const syncTime = document.getElementById('syncTime');
-    if (syncTime) syncTime.textContent = formatDateTime(new Date().toISOString());
-  });
 
   return { notifyDataChanged };
 })();
