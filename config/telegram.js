@@ -287,8 +287,8 @@ async function buildWithdrawalNotification(data) {
   const esc = (v) => escapeHtml(v == null ? '' : v);
 
   const csLine = csCode
-    ? `\n${t(language, 'telegram.csCode', 'Kod CS')}: ${esc(csCode)}\n${t(language, 'telegram.csName', 'Nama CS')}: ${esc(csName || '-')}`
-    : `\n${t(language, 'telegram.csCode', 'Kod CS')}: -`;
+    ? `\n👨\u200d💼 <b>${t(language, 'telegram.csData', 'Data CS')}:</b>\n• ${t(language, 'telegram.csCode', 'Kod CS')}: ${esc(csCode)}\n• ${t(language, 'telegram.csName', 'Nama CS')}: ${esc(csName || '-')}`
+    : `\n👨\u200d💼 <b>${t(language, 'telegram.csData', 'Data CS')}:</b>\n• ${t(language, 'telegram.csCode', 'Kod CS')}: -`;
 
   return `🔔 <b>${t(language, 'telegram.withdrawalReceived', 'Permintaan Pengeluaran Diterima')}</b>
 
@@ -298,20 +298,7 @@ Nama Bank Tujuan: ${esc(bank)}
 Atas Nama: ${esc(accountHolder)}
 Nombor Akaun: ${esc(accountNumber)}${csLine}
 
-ID Pengeluaran:
-<b>${esc(withdrawalId)}</b>
-
-No HP:
-${esc(phone)}
-
-Emel:
-${esc(email)}
-
-Tarikh:
-${date}
-
-Status:
-${t(language, 'withdraw.pending', 'Menunggu Pengesahan')}`;
+⏰ ${date}`;
 }
 
 /**
