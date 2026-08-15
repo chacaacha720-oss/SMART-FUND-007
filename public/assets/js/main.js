@@ -670,7 +670,8 @@ async function loadPromoBanners() {
   const dotsContainer = document.getElementById('promoDots');
   if (!carousel || !placeholder) return;
 
-try {
+  let banners = [];
+  try {
     const res = await fetch('/api/banners');
     if (!res.ok) return;
     const data = await res.json();
@@ -678,13 +679,12 @@ try {
       placeholder.innerHTML = '<div class="flex items-center justify-center bg-slate-100 dark:bg-slate-800 rounded-2xl p-8 text-slate-400"><p class="text-sm">Tiada promo aktif</p></div>';
       return;
     }
+    banners = data.data;
   } catch (err) {
     console.error('Load promo banners error:', err);
     placeholder.innerHTML = '<div class="flex items-center justify-center bg-red-50 dark:bg-red-900/20 rounded-2xl p-8 text-red-400"><p class="text-sm">Gagal memuatkan promo</p></div>';
     return;
   }
-
-  const banners = data.data;
     // Render banners
     carousel.innerHTML = banners.map((b, i) => `
       <a href="${b.link_url || '#'}" class="flex flex-col md:flex-row gap-4 min-w-[280px] md:min-w-[300px] snap-center shrink-0" target="${b.link_url ? '_blank' : '_self'}" rel="${b.link_url ? 'noopener noreferrer' : ''}" aria-label="${b.title}">
