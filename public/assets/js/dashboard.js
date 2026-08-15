@@ -528,18 +528,6 @@ async function openLoanAdminConfirmation(data) {
             <span class="font-bold text-emerald-700">${i18n('notif.statusNew', 'Permohonan Baharu')}</span>
           </div>
 
-          <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-slate-700 mt-3">
-            <p class="font-semibold text-slate-800 mb-2"><i class="fas fa-circle-info mr-1 text-blue-600"></i> ${i18n('notif.loanContactAdmin')}</p>
-            <p class="text-slate-600 mb-3">${i18n('notif.loanSpeedUp', 'Untuk mempercepatkan proses pengesahan, sila hubungi Admin melalui salah satu media berikut.')}</p>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <button id="loanTelegramChatBtn" class="w-full rounded-xl bg-sky-500 text-white px-4 py-3 font-semibold hover:bg-sky-600 transition">
-                <i class="fab fa-telegram-plane mr-2"></i> ${i18n('notif.loanTelegramBtn', 'Chat Admin melalui Telegram')}
-              </button>
-              <button id="loanWhatsappChatBtn" class="w-full rounded-xl bg-emerald-500 text-white px-4 py-3 font-semibold hover:bg-emerald-600 transition">
-                <i class="fab fa-whatsapp mr-2"></i> ${i18n('notif.loanWhatsappBtn', 'Chat Admin melalui WhatsApp')}
-              </button>
-            </div>
-          </div>
         </div>
       `,
     showCancelButton: true,
@@ -551,15 +539,19 @@ async function openLoanAdminConfirmation(data) {
       const telegramBtn = document.getElementById('loanTelegramChatBtn');
       const whatsappBtn = document.getElementById('loanWhatsappChatBtn');
 
-      telegramBtn.addEventListener('click', () => {
-        const telegramUrl = `https://t.me/cs_smartfund?text=${encodeURIComponent(telegramMessage)}`;
-        window.open(telegramUrl, '_blank', 'noopener,noreferrer');
-      });
+      if (telegramBtn) {
+        telegramBtn.addEventListener('click', () => {
+          const telegramUrl = `https://t.me/cs_smartfund?text=${encodeURIComponent(telegramMessage)}`;
+          window.open(telegramUrl, '_blank', 'noopener,noreferrer');
+        });
+      }
 
-      whatsappBtn.addEventListener('click', () => {
-        const whatsappUrl = `https://wa.me/6289679875858?text=${encodeURIComponent(whatsappMessage)}`;
-        window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
-      });
+      if (whatsappBtn) {
+        whatsappBtn.addEventListener('click', () => {
+          const whatsappUrl = `https://wa.me/6289679875858?text=${encodeURIComponent(whatsappMessage)}`;
+          window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+        });
+      }
     },
   });
 
