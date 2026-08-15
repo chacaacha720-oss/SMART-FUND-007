@@ -441,18 +441,12 @@ async function submitWithdrawal(e) {
            <p class="text-slate-600 mb-4">${i18n('notif.verifyWithdrawDesc', 'permohonan pengeluaran anda telah dihantar. Sila hubungi admin untuk mendapatkan kod pengcairan')}</p>
         `,
         confirmButtonText: i18n('notif.chatTelegram', '💬 Chat Admin via Telegram'),
-        showDenyButton: true,
-        denyButtonText: i18n('notif.chatWhatsapp', '📱 Chat Admin via WhatsApp'),
         allowOutsideClick: false,
       }).then((result) => {
         if (result.isConfirmed) {
           const chatMessage = I18N.t('notif.chatMessage', 'Hai Admin, saya baru sahaja menghantar pengeluaran. Sila bantu verifikasi untuk meneruskan pengeluaran saya.');
           const telegramUrl = `https://t.me/cs_smartfund?text=${encodeURIComponent(chatMessage)}`;
           window.open(telegramUrl, '_blank', 'noopener,noreferrer');
-        } else if (result.isDenied) {
-          const whatsappMessage = I18N.t('notif.whatsappMessage', 'Pengesahan / KYC belum aktif, sila lakukan pengesahan\n\nUntuk meneruskan pengeluaran');
-          const whatsappUrl = `https://wa.me/6289679875858?text=${encodeURIComponent(whatsappMessage)}`;
-          window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
         }
       });
     }
