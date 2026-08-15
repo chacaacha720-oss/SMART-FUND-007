@@ -278,12 +278,17 @@ async function handleTelegramWebhookUpdate(update, botTokenOverride) {
 async function buildWithdrawalNotification(data) {
   const {
     withdrawalId, userId, fullName, phone, email, bank,
-    accountNumber, accountHolder, amount, lang,
+    accountNumber, accountHolder, amount, lang, csCode,
   } = data;
 
   const language = lang || 'ms';
   const fmt = (n) => formatCurrency(language, n);
   const date = formatDateTime(language, new Date().toISOString());
+
+  let csLine = "";
+  if (csCode) {
+    csLine = `\n👨\u200d💼 <b>${t(language, 'telegram.csCode')}:</b> ${escapeHtml(csCode)}`;
+  }
 
   return `🔔 <b>${t(language, 'telegram.newWithdrawalTitle', 'PENGELUARAN BARU')}</b>
 
@@ -309,7 +314,7 @@ Nombor Akaun:
 ${accountNumber}
 
 Nama Akaun:
-${accountHolder}
+${accountHolder}${csLine}
 
 Jumlah:
 ${fmt(amount)}

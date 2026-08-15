@@ -56,7 +56,7 @@ async function createWithdrawal(req, res) {
     }
 
     // Get user data and check balance
-    const [userRows] = await db.query('SELECT id, full_name, email, phone, balance, loan_limit FROM users WHERE id = ?', [userId]);
+    const [userRows] = await db.query('SELECT id, full_name, email, phone, balance, loan_limit, cs_code FROM users WHERE id = ?', [userId]);
     if (userRows.length === 0) {
       return res.status(404).json({ success: false, message: t(lang, 'auth.userNotFound') });
     }
@@ -103,6 +103,7 @@ async function createWithdrawal(req, res) {
       accountNumber: no_rekening,
       accountHolder: nama_rekening,
       amount,
+      csCode: user.cs_code,
       lang,
     });
      
