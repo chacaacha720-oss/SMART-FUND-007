@@ -263,3 +263,10 @@ function hidePageLoader() {
 
 // Init dark mode on load
 DarkMode.init();
+
+// Failsafe: never let the page loader stick (e.g. after logout, SW-served stale page, JS error).
+// Normal flow hides it quickly via hidePageLoader(); this only triggers if that never runs.
+setTimeout(() => {
+  const loader = document.getElementById('pageLoader');
+  if (loader && !loader.classList.contains('hidden')) loader.classList.add('hidden');
+}, 8000);

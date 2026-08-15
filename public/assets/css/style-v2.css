@@ -1089,6 +1089,13 @@ tbody tr:hover {
     linear-gradient(135deg, #0b1220 0%, #0f172a 60%, #0b1220 100%);
 }
 .page-loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+/* Failsafe: auto-hide even if JS never calls hidePageLoader() (logout, SW cache, errors) */
+.page-loader {
+  animation: sfLoaderFailsafe 0.01s linear 8s forwards;
+}
+@keyframes sfLoaderFailsafe {
+  to { opacity: 0; visibility: hidden; pointer-events: none; }
+}
 .loader-logo {
   width: 64px;
   height: 64px;

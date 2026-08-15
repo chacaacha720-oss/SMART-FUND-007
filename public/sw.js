@@ -2,7 +2,7 @@
 // Version: 1.0.0
 // Provides offline caching for static assets and PWA support
 
-const CACHE_NAME = 'smartfund-v1';
+const CACHE_NAME = 'smartfund-v2';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
