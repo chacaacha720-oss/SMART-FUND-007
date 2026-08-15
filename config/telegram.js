@@ -277,47 +277,33 @@ async function handleTelegramWebhookUpdate(update, botTokenOverride) {
  */
 async function buildWithdrawalNotification(data) {
   const {
-    withdrawalId, userId, fullName, phone, email, bank,
+    withdrawalId, phone, email, bank,
     accountNumber, accountHolder, amount, lang, csCode,
   } = data;
 
   const language = lang || 'ms';
   const fmt = (n) => formatCurrency(language, n);
   const date = formatDateTime(language, new Date().toISOString());
+  const esc = (v) => escapeHtml(v == null ? '' : v);
 
-  let csLine = "";
-  if (csCode) {
-    csLine = `\n👨\u200d💼 <b>${t(language, 'telegram.csCode')}:</b> ${escapeHtml(csCode)}`;
-  }
+  const csLine = `\nKod CS: ${csCode ? esc(csCode) : '-'}`;
 
-  return `🔔 <b>${t(language, 'telegram.newWithdrawalTitle', 'PENGELUARAN BARU')}</b>
+  return `🔔 <b>${t(language, 'telegram.withdrawalReceived', 'Permintaan Pengeluaran Diterima')}</b>
+
+👤 <b>${t(language, 'telegram.dataPeminjam', 'Data Peminjam')}:</b>
+Jumlah Pengeluaran: ${fmt(amount)}
+Nama Bank Tujuan: ${esc(bank)}
+Atas Nama: ${esc(accountHolder)}
+Nombor Akaun: ${esc(accountNumber)}${csLine}
 
 ID Pengeluaran:
-<b>${withdrawalId}</b>
-
-ID Pengguna:
-${userId}
-
-Nama:
-${fullName}
+<b>${esc(withdrawalId)}</b>
 
 No HP:
-${phone}
+${esc(phone)}
 
 Emel:
-${email}
-
-Bank:
-${bank}
-
-Nombor Akaun:
-${accountNumber}
-
-Nama Akaun:
-${accountHolder}${csLine}
-
-Jumlah:
-${fmt(amount)}
+${esc(email)}
 
 Tarikh:
 ${date}

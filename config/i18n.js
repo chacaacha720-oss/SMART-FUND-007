@@ -201,6 +201,8 @@ const MESSAGES = {
 
     // ===== Telegram =====
     'telegram.newLoanTitle': '🔔 PERMOHONAN PINJAMAN BAHARU',
+  'telegram.withdrawalReceived': 'Permintaan Pengeluaran Diterima',
+  'telegram.dataPeminjam': 'Data Peminjam',
     'telegram.borrowerData': 'Data Peminjam',
     'telegram.name': 'Nama',
     'telegram.phone': 'No. HP',
@@ -439,6 +441,8 @@ const MESSAGES = {
 
     // ===== Telegram =====
     'telegram.newLoanTitle': 'NEW LOAN APPLICATION',
+  'telegram.withdrawalReceived': 'Withdrawal Request Received',
+  'telegram.dataPeminjam': 'Borrower Data',
     'telegram.borrowerData': 'Borrower Data',
     'telegram.name': 'Name',
     'telegram.phone': 'Phone',
