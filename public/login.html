@@ -195,8 +195,9 @@
         showToast(res.message || I18N.t('notif.loginFailed'), 'error');
       }
     });
-  });
-  // Service Worker Registration for PWA
+    });
+  </script>
+  <!-- Service Worker Registration for PWA -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
