@@ -801,6 +801,7 @@ module.exports = {
   createBanner,
   updateBanner,
   deleteBanner,
+  uploadBannerImage,
 };
 
 // ============================================
@@ -958,6 +959,24 @@ async function deleteBanner(req, res) {
   }
 }
 
+/**
+ * POST /api/admin/banners/upload
+ * Upload banner image file, returns local URL
+ */
+async function uploadBannerImage(req, res) {
+  const lang = req.lang || 'ms';
+  try {
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: 'Tiada fail imej dihantar' });
+    }
+    const url = `/uploads/${req.file.filename}`;
+    return res.json({ success: true, url, message: 'Imej berjaya dimuat naik' });
+  } catch (err) {
+    console.error('Upload banner image error:', err);
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
+  }
+}
+
 module.exports = {
   adminLogin,
   adminMe,
@@ -987,4 +1006,5 @@ module.exports = {
   createBanner,
   updateBanner,
   deleteBanner,
+  uploadBannerImage,
 };

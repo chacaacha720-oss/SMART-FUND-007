@@ -775,6 +775,11 @@ function editPromo(id) {
         active.value = banner.active ? 'true' : 'false';
         order.value = banner.order || 0;
         hiddenId.value = banner.id;
+        const preview = document.getElementById('promoImagePreview');
+        if (preview) {
+          if (banner.image_url) { preview.src = banner.image_url; preview.classList.remove('hidden'); }
+          else { preview.src = ''; preview.classList.add('hidden'); }
+        }
       }
     }
   });
@@ -829,6 +834,10 @@ function resetPromoForm() {
   promoEditId = null;
   const btn = document.querySelector('#promoForm button[type="submit"] .btn-text');
   if (btn) btn.innerHTML = `<i class="fas fa-save mr-2"></i> ${I18N.t('admin.promoCreate')}`;
+  const preview = document.getElementById('promoImagePreview');
+  if (preview) { preview.src = ''; preview.classList.add('hidden'); }
+  const status = document.getElementById('promoImageStatus');
+  if (status) status.textContent = '';
 }
 
 async function deletePromo(id) {
@@ -852,6 +861,39 @@ document.addEventListener('DOMContentLoaded', () => {
   const promoForm = document.getElementById('promoForm');
   if (promoForm) {
     promoForm.addEventListener('submit', savePromo);
+  }
+
+  // Banner image upload
+  const promoImageUploadBtn = document.getElementById('promoImageUploadBtn');
+  const promoImageFile = document.getElementById('promoImageFile');
+  if (promoImageUploadBtn && promoImageFile) {
+    promoImageUploadBtn.addEventListener('click', () => promoImageFile.click());
+    promoImageFile.addEventListener('change', async () => {
+      const file = promoImageFile.files && promoImageFile.files[0];
+      if (!file) return;
+      const status = document.getElementById('promoImageStatus');
+      const preview = document.getElementById('promoImagePreview');
+      status.textContent = 'Memuat naik...';
+      status.className = 'text-xs text-slate-500';
+      try {
+        const fd = new FormData();
+        fd.append('image', file);
+        const res = await api('/admin/banners/upload', { method: 'POST', body: fd });
+        if (res.success && res.url) {
+          document.getElementById('promoImage').value = res.url;
+          if (preview) { preview.src = res.url; preview.classList.remove('hidden'); }
+          status.textContent = 'Berjaya';
+          status.className = 'text-xs text-green-600';
+        } else {
+          status.textContent = res.message || 'Gagal memuat naik';
+          status.className = 'text-xs text-red-600';
+        }
+      } catch (err) {
+        status.textContent = 'Ralat sambungan';
+        status.className = 'text-xs text-red-600';
+      }
+      promoImageFile.value = '';
+    });
   }
 });
 

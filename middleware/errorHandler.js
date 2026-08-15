@@ -16,7 +16,7 @@ function multerErrorHandler(err, req, res, next) {
   if (err && err.code === 'LIMIT_FILE_SIZE') {
     return res.status(400).json({ success: false, message: t(lang, 'error.fileSize') });
   }
-  if (err && err.message && err.message.includes('file gambar')) {
+  if (err && err.message && /gambar|imej|image/i.test(err.message)) {
     return res.status(400).json({ success: false, message: t(lang, 'error.fileImage') });
   }
   next(err);

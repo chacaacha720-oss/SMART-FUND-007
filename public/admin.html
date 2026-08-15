@@ -397,6 +397,16 @@
                   <div>
                     <label class="form-label" for="promoImage" data-i18n="admin.promoImageLabel">URL Imej</label>
                     <input type="url" id="promoImage" class="form-input" placeholder="https://contoh.com/imej.jpg" required />
+                    <div class="mt-2 flex flex-col gap-2">
+                      <div class="flex items-center gap-2">
+                        <input type="file" id="promoImageFile" accept="image/*" class="hidden" />
+                        <button type="button" id="promoImageUploadBtn" class="btn btn-secondary text-sm">
+                          <i class="fas fa-upload mr-1"></i> <span data-i18n="admin.promoUploadImage">Muat Naik Imej</span>
+                        </button>
+                        <span id="promoImageStatus" class="text-xs text-slate-500"></span>
+                      </div>
+                      <img id="promoImagePreview" src="" alt="Preview" class="hidden w-32 h-20 object-cover rounded-lg border border-slate-200" />
+                    </div>
                   </div>
                   <div>
                     <label class="form-label" for="promoLink" data-i18n="admin.promoLinkLabel">URL Pautan</label>

@@ -354,6 +354,7 @@
     "promoTitleLabel": "Title",
     "promoSubtitleLabel": "Subtitle",
     "promoImageLabel": "Image URL",
+    "promoUploadImage": "Upload Image",
     "promoLinkLabel": "Link URL",
     "promoActiveLabel": "Active",
     "promoOrderLabel": "Order",
