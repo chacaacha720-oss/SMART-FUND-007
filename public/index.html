@@ -81,7 +81,7 @@
    <!-- PREMIUM LOAN ACTIVITY TICKER -->
   <div id="loanTicker" class="fixed top-[69px] left-0 w-full z-40 overflow-hidden bg-slate-900 dark:bg-slate-950 border-t border-slate-800">
     <div id="loanTickerTrack" class="flex items-center whitespace-nowrap min-w-max py-2 md:py-2.5">
-      <!-- SET 1 -->
+      <!-- SET 1 (Mohon Pinjaman) -->
       <div class="loan-item flex items-center text-xs md:text-sm">
         <span class="flex items-center gap-2 md:gap-3 text-slate-300">
           <span class="flex items-center justify-center w-5 h-5 md:w-6 md:h-6 rounded-full bg-primary/20 text-primary shrink-0">
@@ -89,14 +89,14 @@
           </span>
           <span class="font-bold text-white whitespace-nowrap lowercase sm:uppercase">AKTIVITI TERKINI</span>
           <span class="text-slate-500 mx-1.5 md:mx-2 shrink-0">•</span>
-          <i class="fas fa-money-bill-wave text-emerald-400 shrink-0"></i>
-          <span class="text-slate-300 whitespace-nowrap">Indah berjaya menerima pencairan</span>
-          <span class="font-bold text-emerald-400 whitespace-nowrap ml-1.5 md:ml-2">RM 2,500</span>
+          <i class="fas fa-file-invoice-dollar text-blue-400 shrink-0"></i>
+          <span class="text-slate-300 whitespace-nowrap">Ahmad baru sahaja membuat permohonan pinjaman</span>
+          <span class="font-bold text-blue-400 whitespace-nowrap ml-1.5 md:ml-2">RM 13,200</span>
         </span>
       </div>
       <img src="/assets/img/ticker-logo.png" alt="SMART FUND" loading="lazy" width="28" height="28" class="object-contain w-7 h-7 md:w-10 md:h-10 block mx-3 md:mx-6 shrink-0">
 
-      <!-- SET 2 (duplikat untuk loop mulus) -->
+      <!-- SET 2 (Tarik Baki) -->
       <div class="loan-item flex items-center text-xs md:text-sm">
         <span class="flex items-center gap-2 md:gap-3 text-slate-300">
           <span class="flex items-center justify-center w-5 h-5 md:w-6 md:h-6 rounded-full bg-primary/20 text-primary shrink-0">
@@ -104,9 +104,9 @@
           </span>
           <span class="font-bold text-white whitespace-nowrap lowercase sm:uppercase">AKTIVITI TERKINI</span>
           <span class="text-slate-500 mx-1.5 md:mx-2 shrink-0">•</span>
-          <i class="fas fa-money-bill-wave text-emerald-400 shrink-0"></i>
-          <span class="text-slate-300 whitespace-nowrap">Indah berjaya menerima pencairan</span>
-          <span class="font-bold text-emerald-400 whitespace-nowrap ml-1.5 md:ml-2">RM 2,500</span>
+          <i class="fas fa-wallet text-emerald-400 shrink-0"></i>
+          <span class="text-slate-300 whitespace-nowrap">Anwar telah membuat pengeluaran baki</span>
+          <span class="font-bold text-emerald-400 whitespace-nowrap ml-1.5 md:ml-2">RM 5,200</span>
         </span>
       </div>
       <img src="/assets/img/ticker-logo.png" alt="SMART FUND" loading="lazy" width="28" height="28" class="object-contain w-7 h-7 md:w-10 md:h-10 block mx-3 md:mx-6 shrink-0">
@@ -545,13 +545,24 @@
 
       const tickerTrack = document.getElementById("loanTickerTrack");
 
-      const borrowers = [
-        "Ahmad", "Aiman", "Aisyah", "Amir", "Azman", "Bayudar", "Danish", "Daniel",
-        "Farhan", "Faris", "Fatin", "Hakim", "Hafiz", "Haziq", "Ibrahim", "Irfan",
-        "Indah", "Iskandar", "Jamal", "Kamal", "Khairul", "Lina", "Mariam", "Nadia",
-        "Nabil", "Nadiah", "Naufal", "Nurul", "Puteri", "Rafiq", "Rahman", "Rania",
-        "Rashid", "Rizal", "Sabrina", "Safiq", "Sakinah", "Sarah", "Shahrul", "Siti",
-        "Syafiq", "Syahmi", "Taufiq", "Wafi", "Yasmin", "Zain", "Zainab", "Zulkifli"
+      // 50 nama pemohon pinjaman (unik, tiada duplikat dalam satu pusingan)
+      const loanApplicants = [
+        "Ahmad","Aiman","Aisyah","Amir","Azman","Bayudar","Danish","Daniel",
+        "Farhan","Faris","Fatin","Hakim","Hafiz","Haziq","Ibrahim","Irfan",
+        "Indah","Iskandar","Jamal","Kamal","Khairul","Lina","Mariam","Nadia",
+        "Nabil","Nadiah","Naufal","Nurul","Puteri","Rafiq","Rahman","Rania",
+        "Rashid","Rizal","Sabrina","Safiq","Sakinah","Sarah","Shahrul","Siti",
+        "Syafiq","Syahmi","Taufiq","Wafi","Yasmin","Zain","Zainab","Zulkifli","Adi","Bella"
+      ];
+
+      // 50 nama pengguna tarik baki (unik, tiada duplikat, berbeza dari pool pemohon)
+      const withdrawalUsers = [
+        "Anwar","Arief","Auni","Aziz","Badrul","Dahlia","Dzakwan","Elisa",
+        "Fahmi","Fira","Gita","Hana","Harith","Hasif","Intan","Jihan",
+        "Kamarul","Lestari","Luqman","Maisarah","Mawar","Mirza","Najwa","Nasywa",
+        "Nazim","Nisa","Okta","Putra","Qistina","Ratna","Rendy","Salsabila",
+        "Syaiful","Tiara","Umar","Usamah","Wahyu","Yuna","Zahra","Zikri",
+        "Aqil","Bunga","Cahaya","Delia","Eko","Filza","Hidayah","Iqbal","Jauhar","Kasih"
       ];
 
       // Random loan amount, always RM 2,000 or above (never below)
@@ -560,12 +571,9 @@
         return Math.floor(Math.random() * ((max - min) / step + 1)) * step + min;
       }
 
-      const activities = [
-        { type: "approved", text: "permohonan pinjaman telah diluluskan", icon: "fa-circle-check", color: "text-emerald-400" },
-        { type: "applied", text: "baru sahaja membuat permohonan pinjaman", icon: "fa-file-invoice-dollar", color: "text-blue-400" },
-        { type: "disbursed", text: "berjaya menerima dana pinjaman", icon: "fa-wallet", color: "text-emerald-400" },
-        { type: "received", text: "telah menerima pencairan dana", icon: "fa-money-bill-wave", color: "text-emerald-400" }
-      ];
+      // Dua aktiviti: Mohon Pinjaman & Tarik Baki
+      const loanActivity = { text: "baru sahaja membuat permohonan pinjaman", icon: "fa-file-invoice-dollar", color: "text-blue-400" };
+      const withdrawalActivity = { text: "telah membuat pengeluaran baki", icon: "fa-wallet", color: "text-emerald-400" };
 
       function shuffle(array) {
         const result = [...array];
@@ -576,46 +584,48 @@
         return result;
       }
 
-      let shuffledBorrowers = shuffle(borrowers);
-      let borrowerIndex = 0;
-
-      function getUniqueBorrower() {
-        if (borrowerIndex >= shuffledBorrowers.length) {
-          shuffledBorrowers = shuffle(borrowers);
-          borrowerIndex = 0;
-        }
-        const name = shuffledBorrowers[borrowerIndex];
-        borrowerIndex++;
-        return name;
+      // Picker unik per pool: tidak ada nama berulang sehingga pool habis
+      function makeUniquePicker(pool) {
+        let shuffled = shuffle(pool);
+        let index = 0;
+        return function () {
+          if (index >= shuffled.length) {
+            shuffled = shuffle(pool);
+            index = 0;
+          }
+          const name = shuffled[index];
+          index++;
+          return name;
+        };
       }
-
-      function randomItem(array) {
-        return array[Math.floor(Math.random() * array.length)];
-      }
+      const pickLoanName = makeUniquePicker(loanApplicants);
+      const pickWithdrawName = makeUniquePicker(withdrawalUsers);
 
       function formatRM(amount) {
         return "RM " + amount.toLocaleString("ms-MY");
       }
 
        function updateTicker() {
-         const name = getUniqueBorrower();
-         const amount = randomAmount();
-         const activity = randomItem(activities);
+          // Pilih secara rawak antara Mohon Pinjaman & Tarik Baki
+          const isLoan = Math.random() < 0.5;
+          const name = isLoan ? pickLoanName() : pickWithdrawName();
+          const activity = isLoan ? loanActivity : withdrawalActivity;
+          const amount = randomAmount();
 
-         const loanHtml = `
-          <div class="loan-item flex items-center text-xs md:text-sm">
-            <span class="flex items-center gap-2 md:gap-3 text-slate-300">
-              <span class="flex items-center justify-center w-5 h-5 md:w-6 md:h-6 rounded-full bg-primary/20 text-primary shrink-0">
-                <i class="fas fa-bell text-[10px] md:text-xs"></i>
-              </span>
-              <span class="font-bold text-white whitespace-nowrap lowercase sm:uppercase">AKTIVITI TERKINI</span>
-              <span class="text-slate-500 mx-1.5 md:mx-2 shrink-0">•</span>
-              <i class="fas ${activity.icon} ${activity.color} shrink-0"></i>
-              <span class="text-slate-300 whitespace-nowrap">${name} ${activity.text}</span>
-              <span class="font-bold ${activity.color} whitespace-nowrap ml-1.5 md:ml-2">${formatRM(amount)}</span>
-            </span>
-          </div>
-        `;
+          const loanHtml = `
+           <div class="loan-item flex items-center text-xs md:text-sm">
+             <span class="flex items-center gap-2 md:gap-3 text-slate-300">
+               <span class="flex items-center justify-center w-5 h-5 md:w-6 md:h-6 rounded-full bg-primary/20 text-primary shrink-0">
+                 <i class="fas fa-bell text-[10px] md:text-xs"></i>
+               </span>
+               <span class="font-bold text-white whitespace-nowrap lowercase sm:uppercase">AKTIVITI TERKINI</span>
+               <span class="text-slate-500 mx-1.5 md:mx-2 shrink-0">•</span>
+               <i class="fas ${activity.icon} ${activity.color} shrink-0"></i>
+               <span class="text-slate-300 whitespace-nowrap">${name} ${activity.text}</span>
+               <span class="font-bold ${activity.color} whitespace-nowrap ml-1.5 md:ml-2">${formatRM(amount)}</span>
+             </span>
+           </div>
+         `;
 
          const logoHtml = '<img src="/assets/img/ticker-logo.png" alt="SMART FUND" loading="lazy" width="28" height="28" class="object-contain w-7 h-7 md:w-10 md:h-10 block mx-3 md:mx-6 shrink-0">';
 
