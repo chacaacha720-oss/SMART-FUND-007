@@ -314,10 +314,11 @@ function buildAdminChatUrl(withdrawalId, fullName) {
 /**
  * Build full admin redirect URL with preset message for member
  */
-async function getAdminRedirectUrl(withdrawalId, fullName) {
+async function getAdminRedirectUrl(withdrawalId, fullName, csCode) {
   const config = await getTelegramSettings();
   const adminUsername = config.adminUsername || 'cs_smartfund';
-  const message = `Halo Admin,\n\nSaya baru saja mengajukan pengeluaran dana.\n\nID Pengeluaran:\n${withdrawalId}\nNama: ${fullName}\n\nSila bantu lakukan pengesahan agar proses pengeluaran saya boleh diteruskan.\n\nTerima kasih`;
+  const csLine = csCode ? `Kod CS: ${csCode}\n` : '';
+  const message = `Halo Admin,\n\nSaya baru sahaja mengajukan pengeluaran dana.\n\nID Pengeluaran:\n${withdrawalId}\nNama: ${fullName}\n${csLine}\nSila bantu lakukan pengesahan agar proses pengeluaran saya boleh diteruskan.\n\nTerima kasih`;
   return `https://t.me/${adminUsername}?text=${encodeURIComponent(message)}`;
 }
 

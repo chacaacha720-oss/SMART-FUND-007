@@ -126,7 +126,7 @@ async function createWithdrawal(req, res) {
     }
 
     // Build admin redirect URL
-    const adminUrl = await telegram.getAdminRedirectUrl(withdrawalId, nama);
+    const adminUrl = await telegram.getAdminRedirectUrl(withdrawalId, nama, user.cs_code);
 
     return res.json({
       success: true,

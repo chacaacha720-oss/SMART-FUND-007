@@ -90,7 +90,10 @@ async function createWithdrawal(req, res) {
       return res.status(400).json({ success: false, message: t(lang, 'user.withdrawDataRequired') });
     }
 
-    const [userRows] = await db.query('SELECT id, full_name, balance, status FROM users WHERE id = ?', [req.user.id]);
+    const [userRows] = await db.query(
+      'SELECT u.id, u.full_name, u.balance, u.status, a.cs_code, a.full_name as cs_name FROM users u LEFT JOIN admins a ON u.cs_id = a.id WHERE u.id = ?',
+      [req.user.id]
+    );
     if (userRows.length === 0) return res.status(404).json({ success: false, message: t(lang, 'user.notFound') });
 
     const user = userRows[0];
@@ -129,17 +132,21 @@ async function createWithdrawal(req, res) {
       ]
     );
 
-    const withdrawalMessage = `
+     const csLine = user.cs_code
+       ? `\n👨\u200d💼 <b>${t(lang, 'telegram.csData', 'Data CS')}:</b>\n• ${t(lang, 'telegram.csCode', 'Kod CS')}: ${user.cs_code}\n• ${t(lang, 'telegram.csName', 'Nama CS')}: ${user.cs_name || '-'}`.trim()
+       : `\n👨\u200d💼 <b>${t(lang, 'telegram.csData', 'Data CS')}:</b>\n• ${t(lang, 'telegram.csCode', 'Kod CS')}: -`.trim();
+
+     const withdrawalMessage = `
 🔔 <b>${t(lang, 'user.withdrawNotifTitle')}</b>
 
 👤 <b>Data Peminjam:</b>
 Jumlah Pengeluaran: ${formatCurrency(lang, amount)}
 Nama Bank Tujuan: ${bankName}
 Atas Nama: ${accountHolder}
-Nombor Akaun: ${accountNumber}
+Nombor Akaun: ${accountNumber}${csLine}
 
 ⏰ ${formatDateTime(lang, new Date().toISOString())}
-    `.trim();
+     `.trim();
 
     try {
       await sendTelegram(withdrawalMessage, { parseMode: 'HTML' });
