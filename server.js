@@ -279,6 +279,30 @@ process.on('SIGINT', () => gracefulShutdown('SIGINT'));
       ) ENGINE=InnoDB`);
     console.log('✔ Withdrawal table ready');
 
+    // Loan repayment schedule (Jadual Ansuran) - NEW, backward-compatible
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS loan_schedules (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        loan_id INT NOT NULL,
+        user_id INT NOT NULL,
+        installment_number INT NOT NULL,
+        due_date DATE NOT NULL,
+        principal DECIMAL(15,2) NOT NULL DEFAULT 0,
+        interest DECIMAL(15,2) NOT NULL DEFAULT 0,
+        total_amount DECIMAL(15,2) NOT NULL DEFAULT 0,
+        remaining_balance DECIMAL(15,2) NOT NULL DEFAULT 0,
+        status ENUM('pending','paid','overdue') DEFAULT 'pending',
+        paid_at DATETIME NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        UNIQUE KEY uk_loan_installment (loan_id, installment_number),
+        INDEX idx_ls_user (user_id),
+        INDEX idx_ls_loan (loan_id),
+        INDEX idx_ls_due (due_date),
+        INDEX idx_ls_status (status)
+      ) ENGINE=InnoDB`);
+    console.log('✔ Loan schedules table ready');
+
     // Ensure min_withdrawal setting exists
     const [rows] = await db.query("SELECT setting_value FROM settings WHERE setting_key = 'min_withdrawal'");
     if (rows.length === 0) {

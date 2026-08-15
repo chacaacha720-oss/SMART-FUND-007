@@ -277,6 +277,9 @@ async function loadDashboard() {
     txEl.innerHTML = html;
     balTxEl.innerHTML = html;
   }
+
+  // Jadual Ansuran (Baki Aktif)
+  loadLoanSchedule();
 }
 
 async function loadPageData(page) {
@@ -320,6 +323,214 @@ async function loadPageData(page) {
       emptyState.classList.remove('hidden');
       container.innerHTML = '';
     }
+
+    if (page === 'balance') {
+      loadLoanSchedule();
+    }
+  }
+}
+
+// ============================================
+// LOAD JADUAL ANSURAN (Baki Aktif)
+// ============================================
+let currentScheduleLoanId = null;
+
+async function loadLoanSchedule() {
+  const container = document.getElementById('loanScheduleSection');
+  if (!container) return;
+
+  container.innerHTML = `
+    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm p-6">
+      <div class="flex items-center justify-center py-8 text-slate-400">
+        <i class="fas fa-spinner fa-spin mr-2"></i> Memuatkan jadual ansuran...
+      </div>
+    </div>`;
+
+  const res = await api('/loans/schedule/active');
+  if (!res.success) {
+    container.innerHTML = `
+      <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm p-8 text-center">
+        <div class="w-14 h-14 mx-auto mb-4 rounded-2xl bg-red-100 flex items-center justify-center">
+          <i class="fas fa-triangle-exclamation text-red-500 text-2xl"></i>
+        </div>
+        <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 mb-1">Jadual ansuran tidak dapat dimuatkan.</h3>
+        <p class="text-sm text-slate-500">Sila cuba lagi.</p>
+      </div>`;
+    return;
+  }
+
+  if (!res.data || !res.data.hasActiveLoan) {
+    container.innerHTML = `
+      <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm p-8 text-center">
+        <div class="w-14 h-14 mx-auto mb-4 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+          <i class="fas fa-file-invoice-dollar text-slate-400 text-2xl"></i>
+        </div>
+        <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 mb-1">Tiada Pinjaman Aktif</h3>
+        <p class="text-sm text-slate-500">Anda belum mempunyai pinjaman aktif pada masa ini.</p>
+      </div>`;
+    return;
+  }
+
+  const { loan, schedule, next_payment_date } = res.data;
+  currentScheduleLoanId = loan.id;
+
+  if (!schedule || schedule.length === 0) {
+    container.innerHTML = `
+      <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm p-8 text-center">
+        <div class="w-14 h-14 mx-auto mb-4 rounded-2xl bg-blue-100 flex items-center justify-center">
+          <i class="fas fa-clock text-blue-600 text-2xl"></i>
+        </div>
+        <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 mb-1">Jadual Ansuran Sedang Disediakan</h3>
+        <p class="text-sm text-slate-500">Jadual ansuran anda sedang diproses. Sila cuba lagi sebentar lagi.</p>
+      </div>`;
+    return;
+  }
+
+  const fmt = (n) => formatRupiah(n);
+  const fmtDate = (d) => {
+    const dt = new Date(d);
+    const dd = String(dt.getDate()).padStart(2, '0');
+    const mm = String(dt.getMonth() + 1).padStart(2, '0');
+    const yy = String(dt.getFullYear()).slice(-2);
+    return `${dd}/${mm}/${yy}`;
+  };
+  const statusBadge = (s) => {
+    const map = {
+      pending: { c: 'bg-amber-100 text-amber-700', t: 'Belum Dibayar' },
+      paid: { c: 'bg-green-100 text-green-700', t: 'Sudah Dibayar' },
+      overdue: { c: 'bg-red-100 text-red-700', t: 'Lewat' },
+    };
+    const m = map[s] || map.pending;
+    const dot = s === 'paid' ? 'bg-green-500' : s === 'overdue' ? 'bg-red-500' : 'bg-amber-500';
+    return `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${m.c}"><span class="w-1.5 h-1.5 rounded-full mr-1.5 ${dot}"></span>${m.t}</span>`;
+  };
+
+  const summary = `
+    <div class="bg-gradient-to-br from-blue-600 to-cyan-500 rounded-2xl p-6 text-white mb-6">
+      <h3 class="text-lg font-bold mb-4"><i class="fas fa-calendar-check mr-2"></i> Jadual Ansuran</h3>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div>
+          <p class="text-xs opacity-80 mb-1">Baki Pinjaman</p>
+          <p class="text-lg font-extrabold">${fmt(loan.amount)}</p>
+        </div>
+        <div>
+          <p class="text-xs opacity-80 mb-1">Ansuran Bulanan</p>
+          <p class="text-lg font-extrabold">${fmt(loan.monthly_payment)}</p>
+        </div>
+        <div>
+          <p class="text-xs opacity-80 mb-1">Tempoh</p>
+          <p class="text-lg font-extrabold">${loan.tenor} Bulan</p>
+        </div>
+        <div>
+          <p class="text-xs opacity-80 mb-1">Bayaran Seterusnya</p>
+          <p class="text-lg font-extrabold">${next_payment_date ? fmtDate(next_payment_date) : '-'}</p>
+        </div>
+      </div>
+    </div>`;
+
+  const head = `
+    <thead>
+      <tr class="text-left text-xs uppercase text-slate-500 border-b border-slate-200 dark:border-slate-700">
+        <th class="py-3 px-3">Bil.</th>
+        <th class="py-3 px-3">Tarikh Bayaran</th>
+        <th class="py-3 px-3 text-right">Pokok</th>
+        <th class="py-3 px-3 text-right">Faedah</th>
+        <th class="py-3 px-3 text-right">Jumlah Bayaran</th>
+        <th class="py-3 px-3 text-right">Baki</th>
+        <th class="py-3 px-3">Status</th>
+      </tr>
+    </thead>`;
+  const bodyRows = schedule.map((r) => `
+    <tr class="border-b border-slate-100 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800">
+      <td class="py-3 px-3 font-medium text-slate-700 dark:text-slate-200">${r.installment_number}</td>
+      <td class="py-3 px-3 text-slate-600 dark:text-slate-300">${fmtDate(r.due_date)}</td>
+      <td class="py-3 px-3 text-right text-slate-700 dark:text-slate-200">${fmt(r.principal)}</td>
+      <td class="py-3 px-3 text-right text-slate-700 dark:text-slate-200">${fmt(r.interest)}</td>
+      <td class="py-3 px-3 text-right font-semibold text-slate-800 dark:text-slate-100">${fmt(r.total_amount)}</td>
+      <td class="py-3 px-3 text-right text-slate-700 dark:text-slate-200">${fmt(r.remaining_balance)}</td>
+      <td class="py-3 px-3">${statusBadge(r.status)}</td>
+    </tr>`).join('');
+
+  const tableHtml = `
+    <div class="hidden md:block bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm overflow-hidden">
+      <div class="flex items-center justify-between p-4 border-b border-slate-100 dark:border-slate-700">
+        <h4 class="font-bold text-slate-800 dark:text-slate-100">Senarai Ansuran</h4>
+        <div class="flex gap-2">
+          <button id="downloadPdfBtn" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-red-50 text-red-600 text-sm font-semibold hover:bg-red-100 transition">
+            <i class="fas fa-file-pdf"></i> Muat Turun PDF
+          </button>
+          <button id="downloadExcelBtn" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-green-50 text-green-600 text-sm font-semibold hover:bg-green-100 transition">
+            <i class="fas fa-file-excel"></i> Muat Turun Excel
+          </button>
+        </div>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">${head}${bodyRows}</table>
+      </div>
+    </div>`;
+
+  const cardsHtml = `
+    <div class="md:hidden space-y-3">
+      <div class="flex items-center justify-between px-1">
+        <h4 class="font-bold text-slate-800 dark:text-slate-100">Senarai Ansuran</h4>
+        <div class="flex gap-2">
+          <button id="downloadPdfBtnM" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-red-50 text-red-600 text-xs font-semibold">
+            <i class="fas fa-file-pdf"></i> PDF
+          </button>
+          <button id="downloadExcelBtnM" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-green-50 text-green-600 text-xs font-semibold">
+            <i class="fas fa-file-excel"></i> Excel
+          </button>
+        </div>
+      </div>
+      ${schedule.map((r) => `
+        <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm p-4">
+          <div class="flex items-center justify-between mb-3">
+            <span class="font-bold text-slate-800 dark:text-slate-100">Ansuran #${r.installment_number}</span>
+            ${statusBadge(r.status)}
+          </div>
+          <div class="grid grid-cols-2 gap-y-2 text-sm">
+            <span class="text-slate-500">Tarikh</span><span class="text-right text-slate-700 dark:text-slate-200">${fmtDate(r.due_date)}</span>
+            <span class="text-slate-500">Pokok</span><span class="text-right text-slate-700 dark:text-slate-200">${fmt(r.principal)}</span>
+            <span class="text-slate-500">Faedah</span><span class="text-right text-slate-700 dark:text-slate-200">${fmt(r.interest)}</span>
+            <span class="text-slate-500">Jumlah</span><span class="text-right font-semibold text-slate-800 dark:text-slate-100">${fmt(r.total_amount)}</span>
+            <span class="text-slate-500">Baki</span><span class="text-right text-slate-700 dark:text-slate-200">${fmt(r.remaining_balance)}</span>
+          </div>
+        </div>`).join('')}
+    </div>`;
+
+  container.innerHTML = summary + tableHtml + cardsHtml;
+
+  const wire = (btnId, type) => {
+    const btn = document.getElementById(btnId);
+    if (btn) btn.addEventListener('click', () => downloadSchedule(type));
+  };
+  wire('downloadPdfBtn', 'pdf');
+  wire('downloadExcelBtn', 'excel');
+  wire('downloadPdfBtnM', 'pdf');
+  wire('downloadExcelBtnM', 'excel');
+}
+
+async function downloadSchedule(type) {
+  if (!currentScheduleLoanId) return;
+  const token = Token.get();
+  if (!token) { showToast('Sila log masuk semula.', 'error'); return; }
+  try {
+    const res = await fetch(`${API_BASE}/loans/${currentScheduleLoanId}/schedule/${type}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) { showToast('Gagal memuat turun jadual.', 'error'); return; }
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = type === 'pdf' ? `jadual-ansuran-LN-${currentScheduleLoanId}.pdf` : `jadual-ansuran-LN-${currentScheduleLoanId}.xlsx`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  } catch (err) {
+    console.error('Download schedule error:', err);
+    showToast('Jadual ansuran tidak dapat dimuatkan. Sila cuba lagi.', 'error');
   }
 }
 
