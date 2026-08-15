@@ -296,7 +296,7 @@ async function updateWithdrawalStatus(req, res) {
       const formattedAmount = formatCurrencyMYR(wd.jumlah);
       const csLine = wd.cs_code ? `\nKod CS: ${wd.cs_code}` : '';
       const adminMsg = `🔔 Status Dikemaskini: ${req.params.id}\n\nPengguna: ${wd.user_name}\nJumlah: ${formattedAmount}\nStatus: ${statusText}${csLine}`;
-      await sendTelegram(adminMsg, { parseMode: 'HTML' });
+      await telegram.sendTelegram(adminMsg, { parseMode: 'HTML' });
     }
 
     return res.json({ success: true, message: t(lang, 'withdraw.statusUpdated') });
