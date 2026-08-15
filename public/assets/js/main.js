@@ -687,12 +687,12 @@ async function loadPromoBanners() {
   }
     // Render banners
     carousel.innerHTML = banners.map((b, i) => `
-      <a href="${b.link_url || '#'}" class="flex flex-col md:flex-row gap-4 min-w-[280px] md:min-w-[300px] snap-center shrink-0" target="${b.link_url ? '_blank' : '_self'}" rel="${b.link_url ? 'noopener noreferrer' : ''}" aria-label="${b.title}">
-        <img src="${b.image_url}" alt="${b.title}" loading="lazy" class="w-full md:w-48 h-32 md:h-auto object-cover rounded-xl flex-shrink-0" onerror="this.style.display='none'" />
-        <div class="flex-1 flex flex-col justify-center p-3 md:p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-700">
-          <h4 class="font-bold text-slate-900 dark:text-white text-sm md:text-base">${b.title}</h4>
-          ${b.subtitle ? `<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">${b.subtitle}</p>` : ''}
-          <span class="text-xs text-primary mt-2 inline-block font-medium">Lihat Promo <i class="fas fa-arrow-right ml-1"></i></span>
+      <a href="${b.link_url || '#'}" class="group flex flex-col md:flex-row w-full md:w-[360px] shrink-0 snap-center overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm hover:shadow-md transition-shadow" target="${b.link_url ? '_blank' : '_self'}" rel="${b.link_url ? 'noopener noreferrer' : ''}" aria-label="${b.title}">
+        <img src="${b.image_url}" alt="${b.title}" loading="lazy" class="w-full md:w-52 h-40 md:h-44 object-cover" onerror="this.style.display='none'" />
+        <div class="flex flex-1 flex-col justify-center gap-1.5 p-4 md:p-5">
+          <h4 class="font-bold text-slate-900 dark:text-white text-base md:text-lg leading-snug">${b.title}</h4>
+          ${b.subtitle ? `<p class="text-sm text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">${b.subtitle}</p>` : ''}
+          <span class="mt-0.5 text-sm font-semibold text-primary inline-flex items-center gap-1">Lihat Promo <i class="fas fa-arrow-right"></i></span>
         </div>
       </a>
     `).join('');
