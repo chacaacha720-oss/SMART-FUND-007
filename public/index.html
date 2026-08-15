@@ -7,6 +7,8 @@
   <meta name="description" content="SMART FUND - Platform pinjaman digital yang selamat dan cekap." />
   <meta name="keywords" content="pinjaman online, fintech, simulasi pinjaman, kalkulator pinjaman, pinjaman cepat" />
   <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <meta name="theme-color" content="#1264E8" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
@@ -111,7 +113,23 @@
       </div>
       <img src="/assets/img/ticker-logo.png" alt="SMART FUND" loading="lazy" width="28" height="28" class="object-contain w-7 h-7 md:w-10 md:h-10 block mx-3 md:mx-6 shrink-0">
     </div>
-  </div>
+</div>
+
+  <!-- PROMO BANNER -->
+  <section id="promoBanner" class="hidden py-4 md:block" aria-label="Promo Banner">
+    <div class="container mx-auto px-4 sm:px-6">
+      <div class="overflow-x-auto snap-x snap-mandatory flex gap-4 pb-4" id="promoCarousel" role="region" aria-label="Promo Banner Carousel">
+        <div class="flex flex-col md:flex-row gap-4 min-w-[280px] md:min-w-[300px] snap-center shrink-0" id="promoPlaceholder">
+          <div class="flex items-center justify-center bg-slate-100 dark:bg-slate-800 rounded-2xl p-8 text-slate-400">
+            <i class="fas fa-spinner fa-spin text-2xl mb-2"></i>
+            <p class="text-sm">Memuatkan promo...</p>
+          </div>
+        </div>
+      </div>
+      <!-- Navigation dots -->
+      <div class="flex justify-center gap-2 mt-3" id="promoDots" aria-label="Promo navigation"></div>
+    </div>
+  </section>
 
   <!-- Mobile Menu -->
   <div id="Soalan LazimMenu" class="hidden lg:hidden fixed top-0 left-0 w-full h-screen bg-white dark:bg-slate-900 z-[60] overflow-y-auto pt-20 pb-8 px-6">
@@ -636,10 +654,20 @@
          tickerTrack.style.animation = "loanTickerSlide 16s linear infinite";
        }
 
-      updateTicker();
+updateTicker();
       setInterval(updateTicker, 25000);
 
     });
+  </script>
+  <!-- Service Worker Registration for PWA -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => console.log('[SW] Registered:', reg.scope))
+          .catch(err => console.warn('[SW] Registration failed:', err));
+      });
+    }
   </script>
 </body>
 </html>

@@ -1,0 +1,50 @@
+{
+  "name": "SMART FUND - Platform Pinjaman Digital",
+  "short_name": "SMART FUND",
+  "description": "Platform pinjaman digital yang selamat, cekap, dan telus dengan faedah bermula 5% setahun",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1264E8",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "ms",
+  "icons": [
+    {
+      "src": "/assets/img/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/img/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/img/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["finance", "productivity"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Mohon Pinjaman",
+      "short_name": "Mohon",
+      "description": "Buat permohonan pinjaman baru",
+      "url": "/register.html",
+      "icons": [{ "src": "/assets/img/logo.svg", "sizes": "192x192" }]
+    },
+    {
+      "name": "Simulasi Pinjaman",
+      "short_name": "Simulasi",
+      "description": "Kira anggaran ansuran bulanan",
+      "url": "/#calculator",
+      "icons": [{ "src": "/assets/img/logo.svg", "sizes": "192x192" }]
+    }
+  ]
+}

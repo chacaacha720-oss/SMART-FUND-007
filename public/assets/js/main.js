@@ -660,3 +660,110 @@ document.addEventListener('DOMContentLoaded', () => {
   }, observerOptions);
   sections.forEach((s) => sectionObserver.observe(s));
 });
+
+// ============================================
+// PROMO BANNER CAROUSEL
+// ============================================
+async function loadPromoBanners() {
+  const carousel = document.getElementById('promoCarousel');
+  const placeholder = document.getElementById('promoPlaceholder');
+  const dotsContainer = document.getElementById('promoDots');
+  if (!carousel || !placeholder) return;
+
+try {
+    const res = await fetch('/api/banners');
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!data.success || !data.data || !data.data.length) {
+      placeholder.innerHTML = '<div class="flex items-center justify-center bg-slate-100 dark:bg-slate-800 rounded-2xl p-8 text-slate-400"><p class="text-sm">Tiada promo aktif</p></div>';
+      return;
+    }
+  } catch (err) {
+    console.error('Load promo banners error:', err);
+    placeholder.innerHTML = '<div class="flex items-center justify-center bg-red-50 dark:bg-red-900/20 rounded-2xl p-8 text-red-400"><p class="text-sm">Gagal memuatkan promo</p></div>';
+    return;
+  }
+
+  const banners = data.data;
+    // Render banners
+    carousel.innerHTML = banners.map((b, i) => `
+      <a href="${b.link_url || '#'}" class="flex flex-col md:flex-row gap-4 min-w-[280px] md:min-w-[300px] snap-center shrink-0" target="${b.link_url ? '_blank' : '_self'}" rel="${b.link_url ? 'noopener noreferrer' : ''}" aria-label="${b.title}">
+        <img src="${b.image_url}" alt="${b.title}" loading="lazy" class="w-full md:w-48 h-32 md:h-auto object-cover rounded-xl flex-shrink-0" onerror="this.style.display='none'" />
+        <div class="flex-1 flex flex-col justify-center p-3 md:p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-700">
+          <h4 class="font-bold text-slate-900 dark:text-white text-sm md:text-base">${b.title}</h4>
+          ${b.subtitle ? `<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">${b.subtitle}</p>` : ''}
+          <span class="text-xs text-primary mt-2 inline-block font-medium">Lihat Promo <i class="fas fa-arrow-right ml-1"></i></span>
+        </div>
+      </a>
+    `).join('');
+
+    // Create navigation dots
+    if (dotsContainer) {
+      dotsContainer.innerHTML = banners.map((_, i) => `
+        <button class="w-2 h-2 rounded-full ${i === 0 ? 'bg-primary' : 'bg-slate-300 dark:bg-slate-600'}" data-index="${i}" aria-label="Slide ${i + 1}"></button>
+      `).join('');
+    }
+
+    // Auto-scroll carousel
+    const carouselEl = document.getElementById('promoCarousel');
+    const dots = document.querySelectorAll('#promoDots button');
+    let currentIndex = 0;
+    let autoScrollInterval = null;
+
+    function goToSlide(index) {
+      const items = carouselEl.querySelectorAll('a');
+      if (!items.length) return;
+      const itemWidth = items[0].offsetWidth + 16; // item width + gap
+      carouselEl.scrollTo({ left: itemWidth * index, behavior: 'smooth' });
+      currentIndex = index;
+      updateDots();
+    }
+
+    function updateDots() {
+      const dots = document.querySelectorAll('#promoDots button');
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('bg-primary', i === currentIndex);
+        dot.classList.toggle('bg-slate-300', i !== currentIndex);
+        dot.classList.toggle('dark:bg-slate-600', i !== currentIndex);
+      });
+    }
+
+    function nextSlide() {
+      const items = carouselEl.querySelectorAll('a');
+      if (!items.length) return;
+      currentIndex = (currentIndex + 1) % items.length;
+      goToSlide(currentIndex);
+    }
+
+    function startAutoScroll() {
+      stopAutoScroll();
+      autoScrollInterval = setInterval(nextSlide, 5000);
+    }
+
+    function stopAutoScroll() {
+      if (autoScrollInterval) clearInterval(autoScrollInterval);
+    }
+
+    // Dot click handlers
+    document.getElementById('promoDots')?.addEventListener('click', (e) => {
+      const btn = e.target.closest('button');
+      if (btn) {
+        const index = parseInt(btn.dataset.index, 10);
+        goToSlide(index);
+        stopAutoScroll();
+        startAutoScroll();
+      }
+    });
+
+    // Pause on hover
+    carouselEl?.addEventListener('mouseenter', stopAutoScroll);
+    carouselEl?.addEventListener('mouseleave', startAutoScroll);
+
+    // Initialize
+    startAutoScroll();
+  }
+
+// Initialize promo banners when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  loadPromoBanners();
+});

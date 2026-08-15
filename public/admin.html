@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Admin Dashboard - SMART FUND</title>
   <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <meta name="theme-color" content="#1264E8" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>tailwind.config = { darkMode: 'class' };</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -75,6 +77,7 @@
            <a class="admin-link super-admin-only" data-page="cs-codes"><i class="fas fa-key w-5"></i> <span data-i18n="admin.csManagement">Urusan Kod CS</span></a>
            <a class="admin-link" data-page="telegram"><i class="fab fa-telegram w-5"></i> <span data-i18n="admin.telegram">Pengaturan Telegram</span></a>
            <a class="admin-link" data-page="settings"><i class="fas fa-gear w-5"></i> <span data-i18n="admin.settings">Setting Website</span></a>
+            <a class="admin-link" data-page="promo"><i class="fas fa-bullhorn w-5"></i> <span data-i18n="admin.promo">Promo Banner</span></a>
         </nav>
         <div class="p-4 border-t border-slate-700">
           <a id="adminLogoutBtn" class="text-red-400 hover:bg-red-500/10 rounded-xl flex items-center gap-3 px-4 py-3 cursor-pointer"><i class="fas fa-right-from-bracket w-5"></i> <span data-i18n="admin.logout">Logout</span></a>
@@ -371,6 +374,68 @@
               </form>
             </div>
           </section>
+
+          <!-- PROMO BANNER -->
+          <section id="apage-promo" class="admin-content hidden">
+            <h2 class="text-2xl font-extrabold text-slate-900 mb-6" data-i18n="admin.promoTitle">Promo Banner</h2>
+            <p class="text-slate-600 dark:text-slate-400 mb-6" data-i18n="admin.promoSubtitle">Kelola banner promosi di laman utama</p>
+
+            <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm mb-6">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold text-slate-900" data-i18n="admin.promoCreate">Tambah Banner Baru</h3>
+              </div>
+              <form id="promoForm" class="space-y-4">
+                <div class="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="form-label" for="promoTitle" data-i18n="admin.promoTitleLabel">Tajuk</label>
+                    <input type="text" id="promoTitle" class="form-input" placeholder="Contoh: Promosi Hari Raya" required />
+                  </div>
+                  <div>
+                    <label class="form-label" for="promoSubtitle" data-i18n="admin.promoSubtitleLabel">Sub-tajuk</label>
+                    <input type="text" id="promoSubtitle" class="form-input" placeholder="Contoh: Faedah 5% setahun" />
+                  </div>
+                  <div>
+                    <label class="form-label" for="promoImage" data-i18n="admin.promoImageLabel">URL Imej</label>
+                    <input type="url" id="promoImage" class="form-input" placeholder="https://contoh.com/imej.jpg" required />
+                  </div>
+                  <div>
+                    <label class="form-label" for="promoLink" data-i18n="admin.promoLinkLabel">URL Pautan</label>
+                    <input type="url" id="promoLink" class="form-input" placeholder="https://contoh.com/promo" />
+                  </div>
+                  <div>
+                    <label class="form-label" for="promoOrder" data-i18n="admin.promoOrderLabel">Urutan</label>
+                    <input type="number" id="promoOrder" class="form-input" value="0" min="0" />
+                  </div>
+                  <div>
+                    <label class="form-label" for="promoActive" data-i18n="admin.promoActiveLabel">Aktif</label>
+                    <select id="promoActive" class="form-select">
+                      <option value="true" data-i18n="admin.promoStatusActive">Aktif</option>
+                      <option value="false" data-i18n="admin.promoStatusInactive">Tidak Aktif</option>
+                    </select>
+                  </div>
+                </div>
+                <input type="hidden" id="promoId" />
+                <div class="flex gap-2">
+                  <button type="submit" class="btn btn-primary">
+                    <span class="btn-text"><i class="fas fa-save mr-2"></i> <span data-i18n="admin.save">Simpan</span></span>
+                  </button>
+                  <button type="button" id="promoCancelBtn" class="btn btn-secondary">
+                    <span class="btn-text"><i class="fas fa-times mr-2"></i> <span data-i18n="admin.cancel">Batal</span></span>
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
+              <h3 class="text-lg font-bold text-slate-900 mb-4" data-i18n="admin.promoList">Senarai Banner</h3>
+              <div id="promoList" class="space-y-3">
+                <div class="text-center py-8 text-slate-400">
+                  <i class="fas fa-spinner fa-spin text-xl mb-2"></i>
+                  <p>Memuatkan senarai banner...</p>
+                </div>
+              </div>
+            </div>
+          </section>
         </main>
       </div>
     </div>
@@ -434,6 +499,16 @@
         });
       });
     });
+  </script>
+  <!-- Service Worker Registration for PWA -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => console.log('[SW] Registered:', reg.scope))
+          .catch(err => console.warn('[SW] Registration failed:', err));
+      });
+    }
   </script>
 </body>
 </html>

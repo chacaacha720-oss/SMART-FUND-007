@@ -1,0 +1,21 @@
+{
+  "topAppBarExists": true,
+  "desktopNavCount": 10,
+  "mobileNavCount": 12,
+  "navItems": [
+    "Tech",
+    "Angular",
+    "React",
+    "CSS",
+    "Mobile",
+    "Features",
+    "Code examples",
+    "Usage guidelines",
+    "Accessibility",
+    "Open source"
+  ],
+  "allPresent": true,
+  "logoExists": true,
+  "loginBtnExists": true,
+  "registerBtnExists": true
+}

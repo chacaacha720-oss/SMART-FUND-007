@@ -53,6 +53,12 @@ router.put('/settings', adminController.updateSettings);
 router.get('/telegram/logs', adminController.telegramLogs);
 router.post('/telegram/test', adminController.telegramTest);
 
+// Promo Banner Management
+router.get('/banners', adminController.getBanners);
+router.post('/banners', adminController.createBanner);
+router.put('/banners/:id', adminController.updateBanner);
+router.delete('/banners/:id', adminController.deleteBanner);
+
 // Bulk operations
 router.put('/users/bulk/limit', adminController.bulkUpdateUserLimit);
 

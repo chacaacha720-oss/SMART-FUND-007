@@ -797,4 +797,194 @@ module.exports = {
   createCsCode,
   updateCsCode,
   deleteCsCode,
+  getBanners,
+  createBanner,
+  updateBanner,
+  deleteBanner,
+};
+
+// ============================================
+// PROMO BANNER MANAGEMENT
+// ============================================
+
+/**
+ * GET /api/admin/banners
+ */
+async function getBanners(req, res) {
+  const lang = req.lang || 'ms';
+  try {
+    const [rows] = await db.query('SELECT * FROM settings WHERE setting_key = "promo_banners"');
+    let banners = [];
+    if (rows.length > 0) {
+      try {
+        banners = JSON.parse(rows[0].setting_value);
+      } catch (e) {
+        banners = [];
+      }
+    }
+    return res.json({ success: true, data: banners });
+  } catch (err) {
+    console.error('Get banners error:', err);
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
+  }
+}
+
+/**
+ * POST /api/admin/banners
+ */
+async function createBanner(req, res) {
+  const lang = req.lang || 'ms';
+  try {
+    const { title, subtitle, image_url, link_url, active, order } = req.body;
+    if (!title || !image_url) {
+      return res.status(400).json({ success: false, message: 'Title and image are required' });
+    }
+
+    const [rows] = await db.query('SELECT * FROM settings WHERE setting_key = "promo_banners"');
+    let banners = [];
+    if (rows.length > 0) {
+      try {
+        banners = JSON.parse(rows[0].setting_value);
+      } catch (e) {
+        banners = [];
+      }
+    }
+
+    const newBanner = {
+      id: Date.now().toString(),
+      title,
+      subtitle: subtitle || '',
+      image_url,
+      link_url: link_url || '',
+      active: active !== false,
+      order: parseInt(order) || 0,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    };
+
+    banners.push(newBanner);
+    banners.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+    await db.query(
+      `INSERT INTO settings (setting_key, setting_value) VALUES (?, ?)
+       ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)`,
+      ['promo_banners', JSON.stringify(banners)]
+    );
+
+    return res.json({ success: true, message: 'Banner created successfully', data: newBanner });
+  } catch (err) {
+    console.error('Create banner error:', err);
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
+  }
+}
+
+/**
+ * PUT /api/admin/banners/:id
+ */
+async function updateBanner(req, res) {
+  const lang = req.lang || 'ms';
+  try {
+    const { id } = req.params;
+    const { title, subtitle, image_url, link_url, active, order } = req.body;
+
+    const [rows] = await db.query('SELECT * FROM settings WHERE setting_key = "promo_banners"');
+    if (rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Banner not found' });
+    }
+
+    let banners = JSON.parse(rows[0].setting_value);
+    const index = banners.findIndex(b => b.id === id);
+    if (index === -1) {
+      return res.status(404).json({ success: false, message: 'Banner not found' });
+    }
+
+    const updated = {
+      ...banners[index],
+      title: title || banners[index].title,
+      subtitle: subtitle !== undefined ? subtitle : banners[index].subtitle,
+      image_url: image_url || banners[index].image_url,
+      link_url: link_url !== undefined ? link_url : banners[index].link_url,
+      active: active !== undefined ? active : banners[index].active,
+      order: order !== undefined ? parseInt(order) : banners[index].order,
+      updated_at: new Date().toISOString()
+    };
+
+    banners[index] = updated;
+    banners.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+    await db.query(
+      `INSERT INTO settings (setting_key, setting_value) VALUES (?, ?)
+       ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)`,
+      ['promo_banners', JSON.stringify(banners)]
+    );
+
+    return res.json({ success: true, message: 'Banner updated successfully', data: updated });
+  } catch (err) {
+    console.error('Update banner error:', err);
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
+  }
+}
+
+/**
+ * DELETE /api/admin/banners/:id
+ */
+async function deleteBanner(req, res) {
+  const lang = req.lang || 'ms';
+  try {
+    const { id } = req.params;
+
+    const [rows] = await db.query('SELECT * FROM settings WHERE setting_key = "promo_banners"');
+    if (rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Banner not found' });
+    }
+
+    let banners = JSON.parse(rows[0].setting_value);
+    const filtered = banners.filter(b => b.id !== id);
+
+    if (filtered.length === banners.length) {
+      return res.status(404).json({ success: false, message: 'Banner not found' });
+    }
+
+    await db.query(
+      `INSERT INTO settings (setting_key, setting_value) VALUES (?, ?)
+       ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)`,
+      ['promo_banners', JSON.stringify(filtered)]
+    );
+
+    return res.json({ success: true, message: 'Banner deleted successfully' });
+  } catch (err) {
+    console.error('Delete banner error:', err);
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
+  }
+}
+
+module.exports = {
+  adminLogin,
+  adminMe,
+  adminDashboard,
+  listUsers,
+  getUser,
+  updateUser,
+  updateUserStatus,
+  deleteUser,
+  listApplications,
+  getApplication,
+  updateApplication,
+  updateApplicationStatus,
+  listTransactions,
+  updateTransactionStatus,
+  getSettings,
+  updateSettings,
+  telegramLogs,
+  telegramTest,
+  bulkUpdateUserLimit,
+  listCsCodes,
+  getCsCode,
+  createCsCode,
+  updateCsCode,
+  deleteCsCode,
+  getBanners,
+  createBanner,
+  updateBanner,
+  deleteBanner,
 };

@@ -84,6 +84,7 @@ async function showAdminApp(admin) {
       'cs-codes': I18N.t('admin.csCode'),
     telegram: I18N.t('admin.telegram'),
     settings: I18N.t('admin.settings'),
+    promo: I18N.t('admin.promo'),
   };
   document.querySelectorAll('.admin-link').forEach((link) => {
     link.removeEventListener('click', handleAdminNavClick);
@@ -212,6 +213,7 @@ async function loadAdminPage(page) {
     await loadTelegramLogs();
   }
   if (page === 'settings') await loadSettings();
+  if (page === 'promo') await loadPromo();
 }
 
 // ============================================
@@ -663,6 +665,195 @@ async function saveSettings(e) {
   if (res.success) showToast(I18N.t('admin.set.saved'), 'success');
   else showToast(res.message || I18N.t('admin.noDataChanged'), 'error');
 }
+
+async function saveSettings(e) {
+  e.preventDefault();
+  const settings = {
+    site_name: document.getElementById('setSiteName').value,
+    site_tagline: document.getElementById('setTagline').value,
+    min_loan: document.getElementById('setMinLoan').value,
+    max_loan: document.getElementById('setMaxLoan').value,
+    min_tenor: document.getElementById('setMinTenor').value,
+    max_tenor: document.getElementById('setMaxTenor').value,
+    interest_rate: document.getElementById('setInterest').value,
+    default_loan_limit: document.getElementById('setDefaultLimit').value,
+    contact_email: document.getElementById('setContactEmail').value,
+    contact_phone: document.getElementById('setContactPhone').value,
+  };
+  const btn = document.getElementById('settingsSaveBtn');
+  setBtnLoading(btn, true);
+  const res = await api('/admin/settings', { method: 'PUT', body: { settings } });
+  setBtnLoading(btn, false);
+  if (res.success) showToast(I18N.t('admin.set.saved'), 'success');
+  else showToast(res.message || I18N.t('admin.noDataChanged'), 'error');
+}
+
+// ============================================
+// PROMO BANNER MANAGEMENT
+// ============================================
+async function loadPromo() {
+  const listEl = document.getElementById('promoList');
+  if (!listEl) return;
+  listEl.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-400">${I18N.t('admin.loading')}</td></tr>`;
+  const res = await api('/admin/banners');
+  if (!res.success || !res.data) {
+    listEl.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-400">${I18N.t('admin.loadError')}</td></tr>`;
+    return;
+  }
+  if (!res.data.length) {
+    listEl.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-400">${I18N.t('admin.promoEmpty')}</td></tr>`;
+    return;
+  }
+  listEl.innerHTML = res.data.map((b) => `
+    <tr class="border-b border-slate-100 hover:bg-slate-50">
+      <td class="py-3 px-3 font-mono text-sm text-slate-700">${b.id}</td>
+      <td class="py-3 px-3">
+        <div class="font-semibold text-slate-900">${b.title}</div>
+        <div class="text-sm text-slate-500">${b.subtitle || '-'}</div>
+      </td>
+      <td class="py-3 px-3"><img src="${b.image_url}" alt="" class="w-16 h-10 object-cover rounded-lg" onerror="this.style.display='none'" /></td>
+      <td class="py-3 px-3 text-center">
+        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${b.active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">
+          ${b.active ? I18N.t('admin.promoStatusActive') : I18N.t('admin.promoStatusInactive')}
+        </span>
+      </td>
+      <td class="py-3 px-3 text-center text-sm text-slate-600">${b.order || 0}</td>
+      <td class="py-3 px-3 text-center">
+        <div class="flex items-center justify-center gap-2">
+          <button onclick="editPromo('${b.id}')" class="text-blue-600 hover:text-blue-800 p-1" title="${I18N.t('admin.promoEdit')}"><i class="fas fa-edit"></i></button>
+          <button onclick="deletePromo('${b.id}')" class="text-red-600 hover:text-red-800 p-1" title="${I18N.t('admin.promoDelete')}"><i class="fas fa-trash"></i></button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+let promoEditId = null;
+
+function editPromo(id) {
+  promoEditId = id;
+  const form = document.getElementById('promoForm');
+  const title = document.getElementById('promoTitle');
+  const subtitle = document.getElementById('promoSubtitle');
+  const image = document.getElementById('promoImage');
+  const link = document.getElementById('promoLink');
+  const active = document.getElementById('promoActive');
+  const order = document.getElementById('promoOrder');
+  const hiddenId = document.getElementById('promoId');
+
+  // Find the banner data
+  const rows = document.querySelectorAll('#promoList tr');
+  let bannerData = null;
+  document.querySelectorAll('#promoList tr').forEach(row => {
+    if (row.querySelector('td:first-child')?.textContent === id) {
+      const titleCell = row.querySelector('td:nth-child(2)');
+      const img = row.querySelector('td:nth-child(3) img');
+      const activeCell = row.querySelector('td:nth-child(4)');
+      const orderCell = row.querySelector('td:nth-child(5)');
+      if (titleCell) {
+        const fullTitle = titleCell.querySelector('.font-semibold')?.textContent || '';
+        const sub = titleCell.querySelector('div:last-child')?.textContent || '';
+        title.value = fullTitle;
+        subtitle.value = sub === '-' ? '' : sub;
+      }
+      if (img) image.value = img.src;
+      active.value = activeCell.querySelector('span')?.textContent?.includes('Aktif') ? 'true' : 'false';
+      if (orderCell) order.value = orderCell.textContent.trim() || 0;
+      hiddenId.value = id;
+    }
+  });
+
+  // Try to fetch the exact banner data from API for accuracy
+  api('/admin/banners').then(res => {
+    if (res.success && res.data) {
+      const banner = res.data.find(b => b.id === id);
+      if (banner) {
+        title.value = banner.title;
+        subtitle.value = banner.subtitle || '';
+        image.value = banner.image_url;
+        link.value = banner.link_url || '';
+        active.value = banner.active ? 'true' : 'false';
+        order.value = banner.order || 0;
+        hiddenId.value = banner.id;
+      }
+    }
+  });
+
+  // Update form button text
+  const btn = document.querySelector('#promoForm button[type="submit"] .btn-text');
+  if (btn) btn.innerHTML = `<i class="fas fa-save mr-2"></i> ${I18N.t('admin.promoEdit')}`;
+  form.scrollIntoView({ behavior: 'smooth' });
+}
+
+async function savePromo(e) {
+  e.preventDefault();
+  const form = e.target;
+  const data = {
+    title: document.getElementById('promoTitle').value.trim(),
+    subtitle: document.getElementById('promoSubtitle').value.trim(),
+    image_url: document.getElementById('promoImage').value.trim(),
+    link_url: document.getElementById('promoLink').value.trim(),
+    active: document.getElementById('promoActive').value === 'true',
+    order: parseInt(document.getElementById('promoOrder').value) || 0,
+  };
+
+  if (!data.title || !data.image_url) {
+    showToast(I18N.t('admin.promoTitleRequired') || 'Title and image are required', 'error');
+    return;
+  }
+
+  const id = document.getElementById('promoId').value;
+  const isEdit = !!promoEditId;
+
+  const endpoint = isEdit ? `/admin/banners/${promoEditId}` : '/admin/banners';
+  const method = isEdit ? 'PUT' : 'POST';
+
+  const btn = form.querySelector('button[type="submit"]');
+  setBtnLoading(btn, true);
+  const res = await api(endpoint, { method, body: data });
+  setBtnLoading(btn, false);
+
+  if (res.success) {
+    showToast(res.message || (isEdit ? I18N.t('admin.promoUpdated') : I18N.t('admin.promoCreated')), 'success');
+    resetPromoForm();
+    await loadPromo();
+  } else {
+    showToast(res.message || I18N.t('admin.noDataChanged'), 'error');
+  }
+}
+
+function resetPromoForm() {
+  const form = document.getElementById('promoForm');
+  form.reset();
+  document.getElementById('promoId').value = '';
+  promoEditId = null;
+  const btn = document.querySelector('#promoForm button[type="submit"] .btn-text');
+  if (btn) btn.innerHTML = `<i class="fas fa-save mr-2"></i> ${I18N.t('admin.promoCreate')}`;
+}
+
+async function deletePromo(id) {
+  const ok = await alertConfirm(I18N.t('admin.promoDeleteConfirm'), I18N.t('admin.promoDeleteConfirmText'));
+  if (!ok) return;
+  const res = await api(`/admin/banners/${id}`, { method: 'DELETE' });
+  if (res.success) {
+    showToast(res.message || I18N.t('admin.promoDeleted'), 'success');
+    await loadPromo();
+  } else {
+    showToast(res.message || I18N.t('admin.promoNotFound'), 'error');
+  }
+}
+
+// Cancel button handler
+document.addEventListener('DOMContentLoaded', () => {
+  const cancelBtn = document.getElementById('promoCancelBtn');
+  if (cancelBtn) {
+    cancelBtn.addEventListener('click', resetPromoForm);
+  }
+  const promoForm = document.getElementById('promoForm');
+  if (promoForm) {
+    promoForm.addEventListener('submit', savePromo);
+  }
+});
 
 // ============================================
 // REAL-TIME SYNC - Admin <-> User Dashboard
