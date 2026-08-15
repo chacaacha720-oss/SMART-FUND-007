@@ -687,8 +687,8 @@ async function loadPromoBanners() {
   }
     // Render banners
     carousel.innerHTML = banners.map((b, i) => `
-      <a href="${b.link_url || '#'}" class="group flex flex-col md:flex-row w-full md:w-[360px] shrink-0 snap-center overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm hover:shadow-md transition-shadow" target="${b.link_url ? '_blank' : '_self'}" rel="${b.link_url ? 'noopener noreferrer' : ''}" aria-label="${b.title}">
-        <img src="${b.image_url}" alt="${b.title}" loading="lazy" class="w-full md:w-52 h-40 md:h-44 object-cover" onerror="this.style.display='none'" />
+      <a href="${b.link_url || '#'}" class="group flex flex-col md:flex-row w-full md:w-[440px] shrink-0 snap-center overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm hover:shadow-md transition-shadow" target="${b.link_url ? '_blank' : '_self'}" rel="${b.link_url ? 'noopener noreferrer' : ''}" aria-label="${b.title}">
+        <img src="${b.image_url}" alt="${b.title}" loading="lazy" class="w-full md:w-56 h-40 md:h-48 object-cover" onerror="this.style.display='none'" />
         <div class="flex flex-1 flex-col justify-center gap-1.5 p-4 md:p-5">
           <h4 class="font-bold text-slate-900 dark:text-white text-base md:text-lg leading-snug">${b.title}</h4>
           ${b.subtitle ? `<p class="text-sm text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">${b.subtitle}</p>` : ''}
