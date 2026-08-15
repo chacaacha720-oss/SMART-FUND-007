@@ -688,7 +688,7 @@ async function loadPromoBanners() {
     // Render banners
     carousel.innerHTML = banners.map((b, i) => `
       <a href="${b.link_url || '#'}" class="group block w-full shrink-0 snap-center overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm hover:shadow-md transition-shadow" target="${b.link_url ? '_blank' : '_self'}" rel="${b.link_url ? 'noopener noreferrer' : ''}" aria-label="${b.title}">
-        <img src="${b.image_url}" alt="${b.title}" loading="lazy" class="w-full max-h-[220px] md:max-h-[380px] object-contain bg-slate-50 dark:bg-slate-800" onerror="this.style.display='none'" />
+        <img src="${b.image_url}" alt="${b.title}" loading="lazy" class="w-full h-auto object-contain bg-slate-50 dark:bg-slate-800" onerror="this.style.display='none'" />
         <div class="flex items-center justify-between gap-3 px-4 py-3 md:px-5 md:py-4 border-t border-slate-100 dark:border-slate-800">
           <div class="min-w-0">
             <h4 class="font-bold text-slate-900 dark:text-white text-sm md:text-base leading-snug">${b.title}</h4>
