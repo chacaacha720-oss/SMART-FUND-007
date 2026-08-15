@@ -687,12 +687,14 @@ async function loadPromoBanners() {
   }
     // Render banners
     carousel.innerHTML = banners.map((b, i) => `
-      <a href="${b.link_url || '#'}" class="group flex flex-col md:flex-row w-full md:w-[440px] shrink-0 snap-center overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm hover:shadow-md transition-shadow" target="${b.link_url ? '_blank' : '_self'}" rel="${b.link_url ? 'noopener noreferrer' : ''}" aria-label="${b.title}">
-        <img src="${b.image_url}" alt="${b.title}" loading="lazy" class="w-full md:w-56 h-40 md:h-48 object-cover" onerror="this.style.display='none'" />
-        <div class="flex flex-1 flex-col justify-center gap-1.5 p-4 md:p-5">
-          <h4 class="font-bold text-slate-900 dark:text-white text-base md:text-lg leading-snug">${b.title}</h4>
-          ${b.subtitle ? `<p class="text-sm text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">${b.subtitle}</p>` : ''}
-          <span class="mt-0.5 text-sm font-semibold text-primary inline-flex items-center gap-1">Lihat Promo <i class="fas fa-arrow-right"></i></span>
+      <a href="${b.link_url || '#'}" class="group block w-full shrink-0 snap-center overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm hover:shadow-md transition-shadow" target="${b.link_url ? '_blank' : '_self'}" rel="${b.link_url ? 'noopener noreferrer' : ''}" aria-label="${b.title}">
+        <img src="${b.image_url}" alt="${b.title}" loading="lazy" class="w-full max-h-[220px] md:max-h-[380px] object-contain bg-slate-50 dark:bg-slate-800" onerror="this.style.display='none'" />
+        <div class="flex items-center justify-between gap-3 px-4 py-3 md:px-5 md:py-4 border-t border-slate-100 dark:border-slate-800">
+          <div class="min-w-0">
+            <h4 class="font-bold text-slate-900 dark:text-white text-sm md:text-base leading-snug">${b.title}</h4>
+            ${b.subtitle ? `<p class="text-xs md:text-sm text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">${b.subtitle}</p>` : ''}
+          </div>
+          <span class="shrink-0 text-sm font-semibold text-primary inline-flex items-center gap-1">Lihat Promo <i class="fas fa-arrow-right"></i></span>
         </div>
       </a>
     `).join('');
