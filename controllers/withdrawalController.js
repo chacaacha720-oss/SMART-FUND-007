@@ -295,7 +295,7 @@ async function updateWithdrawalStatus(req, res) {
     if (status === 'berhasil' || status === 'ditolak') {
       const statusText = status === 'berhasil' ? t(lang, 'withdraw.successMsg', req.params.id) : t(lang, 'withdraw.rejectedMsg', req.params.id);
       const formattedAmount = formatCurrencyMYR(wd.jumlah);
-      const csLine = wd.cs_code ? `\nKod CS: ${wd.cs_code}\nNama CS: ${wd.cs_name || '-'}` : '';
+      const csLine = wd.cs_code ? `\n${t(lang, 'telegram.csCode', 'Kod CS')}: ${wd.cs_code}\n${t(lang, 'telegram.csName', 'Nama CS')}: ${wd.cs_name || '-'}` : '';
       const adminMsg = `🔔 Status Dikemaskini: ${req.params.id}\n\nPengguna: ${wd.user_name}\nJumlah: ${formattedAmount}\nStatus: ${statusText}${csLine}`;
       await telegram.sendTelegram(adminMsg, { parseMode: 'HTML' });
     }

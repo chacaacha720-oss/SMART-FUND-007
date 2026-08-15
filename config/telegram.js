@@ -286,7 +286,9 @@ async function buildWithdrawalNotification(data) {
   const date = formatDateTime(language, new Date().toISOString());
   const esc = (v) => escapeHtml(v == null ? '' : v);
 
-  const csLine = csCode ? `\nKod CS: ${esc(csCode)}\nNama CS: ${esc(csName || '-')}` : '\nKod CS: -';
+  const csLine = csCode
+    ? `\n${t(language, 'telegram.csCode', 'Kod CS')}: ${esc(csCode)}\n${t(language, 'telegram.csName', 'Nama CS')}: ${esc(csName || '-')}`
+    : `\n${t(language, 'telegram.csCode', 'Kod CS')}: -`;
 
   return `🔔 <b>${t(language, 'telegram.withdrawalReceived', 'Permintaan Pengeluaran Diterima')}</b>
 
