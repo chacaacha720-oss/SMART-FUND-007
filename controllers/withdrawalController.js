@@ -56,7 +56,13 @@ async function createWithdrawal(req, res) {
     }
 
     // Get user data and check balance
-    const [userRows] = await db.query('SELECT id, full_name, email, phone, balance, loan_limit, cs_code FROM users WHERE id = ?', [userId]);
+    // cs_code diambil dari admins berdasarkan cs_id user (kod CS yang sama ketika mendaftar)
+    const [userRows] = await db.query(
+      `SELECT u.id, u.full_name, u.email, u.phone, u.balance, u.loan_limit, a.cs_code
+       FROM users u LEFT JOIN admins a ON u.cs_id = a.id
+       WHERE u.id = ?`,
+      [userId]
+    );
     if (userRows.length === 0) {
       return res.status(404).json({ success: false, message: t(lang, 'auth.userNotFound') });
     }
@@ -248,7 +254,11 @@ async function updateWithdrawalStatus(req, res) {
 
     // Get withdrawal data for notification
     const [wdRows] = await db.query(
-      'SELECT w.*, u.email as user_email, u.full_name as user_name FROM withdrawals w LEFT JOIN users u ON w.member_id = u.id WHERE w.withdrawal_id = ?',
+      `SELECT w.*, u.email as user_email, u.full_name as user_name, a.cs_code
+       FROM withdrawals w
+       LEFT JOIN users u ON w.member_id = u.id
+       LEFT JOIN admins a ON u.cs_id = a.id
+       WHERE w.withdrawal_id = ?`,
       [req.params.id]
     );
     const wd = wdRows[0];
@@ -284,7 +294,8 @@ async function updateWithdrawalStatus(req, res) {
     if (status === 'berhasil' || status === 'ditolak') {
       const statusText = status === 'berhasil' ? t(lang, 'withdraw.successMsg', req.params.id) : t(lang, 'withdraw.rejectedMsg', req.params.id);
       const formattedAmount = formatCurrencyMYR(wd.jumlah);
-      const adminMsg = `🔔 Status Dikemaskini: ${req.params.id}\n\nPengguna: ${wd.user_name}\nJumlah: ${formattedAmount}\nStatus: ${statusText}`;
+      const csLine = wd.cs_code ? `\nKod CS: ${wd.cs_code}` : '';
+      const adminMsg = `🔔 Status Dikemaskini: ${req.params.id}\n\nPengguna: ${wd.user_name}\nJumlah: ${formattedAmount}\nStatus: ${statusText}${csLine}`;
       await sendTelegram(adminMsg, { parseMode: 'HTML' });
     }
 
