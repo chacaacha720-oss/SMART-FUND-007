@@ -753,7 +753,7 @@ async function openLoanAdminConfirmation(data) {
 
       if (whatsappBtn) {
         whatsappBtn.addEventListener('click', () => {
-          const whatsappUrl = `https://wa.me/6289679875858?text=${encodeURIComponent(whatsappMessage)}`;
+          const whatsappUrl = `https://wa.me/+6289679875858?text=${encodeURIComponent(whatsappMessage)}`;
           window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
         });
       }

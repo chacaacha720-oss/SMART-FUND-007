@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const db = require('../config/db');
 const { JWT_SECRET } = require('../middleware/auth');
-const { sanitize, isValidEmail } = require('../middleware/validate');
+const { sanitize, isValidEmail, normalizePhone } = require('../middleware/validate');
 const { t } = require('../config/i18n');
 
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
@@ -25,9 +25,14 @@ async function register(req, res) {
   try {
     const fullName = sanitize(req.body.fullName);
     const email = (req.body.email || '').toLowerCase().trim();
-    const phone = sanitize(req.body.phone || '').trim();
+    const rawPhone = (req.body.phone || '').trim();
+    const phone = normalizePhone(rawPhone);
     const password = req.body.password;
     const csCode = (req.body.csCode || '').trim();
+
+    if (!phone) {
+      return res.status(400).json({ success: false, message: t(lang, 'val.phoneInvalid') });
+    }
 
     // Validate CS code
     if (!csCode || !/^CS\d{2}$/.test(csCode)) {
@@ -47,6 +52,12 @@ async function register(req, res) {
     const [exists] = await db.query('SELECT id FROM users WHERE email = ?', [email]);
     if (exists.length) {
       return res.status(400).json({ success: false, message: t(lang, 'auth.emailExists') });
+    }
+
+    // Cek nomor HP sudah terdaftar (format E.164 maupun input mentah)
+    const [phoneExists] = await db.query('SELECT id FROM users WHERE phone = ? OR phone = ?', [phone, rawPhone]);
+    if (phoneExists.length) {
+      return res.status(400).json({ success: false, message: t(lang, 'auth.phoneExists') });
     }
 
     const passwordHash = await bcrypt.hash(password, 12);
@@ -100,11 +111,12 @@ async function login(req, res) {
     const identifier = (req.body.identifier || '').trim();
     const password = req.body.password;
     const remember = req.body.remember;
+    const identifierPhone = normalizePhone(identifier);
 
-    // Cari user berdasarkan email atau phone
+    // Cari user berdasarkan email atau phone (format mentah maupun E.164)
     const [rows] = await db.query(
-      'SELECT * FROM users WHERE email = ? OR phone = ? LIMIT 1',
-      [identifier, identifier]
+      'SELECT * FROM users WHERE email = ? OR phone = ? OR phone = ? LIMIT 1',
+      [identifier, identifier, identifierPhone || identifier]
     );
 
     if (rows.length === 0) {
@@ -163,6 +175,7 @@ async function forgotPassword(req, res) {
   try {
     const email = (req.body.email || '').toLowerCase().trim();
     const phone = (req.body.phone || '').trim();
+    const phoneNorm = normalizePhone(phone);
 
     if (!email && !phone) {
       return res.status(400).json({ success: false, message: t(lang, 'auth.identifierRequired') });
@@ -171,7 +184,7 @@ async function forgotPassword(req, res) {
     // Cari user
     let query, params;
     if (email) { query = 'SELECT id, email, phone FROM users WHERE email = ?'; params = [email]; }
-    else { query = 'SELECT id, email, phone FROM users WHERE phone = ?'; params = [phone]; }
+    else { query = 'SELECT id, email, phone FROM users WHERE phone = ? OR phone = ?'; params = [phone, phoneNorm || phone]; }
 
     const [rows] = await db.query(query, params);
     if (rows.length === 0) {

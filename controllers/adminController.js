@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const db = require('../config/db');
 const { JWT_SECRET } = require('../middleware/auth');
 const { sendTelegram } = require('../config/telegram');
-const { sanitize } = require('../middleware/validate');
+const { sanitize, normalizePhone } = require('../middleware/validate');
 const { t, formatCurrency, formatDate, formatDateTime } = require('../config/i18n');
 
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
@@ -170,7 +170,12 @@ async function updateUser(req, res) {
     const params = [];
 
     if (fullName !== undefined) { updates.push('full_name = ?'); params.push(sanitize(fullName)); }
-    if (phone !== undefined) { updates.push('phone = ?'); params.push(phone); }
+    if (phone !== undefined) {
+      const norm = normalizePhone(phone);
+      if (!norm) return res.status(400).json({ success: false, message: t(lang, 'val.phoneInvalid') });
+      updates.push('phone = ?');
+      params.push(norm);
+    }
     if (nik !== undefined) { updates.push('nik = ?'); params.push(sanitize(nik)); }
     if (address !== undefined) { updates.push('address = ?'); params.push(sanitize(address)); }
     if (job !== undefined) { updates.push('job = ?'); params.push(sanitize(job)); }

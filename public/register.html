@@ -102,10 +102,26 @@
             </div>
             <div>
               <label class="form-label" for="phone" data-i18n="register.phone">Nombor HP</label>
-              <div class="relative">
-                <i class="fas fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                <input type="tel" id="phone" placeholder="60 3-XXXX XXXX" class="form-input pl-11" />
+              <div class="flex gap-2">
+                <div class="relative">
+                  <button type="button" id="phoneCountryBtn" class="h-11 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 flex items-center gap-1.5 text-slate-700 transition" aria-label="Pilih negara">
+                    <span id="phoneFlag" class="text-lg leading-none">🇲🇾</span>
+                    <span id="phoneCode" class="text-sm font-medium">+60</span>
+                    <i class="fas fa-chevron-down text-[10px] text-slate-400"></i>
+                  </button>
+                  <div id="phoneCountryList" class="hidden absolute z-50 mt-1 w-72 max-h-64 overflow-y-auto rounded-xl bg-white border border-slate-200 shadow-xl">
+                    <div class="sticky top-0 bg-white p-2 border-b border-slate-100">
+                      <input type="text" id="phoneCountrySearch" placeholder="Cari negara..." class="form-input !py-2 text-sm" />
+                    </div>
+                    <ul id="phoneCountryOptions" class="py-1"></ul>
+                  </div>
+                </div>
+                <div class="relative flex-1">
+                  <i class="fas fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                  <input type="tel" id="phone" placeholder="123456789" class="form-input pl-11" autocomplete="tel-national" />
+                </div>
               </div>
+              <p class="form-hint">Nombor akan dinormalisasi ke format antarabangsa (E.164)</p>
             </div>
             <div>
               <label class="form-label" for="adminCode" data-i18n="register.csCode">Kod CS</label>
@@ -180,6 +196,8 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+  <script src="/assets/js/libphonenumber.min.js"></script>
+  <script src="/assets/js/countries.js"></script>
   <script src="/assets/js/api.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -195,6 +213,90 @@
           window.location.reload();
         });
       });
+
+      // ===== Nomor HP internasional (libphonenumber-js) =====
+      (function () {
+        const lp = window.libphonenumber;
+        if (!lp) return;
+        const CC_MAP = {};
+        lp.getCountries().forEach((iso) => {
+          const cc = lp.getCountryCallingCode(iso);
+          (CC_MAP[cc] = CC_MAP[cc] || []).push(iso);
+        });
+        const CC_PREFIXES = Object.keys(CC_MAP).sort((a, b) => b.length - a.length);
+
+        function normalize(raw) {
+          if (typeof raw !== 'string') return null;
+          let s = raw.trim().replace(/[\s().\-]/g, '');
+          if (!s) return null;
+          if (s.startsWith('+')) {
+            const p = lp.parsePhoneNumberFromString(s);
+            return p && p.isValid() ? p.number : null;
+          }
+          if (s.startsWith('00')) s = s.slice(2);
+          const digits = s.replace(/\D/g, '');
+          if (!digits) return null;
+          for (const cc of CC_PREFIXES) {
+            if (digits.startsWith(cc)) {
+              for (const iso of CC_MAP[cc]) {
+                const p = lp.parsePhoneNumberFromString(digits, iso);
+                if (p && p.isValid()) return p.number;
+              }
+            }
+          }
+          const p = lp.parsePhoneNumberFromString(raw, phoneState.iso);
+          return p && p.isValid() ? p.number : null;
+        }
+        window.__normalizePhone = normalize;
+
+        function flag(iso) {
+          return iso.replace(/./g, (c) => String.fromCodePoint(127397 + c.charCodeAt(0)));
+        }
+        const phoneState = { iso: 'MY' };
+        const btn = document.getElementById('phoneCountryBtn');
+        const flagEl = document.getElementById('phoneFlag');
+        const codeEl = document.getElementById('phoneCode');
+        const listEl = document.getElementById('phoneCountryList');
+        const optsEl = document.getElementById('phoneCountryOptions');
+        const searchEl = document.getElementById('phoneCountrySearch');
+
+        function setCountry(iso) {
+          phoneState.iso = iso;
+          flagEl.textContent = flag(iso);
+          codeEl.textContent = '+' + lp.getCountryCallingCode(iso);
+          listEl.classList.add('hidden');
+          document.getElementById('phone').focus();
+        }
+
+        function renderOptions(filter) {
+          const f = (filter || '').trim().toLowerCase();
+          const items = (window.COUNTRIES || []).filter((c) =>
+            !f || c.n.toLowerCase().includes(f) || c.iso.toLowerCase().includes(f) || c.cc.includes(f)
+          );
+          optsEl.innerHTML = items.map((c) =>
+            '<li><button type="button" data-iso="' + c.iso + '" class="w-full flex items-center gap-2 px-3 py-2 text-left text-sm hover:bg-slate-100 ' + (c.iso === phoneState.iso ? 'bg-blue-50 text-blue-700' : '') + '">' +
+            '<span class="text-lg leading-none">' + flag(c.iso) + '</span>' +
+            '<span class="flex-1 truncate">' + c.n + '</span>' +
+            '<span class="text-slate-400 text-xs">+' + c.cc + '</span>' +
+            '</button></li>'
+          ).join('');
+        }
+
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const hidden = listEl.classList.contains('hidden');
+          listEl.classList.toggle('hidden');
+          if (hidden) { renderOptions(''); searchEl.value = ''; searchEl.focus(); }
+        });
+        searchEl.addEventListener('input', () => renderOptions(searchEl.value));
+        optsEl.addEventListener('click', (e) => {
+          const b = e.target.closest('button[data-iso]');
+          if (b) setCountry(b.getAttribute('data-iso'));
+        });
+        document.addEventListener('click', () => listEl.classList.add('hidden'));
+
+        setCountry('MY');
+      })();
 
       // Dark mode
       const darkToggle = document.getElementById('darkToggle');
@@ -240,13 +342,14 @@
       document.getElementById('toStep2Btn').addEventListener('click', () => {
         const fullName = document.getElementById('fullName').value.trim();
         const email = document.getElementById('email').value.trim();
-        const phone = document.getElementById('phone').value.trim();
+        const phoneRaw = document.getElementById('phone').value.trim();
+        const phone = window.__normalizePhone ? window.__normalizePhone(phoneRaw) : (phoneRaw || null);
         const password = document.getElementById('password').value;
         const confirm = document.getElementById('confirmPassword').value;
 
         if (!fullName || fullName.length < 3) return showToast(I18N.t('val.nameMin'), 'error');
         if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showToast(I18N.t('val.emailInvalid'), 'error');
-        if (!phone || !/^((\+62|62|0)8[1-9]\d{6,11})$/.test(phone.replace(/[\s-]/g, ''))) return showToast(I18N.t('val.phoneInvalid'), 'error');
+        if (!phone) return showToast(I18N.t('val.phoneInvalid'), 'error');
         if (!password || password.length < 6) return showToast(I18N.t('val.passwordMin'), 'error');
         if (!/[a-zA-Z]/.test(password) || !/[0-9]/.test(password)) return showToast(I18N.t('val.passwordMix'), 'error');
         if (password !== confirm) return showToast(I18N.t('val.passwordMatch'), 'error');
@@ -267,7 +370,7 @@
         const body = {
           fullName: document.getElementById('fullName').value.trim(),
           email: document.getElementById('email').value.trim(),
-          phone: document.getElementById('phone').value.trim(),
+          phone: (window.__normalizePhone ? window.__normalizePhone(document.getElementById('phone').value.trim()) : document.getElementById('phone').value.trim()),
           password: document.getElementById('password').value,
           confirmPassword: document.getElementById('confirmPassword').value,
           csCode: document.getElementById('adminCode').value.trim().toUpperCase(),

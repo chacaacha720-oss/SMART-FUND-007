@@ -51,6 +51,7 @@ const MESSAGES = {
 
     // ===== Auth Controller =====
     'auth.emailExists': 'Emel telah berdaftar',
+    'auth.phoneExists': 'Nombor HP telah berdaftar',
     'auth.registerSuccess': 'Pendaftaran berjaya. Anda auto log masuk.',
     'auth.welcomeNotif': 'Selamat Datang ke SMART FUND!',
     'auth.welcomeMsg': (name) => `Halo ${name}, akaun anda berjaya dibuat. Nikmati pelbagai kemudahan pinjaman dalam talian bersama kami.`,
@@ -291,6 +292,7 @@ const MESSAGES = {
 
     // ===== Auth Controller =====
     'auth.emailExists': 'Email is already registered',
+    'auth.phoneExists': 'Phone number is already registered',
     'auth.registerSuccess': 'Registration successful. You are automatically logged in.',
     'auth.welcomeNotif': 'Welcome to SMART FUND!',
     'auth.welcomeMsg': (name) => `Hello ${name}, your account has been created successfully. Enjoy easy online loans with us.`,

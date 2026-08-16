@@ -4,6 +4,48 @@
  */
 const validator = require('validator');
 const { t } = require('../config/i18n');
+const { parsePhoneNumberFromString, getCountries, getCountryCallingCode } = require('libphonenumber-js');
+
+/**
+ * Map calling code -> ISO countries (for auto-detection of country from leading digits)
+ */
+const CC_MAP = {};
+for (const iso of getCountries()) {
+  const cc = getCountryCallingCode(iso);
+  (CC_MAP[cc] = CC_MAP[cc] || []).push(iso);
+}
+const CC_PREFIXES = Object.keys(CC_MAP).sort((a, b) => b.length - a.length);
+
+/**
+ * Normalisasi nomor HP ke format E.164 internasional.
+ * Menerima input dengan/tanpa '+', dengan/tanpa country code, dan mengenali
+ * country calling code secara otomatis (mis. 60123456789 -> +60123456789).
+ * Mengembalikan null jika nomor tidak valid menurut validasi internasional.
+ */
+function normalizePhone(raw) {
+  if (typeof raw !== 'string') return null;
+  let s = raw.trim().replace(/[\s().\-]/g, '');
+  if (!s) return null;
+
+  if (s.startsWith('+')) {
+    const p = parsePhoneNumberFromString(s);
+    return p && p.isValid() ? p.number : null;
+  }
+
+  if (s.startsWith('00')) s = s.slice(2); // exit code internasional
+  const digits = s.replace(/\D/g, '');
+  if (!digits) return null;
+
+  for (const cc of CC_PREFIXES) {
+    if (digits.startsWith(cc)) {
+      for (const iso of CC_MAP[cc]) {
+        const p = parsePhoneNumberFromString(digits, iso);
+        if (p && p.isValid()) return p.number;
+      }
+    }
+  }
+  return null;
+}
 
 /**
  * Sanitasi string - trim & escape untuk mencegah XSS
@@ -21,12 +63,11 @@ function isValidEmail(email) {
 }
 
 /**
- * Validasi nomor HP Indonesia (08xxx / +62xxx)
+ * Validasi nomor HP internasional (mendukung semua negara).
+ * Mengenali country calling code secara otomatis dan menormalisasi ke E.164.
  */
 function isValidPhone(phone) {
-  if (typeof phone !== 'string') return false;
-  const cleaned = phone.replace(/[\s-]/g, '');
-  return /^(\+62|62|0)8[1-9]\d{6,11}$/.test(cleaned);
+  return normalizePhone(phone) !== null;
 }
 
 /**
@@ -100,6 +141,7 @@ module.exports = {
   sanitize,
   isValidEmail,
   isValidPhone,
+  normalizePhone,
   isStrongPassword,
   validateRegister,
   validateLogin,
