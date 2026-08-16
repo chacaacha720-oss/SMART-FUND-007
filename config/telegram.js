@@ -306,7 +306,7 @@ Nombor Akaun: ${esc(accountNumber)}${csLine}
  */
 function buildAdminChatUrl(withdrawalId, fullName) {
   const config = getTelegramSettings ? null : null; // settings loaded async inside getTelegramSettings
-  const botUsername = process.env.TELEGRAM_BOT_USERNAME || 'notifsmart_bot';
+  const botUsername = process.env.TELEGRAM_BOT_USERNAME || 'Smartfund_my_BOT';
   const message = `Halo Admin,\n\nSaya baru saja mengajukan pengeluaran dana.\n\nID Pengeluaran:\n${withdrawalId}\nNama: ${fullName}\n\nSila bantu lakukan pengesahan agar proses pengeluaran saya boleh diteruskan.\n\nTerima kasih.`;
   return `https://t.me/${botUsername}?start=withdraw_${withdrawalId}`;
 }
