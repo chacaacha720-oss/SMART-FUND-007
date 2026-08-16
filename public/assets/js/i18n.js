@@ -237,7 +237,7 @@ const I18N = {
       'dash.withdrawBtn': 'Withdraw',
       'dash.lastApp': 'Status Permohonan Terakhir',
       'dash.noApp': 'Belum ada permohonan',
-      'dash.recentTx': 'Sejarah Transaksi',
+      'dash.recentTx': 'riwayat Transaksi',
       'dash.noTx': 'Belum ada transaksi',
       'dash.applyTitle': 'Mohon Pinjaman',
       'dash.step1': 'Langkah 1: Data Diri',
