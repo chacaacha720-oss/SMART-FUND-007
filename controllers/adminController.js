@@ -376,14 +376,14 @@ async function updateApplication(req, res) {
       const [app] = await db.query('SELECT amount, tenor FROM loan_applications WHERE id = ?', [req.params.id]);
       const amt = amount !== undefined ? parseFloat(amount) : parseFloat(app[0].amount);
       const ten = tenor !== undefined ? parseInt(tenor, 10) : parseInt(app[0].tenor, 10);
-      const [settings] = await db.query("SELECT setting_value FROM settings WHERE setting_key = 'interest_rate'");
-      const rate = settings.length ? parseFloat(settings[0].setting_value) : 5;
-      const monthlyRate = rate / 100 / 12;
-      const monthlyPayment = amt * (monthlyRate * Math.pow(1 + monthlyRate, ten)) / (Math.pow(1 + monthlyRate, ten) - 1);
-      const totalPayment = monthlyPayment * ten;
-      const totalInterest = totalPayment - amt;
+      const rate = 5; // bunga flat 5% setahun (tetap)
+      const annualRate = rate / 100;
+      const totalInterest = amt * annualRate * (ten / 12);
+      const totalPayment = amt + totalInterest;
+      const monthlyPayment = ten > 0 ? totalPayment / ten : 0;
+      const round2 = (x) => Math.round((x + Number.EPSILON) * 100) / 100;
       updates.push('monthly_payment = ?', 'total_interest = ?', 'total_payment = ?');
-      params.push(Math.round(monthlyPayment), Math.round(totalInterest), Math.round(totalPayment));
+      params.push(round2(monthlyPayment), round2(totalInterest), round2(totalPayment));
     }
 
     params.push(req.params.id);

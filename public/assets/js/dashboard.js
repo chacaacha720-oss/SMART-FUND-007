@@ -131,13 +131,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const amount = parseFloat(document.getElementById('applyAmount').value) || 0;
     const tenor = parseInt(document.getElementById('applyTenor').value, 10);
     if (amount >= 2000 && amount <= 300000 && tenor > 0) {
-      const rate = 5 / 100 / 12;
-      const monthly = amount * (rate * Math.pow(1 + rate, tenor)) / (Math.pow(1 + rate, tenor) - 1);
-      const total = monthly * tenor;
-      const interest = total - amount;
-      document.getElementById('applyEstMonthly').textContent = formatRupiah(monthly);
-      document.getElementById('applyEstInterest').textContent = formatRupiah(interest);
-      document.getElementById('applyEstTotal').textContent = formatRupiah(total);
+      const annualRate = 5 / 100;
+      const interest = amount * annualRate * (tenor / 12);
+      const total = amount + interest;
+      const monthly = total / tenor;
+      const round2 = (x) => Math.round((x + Number.EPSILON) * 100) / 100;
+      document.getElementById('applyEstMonthly').textContent = formatRupiah(round2(monthly));
+      document.getElementById('applyEstInterest').textContent = formatRupiah(round2(interest));
+      document.getElementById('applyEstTotal').textContent = formatRupiah(round2(total));
     }
   }
   document.getElementById('applyAmount').addEventListener('input', updateEstimasi);
@@ -703,6 +704,7 @@ async function openLoanAdminConfirmation(data) {
             <div class="flex justify-between"><span class="text-slate-500">${i18n('notif.loanAmount', 'Jumlah Pinjaman')}</span><span class="font-bold text-slate-800">${fmt(amount)}</span></div>
             <div class="flex justify-between"><span class="text-slate-500">${i18n('notif.loanLimit', 'Had Pinjaman')}</span><span class="font-bold text-slate-800">${fmt(loanLimit)}</span></div>
             <div class="flex justify-between"><span class="text-slate-500">${i18n('notif.loanTenor', 'Tempoh Pinjaman')}</span><span class="font-bold text-slate-800">${tenor || '-'} ${i18n('notif.loanTenorUnit', 'Bulan')}</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">${i18n('notif.interestRate', 'Kadar Bunga')}</span><span class="font-bold text-slate-800">5% ${i18n('notif.perYear', 'setahun')}</span></div>
             <div class="flex justify-between"><span class="text-slate-500">${i18n('notif.loanPurpose', 'Tujuan Pinjaman')}</span><span class="font-bold text-slate-800">${loanPurposeText}</span></div>
           </div>
 

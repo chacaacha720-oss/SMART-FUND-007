@@ -8,19 +8,25 @@ const { sanitize } = require('../middleware/validate');
 const { t, formatCurrency } = require('../config/i18n');
 
 /**
- * Hitung cicilan dengan bunga flat tahunan
+ * Hitung cicilan dengan bunga flat 5% setahun (tetap).
+ * interest = principal * 5% * (tenorBulan / 12)
+ * total    = principal + interest
+ * monthly  = total / tenorBulan
  */
-function calculateLoan(principal, tenorMonths, annualRatePercent = 5) {
-  const principalNum = Number(principal);
-  const tenorNum = Number(tenorMonths);
-  const monthlyRate = Number(annualRatePercent) / 100 / 12;
-  const monthlyPayment = principalNum * (monthlyRate * Math.pow(1 + monthlyRate, tenorNum)) / (Math.pow(1 + monthlyRate, tenorNum) - 1);
-  const totalPayment = monthlyPayment * tenorNum;
-  const totalInterest = totalPayment - principalNum;
+function calculateLoan(principal, tenorMonths) {
+  const principalNum = Number(principal) || 0;
+  const tenorNum = Number(tenorMonths) || 0;
+  const ANNUAL_RATE = 5; // bunga flat 5% setahun (tetap)
+  const annualRate = ANNUAL_RATE / 100;
+  const totalInterest = principalNum * annualRate * (tenorNum / 12);
+  const totalPayment = principalNum + totalInterest;
+  const monthlyPayment = tenorNum > 0 ? totalPayment / tenorNum : 0;
+  const round2 = (x) => Math.round((x + Number.EPSILON) * 100) / 100;
   return {
-    monthlyPayment: Math.round(monthlyPayment),
-    totalInterest: Math.round(totalInterest),
-    totalPayment: Math.round(totalPayment),
+    monthlyPayment: round2(monthlyPayment),
+    totalInterest: round2(totalInterest),
+    totalPayment: round2(totalPayment),
+    annualRatePercent: ANNUAL_RATE,
   };
 }
 
@@ -34,14 +40,8 @@ async function simulate(req, res) {
     const amount = parseFloat(req.body.amount);
     const tenor = parseInt(req.body.tenor, 10);
 
-    // Try to get rate from DB, fallback to 5% if DB unavailable
-    let rate = 5;
-    try {
-      const [settings] = await db.query("SELECT setting_value FROM settings WHERE setting_key = 'interest_rate'");
-      if (settings.length) rate = parseFloat(settings[0].setting_value);
-    } catch (dbErr) {
-      // DB not available, use default rate
-    }
+     // Kadar faedah ditetapkan 5% setahun (tetap)
+     const rate = 5;
 
      if (!amount || amount < 500 || amount > 300000) {
        return res.status(400).json({ success: false, message: t(lang, 'loan.amountRange') });
@@ -112,8 +112,7 @@ async function applyLoan(req, res) {
       return res.status(400).json({ success: false, message: t(lang, 'loan.hasActiveLoan') });
     }
 
-    const [settings] = await db.query("SELECT setting_value FROM settings WHERE setting_key = 'interest_rate'");
-    const rate = settings.length ? parseFloat(settings[0].setting_value) : 5;
+    const rate = 5;
     const calc = calculateLoan(amount, tenor, rate);
 
      // Simpan pengajuan (cs_id & cs_code derived server-side)

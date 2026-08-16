@@ -15,16 +15,7 @@ const db = require('../config/db');
  * Fallback 5% jika settings tiada / DB gagal.
  */
 async function getRate() {
-  try {
-    const [rows] = await db.query("SELECT setting_value FROM settings WHERE setting_key = 'interest_rate'");
-    if (rows.length) {
-      const r = parseFloat(rows[0].setting_value);
-      if (!isNaN(r)) return r;
-    }
-  } catch (e) {
-    // DB tidak tersedia -> guna default
-  }
-  return 5;
+  return 5; // kadar faedah ditetapkan 5% setahun (tetap)
 }
 
 /**
@@ -47,42 +38,40 @@ function addMonthsClamp(date, months) {
  * Konsisten dengan loan_applications.monthly_payment / total_payment / total_interest
  * yang disimpan — tiada selisih akibat rounding (ansuran terakhir menyerap baki).
  */
-function buildSchedule(loan, rate) {
+function buildSchedule(loan) {
   const principal = Number(loan.amount);
   const tenor = Number(loan.tenor);
-  const monthlyRate = Number(rate) / 100 / 12;
-  const monthly = Number(loan.monthly_payment);       // nilai dibulatkan sedia ada
-  const totalStored = Number(loan.total_payment);      // nilai dibulatkan sedia ada
+  const monthly = Number(loan.monthly_payment);       // nilai flat sedia ada
+  const totalStored = Number(loan.total_payment);      // nilai flat sedia ada
   const interestStored = Number(loan.total_interest);  // = totalStored - principal
 
   const base = loan.disbursed_at ? new Date(loan.disbursed_at) : new Date();
-  let remaining = principal;
   let sumPrincipal = 0;
   const rows = [];
 
+  // Model flat 5% setahun: faedah & pokok bahagi sama rata per ansuran.
+  // Ansuran terakhir menyerap baki rounding supaya:
+  // sum(principal) == amount, sum(interest) == totalInterest, sum(total) == totalPayment
   for (let i = 1; i <= tenor; i++) {
     const due = addMonthsClamp(base, i);
 
     if (i < tenor) {
-      const interest = Math.round(remaining * monthlyRate);
-      const principalPart = monthly - interest;
-      remaining -= principalPart;
+      const principalPart = principal / tenor;
+      const totalAmt = monthly;
+      const interestPart = totalAmt - principalPart;
       sumPrincipal += principalPart;
       rows.push({
         installment_number: i,
         due_date: due,
         principal: principalPart,
-        interest: interest,
-        total_amount: monthly,
-        remaining_balance: Math.max(0, Math.round(remaining)),
+        interest: interestPart,
+        total_amount: totalAmt,
+        remaining_balance: Math.max(0, principal - sumPrincipal),
       });
     } else {
-      // Ansuran terakhir: serap baki rounding supaya
-      // sum(principal) == amount, sum(interest) == totalInterest, sum(total) == totalPayment
       const principalPart = Math.round(principal - sumPrincipal);
       const totalPart = Math.round(totalStored - monthly * (tenor - 1));
       const interestPart = totalPart - principalPart;
-      remaining = 0;
       rows.push({
         installment_number: i,
         due_date: due,
@@ -110,8 +99,7 @@ async function ensureSchedule(loan, conn) {
   );
   if (existing[0].cnt > 0) return false;
 
-  const rate = await getRate();
-  const rows = buildSchedule(loan, rate);
+  const rows = buildSchedule(loan);
 
   for (const r of rows) {
     const dueStr = r.due_date.toISOString().slice(0, 10);

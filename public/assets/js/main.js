@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const amount = parseNumeric(rawAmount);
     const tenor = parseNumeric(rawTenor);
-    const rate = parseNumeric(rawRate);
+    const rate = 5; // kadar faedah ditetapkan 5% setahun (tetap)
 
     // Validation
     if (isNaN(amount) || amount <= 0) {
@@ -236,6 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialise
   resetCalculator();
+  if (interestRateInput) { interestRateInput.value = 5; interestRateInput.disabled = true; }
   updateHeroMockup();
 
   // ============================================
