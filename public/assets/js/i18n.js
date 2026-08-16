@@ -234,7 +234,7 @@ const I18N = {
       'dash.balanceLabel': 'Baki Pinjaman',
       'dash.limitLabel': 'Had Pinjaman',
       'dash.withdrawal': 'Pengeluaran',
-      'dash.withdrawBtn': 'Tarik Baki',
+      'dash.withdrawBtn': 'Withdraw',
       'dash.lastApp': 'Status Permohonan Terakhir',
       'dash.noApp': 'Belum ada permohonan',
       'dash.recentTx': 'Sejarah Transaksi',
