@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // LOAN CALCULATOR — Flat Annual Interest
   // ============================================
 
-  const LOAN_LIMITS = { min: 500, max: 300000, step: 500, defaultVal: 10000 };
+  const LOAN_LIMITS = { min: 2000, max: 200000, step: 500, defaultVal: 10000 };
 
   /**
    * Format a number as Malaysian Ringgit with 2 decimal places.
