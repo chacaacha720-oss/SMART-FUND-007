@@ -600,7 +600,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { q: 'Berapa jumlah pinjaman yang boleh dimohon?', a: 'Anda boleh memohon pinjaman dari RM 500.00 hingga RM 300,000.00 dengan tempoh 1 hingga 60 bulan.' },
     { q: 'Adakah SMART FUND selamat dan dipercayai?', a: 'Ya, SMART FUND mengutamakan keselamatan dan keyakinan pengguna. Kami menggunakan teknologi enkripsi tinggi dan prinsip keelamanan yang ketat.' },
     { q: 'Berapa lama proses kelulusan?', a: 'Proses kelulusan kami pantas. Setelah permohonan dikemukakan, tim kami akan menyemaknya dan memberikan keputusan dalam tempoh masa yang singkat—iaitu 1 hingga 2 jam.' },
-    { q: 'Dokumen apa yang diperlukan?', a: 'Kami memerlukan dokumen minimal seperti ID dan maklumat peribadi. Proses pengesahan praktikal dan tidak rumit.' },
+    { q: 'Dokumen apa yang diperlukan?', a: 'Kami hanya memerlukan dokumentasi yang minimum. Proses pengesahannya praktikal dan mudah.' },
   ];
 
   function renderFaq() {
