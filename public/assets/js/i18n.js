@@ -492,7 +492,7 @@ const I18N = {
       'val.withdrawRequired': 'Semua data akaun diperlukan',
       'val.csCodeRequired': 'Kod CS diperlukan',
       'val.term1': 'Data yang dimasukkan adalah benar dan boleh dipertanggungjawabkan.',
-      'val.term2': 'Pinjaman akan diproses mengikut dasar dan terma SMART FUND.',
+      'val.term2': 'Pinjaman akan diproses mengikut Terma & Syarat',
       'val.term3': 'Faedah dikenakan bermula 5% setahun mengikut tempoh pinjaman.',
       'val.term4': 'Platform yang berlesen.',
       'val.term5': 'Permohonan boleh diterima atau ditolak oleh pentadbir.',
