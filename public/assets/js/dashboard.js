@@ -224,7 +224,7 @@ async function loadDashboard() {
   document.getElementById('balanceLimit').textContent = formatRupiah(d.limitPinjaman);
   const limitEl = document.getElementById('limitAmount');
   if (limitEl) {
-    limitEl.textContent = formatRupiah(d.limitPinjaman);
+    limitEl.textContent = Currency.formatDecimal(d.limitPinjaman, 2);
     limitEl.classList.add('whitespace-nowrap', 'overflow-x-auto');
     // Fallback: jika angka panjang, turunkan ukuran font di HP
     if (limitEl.scrollWidth > limitEl.clientWidth) {
