@@ -599,7 +599,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { q: 'Berapa kadar faedah yang dikenakan?', a: 'Kadar faedah kami bermula dari 5% setahun, supaya ansuran anda terasa ringan. Kadar tepat ditentukan berdasarkan profil kelayakan dan tempoh pinjaman.' },
     { q: 'Berapa jumlah pinjaman yang boleh dimohon?', a: 'Anda boleh memohon pinjaman dari RM 500.00 hingga RM 300,000.00 dengan tempoh 1 hingga 60 bulan.' },
     { q: 'Adakah SMART FUND selamat dan dipercayai?', a: 'Ya, SMART FUND mengutamakan keselamatan dan keyakinan pengguna. Kami menggunakan teknologi enkripsi tinggi dan prinsip keelamanan yang ketat.' },
-    { q: 'Berapa lama proses kelulusan?', a: 'Proses kelulusan kami cepat. Selepas permohonan dihantar, pasukan kami akan menyemak dan memberikan keputusan dalam masa singkat.' },
+    { q: 'Berapa lama proses kelulusan?', a: 'Proses kelulusan kami pantas. Setelah permohonan dikemukakan, tim kami akan menyemaknya dan memberikan keputusan dalam tempoh masa yang singkat—iaitu 1 hingga 2 jam.' },
     { q: 'Dokumen apa yang diperlukan?', a: 'Kami memerlukan dokumen minimal seperti ID dan maklumat peribadi. Proses pengesahan praktikal dan tidak rumit.' },
   ];
 
