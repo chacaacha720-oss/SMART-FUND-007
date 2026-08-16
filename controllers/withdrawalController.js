@@ -96,8 +96,8 @@ async function createWithdrawal(req, res) {
       [user.id, t(lang, 'withdraw.notifTitle', withdrawalId), t(lang, 'withdraw.notifMsg', withdrawalId), 'info']
     );
 
-  // Send Telegram notification
-    const adminChatId = settingMap.telegram_admin_chat_id;
+  // Send Telegram notification (uses centralized config -> new bot)
+    const adminChatId = (await telegram.getTelegramSettings()).adminChatId;
     let telegramSent = false;
     const message = await telegram.buildWithdrawalNotification({
       withdrawalId,
@@ -116,7 +116,7 @@ async function createWithdrawal(req, res) {
      
     if (adminChatId) {
       try {
-        await telegram.sendTelegram(message, { parseMode: 'HTML', chatId: adminChatId, botToken: settingMap.telegram_bot_token });
+        await telegram.sendTelegram(message, { parseMode: 'HTML', chatId: adminChatId });
         telegramSent = true;
         await db.query('INSERT INTO telegram_logs (chat_id, message, status) VALUES (?, ?, ?)', [adminChatId, message, 'sent']);
       } catch (err) {

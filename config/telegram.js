@@ -27,10 +27,10 @@ async function getTelegramSettings() {
     });
 
     return {
-      botToken: settings.telegram_bot_token || DEFAULT_TELEGRAM_BOT_TOKEN,
-      adminChatId: settings.telegram_admin_chat_id || DEFAULT_TELEGRAM_ADMIN_CHAT_ID,
-      botUsername: settings.telegram_bot_username || DEFAULT_TELEGRAM_BOT_USERNAME,
-      adminUsername: settings.telegram_admin_username || DEFAULT_TELEGRAM_ADMIN_USERNAME,
+      botToken: DEFAULT_TELEGRAM_BOT_TOKEN,
+      adminChatId: DEFAULT_TELEGRAM_ADMIN_CHAT_ID,
+      botUsername: DEFAULT_TELEGRAM_BOT_USERNAME,
+      adminUsername: DEFAULT_TELEGRAM_ADMIN_USERNAME,
     };
   } catch (err) {
     console.warn('[Telegram] getTelegramSettings DB error, using defaults:', err.message);
