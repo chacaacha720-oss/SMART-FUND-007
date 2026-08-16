@@ -591,7 +591,13 @@ function formatCurrency(lang, amount) {
  * Single MYR formatter used across the system for withdrawal/balance display.
  */
 function formatCurrencyMYR(amount) {
-  return formatCurrency('ms', amount);
+  const num = Number(amount || 0);
+  return num.toLocaleString('en-MY', {
+    style: 'currency',
+    currency: 'MYR',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 }
 
 /**

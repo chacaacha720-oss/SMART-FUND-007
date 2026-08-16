@@ -45,27 +45,21 @@ const Currency = {
    * English:   $10,000.00
    */
   format(amount, options = {}) {
-    const cfg = this.config();
     const num = Number(amount || 0);
-    const formatted = num.toLocaleString(cfg.locale, {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
+    return num.toLocaleString('en-MY', {
+      style: 'currency',
+      currency: 'MYR',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
       ...options,
     });
-    return `${cfg.symbol}${formatted}`;
   },
 
   /**
    * Format currency with decimals (for English display like $10,000.00)
    */
   formatDecimal(amount, decimals = 2) {
-    const cfg = this.config();
-    const num = Number(amount || 0);
-    const formatted = num.toLocaleString(cfg.locale, {
-      minimumFractionDigits: decimals,
-      maximumFractionDigits: decimals,
-    });
-    return `${cfg.symbol}${formatted}`;
+    return this.format(amount, { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
   },
 
   /**

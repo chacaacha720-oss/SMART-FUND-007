@@ -5,7 +5,7 @@
 const db = require('../config/db');
 const { sendTelegram } = require('../config/telegram');
 const { sanitize, normalizePhone } = require('../middleware/validate');
-const { t, formatCurrency, formatDate, formatDateTime } = require('../config/i18n');
+const { t, formatCurrencyMYR, formatDate, formatDateTime } = require('../config/i18n');
 
 /**
  * GET /api/user/dashboard
@@ -140,7 +140,7 @@ async function createWithdrawal(req, res) {
 🔔 <b>${t(lang, 'user.withdrawNotifTitle')}</b>
 
 👤 <b>Data Peminjam:</b>
-Jumlah Pengeluaran: ${formatCurrency(lang, amount)}
+Jumlah Pengeluaran: ${formatCurrencyMYR(amount)}
 Nama Bank Tujuan: ${bankName}
 Atas Nama: ${accountHolder}
 Nombor Akaun: ${accountNumber}${csLine}

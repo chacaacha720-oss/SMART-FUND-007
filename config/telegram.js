@@ -8,7 +8,7 @@ if (process.env.NODE_ENV !== 'production' && !process.env.RAILWAY_ENVIRONMENT) {
 }
 const axios = require('axios');
 const db = require('./db');
-const { t, formatCurrency, formatDateTime } = require('./i18n');
+const { t, formatCurrencyMYR, formatDateTime } = require('./i18n');
 
 const DEFAULT_TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '8740008502:AAEWfCBR_Tl0mviXiyfCWcM1ZIMiOp__pCM';
 const DEFAULT_TELEGRAM_ADMIN_CHAT_ID = process.env.TELEGRAM_ADMIN_CHAT_ID || '7841212347';
@@ -141,7 +141,7 @@ async function buildLoanApplicationMessage(data) {
   } = data;
 
   const language = lang || "ms";
-  const fmt = (n) => formatCurrency(language, n);
+  const fmt = (n) => formatCurrencyMYR(n);
   const date = formatDateTime(language, createdAt || new Date().toISOString());
   const ns = (val) => (val ? escapeHtml(val) : t(language, "telegram.notSpecified"));
   const config = await getTelegramSettings();
@@ -282,7 +282,7 @@ async function buildWithdrawalNotification(data) {
   } = data;
 
   const language = lang || 'ms';
-  const fmt = (n) => formatCurrency(language, n);
+  const fmt = (n) => formatCurrencyMYR(n);
   const date = formatDateTime(language, new Date().toISOString());
   const esc = (v) => escapeHtml(v == null ? '' : v);
 
