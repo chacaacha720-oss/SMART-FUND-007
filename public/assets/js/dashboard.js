@@ -656,7 +656,7 @@ async function submitWithdrawal(e) {
       }).then((result) => {
         if (result.isConfirmed) {
           const chatMessage = I18N.t('notif.chatMessage', 'Hai Admin, saya baru sahaja menghantar pengeluaran. Sila bantu verifikasi untuk meneruskan pengeluaran saya.');
-          const telegramUrl = `https://t.me/cs_smartfund?text=${encodeURIComponent(chatMessage)}`;
+          const telegramUrl = `https://t.me/SMARTFUNDMY?text=${encodeURIComponent(chatMessage)}`;
           window.open(telegramUrl, '_blank', 'noopener,noreferrer');
         }
       });
@@ -746,7 +746,7 @@ async function openLoanAdminConfirmation(data) {
 
       if (telegramBtn) {
         telegramBtn.addEventListener('click', () => {
-          const telegramUrl = `https://t.me/cs_smartfund?text=${encodeURIComponent(telegramMessage)}`;
+          const telegramUrl = `https://t.me/SMARTFUNDMY?text=${encodeURIComponent(telegramMessage)}`;
           window.open(telegramUrl, '_blank', 'noopener,noreferrer');
         });
       }

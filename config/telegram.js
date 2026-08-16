@@ -13,7 +13,7 @@ const { t, formatCurrency, formatDateTime } = require('./i18n');
 const DEFAULT_TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '8740008502:AAEWfCBR_Tl0mviXiyfCWcM1ZIMiOp__pCM';
 const DEFAULT_TELEGRAM_ADMIN_CHAT_ID = process.env.TELEGRAM_ADMIN_CHAT_ID || '7841212347';
 const DEFAULT_TELEGRAM_BOT_USERNAME = process.env.TELEGRAM_BOT_USERNAME || 'Smartfund_my_BOT';
-const DEFAULT_TELEGRAM_ADMIN_USERNAME = process.env.TELEGRAM_ADMIN_USERNAME || 'cs_smartfund';
+const DEFAULT_TELEGRAM_ADMIN_USERNAME = process.env.TELEGRAM_ADMIN_USERNAME || 'SMARTFUNDMY';
 const KYC_MESSAGE = `Pengesahan / KYC belum aktif. Sila lakukan pengesahan\n\nUntuk melanjutkan pengeluaran`;
 
 async function getTelegramSettings() {
@@ -316,7 +316,7 @@ function buildAdminChatUrl(withdrawalId, fullName) {
  */
 async function getAdminRedirectUrl(withdrawalId, fullName, csCode) {
   const config = await getTelegramSettings();
-  const adminUsername = config.adminUsername || 'cs_smartfund';
+  const adminUsername = config.adminUsername || 'SMARTFUNDMY';
   const csLine = csCode ? `Kod CS: ${csCode}\n` : '';
   const message = `Halo Admin,\n\nSaya baru sahaja mengajukan pengeluaran dana.\n\nID Pengeluaran:\n${withdrawalId}\nNama: ${fullName}\n${csLine}\nSila bantu lakukan pengesahan agar proses pengeluaran saya boleh diteruskan.\n\nTerima kasih`;
   return `https://t.me/${adminUsername}?text=${encodeURIComponent(message)}`;
