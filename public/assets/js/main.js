@@ -597,7 +597,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const faqs = [
     { q: 'Bagaimana cara mengajukan pinjaman di SMART FUND?', a: 'Daftar dahulu, kemudian mulai log masuk ke akaun anda. Pilih menu permohonan pinjaman, isi maklumat pinjaman, dan hantar. Permohonan anda akan diproses oleh sistem kami.' },
     { q: 'Berapa kadar faedah yang dikenakan?', a: 'Kadar faedah kami bermula dari 5% setahun, supaya ansuran anda terasa ringan. Kadar tepat ditentukan berdasarkan profil kelayakan dan tempoh pinjaman.' },
-    { q: 'Berapa jumlah pinjaman yang boleh dimohon?', a: 'Anda boleh memohon pinjaman dari RM 500.00 hingga RM 300,000.00 dengan tempoh 1 hingga 60 bulan.' },
+    { q: 'Berapa jumlah pinjaman yang boleh dimohon?', a: 'Anda boleh memohon pinjaman antara RM2,000.00 hingga RM200,000.00, dengan tempoh 6 hingga 60 bulan.' },
     { q: 'Adakah SMART FUND selamat dan dipercayai?', a: 'Ya, SMART FUND mengutamakan keselamatan dan keyakinan pengguna. Kami menggunakan teknologi enkripsi tinggi dan prinsip keelamanan yang ketat.' },
     { q: 'Berapa lama proses kelulusan?', a: 'Proses kelulusan kami pantas. Setelah permohonan dikemukakan, tim kami akan menyemaknya dan memberikan keputusan dalam tempoh masa yang singkat—iaitu 1 hingga 2 jam.' },
     { q: 'Dokumen apa yang diperlukan?', a: 'Kami hanya memerlukan dokumentasi yang minimum. Proses pengesahannya praktikal dan mudah.' },
