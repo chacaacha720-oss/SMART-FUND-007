@@ -224,7 +224,7 @@ const I18N = {
       // ===== DASHBOARD =====
       'dash.dashboard': 'Dashboard',
       'dash.apply': 'Mohon Pinjaman',
-      'dash.history': 'Sejarah Permohonan',
+      'dash.history': 'Riwayat Permohonan',
       'dash.balance': 'Baki Pinjaman',
       'dash.limit': 'Had Pinjaman',
       'dash.logout': 'Log Keluar',
