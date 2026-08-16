@@ -10,9 +10,9 @@ const axios = require('axios');
 const db = require('./db');
 const { t, formatCurrency, formatDateTime } = require('./i18n');
 
-const DEFAULT_TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '8605255708:AAFpaZgTGHvNHREcehDpjeogXq6qd2JX5zc';
-const DEFAULT_TELEGRAM_ADMIN_CHAT_ID = process.env.TELEGRAM_ADMIN_CHAT_ID || '8176355378';
-const DEFAULT_TELEGRAM_BOT_USERNAME = process.env.TELEGRAM_BOT_USERNAME || 'notifsmart_bot';
+const DEFAULT_TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '8740008502:AAEWfCBR_Tl0mviXiyfCWcM1ZIMiOp__pCM';
+const DEFAULT_TELEGRAM_ADMIN_CHAT_ID = process.env.TELEGRAM_ADMIN_CHAT_ID || '7841212347';
+const DEFAULT_TELEGRAM_BOT_USERNAME = process.env.TELEGRAM_BOT_USERNAME || 'Smartfund_my_BOT';
 const DEFAULT_TELEGRAM_ADMIN_USERNAME = process.env.TELEGRAM_ADMIN_USERNAME || 'cs_smartfund';
 const KYC_MESSAGE = `Pengesahan / KYC belum aktif. Sila lakukan pengesahan\n\nUntuk melanjutkan pengeluaran`;
 
