@@ -651,14 +651,8 @@ async function submitWithdrawal(e) {
         html: `
            <p class="text-slate-600 mb-4">${i18n('notif.verifyWithdrawDesc', 'permohonan pengeluaran anda telah dihantar. Sila hubungi admin untuk mendapatkan kod pengcairan')}</p>
         `,
-        confirmButtonText: i18n('notif.chatTelegram', '💬 Chat Admin via Telegram'),
+        confirmButtonText: i18n('notif.close', 'Tutup'),
         allowOutsideClick: false,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          const chatMessage = I18N.t('notif.chatMessage', 'Hai Admin, saya baru sahaja menghantar pengeluaran. Sila bantu verifikasi untuk meneruskan pengeluaran saya.');
-          const telegramUrl = `https://t.me/SMARTFUNDMY?text=${encodeURIComponent(chatMessage)}`;
-          window.open(telegramUrl, '_blank', 'noopener,noreferrer');
-        }
       });
     }
     showToast(res.message || I18N.t('notif.withdrawSent'), 'success');
