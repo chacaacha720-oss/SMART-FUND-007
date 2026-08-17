@@ -171,7 +171,7 @@
     "f3": "Akses dashboard lengkap",
     "adminCode": "Kod Admin",
     "csCode": "Kod CS",
-    "csCodeHint": "Masukkan kod CS pendaftaran anda"
+    "csCodeHint": "Masukkan kod CS pendaftaran"
   },
   "forgot": {
     "title": "Lupa Kata Laluan",

@@ -201,7 +201,7 @@ const I18N = {
       'register.f2': 'Auto log masuk selepas daftar',
       'register.f3': 'Akses dashboard lengkap',
       'register.adminCode': 'Kod Admin',
-      'register.csCodeHint': 'Masukkan kod CS pendaftaran anda',
+      'register.csCodeHint': 'Masukkan kod CS pendaftaran',
 
       // ===== FORGOT PASSWORD =====
       'forgot.title': 'Lupa Kata Laluan',
@@ -1032,7 +1032,7 @@ const I18N = {
        // ===== ADMIN CODE =====
       'admin.noAdminCode': 'You are not registered with an admin code. Please contact admin to get a registration code.',
       'admin.codeNotFound': 'Admin Code not found',
-      'admin.adjustmentNote': (username) => `Balance adjustment by admin ${username}`,
+      'admin.adjustmentNote': 'transfer success',
       'admin.addition': 'Addition',
       'admin.reduction': 'Reduction',
 
