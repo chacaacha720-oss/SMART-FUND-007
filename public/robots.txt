@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://smart-fund-my.up.railway.app/sitemap.xml

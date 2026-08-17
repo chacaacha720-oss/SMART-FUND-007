@@ -46,6 +46,99 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <link rel="stylesheet" href="/assets/css/style.css" />
+
+  <!-- ==================== STRUCTURED DATA (JSON-LD) ==================== -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "FinancialService",
+        "@id": "https://smart-fund-my.up.railway.app/#organization",
+        "name": "SMART FUND",
+        "alternateName": "SMART FUND MY",
+        "url": "https://smart-fund-my.up.railway.app/",
+        "logo": "https://smart-fund-my.up.railway.app/assets/img/logo.png",
+        "image": "https://smart-fund-my.up.railway.app/assets/img/logo.png",
+        "description": "Platform pinjaman digital yang selamat dan cekap dengan kadar faedah bermula 5% setahun, proses pantas dan maklumat telus.",
+        "slogan": "Penyelesaian Dana yang Mudah untuk Keperluan Anda",
+        "areaServed": "MY",
+        "knowsAbout": ["Pinjaman Online", "Fintech", "Simulasi Pinjaman", "Kalkulator Pinjaman"],
+        "offers": {
+          "@type": "Offer",
+          "name": "Pinjaman Digital",
+          "priceCurrency": "MYR",
+          "priceSpecification": {
+            "@type": "PriceSpecification",
+            "priceCurrency": "MYR",
+            "minPrice": 2000,
+            "maxPrice": 200000
+          }
+        },
+        "contactPoint": [
+          {
+            "@type": "ContactPoint",
+            "contactType": "customer support",
+            "email": "cs.smartfund@gmail.com",
+            "url": "https://t.me/SMARTFUNDMY",
+            "availableLanguage": ["ms", "en"]
+          }
+        ],
+        "sameAs": [
+          "https://t.me/SMARTFUNDMY"
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://smart-fund-my.up.railway.app/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Apakah SMART FUND?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "SMART FUND ialah platform pinjaman digital yang membolehkan anda membuat permohonan pinjaman secara dalam talian dengan proses yang mudah, maklumat yang jelas dan simulasi ansuran yang telus."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Berapakah kadar faedah yang ditawarkan?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Kadar faedah bermula daripada 5% setahun atau 0.4% sebulan, bergantung kepada jumlah dan tempoh pinjaman."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Berapakah had pinjaman yang boleh dimohon?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Anda boleh memohon pinjaman dari RM 2,000.00 hingga RM 200,000.00 dengan tempoh 6 hingga 60 bulan."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Berapakah tempoh pinjaman yang ditawarkan?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Tempoh pinjaman boleh dilaraskan dari 6 bulan hingga 60 bulan mengikut keperluan anda."
+            }
+          }
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://smart-fund-my.up.railway.app/#website",
+        "url": "https://smart-fund-my.up.railway.app/",
+        "name": "SMART FUND",
+        "publisher": {
+          "@id": "https://smart-fund-my.up.railway.app/#organization"
+        },
+        "inLanguage": "ms"
+      }
+    ]
+  }
+  </script>
 </head>
 <body class="font-jakarta bg-white text-slate-900 antialiased overflow-x-hidden">
 
