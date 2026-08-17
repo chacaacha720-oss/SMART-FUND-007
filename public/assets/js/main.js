@@ -281,7 +281,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btn) btn.addEventListener('click', handleApplyClick);
   });
 
-  heroLearnMore?.addEventListener('click', () => scrollToSection('features'));
+  heroLearnMore?.addEventListener('click', () => scrollToSection('calculator'));
 
   // ============================================
   // TESTIMONIAL CAROUSEL — responsive flex slider
