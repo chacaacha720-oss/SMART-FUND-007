@@ -711,7 +711,11 @@ async function loadPromo() {
         <div class="font-semibold text-slate-900">${b.title}</div>
         <div class="text-sm text-slate-500">${b.subtitle || '-'}</div>
       </td>
-      <td class="py-3 px-3"><img src="${b.image_url}" alt="" class="w-16 h-10 object-cover rounded-lg" onerror="this.style.display='none'" /></td>
+      <td class="py-3 px-3">
+        ${b.video_url
+          ? `<video src="${b.video_url}" muted controls class="w-16 h-10 object-cover rounded-lg bg-slate-100"></video>`
+          : `<img src="${b.image_url}" alt="" class="w-16 h-10 object-cover rounded-lg" onerror="this.style.display='none'" />`}
+      </td>
       <td class="py-3 px-3 text-center">
         <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${b.active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">
           ${b.active ? I18N.t('admin.promoStatusActive') : I18N.t('admin.promoStatusInactive')}
@@ -736,6 +740,7 @@ function editPromo(id) {
   const title = document.getElementById('promoTitle');
   const subtitle = document.getElementById('promoSubtitle');
   const image = document.getElementById('promoImage');
+  const video = document.getElementById('promoVideo');
   const link = document.getElementById('promoLink');
   const active = document.getElementById('promoActive');
   const order = document.getElementById('promoOrder');
@@ -771,6 +776,7 @@ function editPromo(id) {
         title.value = banner.title;
         subtitle.value = banner.subtitle || '';
         image.value = banner.image_url;
+        video.value = banner.video_url || '';
         link.value = banner.link_url || '';
         active.value = banner.active ? 'true' : 'false';
         order.value = banner.order || 0;
@@ -779,6 +785,11 @@ function editPromo(id) {
         if (preview) {
           if (banner.image_url) { preview.src = banner.image_url; preview.classList.remove('hidden'); }
           else { preview.src = ''; preview.classList.add('hidden'); }
+        }
+        const videoPreview = document.getElementById('promoVideoPreview');
+        if (videoPreview) {
+          if (banner.video_url) { videoPreview.src = banner.video_url; videoPreview.classList.remove('hidden'); }
+          else { videoPreview.removeAttribute('src'); videoPreview.classList.add('hidden'); }
         }
       }
     }
@@ -797,13 +808,14 @@ async function savePromo(e) {
     title: document.getElementById('promoTitle').value.trim(),
     subtitle: document.getElementById('promoSubtitle').value.trim(),
     image_url: document.getElementById('promoImage').value.trim(),
+    video_url: document.getElementById('promoVideo').value.trim(),
     link_url: document.getElementById('promoLink').value.trim(),
     active: document.getElementById('promoActive').value === 'true',
     order: parseInt(document.getElementById('promoOrder').value) || 0,
   };
 
-  if (!data.title || !data.image_url) {
-    showToast(I18N.t('admin.promoTitleRequired') || 'Title and image are required', 'error');
+  if (!data.title || (!data.image_url && !data.video_url)) {
+    showToast(I18N.t('admin.promoTitleRequired') || 'Title and image or video are required', 'error');
     return;
   }
 
@@ -836,6 +848,8 @@ function resetPromoForm() {
   if (btn) btn.innerHTML = `<i class="fas fa-save mr-2"></i> ${I18N.t('admin.promoCreate')}`;
   const preview = document.getElementById('promoImagePreview');
   if (preview) { preview.src = ''; preview.classList.add('hidden'); }
+  const videoPreview = document.getElementById('promoVideoPreview');
+  if (videoPreview) { videoPreview.removeAttribute('src'); videoPreview.classList.add('hidden'); }
   const status = document.getElementById('promoImageStatus');
   if (status) status.textContent = '';
 }
@@ -861,6 +875,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const promoForm = document.getElementById('promoForm');
   if (promoForm) {
     promoForm.addEventListener('submit', savePromo);
+  }
+
+  // Banner video URL live preview
+  const promoVideo = document.getElementById('promoVideo');
+  const promoVideoPreview = document.getElementById('promoVideoPreview');
+  if (promoVideo && promoVideoPreview) {
+    promoVideo.addEventListener('input', () => {
+      const url = promoVideo.value.trim();
+      if (url) { promoVideoPreview.src = url; promoVideoPreview.classList.remove('hidden'); }
+      else { promoVideoPreview.removeAttribute('src'); promoVideoPreview.classList.add('hidden'); }
+    });
   }
 
   // Banner image upload

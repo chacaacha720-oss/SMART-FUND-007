@@ -396,7 +396,7 @@
                   </div>
                   <div>
                     <label class="form-label" for="promoImage" data-i18n="admin.promoImageLabel">URL Imej</label>
-                    <input type="url" id="promoImage" class="form-input" placeholder="https://contoh.com/imej.jpg" required />
+                    <input type="url" id="promoImage" class="form-input" placeholder="https://contoh.com/imej.jpg" />
                     <div class="mt-2 flex flex-col gap-2">
                       <div class="flex items-center gap-2">
                         <input type="file" id="promoImageFile" accept="image/*" class="hidden" />
@@ -407,6 +407,12 @@
                       </div>
                       <img id="promoImagePreview" src="" alt="Preview" class="hidden w-32 h-20 object-cover rounded-lg border border-slate-200" />
                     </div>
+                  </div>
+                  <div class="md:col-span-2">
+                    <label class="form-label" for="promoVideo">URL Video (mp4/webm, tanpa audio)</label>
+                    <input type="url" id="promoVideo" class="form-input" placeholder="https://contoh.com/video.mp4" />
+                    <p class="text-xs text-slate-400 mt-1">Video akan dimainkan autoplay, muted, loop. Jika diisi, ia menggantikan imej pada bahagian hadapan.</p>
+                    <video id="promoVideoPreview" src="" class="hidden w-48 h-28 object-cover rounded-lg border border-slate-200 mt-2" muted controls></video>
                   </div>
                   <div>
                     <label class="form-label" for="promoLink" data-i18n="admin.promoLinkLabel">URL Pautan</label>

@@ -841,9 +841,9 @@ async function getBanners(req, res) {
 async function createBanner(req, res) {
   const lang = req.lang || 'ms';
   try {
-    const { title, subtitle, image_url, link_url, active, order } = req.body;
-    if (!title || !image_url) {
-      return res.status(400).json({ success: false, message: 'Title and image are required' });
+    const { title, subtitle, image_url, video_url, link_url, active, order } = req.body;
+    if (!title || (!image_url && !video_url)) {
+      return res.status(400).json({ success: false, message: 'Title and image or video are required' });
     }
 
     const [rows] = await db.query('SELECT * FROM settings WHERE setting_key = "promo_banners"');
@@ -860,7 +860,8 @@ async function createBanner(req, res) {
       id: Date.now().toString(),
       title,
       subtitle: subtitle || '',
-      image_url,
+      image_url: image_url || '',
+      video_url: video_url || '',
       link_url: link_url || '',
       active: active !== false,
       order: parseInt(order) || 0,
@@ -891,7 +892,7 @@ async function updateBanner(req, res) {
   const lang = req.lang || 'ms';
   try {
     const { id } = req.params;
-    const { title, subtitle, image_url, link_url, active, order } = req.body;
+    const { title, subtitle, image_url, video_url, link_url, active, order } = req.body;
 
     const [rows] = await db.query('SELECT * FROM settings WHERE setting_key = "promo_banners"');
     if (rows.length === 0) {
@@ -908,7 +909,8 @@ async function updateBanner(req, res) {
       ...banners[index],
       title: title || banners[index].title,
       subtitle: subtitle !== undefined ? subtitle : banners[index].subtitle,
-      image_url: image_url || banners[index].image_url,
+      image_url: image_url !== undefined ? image_url : banners[index].image_url,
+      video_url: video_url !== undefined ? video_url : banners[index].video_url,
       link_url: link_url !== undefined ? link_url : banners[index].link_url,
       active: active !== undefined ? active : banners[index].active,
       order: order !== undefined ? parseInt(order) : banners[index].order,

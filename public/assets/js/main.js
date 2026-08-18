@@ -687,9 +687,13 @@ async function loadPromoBanners() {
     return;
   }
     // Render banners
-    carousel.innerHTML = banners.map((b, i) => `
+    carousel.innerHTML = banners.map((b, i) => {
+      const media = b.video_url
+        ? `<video src="${b.video_url}" autoplay muted loop playsinline preload="metadata" class="w-full h-auto object-contain bg-slate-50 dark:bg-slate-800" onerror="this.style.display='none'"></video>`
+        : `<img src="${b.image_url}" alt="${b.title}" loading="lazy" class="w-full h-auto object-contain bg-slate-50 dark:bg-slate-800" onerror="this.style.display='none'" />`;
+      return `
       <a href="${b.link_url || '#'}" class="group block w-full shrink-0 snap-center overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm hover:shadow-md transition-shadow" target="${b.link_url ? '_blank' : '_self'}" rel="${b.link_url ? 'noopener noreferrer' : ''}" aria-label="${b.title}">
-        <img src="${b.image_url}" alt="${b.title}" loading="lazy" class="w-full h-auto object-contain bg-slate-50 dark:bg-slate-800" onerror="this.style.display='none'" />
+        ${media}
         <div class="flex items-center justify-between gap-3 px-4 py-3 md:px-5 md:py-4 border-t border-slate-100 dark:border-slate-800">
           <div class="min-w-0">
             <h4 class="font-bold text-slate-900 dark:text-white text-sm md:text-base leading-snug">${b.title}</h4>
@@ -698,7 +702,8 @@ async function loadPromoBanners() {
           <span class="shrink-0 text-sm font-semibold text-primary inline-flex items-center gap-1">Lihat Promo <i class="fas fa-arrow-right"></i></span>
         </div>
       </a>
-    `).join('');
+    `;
+    }).join('');
 
     // Create navigation dots
     if (dotsContainer) {
