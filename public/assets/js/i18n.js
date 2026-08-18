@@ -134,6 +134,7 @@ const I18N = {
       'apply.purpose.education': 'Pendidikan',
       'apply.purpose.personal': 'Keperluan Peribadi',
       'apply.purpose.other': 'Lain-lain',
+      'apply.tenor': 'Apply Tenor',
 
       // ===== TESTIMONI =====
       'testimoni.label': 'TESTIMONI',
@@ -717,6 +718,7 @@ const I18N = {
       'apply.purpose.education': 'Education',
       'apply.purpose.personal': 'Personal Needs',
       'apply.purpose.other': 'Other',
+      'apply.tenor': 'Apply Tenor',
 
       // ===== TESTIMONI =====
       'testimoni.label': 'TESTIMONIALS',
