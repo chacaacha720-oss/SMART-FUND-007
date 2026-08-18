@@ -343,6 +343,7 @@ process.on('SIGINT', () => gracefulShutdown('SIGINT'));
       { table: 'users', col: 'cs_id', definition: 'INT NULL AFTER status', index: 'idx_cs' },
       { table: 'loan_applications', col: 'cs_id', definition: 'INT NULL AFTER user_id', index: 'idx_cs' },
       { table: 'loan_applications', col: 'cs_code', definition: 'VARCHAR(50) NULL AFTER cs_id', index: false },
+      { table: 'users', col: 'fcm_token', definition: 'VARCHAR(512) NULL AFTER status' },
     ];
 
     for (const m of migrations) {

@@ -45,6 +45,7 @@ router.post('/withdrawals', authUser, userController.createWithdrawal);
 router.put('/notifications/:id/read', authUser, userController.readNotification);
 router.put('/profile', authUser, userController.updateProfile);
 router.put('/settings', authUser, userController.updateSettings);
+router.post('/fcm/register', authUser, userController.registerFcmToken);
 router.post('/upload-document', authUser, upload.single('document'), userController.uploadDocument);
 
 module.exports = router;

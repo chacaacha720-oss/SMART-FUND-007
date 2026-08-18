@@ -302,4 +302,22 @@ module.exports = {
   updateProfile,
   updateSettings,
   uploadDocument,
+  registerFcmToken,
 };
+
+/**
+ * POST /api/user/fcm/register
+ * Simpan FCM device token untuk push notification (Android APK)
+ */
+async function registerFcmToken(req, res) {
+  const lang = req.lang || 'ms';
+  try {
+    const token = (req.body.token || '').trim();
+    if (!token) return res.status(400).json({ success: false, message: 'token required' });
+    await db.query('UPDATE users SET fcm_token = ? WHERE id = ?', [token, req.user.id]);
+    return res.json({ success: true, message: 'FCM token registered' });
+  } catch (err) {
+    console.error('Register FCM token error:', err);
+    return res.status(500).json({ success: false, message: t(lang, 'error.server') });
+  }
+}

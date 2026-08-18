@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 const db = require('../config/db');
 const { JWT_SECRET } = require('../middleware/auth');
 const { sendTelegram } = require('../config/telegram');
+const { sendToUser } = require('../config/fcm');
 const { sanitize, normalizePhone } = require('../middleware/validate');
 const { t, formatCurrency, formatDate, formatDateTime } = require('../config/i18n');
 
@@ -427,6 +428,11 @@ async function updateApplicationStatus(req, res) {
           `INSERT INTO notifications (user_id, title, message, type) VALUES (?, ?, ?, 'success')`,
           [app.user_id, t(lang, 'admin.approvedNotifTitle'), t(lang, 'admin.approvedNotifMsg', app.id)]
         );
+        sendToUser(app.user_id, {
+          title: t(lang, 'admin.approvedNotifTitle'),
+          body: t(lang, 'admin.approvedNotifMsg', app.id),
+          data: { type: 'loan', status: 'approved', loanId: String(app.id) },
+        });
         await conn.commit();
       } catch (err) {
         await conn.rollback();
@@ -446,6 +452,11 @@ async function updateApplicationStatus(req, res) {
           `INSERT INTO notifications (user_id, title, message, type) VALUES (?, ?, ?, 'error')`,
           [app.user_id, t(lang, 'admin.rejectedNotifTitle'), t(lang, 'admin.rejectedNotifMsg', app.id, adminNote || t(lang, 'admin.defaultRejectReason'))]
         );
+        sendToUser(app.user_id, {
+          title: t(lang, 'admin.rejectedNotifTitle'),
+          body: t(lang, 'admin.rejectedNotifMsg', app.id, adminNote || t(lang, 'admin.defaultRejectReason')),
+          data: { type: 'loan', status: 'rejected', loanId: String(app.id) },
+        });
         await conn.commit();
       } catch (err) {
         await conn.rollback();
@@ -470,6 +481,11 @@ async function updateApplicationStatus(req, res) {
           `INSERT INTO notifications (user_id, title, message, type) VALUES (?, ?, ?, 'success')`,
           [app.user_id, t(lang, 'admin.disbursedNotifTitle'), t(lang, 'admin.disbursedNotifMsg', app.id, app.amount)]
         );
+        sendToUser(app.user_id, {
+          title: t(lang, 'admin.disbursedNotifTitle'),
+          body: t(lang, 'admin.disbursedNotifMsg', app.id, app.amount),
+          data: { type: 'loan', status: 'disbursed', loanId: String(app.id) },
+        });
         await conn.commit();
       } catch (err) {
         await conn.rollback();
@@ -564,6 +580,11 @@ async function updateTransactionStatus(req, res) {
       `INSERT INTO notifications (user_id, title, message, type) VALUES (?, ?, ?, ?)`,
       [tx.user_id, t(lang, 'admin.txStatusNotifTitle'), t(lang, 'admin.txStatusNotifMsg', tx.id, tx.type, status), status === 'rejected' ? 'warning' : 'info']
     );
+    sendToUser(tx.user_id, {
+      title: t(lang, 'admin.txStatusNotifTitle'),
+      body: t(lang, 'admin.txStatusNotifMsg', tx.id, tx.type, status),
+      data: { type: 'transaction', status, txId: String(tx.id) },
+    });
 
     return res.json({ success: true, message: t(lang, 'admin.txStatusSuccess', status) });
   } catch (err) {

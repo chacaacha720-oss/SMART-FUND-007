@@ -455,5 +455,45 @@
       });
     }
   </script>
+
+  <!-- FCM Push Notification Registration (Android APK / Capacitor native only) -->
+  <script>
+    (async () => {
+      if (typeof Capacitor === 'undefined' || !Capacitor.isNativePlatform()) return;
+      try {
+        const Push = Capacitor.Plugins && Capacitor.Plugins.PushNotifications;
+        if (!Push) return;
+
+        const perm = await Push.checkPermissions();
+        let granted = perm.receive;
+        if (granted !== 'granted') {
+          granted = (await Push.requestPermissions()).receive;
+        }
+        if (granted !== 'granted') return;
+
+        await Push.register();
+
+        Push.addListener('registration', async (token) => {
+          try {
+            await fetch('/api/user/fcm/register', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ token: token.value })
+            });
+          } catch (e) { console.warn('[FCM] gagal simpan token', e); }
+        });
+
+        Push.addListener('pushNotificationReceived', (notification) => {
+          console.log('[FCM] notifikasi diterima', notification);
+        });
+
+        Push.addListener('pushNotificationActionPerformed', (action) => {
+          console.log('[FCM] aksi notifikasi', action);
+        });
+      } catch (e) {
+        console.warn('[FCM] pendaftaran gagal', e);
+      }
+    })();
+  </script>
 </body>
 </html>
