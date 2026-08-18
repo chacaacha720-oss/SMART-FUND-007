@@ -228,7 +228,7 @@ const I18N = {
       'dash.balance': 'Baki Pinjaman',
       'dash.limit': 'Had Pinjaman',
       'dash.logout': 'Log Keluar',
-      'dash.welcome': 'Hy...👋',
+      'dash.welcome': 'Hy...',
       'dash.accountStatus': 'Status Akaun',
       'dash.active': 'Aktif',
       'dash.balanceLabel': 'Baki Pinjaman',
