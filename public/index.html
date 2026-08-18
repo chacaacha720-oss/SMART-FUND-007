@@ -717,18 +717,18 @@
       const pickLoanName = makeUniquePicker(loanApplicants);
       const pickWithdrawName = makeUniquePicker(withdrawalUsers);
 
-      function formatRM(amount) {
-        return "RM " + amount.toLocaleString("ms-MY");
-      }
+       function formatRM(amount) {
+         return "RM " + amount.toLocaleString("ms-MY");
+       }
 
-       function updateTicker() {
+       function buildItem() {
           // Pilih secara rawak antara Mohon Pinjaman & Tarik Baki
           const isLoan = Math.random() < 0.5;
           const name = isLoan ? pickLoanName() : pickWithdrawName();
           const activity = isLoan ? loanActivity : withdrawalActivity;
           const amount = randomAmount();
 
-          const loanHtml = `
+          return `
            <div class="loan-item flex items-center text-xs md:text-sm">
              <span class="flex items-center gap-2 md:gap-3 text-slate-300">
                <span class="flex items-center justify-center w-5 h-5 md:w-6 md:h-6 rounded-full bg-primary/20 text-primary shrink-0">
@@ -742,10 +742,13 @@
              </span>
            </div>
          `;
+       }
 
-         const logoHtml = '<img src="/assets/img/ticker-logo.png" alt="SMART FUND" loading="lazy" width="28" height="28" class="object-contain w-7 h-7 md:w-10 md:h-10 block mx-3 md:mx-6 shrink-0">';
+       const logoHtml = '<img src="/assets/img/ticker-logo.png" alt="SMART FUND" loading="lazy" width="28" height="28" class="object-contain w-7 h-7 md:w-10 md:h-10 block mx-3 md:mx-6 shrink-0">';
 
-         tickerTrack.innerHTML = loanHtml + logoHtml + loanHtml + logoHtml;
+       function updateTicker() {
+         // Dua item berbeza, tiada nama yang berulang dalam satu pusingan
+         tickerTrack.innerHTML = buildItem() + logoHtml + buildItem() + logoHtml;
 
          tickerTrack.style.animation = "none";
          void tickerTrack.offsetWidth;
