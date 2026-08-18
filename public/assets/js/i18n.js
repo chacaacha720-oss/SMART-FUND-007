@@ -193,7 +193,7 @@ const I18N = {
       'register.agree': 'Saya bersetuju dengan',
       'register.and': 'serta',
       'register.privacy': 'Dasar Privasi',
-      'register.btn': 'Daftar Sekarang',
+      'register.btn': 'Apply Now',
       'register.haveAccount': 'Sudah ada akaun?',
       'register.login': 'Log Masuk',
       'register.back': 'Kembali ke Laman Utama',
