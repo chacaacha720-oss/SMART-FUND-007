@@ -255,4 +255,4 @@ self.addEventListener('notificationclick', (event) => {
       return clients.openWindow(event.notification.data.url);
     })
   );
-}
+});
