@@ -22,11 +22,9 @@ const STATIC_ASSETS = [
   '/assets/img/favicon.png',
   '/assets/img/ticker-logo.png',
   '/manifest.webmanifest',
-  'https://cdn.tailwindcss.com',
   'https://cdn.jsdelivr.net/npm/sweetalert2@11',
   'https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
-  'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap'
+  'https://cdn.tailwindcss.com'
 ];
 
 const CACHE_STRATEGIES = {
@@ -37,6 +35,13 @@ const CACHE_STRATEGIES = {
   // Stale-while-revalidate for HTML pages
   html: 'stale-while-revalidate'
 };
+
+// Origins allowed to be fetched/cached by the SW (must match CSP connect-src)
+const ALLOWED_ORIGINS = [
+  'https://smart-fund-my.up.railway.app',
+  'https://cdn.jsdelivr.net',
+  'https://cdn.tailwindcss.com'
+];
 
 // Install event - precache static assets
 self.addEventListener('install', (event) => {
@@ -79,9 +84,15 @@ self.addEventListener('activate', (event) => {
 // Helper: Determine cache strategy for request
 function getCacheStrategy(request) {
   const url = new URL(request.url);
-  
+
   // Skip non-GET requests
   if (request.method !== 'GET') {
+    return 'network-only';
+  }
+
+  // Never intercept cross-origin requests outside the CSP allowlist.
+  // Let the browser handle them normally (CSP still applies at fetch time).
+  if (!ALLOWED_ORIGINS.includes(url.origin)) {
     return 'network-only';
   }
   
@@ -132,7 +143,8 @@ self.addEventListener('fetch', (event) => {
       event.respondWith(staleWhileRevalidate(event.request));
       break;
     default:
-      event.respondWith(networkFirst(event.request));
+      // network-only: pass through to the browser (no interception)
+      return;
   }
 });
 
